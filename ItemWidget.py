@@ -3,6 +3,14 @@
 from PyQt5.QtWidgets import QWidget
 
 
+class Widget:
+
+    def __init__(self):
+        self.enabled = True
+        self.text = None
+        self.data = None
+
+
 class ItemWidget(QWidget):
 
     def __init_(self, parent = None, name = None):
@@ -16,8 +24,11 @@ class ItemWidget(QWidget):
         self.insertItemWidget(index, text)
 
     def insertItemWidget(self, index, text):
+        widget = Widget()
+        widget.text = text
         self.WidgetList.append([])
-        pass
+        self.WidgetList[index].append(widget)
+        print(self.WidgetList)
 
     def removeItemWidget(self, index, text):
         pass
