@@ -8,6 +8,7 @@ from PyQt5.QtWidgets import QMainWindow, QMenu, QToolBar, QTreeWidgetItem
 from Character import AllBonusList, ClassList, Races, Realms
 from Constants import Cap, DropLists, MythicalCap
 from Item import *
+from ItemWidget import ItemWidget
 
 
 class MainWindow(QMainWindow):
@@ -100,10 +101,9 @@ class MainWindow(QMainWindow):
         # FIGURE OUT WHAT EXACTLY HAPPENS WHEN A NEW ITEM IS ADDED, OR AN ITEM
         # IS DELETED FROM THE INDEX.
 
-        # for key, value in SlotList.items():
-        #    for val in value:
-        #        self.ItemStackedWidget.addItemWidget()
-        #        pass
+        for key, value in SlotList.items():
+            for val in value:
+                self.ItemStackedWidget.addItemWidget(1, val)
 
         for stat in (DropLists['All']['Stat'] + ('ArmorFactor', 'Fatigue', 'PowerPool',)):
             self.StatLabel[stat] = getattr(self, stat + 'Label')
