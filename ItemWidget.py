@@ -1,6 +1,5 @@
 # HEADER PLACE HOLDER
 
-from PyQt5.Qt import Qt
 from PyQt5.QtWidgets import QWidget
 
 
