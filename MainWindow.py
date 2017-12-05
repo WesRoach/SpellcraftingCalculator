@@ -4,11 +4,10 @@ from PyQt5 import uic
 from PyQt5.Qt import Qt
 from PyQt5.QtCore import QSize
 from PyQt5.QtGui import QFont, QFontMetrics
-from PyQt5.QtWidgets import QMainWindow, QMenu, QToolBar, QTreeWidgetItem
+from PyQt5.QtWidgets import QMainWindow, QMenu, QToolBar, QTreeWidgetItem, QWidget
 from Character import AllBonusList, ClassList, Races, Realms
 from Constants import Cap, DropLists, MythicalCap
 from Item import Item, SlotList
-from ItemWidget import *
 
 
 class ItemWidget(QWidget):
@@ -46,11 +45,6 @@ class MainWindow(QMainWindow):
 
         self.CurrentRealm = ''
         self.CurrentItemIndex = 0
-
-        self.switchOnType = {
-            'drop': [],
-            'crafted': []
-        }
 
         self.initMenuBar()
         self.initToolBar()
@@ -382,7 +376,3 @@ class MainWindow(QMainWindow):
 
             if BaseMythicalCap == 0:
                 self.StatMythicalCap[key].setText('--  ')
-
-    def createWidget(self):
-        print('We are adding a new widget..')
-        pass
