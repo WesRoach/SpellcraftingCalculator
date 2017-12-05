@@ -18,6 +18,69 @@ class ItemWidget(QWidget):
         self.text = None
         self.data = None
 
+        height = 20
+
+        self.AmountEdit1.setFixedHeight(height)
+        self.AmountEdit2.setFixedHeight(height)
+        self.AmountEdit3.setFixedHeight(height)
+        self.AmountEdit4.setFixedHeight(height)
+        self.AmountEdit5.setFixedHeight(height)
+        self.AmountEdit6.setFixedHeight(height)
+        self.AmountEdit7.setFixedHeight(height)
+        self.AmountEdit8.setFixedHeight(height)
+        self.AmountEdit9.setFixedHeight(height)
+        self.AmountEdit10.setFixedHeight(height)
+        self.AmountEdit11.setFixedHeight(height)
+        self.AmountEdit12.setFixedHeight(height)
+
+        self.AmountStatic1.setFixedHeight(height)
+        self.AmountStatic2.setFixedHeight(height)
+        self.AmountStatic3.setFixedHeight(height)
+        self.AmountStatic4.setFixedHeight(height)
+        self.AmountStatic5.setFixedHeight(height)
+        self.AmountStatic6.setFixedHeight(height)
+
+        self.Effect1.setFixedHeight(height)
+        self.Effect2.setFixedHeight(height)
+        self.Effect3.setFixedHeight(height)
+        self.Effect4.setFixedHeight(height)
+        self.Effect5.setFixedHeight(height)
+        self.Effect6.setFixedHeight(height)
+        self.Effect7.setFixedHeight(height)
+        self.Effect8.setFixedHeight(height)
+        self.Effect9.setFixedHeight(height)
+        self.Effect10.setFixedHeight(height)
+        self.Effect11.setFixedHeight(height)
+        self.Effect12.setFixedHeight(height)
+
+        self.Requirement1.setFixedHeight(height)
+        self.Requirement2.setFixedHeight(height)
+        self.Requirement3.setFixedHeight(height)
+        self.Requirement4.setFixedHeight(height)
+        self.Requirement5.setFixedHeight(height)
+        self.Requirement6.setFixedHeight(height)
+        self.Requirement7.setFixedHeight(height)
+        self.Requirement8.setFixedHeight(height)
+        self.Requirement9.setFixedHeight(height)
+        self.Requirement10.setFixedHeight(height)
+        self.Requirement11.setFixedHeight(height)
+        self.Requirement12.setFixedHeight(height)
+
+        self.Type1.setFixedHeight(height)
+        self.Type2.setFixedHeight(height)
+        self.Type3.setFixedHeight(height)
+        self.Type4.setFixedHeight(height)
+        self.Type5.setFixedHeight(height)
+        self.Type6.setFixedHeight(height)
+        self.Type7.setFixedHeight(height)
+        self.Type8.setFixedHeight(height)
+        self.Type9.setFixedHeight(height)
+        self.Type10.setFixedHeight(height)
+        self.Type11.setFixedHeight(height)
+        self.Type12.setFixedHeight(height)
+
+        self.updateGeometry()
+
 
 class MainWindow(QMainWindow):
 
@@ -75,7 +138,7 @@ class MainWindow(QMainWindow):
         self.setFont(font)
 
         # TODO: DYNAMICALLY ASSIGN SIZE
-        self.setMinimumSize(780, 520)
+        # self.setMinimumSize(780, 520)
         self.setWindowTitle('Spellcrafting Calculator')
 
         # MAKE SURE WE ARE TESTING WIDTH AND HEIGHT
