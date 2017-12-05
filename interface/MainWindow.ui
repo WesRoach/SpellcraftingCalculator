@@ -1452,7 +1452,7 @@
             </sizepolicy>
            </property>
            <property name="frameShape">
-            <enum>QFrame::StyledPanel</enum>
+            <enum>QFrame::NoFrame</enum>
            </property>
           </widget>
          </widget>

@@ -7,8 +7,17 @@ from PyQt5.QtGui import QFont, QFontMetrics
 from PyQt5.QtWidgets import QMainWindow, QMenu, QToolBar, QTreeWidgetItem
 from Character import AllBonusList, ClassList, Races, Realms
 from Constants import Cap, DropLists, MythicalCap
-from Item import *
-from ItemWidget import ItemWidget
+from Item import Item, SlotList
+from ItemWidget import *
+
+
+class ItemWidget(QWidget):
+    def __init__(self, parent = None):
+        QWidget.__init__(self, parent = parent)
+        uic.loadUi(r'interface/ItemWidget.ui', self)
+        self.enabled = True
+        self.text = None
+        self.data = None
 
 
 class MainWindow(QMainWindow):
@@ -91,20 +100,6 @@ class MainWindow(QMainWindow):
         self.CharacterRealmRank.setFixedSize(QSize(width, height))
         self.OutfitName.setFixedSize(QSize(width, height))
 
-        # NEED TO IMPLEMENT ADDING THE "TABS"
-        # for tabname in PieceTabList:
-        #     self.PieceTab.addTab(0, qApp.translate("B_SCWindow", tabname, None))
-        # for tabname in JewelTabList:
-        #     self.PieceTab.addTab(1, qApp.translate("B_SCWindow", tabname, None))
-        #
-        # NEED TO IMPLEMENT ITEMSTACKEDWIDGET AS A CUSTOM WIDGET. ALSO NEED TO
-        # FIGURE OUT WHAT EXACTLY HAPPENS WHEN A NEW ITEM IS ADDED, OR AN ITEM
-        # IS DELETED FROM THE INDEX.
-
-        for key, value in SlotList.items():
-            for val in value:
-                self.ItemStackedWidget.addItemWidget(1, val)
-
         for stat in (DropLists['All']['Stat'] + ('ArmorFactor', 'Fatigue', 'PowerPool',)):
             self.StatLabel[stat] = getattr(self, stat + 'Label')
             self.StatValue[stat] = getattr(self, stat)
@@ -169,7 +164,6 @@ class MainWindow(QMainWindow):
                 print('Selection: ' + str(value))
                 print('Widget: ' + str(self.ItemStackedWidget.widget(value)))
 
-                # THIS WILL CHANGE ...
                 self.ItemStackedWidget.setCurrentIndex(value)
 
     def RealmChanged(self, value):
@@ -231,6 +225,12 @@ class MainWindow(QMainWindow):
                     self.ItemIndex += 1
                     self.ItemNumbering += 1
                     self.ItemAttributeList[val] = item
+
+        # AttributeError: 'QStackedWidget' object has no ...
+        for key, value in self.ItemIndexList.items():
+            widget = ItemWidget()
+            widget.Requirement1.setPlaceholderText(str(key))
+            self.ItemStackedWidget.insertWidget(value, widget)
 
     def showStat(self, stat, show):
         if self.StatLabel[stat].isHidden() != show:
