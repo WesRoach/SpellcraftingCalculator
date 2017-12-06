@@ -166,11 +166,11 @@ class MainWindow(QMainWindow):
         for index in self.SlotListTreeView.selectedIndexes():
             selection = index.data()
 
-        for key, index in self.ItemIndexList.items():
-            if selection == key:
-                self.ItemStackedWidget.setCurrentIndex(index)
+        for label, index in self.ItemIndexList.items():
+            if selection == label:
+                # self.ItemStackedWidget.setCurrentIndex(index)
                 self.CurrentItemIndex = index
-                self.CurrentItemLabel = key
+                self.CurrentItemLabel = label
 
     def showFixedWidgets(self):
         pass
@@ -260,12 +260,13 @@ class MainWindow(QMainWindow):
                     self.ItemAttributeList[val] = item
 
         # THIS MIGHT NOT BE RIGHT ...
-        for key, value in self.ItemIndexList.items():
-            self.ItemStackedWidget.insertWidget(value, ItemWidget())
+        # for key, value in self.ItemIndexList.items():
+        #     self.ItemStackedWidget.insertWidget(value, ItemWidget())
+        #     print(self.ItemStackedWidget.__dict__)
 
-        for item, index in self.ItemIndexList.items():
-            if index == self.ItemStackedWidget.currentIndex():
-                self.RestoreItem(self.ItemAttributeList[item])
+        # for item, index in self.ItemIndexList.items():
+        #     if index == self.ItemStackedWidget.currentIndex():
+        #         self.RestoreItem(self.ItemAttributeList[item])
 
     def showStat(self, stat, show):
         if self.StatLabel[stat].isHidden() != show:
