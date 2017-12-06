@@ -4,32 +4,32 @@ from PyQt5 import uic
 from PyQt5.Qt import Qt
 from PyQt5.QtCore import QSize
 from PyQt5.QtGui import QFont, QFontMetrics
-from PyQt5.QtWidgets import QMainWindow, QMenu, QToolBar, QTreeWidgetItem, QWidget
+from PyQt5.QtWidgets import QMainWindow, QMenu, QToolBar, QTreeWidgetItem
 from Character import AllBonusList, ClassList, Races, Realms
 from Constants import Cap, DropLists, MythicalCap
 from Item import Item, SlotList
 
 
-class ItemWidget(QWidget):
-    def __init__(self, parent = None):
-        QWidget.__init__(self, parent = parent)
-        uic.loadUi(r'interface/ItemWidget.ui', self)
-        self.enabled = True
-        self.text = None
-        self.data = None
-
-        height = 20
-
-        for i in range(1, 13):
-            getattr(self, "AmountEdit{}".format(i)).setFixedHeight(height)
-            getattr(self, "Effect{}".format(i)).setFixedHeight(height)
-            getattr(self, "Requirement{}".format(i)).setFixedHeight(height)
-            getattr(self, "Type{}".format(i)).setFixedHeight(height)
-
-        for i in range(1, 7):
-            getattr(self, "AmountStatic{}".format(i)).setFixedHeight(height)
-
-        self.updateGeometry()
+# class ItemWidget(QWidget):
+#     def __init__(self, parent = None):
+#         QWidget.__init__(self, parent = parent)
+#         uic.loadUi(r'interface/ItemWidget.ui', self)
+#         self.enabled = True
+#         self.text = None
+#         self.data = None
+#
+#         height = 20
+#
+#         for i in range(1, 13):
+#             getattr(self, "AmountEdit{}".format(i)).setFixedHeight(height)
+#             getattr(self, "Effect{}".format(i)).setFixedHeight(height)
+#             getattr(self, "Requirement{}".format(i)).setFixedHeight(height)
+#             getattr(self, "Type{}".format(i)).setFixedHeight(height)
+#
+#         for i in range(1, 7):
+#             getattr(self, "AmountStatic{}".format(i)).setFixedHeight(height)
+#
+#         self.updateGeometry()
 
 
 class MainWindow(QMainWindow):
@@ -171,6 +171,7 @@ class MainWindow(QMainWindow):
                 # self.ItemStackedWidget.setCurrentIndex(index)
                 self.CurrentItemIndex = index
                 self.CurrentItemLabel = label
+                self.RestoreItem(self.ItemAttributeList[self.CurrentItemLabel])
 
     def showFixedWidgets(self):
         pass
