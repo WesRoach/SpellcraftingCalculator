@@ -71,8 +71,14 @@
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="editable">
+         <bool>true</bool>
+        </property>
         <property name="maxVisibleItems">
          <number>20</number>
+        </property>
+        <property name="duplicatesEnabled">
+         <bool>true</bool>
         </property>
        </widget>
       </item>

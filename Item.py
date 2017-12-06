@@ -95,3 +95,12 @@ class Item:
             ItemSlots.append(ItemSlot('unused'))
 
         return ItemSlots
+
+    def slot(self, index):
+        return self.ItemSlotList[index]
+
+    def slotCount(self):
+        return len(self.ItemSlotList)
+
+    def slots(self):
+        return list(self.ItemSlotList)

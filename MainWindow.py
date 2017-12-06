@@ -20,64 +20,14 @@ class ItemWidget(QWidget):
 
         height = 20
 
-        self.AmountEdit1.setFixedHeight(height)
-        self.AmountEdit2.setFixedHeight(height)
-        self.AmountEdit3.setFixedHeight(height)
-        self.AmountEdit4.setFixedHeight(height)
-        self.AmountEdit5.setFixedHeight(height)
-        self.AmountEdit6.setFixedHeight(height)
-        self.AmountEdit7.setFixedHeight(height)
-        self.AmountEdit8.setFixedHeight(height)
-        self.AmountEdit9.setFixedHeight(height)
-        self.AmountEdit10.setFixedHeight(height)
-        self.AmountEdit11.setFixedHeight(height)
-        self.AmountEdit12.setFixedHeight(height)
+        for i in range(1, 13):
+            getattr(self, "AmountEdit{}".format(i)).setFixedHeight(height)
+            getattr(self, "Effect{}".format(i)).setFixedHeight(height)
+            getattr(self, "Requirement{}".format(i)).setFixedHeight(height)
+            getattr(self, "Type{}".format(i)).setFixedHeight(height)
 
-        self.AmountStatic1.setFixedHeight(height)
-        self.AmountStatic2.setFixedHeight(height)
-        self.AmountStatic3.setFixedHeight(height)
-        self.AmountStatic4.setFixedHeight(height)
-        self.AmountStatic5.setFixedHeight(height)
-        self.AmountStatic6.setFixedHeight(height)
-
-        self.Effect1.setFixedHeight(height)
-        self.Effect2.setFixedHeight(height)
-        self.Effect3.setFixedHeight(height)
-        self.Effect4.setFixedHeight(height)
-        self.Effect5.setFixedHeight(height)
-        self.Effect6.setFixedHeight(height)
-        self.Effect7.setFixedHeight(height)
-        self.Effect8.setFixedHeight(height)
-        self.Effect9.setFixedHeight(height)
-        self.Effect10.setFixedHeight(height)
-        self.Effect11.setFixedHeight(height)
-        self.Effect12.setFixedHeight(height)
-
-        self.Requirement1.setFixedHeight(height)
-        self.Requirement2.setFixedHeight(height)
-        self.Requirement3.setFixedHeight(height)
-        self.Requirement4.setFixedHeight(height)
-        self.Requirement5.setFixedHeight(height)
-        self.Requirement6.setFixedHeight(height)
-        self.Requirement7.setFixedHeight(height)
-        self.Requirement8.setFixedHeight(height)
-        self.Requirement9.setFixedHeight(height)
-        self.Requirement10.setFixedHeight(height)
-        self.Requirement11.setFixedHeight(height)
-        self.Requirement12.setFixedHeight(height)
-
-        self.Type1.setFixedHeight(height)
-        self.Type2.setFixedHeight(height)
-        self.Type3.setFixedHeight(height)
-        self.Type4.setFixedHeight(height)
-        self.Type5.setFixedHeight(height)
-        self.Type6.setFixedHeight(height)
-        self.Type7.setFixedHeight(height)
-        self.Type8.setFixedHeight(height)
-        self.Type9.setFixedHeight(height)
-        self.Type10.setFixedHeight(height)
-        self.Type11.setFixedHeight(height)
-        self.Type12.setFixedHeight(height)
+        for i in range(1, 7):
+            getattr(self, "AmountStatic{}".format(i)).setFixedHeight(height)
 
         self.updateGeometry()
 
@@ -105,9 +55,13 @@ class MainWindow(QMainWindow):
         self.ItemIndexList = {}
         self.ItemNumbering = 1
         self.ItemAttributeList = {}
+        self.ItemWidget = {}
 
         self.CurrentRealm = ''
-        self.CurrentItemIndex = 0
+        self.CurrentItemIndex = {}
+        self.CurrentItemLabel = {}
+
+        self.SwitchOnType = {'crafted': [], 'drop': [], }
 
         self.initMenuBar()
         self.initToolBar()
@@ -212,16 +166,40 @@ class MainWindow(QMainWindow):
         for index in self.SlotListTreeView.selectedIndexes():
             selection = index.data()
 
-        print(self.ItemIndexList)
-
-        for key, value in self.ItemIndexList.items():
+        for key, index in self.ItemIndexList.items():
             if selection == key:
+                self.ItemStackedWidget.setCurrentIndex(index)
+                self.CurrentItemIndex = index
+                self.CurrentItemLabel = key
 
-                # DEBUGGING ...
-                print('Selection: ' + str(value))
-                print('Widget: ' + str(self.ItemStackedWidget.widget(value)))
+    def showFixedWidgets(self):
+        pass
 
-                self.ItemStackedWidget.setCurrentIndex(value)
+    def showDropWidgets(self, item):
+        self.showFixedWidgets()
+        for child in self.SwitchOnType['crafted']:
+            child.hide()
+        for child in self.SwitchOnType['drop']:
+            child.show()
+
+    def showCraftWidgets(self, item):
+        self.showFixedWidgets()
+        for child in self.SwitchOnType['drop']:
+            child.hide()
+        for child in self.SwitchOnType['crafted']:
+            child.show()
+
+    def RestoreItem(self, item):
+        ItemType = item.ActiveState
+
+        if ItemType == 'crafted':
+            self.showCraftWidgets(item)
+
+        elif ItemType == 'drop':
+            self.showDropWidgets(item)
+
+        else:
+            return
 
     def RealmChanged(self, value):
         Realm = str(self.CharacterRealm.currentText())
@@ -265,8 +243,6 @@ class MainWindow(QMainWindow):
         self.CharacterRace.setCurrentIndex(2)
         self.RaceChanged(self.CharacterRace.currentIndex())
 
-        self.ItemStackedWidget.setCurrentIndex(0)
-
         for key, value in SlotList.items():
             for val in value:
                 self.ItemIndexList[val] = self.ItemIndex
@@ -283,11 +259,13 @@ class MainWindow(QMainWindow):
                     self.ItemNumbering += 1
                     self.ItemAttributeList[val] = item
 
-        # AttributeError: 'QStackedWidget' object has no ...
+        # THIS MIGHT NOT BE RIGHT ...
         for key, value in self.ItemIndexList.items():
-            widget = ItemWidget()
-            widget.Requirement1.setPlaceholderText(str(key))
-            self.ItemStackedWidget.insertWidget(value, widget)
+            self.ItemStackedWidget.insertWidget(value, ItemWidget())
+
+        for item, index in self.ItemIndexList.items():
+            if index == self.ItemStackedWidget.currentIndex():
+                self.RestoreItem(self.ItemAttributeList[item])
 
     def showStat(self, stat, show):
         if self.StatLabel[stat].isHidden() != show:

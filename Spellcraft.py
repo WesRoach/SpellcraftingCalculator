@@ -1,6 +1,7 @@
 # HEADER PLACE HOLDER
 
 from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QApplication
 import MainWindow
 import sys
@@ -17,6 +18,7 @@ class SpellcraftingCalculator(QApplication):
     def __init__(self):
         args = sys.argv
         QApplication.__init__(self, args)
+        self.setWindowIcon(QIcon(r"images/SCWindow.png"))
         self.application = MainWindow.MainWindow()
 
     def initializeApplication(self):
