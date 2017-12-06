@@ -165,10 +165,10 @@ class MainWindow(QMainWindow):
     def ItemSelected(self, selection):
         for index in self.SlotListTreeView.selectedIndexes():
             selection = index.data()
+            print(selection)
 
         for label, index in self.ItemIndexList.items():
             if selection == label:
-                # self.ItemStackedWidget.setCurrentIndex(index)
                 self.CurrentItemIndex = index
                 self.CurrentItemLabel = label
                 self.RestoreItem(self.ItemAttributeList[self.CurrentItemLabel])
@@ -260,10 +260,12 @@ class MainWindow(QMainWindow):
                     self.ItemNumbering += 1
                     self.ItemAttributeList[val] = item
 
+        # SET THE INITIAL SLOT
+        self.ItemSelected('Neck')
+
         # THIS MIGHT NOT BE RIGHT ...
         # for key, value in self.ItemIndexList.items():
         #     self.ItemStackedWidget.insertWidget(value, ItemWidget())
-        #     print(self.ItemStackedWidget.__dict__)
 
         # for item, index in self.ItemIndexList.items():
         #     if index == self.ItemStackedWidget.currentIndex():
