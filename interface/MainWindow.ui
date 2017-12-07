@@ -115,6 +115,9 @@
              <property name="text">
               <string>Class:</string>
              </property>
+             <property name="buddy">
+              <cstring>CharacterClass</cstring>
+             </property>
             </widget>
            </item>
            <item row="3" column="0">
@@ -122,19 +125,28 @@
              <property name="text">
               <string>Race:</string>
              </property>
+             <property name="buddy">
+              <cstring>CharacterRace</cstring>
+             </property>
             </widget>
            </item>
            <item row="4" column="0">
             <widget class="QLabel" name="OutfitNameLabel">
              <property name="text">
-              <string>Outfit:</string>
+              <string>&amp;Outfit:</string>
+             </property>
+             <property name="buddy">
+              <cstring>OutfitName</cstring>
              </property>
             </widget>
            </item>
            <item row="0" column="0">
             <widget class="QLabel" name="CharacterNameLabel">
              <property name="text">
-              <string>Name:</string>
+              <string>&amp;Name:</string>
+             </property>
+             <property name="buddy">
+              <cstring>CharacterName</cstring>
              </property>
             </widget>
            </item>
@@ -169,6 +181,9 @@
              <property name="text">
               <string>Realm:</string>
              </property>
+             <property name="buddy">
+              <cstring>CharacterRealm</cstring>
+             </property>
             </widget>
            </item>
            <item row="1" column="1">
@@ -191,6 +206,9 @@
             <widget class="QLabel" name="CharacterRealmRankLabel">
              <property name="text">
               <string>Rank:</string>
+             </property>
+             <property name="buddy">
+              <cstring>CharacterRealmRank</cstring>
              </property>
             </widget>
            </item>
@@ -234,6 +252,9 @@
              </property>
              <property name="indent">
               <number>-1</number>
+             </property>
+             <property name="buddy">
+              <cstring>CharacterLevel</cstring>
              </property>
             </widget>
            </item>
@@ -1491,7 +1512,10 @@
                <item>
                 <widget class="QLabel" name="ItemNameLabel">
                  <property name="text">
-                  <string>Item Name:</string>
+                  <string>Item &amp;Name:</string>
+                 </property>
+                 <property name="buddy">
+                  <cstring>ItemName</cstring>
                  </property>
                 </widget>
                </item>
@@ -1601,7 +1625,7 @@
                 </widget>
                </item>
                <item row="9" column="1">
-                <widget class="QComboBox" name="Type8">
+                <widget class="QComboBox" name="EffectType8">
                  <property name="maxVisibleItems">
                   <number>20</number>
                  </property>
@@ -1619,8 +1643,14 @@
                <item row="5" column="2">
                 <widget class="QLineEdit" name="AmountEdit4"/>
                </item>
-               <item row="1" column="5">
+               <item row="1" column="4">
                 <widget class="QLabel" name="ImbuePoints0">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
                  <property name="text">
                   <string>0.0</string>
                  </property>
@@ -1640,7 +1670,14 @@
                 </widget>
                </item>
                <item row="1" column="4">
-                <widget class="QLineEdit" name="Requirement0"/>
+                <widget class="QLineEdit" name="Requirement0">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                </widget>
                </item>
                <item row="4" column="2">
                 <widget class="QLineEdit" name="AmountEdit3"/>
@@ -1672,7 +1709,10 @@
                <item row="1" column="0">
                 <widget class="QLabel" name="SlotLabel0">
                  <property name="text">
-                  <string>Slot 1:</string>
+                  <string>Slot &amp;1:</string>
+                 </property>
+                 <property name="buddy">
+                  <cstring>EffectType0</cstring>
                  </property>
                 </widget>
                </item>
@@ -1720,7 +1760,10 @@
                <item row="6" column="0">
                 <widget class="QLabel" name="SlotLabel5">
                  <property name="text">
-                  <string>Slot 6:</string>
+                  <string>Slot &amp;6:</string>
+                 </property>
+                 <property name="buddy">
+                  <cstring>EffectType5</cstring>
                  </property>
                 </widget>
                </item>
@@ -1732,7 +1775,14 @@
                 </widget>
                </item>
                <item row="7" column="4">
-                <widget class="QLineEdit" name="Requirement6"/>
+                <widget class="QLineEdit" name="Requirement6">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                </widget>
                </item>
                <item row="3" column="2">
                 <widget class="QComboBox" name="AmountStatic2">
@@ -1782,21 +1832,30 @@
                <item row="5" column="0">
                 <widget class="QLabel" name="SlotLabel4">
                  <property name="text">
-                  <string>Slot 5:</string>
+                  <string>Slot &amp;5:</string>
+                 </property>
+                 <property name="buddy">
+                  <cstring>EffectType4</cstring>
                  </property>
                 </widget>
                </item>
                <item row="7" column="0">
                 <widget class="QLabel" name="SlotLabel6">
                  <property name="text">
-                  <string>Slot 7:</string>
+                  <string>Slot &amp;7:</string>
+                 </property>
+                 <property name="buddy">
+                  <cstring>EffectType6</cstring>
                  </property>
                 </widget>
                </item>
                <item row="4" column="0">
                 <widget class="QLabel" name="SlotLabel3">
                  <property name="text">
-                  <string>Slot 4:</string>
+                  <string>Slot &amp;4:</string>
+                 </property>
+                 <property name="buddy">
+                  <cstring>EffectType3</cstring>
                  </property>
                 </widget>
                </item>
@@ -1824,7 +1883,10 @@
                <item row="3" column="0">
                 <widget class="QLabel" name="SlotLabel2">
                  <property name="text">
-                  <string>Slot 3:</string>
+                  <string>Slot &amp;3:</string>
+                 </property>
+                 <property name="buddy">
+                  <cstring>EffectType2</cstring>
                  </property>
                 </widget>
                </item>
@@ -1839,7 +1901,14 @@
                 <widget class="QLineEdit" name="AmountEdit11"/>
                </item>
                <item row="10" column="4">
-                <widget class="QLineEdit" name="Requirement9"/>
+                <widget class="QLineEdit" name="Requirement9">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                </widget>
                </item>
                <item row="12" column="3">
                 <widget class="QComboBox" name="Effect11">
@@ -1849,7 +1918,14 @@
                 </widget>
                </item>
                <item row="8" column="4">
-                <widget class="QLineEdit" name="Requirement7"/>
+                <widget class="QLineEdit" name="Requirement7">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                </widget>
                </item>
                <item row="11" column="3">
                 <widget class="QComboBox" name="Effect10">
@@ -1859,27 +1935,72 @@
                 </widget>
                </item>
                <item row="9" column="4">
-                <widget class="QLineEdit" name="Requirement8"/>
+                <widget class="QLineEdit" name="Requirement8">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                </widget>
                </item>
                <item row="6" column="4">
-                <widget class="QLineEdit" name="Requirement5"/>
+                <widget class="QLineEdit" name="Requirement5">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                </widget>
                </item>
                <item row="12" column="4">
-                <widget class="QLineEdit" name="Requirement11"/>
+                <widget class="QLineEdit" name="Requirement11">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                </widget>
                </item>
                <item row="11" column="4">
-                <widget class="QLineEdit" name="Requirement10"/>
+                <widget class="QLineEdit" name="Requirement10">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                </widget>
                </item>
                <item row="2" column="4">
-                <widget class="QLineEdit" name="Requirement1"/>
+                <widget class="QLineEdit" name="Requirement1">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                </widget>
                </item>
                <item row="5" column="4">
-                <widget class="QLineEdit" name="Requirement4"/>
+                <widget class="QLineEdit" name="Requirement4">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                </widget>
                </item>
                <item row="2" column="0">
                 <widget class="QLabel" name="SlotLabel1">
                  <property name="text">
-                  <string>Slot 2:</string>
+                  <string>Slot &amp;2:</string>
+                 </property>
+                 <property name="buddy">
+                  <cstring>EffectType1</cstring>
                  </property>
                 </widget>
                </item>
@@ -1894,12 +2015,26 @@
                 </widget>
                </item>
                <item row="4" column="4">
-                <widget class="QLineEdit" name="Requirement3"/>
+                <widget class="QLineEdit" name="Requirement3">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                </widget>
                </item>
                <item row="3" column="4">
-                <widget class="QLineEdit" name="Requirement2"/>
+                <widget class="QLineEdit" name="Requirement2">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                </widget>
                </item>
-               <item row="0" column="5">
+               <item row="0" column="4">
                 <widget class="QLabel" name="ImbuePointsLabel">
                  <property name="text">
                   <string>Imbue</string>
@@ -1946,14 +2081,20 @@
                <item row="11" column="0">
                 <widget class="QLabel" name="SlotLabel10">
                  <property name="text">
-                  <string>Slot 11:</string>
+                  <string>Slot 1&amp;1:</string>
+                 </property>
+                 <property name="buddy">
+                  <cstring>EffectType10</cstring>
                  </property>
                 </widget>
                </item>
                <item row="8" column="0">
                 <widget class="QLabel" name="SlotLabel7">
                  <property name="text">
-                  <string>Slot 8:</string>
+                  <string>Slot &amp;8:</string>
+                 </property>
+                 <property name="buddy">
+                  <cstring>EffectType7</cstring>
                  </property>
                 </widget>
                </item>
@@ -1980,21 +2121,30 @@
                <item row="10" column="0">
                 <widget class="QLabel" name="SlotLabel9">
                  <property name="text">
-                  <string>Slot 10:</string>
+                  <string>Slot 1&amp;0:</string>
+                 </property>
+                 <property name="buddy">
+                  <cstring>EffectType9</cstring>
                  </property>
                 </widget>
                </item>
                <item row="9" column="0">
                 <widget class="QLabel" name="SlotLabel8">
                  <property name="text">
-                  <string>Slot 9:</string>
+                  <string>Slot &amp;9:</string>
+                 </property>
+                 <property name="buddy">
+                  <cstring>EffectType8</cstring>
                  </property>
                 </widget>
                </item>
                <item row="12" column="0">
                 <widget class="QLabel" name="SlotLabel11">
                  <property name="text">
-                  <string>Slot 12:</string>
+                  <string>Slot 1&amp;2:</string>
+                 </property>
+                 <property name="buddy">
+                  <cstring>EffectType11</cstring>
                  </property>
                 </widget>
                </item>
@@ -2025,7 +2175,7 @@
                  </property>
                 </widget>
                </item>
-               <item row="4" column="5">
+               <item row="4" column="4">
                 <widget class="QLabel" name="ImbuePoints3">
                  <property name="text">
                   <string>0.0</string>
@@ -2069,7 +2219,7 @@
                  </property>
                 </widget>
                </item>
-               <item row="3" column="5">
+               <item row="3" column="4">
                 <widget class="QLabel" name="ImbuePoints2">
                  <property name="text">
                   <string>0.0</string>
@@ -2079,20 +2229,7 @@
                  </property>
                 </widget>
                </item>
-               <item row="0" column="7" rowspan="13">
-                <spacer>
-                 <property name="orientation">
-                  <enum>Qt::Horizontal</enum>
-                 </property>
-                 <property name="sizeHint" stdset="0">
-                  <size>
-                   <width>40</width>
-                   <height>20</height>
-                  </size>
-                 </property>
-                </spacer>
-               </item>
-               <item row="2" column="5">
+               <item row="2" column="4">
                 <widget class="QLabel" name="ImbuePoints1">
                  <property name="text">
                   <string>0.0</string>
@@ -2116,7 +2253,105 @@
                  </property>
                 </widget>
                </item>
+               <item row="0" column="7" rowspan="13">
+                <spacer>
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                 <property name="sizeType">
+                  <enum>QSizePolicy::Expanding</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>0</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
               </layout>
+              <zorder>RequirementLabel</zorder>
+              <zorder>Requirement0</zorder>
+              <zorder>Effect4</zorder>
+              <zorder>Effect5</zorder>
+              <zorder>Effect3</zorder>
+              <zorder>EffectType8</zorder>
+              <zorder>AmountEdit1</zorder>
+              <zorder>AmountEdit0</zorder>
+              <zorder>AmountEdit2</zorder>
+              <zorder>AmountEdit4</zorder>
+              <zorder>ImbuePoints0</zorder>
+              <zorder>EffectType0</zorder>
+              <zorder>AmountEdit3</zorder>
+              <zorder>AmountEdit5</zorder>
+              <zorder>AmountStatic0</zorder>
+              <zorder>AmountStatic4</zorder>
+              <zorder>AmountStatic5</zorder>
+              <zorder>SlotLabel0</zorder>
+              <zorder>GemName0</zorder>
+              <zorder>AmountStatic3</zorder>
+              <zorder>GemNameLabel</zorder>
+              <zorder>EffectTypeLabel</zorder>
+              <zorder>EffectType5</zorder>
+              <zorder>SlotLabel5</zorder>
+              <zorder>AmountStatic1</zorder>
+              <zorder>Requirement6</zorder>
+              <zorder>AmountStatic2</zorder>
+              <zorder>Effect0</zorder>
+              <zorder>AmountEdit6</zorder>
+              <zorder>Effect1</zorder>
+              <zorder>EffectType3</zorder>
+              <zorder>EffectType6</zorder>
+              <zorder>Effect2</zorder>
+              <zorder>SlotLabel4</zorder>
+              <zorder>SlotLabel6</zorder>
+              <zorder>SlotLabel3</zorder>
+              <zorder>EffectType2</zorder>
+              <zorder>EffectType4</zorder>
+              <zorder>EffectType1</zorder>
+              <zorder>SlotLabel2</zorder>
+              <zorder>Effect9</zorder>
+              <zorder>AmountEdit11</zorder>
+              <zorder>Requirement9</zorder>
+              <zorder>Effect11</zorder>
+              <zorder>Requirement7</zorder>
+              <zorder>Effect10</zorder>
+              <zorder>Requirement8</zorder>
+              <zorder>Requirement5</zorder>
+              <zorder>Requirement11</zorder>
+              <zorder>Requirement10</zorder>
+              <zorder>Requirement1</zorder>
+              <zorder>Requirement4</zorder>
+              <zorder>SlotLabel1</zorder>
+              <zorder>AmountLabel</zorder>
+              <zorder>Requirement3</zorder>
+              <zorder>Requirement2</zorder>
+              <zorder>ImbuePointsLabel</zorder>
+              <zorder>EffectLabel</zorder>
+              <zorder>EffectType7</zorder>
+              <zorder>Effect6</zorder>
+              <zorder>SlotLabel10</zorder>
+              <zorder>SlotLabel7</zorder>
+              <zorder>AmountEdit9</zorder>
+              <zorder>EffectType10</zorder>
+              <zorder>Effect7</zorder>
+              <zorder>AmountEdit10</zorder>
+              <zorder>SlotLabel9</zorder>
+              <zorder>SlotLabel8</zorder>
+              <zorder>SlotLabel11</zorder>
+              <zorder>AmountEdit7</zorder>
+              <zorder>EffectType11</zorder>
+              <zorder>Effect8</zorder>
+              <zorder>AmountEdit8</zorder>
+              <zorder>GemName3</zorder>
+              <zorder>ImbuePoints3</zorder>
+              <zorder>EffectType9</zorder>
+              <zorder>GemName1</zorder>
+              <zorder>GemName2</zorder>
+              <zorder>ImbuePoints2</zorder>
+              <zorder>ImbuePoints1</zorder>
+              <zorder>GemName4</zorder>
+              <zorder>GemName5</zorder>
              </widget>
             </item>
            </layout>

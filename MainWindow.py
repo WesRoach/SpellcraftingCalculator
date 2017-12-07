@@ -143,7 +143,7 @@ class MainWindow(QMainWindow):
             selection = index.data()
 
             # DEBUGGING
-            print(selection)
+            print('\n' + selection)
 
         for label, index in self.ItemIndexList.items():
             if selection == label:
@@ -151,42 +151,57 @@ class MainWindow(QMainWindow):
                 self.CurrentItemLabel = label
                 self.RestoreItem(self.ItemAttributeList[self.CurrentItemLabel])
 
-    # TODO: CLEAN THIS MESS UP
-    def showFixedWidgets(self):
-        for i in range(0, 6):
-            getattr(self, "SlotLabel{}".format(i)).setText('Slot %d:' % (i + 1))
-            getattr(self, "SlotLabel{}".format(i)).show()
-            getattr(self, "EffectType{}".format(i)).show()
-            getattr(self, "Effect{}".format(i)).show()
-
-    # TODO: CLEAN THIS MESS UP
     def showDropWidgets(self, item):
-        self.showFixedWidgets()
-        self.ItemGroup.updateGeometry()
-
-        # TODO: CLEAN THIS MESS UP
-    def showCraftWidgets(self, item):
-        self.showFixedWidgets()
         for i in range(0, item.slotCount()):
             print(item.slot(i).__dict__)
-            if item.slot(i).itemType() == 'crafted':
-                getattr(self, "SlotLabel{}".format(i)).setText('Gem %d:' % (i + 1))
-            else:
-                if i < 4:
-                    getattr(self, "ImbuePoints{}".format(i)).hide()
+            if item.slot(i).itemType() == 'drop':
+                getattr(self, "SlotLabel{}".format(i)).setText('Slot &%d:' % (i + 1))
+                getattr(self, "SlotLabel{}".format(i)).show()
+                getattr(self, "EffectType{}".format(i)).show()
+                getattr(self, "AmountEdit{}".format(i)).show()
+                getattr(self, "Effect{}".format(i)).show()
                 getattr(self, "Requirement{}".format(i)).show()
-            if item.slot(i).itemType() == 'unused':
-                if item.slot(i).effectType() == 'Unused':
-                    print(item.slot(i).effectType())
-                    getattr(self, "SlotLabel{}".format(i)).hide()
-                    getattr(self, "EffectType{}".format(i)).hide()
-                    getattr(self, "AmountStatic{}".format(i)).hide()
-                    getattr(self, "Effect{}".format(i)).hide()
-                    getattr(self, "Requirement{}".format(i)).hide()
-                    getattr(self, "GemName{}".format(i)).hide()
+                getattr(self, "RequirementLabel").show()
+            if i < 6:
+                getattr(self, "GemName{}".format(i)).hide()
+            if i < 4:
+                getattr(self, "ImbuePoints{}".format(i)).hide()
+
+        getattr(self, "ImbuePointsLabel").hide()
+        getattr(self, "GemNameLabel").hide()
+        getattr(self, "RequirementLabel").show()
         self.ItemGroup.updateGeometry()
 
-    # TODO: CLEAN THIS MESS UP
+    def showCraftWidgets(self, item):
+        for i in range(0, item.slotCount()):
+            print(item.__dict__)
+            if item.slot(i).itemType() == 'crafted':
+                getattr(self, "SlotLabel{}".format(i)).setText('Gem &%d:' % (i + 1))
+
+            elif item.slot(i).itemType() == 'enhanced':
+                getattr(self, "SlotLabel{}".format(i)).setText('Slot &%d:' % (i + 1))
+
+            elif item.slot(i).itemType() == 'effect':
+                getattr(self, "SlotLabel{}".format(i)).setText('Slot &%d:' % (i + 1))
+
+            getattr(self, "GemName{}".format(i)).show()
+
+            if i < 4:
+                getattr(self, "Requirement{}".format(i)).hide()
+                getattr(self, "ImbuePoints{}".format(i)).show()
+
+        for i in range(6, 12):
+            getattr(self, "SlotLabel{}".format(i)).hide()
+            getattr(self, "EffectType{}".format(i)).hide()
+            getattr(self, "AmountEdit{}".format(i)).hide()
+            getattr(self, "Effect{}".format(i)).hide()
+            getattr(self, "Requirement{}".format(i)).hide()
+
+        getattr(self, "RequirementLabel").hide()
+        getattr(self, "ImbuePointsLabel").show()
+        getattr(self, "GemNameLabel").show()
+        self.ItemGroup.updateGeometry()
+
     def RestoreItem(self, item):
         ItemType = item.ActiveState
 

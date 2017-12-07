@@ -18,7 +18,7 @@ class ItemSlot:
         self.EffectType = ''
         self.EffectAmount = ''
         self.Requirement = ''
-        self.CraftOkay = bool
+        self.CraftOkay = False
 
         self.setAll(etype, effect, amount, requirement)
 
@@ -39,10 +39,10 @@ class ItemSlot:
             self.__dict__[attribute] = str(value)
 
     def itemType(self):
-        return self.ItemType
+        return self.itemType
 
     def effectType(self):
-        return self.EffectType
+        return self.effectType
 
 
 class Item:
@@ -97,8 +97,8 @@ class Item:
             for slot in range(0, 4):
                 ItemSlots.append(ItemSlot(ItemType))
 
+            ItemSlots.append(ItemSlot('enhanced'))
             ItemSlots.append(ItemSlot('effect'))
-            ItemSlots.append(ItemSlot('unused'))
 
         return ItemSlots
 
