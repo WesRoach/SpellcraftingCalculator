@@ -50,7 +50,7 @@
       <property name="childrenCollapsible">
        <bool>false</bool>
       </property>
-      <widget class="QWidget">
+      <widget class="QWidget" name="layoutWidget">
        <layout class="QHBoxLayout">
         <property name="spacing">
          <number>5</number>
@@ -1444,10 +1444,22 @@
             </property>
            </column>
           </widget>
-          <widget class="QWidget">
+          <widget class="QFrame" name="ItemGroup">
            <layout class="QVBoxLayout">
             <property name="spacing">
              <number>5</number>
+            </property>
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
+             <number>0</number>
             </property>
             <item>
              <widget class="QFrame" name="ItemHeaderFrame">
@@ -1568,47 +1580,47 @@
                 <number>2</number>
                </property>
                <item row="5" column="3">
-                <widget class="QComboBox" name="Effect5">
-                 <property name="maxVisibleItems">
-                  <number>20</number>
-                 </property>
-                </widget>
-               </item>
-               <item row="6" column="3">
-                <widget class="QComboBox" name="Effect6">
-                 <property name="maxVisibleItems">
-                  <number>20</number>
-                 </property>
-                </widget>
-               </item>
-               <item row="4" column="3">
                 <widget class="QComboBox" name="Effect4">
                  <property name="maxVisibleItems">
                   <number>20</number>
                  </property>
                 </widget>
                </item>
+               <item row="6" column="3">
+                <widget class="QComboBox" name="Effect5">
+                 <property name="maxVisibleItems">
+                  <number>20</number>
+                 </property>
+                </widget>
+               </item>
+               <item row="4" column="3">
+                <widget class="QComboBox" name="Effect3">
+                 <property name="maxVisibleItems">
+                  <number>20</number>
+                 </property>
+                </widget>
+               </item>
                <item row="9" column="1">
-                <widget class="QComboBox" name="Type9">
+                <widget class="QComboBox" name="Type8">
                  <property name="maxVisibleItems">
                   <number>20</number>
                  </property>
                 </widget>
                </item>
                <item row="2" column="2">
-                <widget class="QLineEdit" name="AmountEdit2"/>
-               </item>
-               <item row="1" column="2">
                 <widget class="QLineEdit" name="AmountEdit1"/>
                </item>
+               <item row="1" column="2">
+                <widget class="QLineEdit" name="AmountEdit0"/>
+               </item>
                <item row="3" column="2">
-                <widget class="QLineEdit" name="AmountEdit3"/>
+                <widget class="QLineEdit" name="AmountEdit2"/>
                </item>
                <item row="5" column="2">
-                <widget class="QLineEdit" name="AmountEdit5"/>
+                <widget class="QLineEdit" name="AmountEdit4"/>
                </item>
                <item row="1" column="5">
-                <widget class="QLabel" name="ImbuePoints1">
+                <widget class="QLabel" name="ImbuePoints0">
                  <property name="text">
                   <string>0.0</string>
                  </property>
@@ -1618,7 +1630,7 @@
                 </widget>
                </item>
                <item row="1" column="1" alignment="Qt::AlignLeft">
-                <widget class="QComboBox" name="Type1">
+                <widget class="QComboBox" name="EffectType0">
                  <property name="maxVisibleItems">
                   <number>20</number>
                  </property>
@@ -1628,51 +1640,51 @@
                 </widget>
                </item>
                <item row="1" column="4">
-                <widget class="QLineEdit" name="Requirement1"/>
+                <widget class="QLineEdit" name="Requirement0"/>
                </item>
                <item row="4" column="2">
-                <widget class="QLineEdit" name="AmountEdit4"/>
+                <widget class="QLineEdit" name="AmountEdit3"/>
                </item>
                <item row="6" column="2">
-                <widget class="QLineEdit" name="AmountEdit6"/>
+                <widget class="QLineEdit" name="AmountEdit5"/>
                </item>
                <item row="1" column="2">
-                <widget class="QComboBox" name="AmountStatic1">
+                <widget class="QComboBox" name="AmountStatic0">
                  <property name="maxVisibleItems">
                   <number>20</number>
                  </property>
                 </widget>
                </item>
                <item row="5" column="2">
-                <widget class="QComboBox" name="AmountStatic5">
+                <widget class="QComboBox" name="AmountStatic4">
                  <property name="maxVisibleItems">
                   <number>20</number>
                  </property>
                 </widget>
                </item>
                <item row="6" column="2">
-                <widget class="QComboBox" name="AmountStatic6">
+                <widget class="QComboBox" name="AmountStatic5">
                  <property name="maxVisibleItems">
                   <number>20</number>
                  </property>
                 </widget>
                </item>
                <item row="1" column="0">
-                <widget class="QLabel" name="SlotLabel1">
+                <widget class="QLabel" name="SlotLabel0">
                  <property name="text">
                   <string>Slot 1:</string>
                  </property>
                 </widget>
                </item>
                <item row="1" column="6">
-                <widget class="QLabel" name="GemName1">
+                <widget class="QLabel" name="GemName0">
                  <property name="text">
                   <string/>
                  </property>
                 </widget>
                </item>
                <item row="4" column="2">
-                <widget class="QComboBox" name="AmountStatic4">
+                <widget class="QComboBox" name="AmountStatic3">
                  <property name="maxVisibleItems">
                   <number>20</number>
                  </property>
@@ -1689,7 +1701,7 @@
                 </widget>
                </item>
                <item row="0" column="1">
-                <widget class="QLabel" name="TypeLabel">
+                <widget class="QLabel" name="EffectTypeLabel">
                  <property name="text">
                   <string>Type</string>
                  </property>
@@ -1699,173 +1711,173 @@
                 </widget>
                </item>
                <item row="6" column="1">
-                <widget class="QComboBox" name="Type6">
+                <widget class="QComboBox" name="EffectType5">
                  <property name="maxVisibleItems">
                   <number>20</number>
                  </property>
                 </widget>
                </item>
                <item row="6" column="0">
-                <widget class="QLabel" name="SlotLabel6">
+                <widget class="QLabel" name="SlotLabel5">
                  <property name="text">
                   <string>Slot 6:</string>
                  </property>
                 </widget>
                </item>
                <item row="2" column="2">
-                <widget class="QComboBox" name="AmountStatic2">
+                <widget class="QComboBox" name="AmountStatic1">
                  <property name="maxVisibleItems">
                   <number>20</number>
                  </property>
                 </widget>
                </item>
                <item row="7" column="4">
-                <widget class="QLineEdit" name="Requirement7"/>
+                <widget class="QLineEdit" name="Requirement6"/>
                </item>
                <item row="3" column="2">
-                <widget class="QComboBox" name="AmountStatic3">
+                <widget class="QComboBox" name="AmountStatic2">
                  <property name="maxVisibleItems">
                   <number>20</number>
                  </property>
                 </widget>
                </item>
                <item row="1" column="3">
-                <widget class="QComboBox" name="Effect1">
+                <widget class="QComboBox" name="Effect0">
                  <property name="maxVisibleItems">
                   <number>20</number>
                  </property>
                 </widget>
                </item>
                <item row="7" column="2">
-                <widget class="QLineEdit" name="AmountEdit7"/>
+                <widget class="QLineEdit" name="AmountEdit6"/>
                </item>
                <item row="2" column="3">
-                <widget class="QComboBox" name="Effect2">
+                <widget class="QComboBox" name="Effect1">
                  <property name="maxVisibleItems">
                   <number>20</number>
                  </property>
                 </widget>
                </item>
                <item row="4" column="1">
-                <widget class="QComboBox" name="Type4">
+                <widget class="QComboBox" name="EffectType3">
                  <property name="maxVisibleItems">
                   <number>20</number>
                  </property>
                 </widget>
                </item>
                <item row="7" column="1">
-                <widget class="QComboBox" name="Type7">
+                <widget class="QComboBox" name="EffectType6">
                  <property name="maxVisibleItems">
                   <number>20</number>
                  </property>
                 </widget>
                </item>
                <item row="3" column="3">
-                <widget class="QComboBox" name="Effect3">
+                <widget class="QComboBox" name="Effect2">
                  <property name="maxVisibleItems">
                   <number>20</number>
                  </property>
                 </widget>
                </item>
                <item row="5" column="0">
-                <widget class="QLabel" name="SlotLabel5">
+                <widget class="QLabel" name="SlotLabel4">
                  <property name="text">
                   <string>Slot 5:</string>
                  </property>
                 </widget>
                </item>
                <item row="7" column="0">
-                <widget class="QLabel" name="SlotLabel7">
+                <widget class="QLabel" name="SlotLabel6">
                  <property name="text">
                   <string>Slot 7:</string>
                  </property>
                 </widget>
                </item>
                <item row="4" column="0">
-                <widget class="QLabel" name="SlotLabel4">
+                <widget class="QLabel" name="SlotLabel3">
                  <property name="text">
                   <string>Slot 4:</string>
                  </property>
                 </widget>
                </item>
                <item row="3" column="1">
-                <widget class="QComboBox" name="Type3">
+                <widget class="QComboBox" name="EffectType2">
                  <property name="maxVisibleItems">
                   <number>20</number>
                  </property>
                 </widget>
                </item>
                <item row="5" column="1">
-                <widget class="QComboBox" name="Type5">
+                <widget class="QComboBox" name="EffectType4">
                  <property name="maxVisibleItems">
                   <number>20</number>
                  </property>
                 </widget>
                </item>
                <item row="2" column="1">
-                <widget class="QComboBox" name="Type2">
+                <widget class="QComboBox" name="EffectType1">
                  <property name="maxVisibleItems">
                   <number>20</number>
                  </property>
                 </widget>
                </item>
                <item row="3" column="0">
-                <widget class="QLabel" name="SlotLabel3">
+                <widget class="QLabel" name="SlotLabel2">
                  <property name="text">
                   <string>Slot 3:</string>
                  </property>
                 </widget>
                </item>
                <item row="10" column="3">
-                <widget class="QComboBox" name="Effect10">
+                <widget class="QComboBox" name="Effect9">
                  <property name="maxVisibleItems">
                   <number>20</number>
                  </property>
                 </widget>
                </item>
                <item row="12" column="2">
-                <widget class="QLineEdit" name="AmountEdit12"/>
+                <widget class="QLineEdit" name="AmountEdit11"/>
                </item>
                <item row="10" column="4">
-                <widget class="QLineEdit" name="Requirement10"/>
+                <widget class="QLineEdit" name="Requirement9"/>
                </item>
                <item row="12" column="3">
-                <widget class="QComboBox" name="Effect12">
-                 <property name="maxVisibleItems">
-                  <number>20</number>
-                 </property>
-                </widget>
-               </item>
-               <item row="8" column="4">
-                <widget class="QLineEdit" name="Requirement8"/>
-               </item>
-               <item row="11" column="3">
                 <widget class="QComboBox" name="Effect11">
                  <property name="maxVisibleItems">
                   <number>20</number>
                  </property>
                 </widget>
                </item>
+               <item row="8" column="4">
+                <widget class="QLineEdit" name="Requirement7"/>
+               </item>
+               <item row="11" column="3">
+                <widget class="QComboBox" name="Effect10">
+                 <property name="maxVisibleItems">
+                  <number>20</number>
+                 </property>
+                </widget>
+               </item>
                <item row="9" column="4">
-                <widget class="QLineEdit" name="Requirement9"/>
+                <widget class="QLineEdit" name="Requirement8"/>
                </item>
                <item row="6" column="4">
-                <widget class="QLineEdit" name="Requirement6"/>
-               </item>
-               <item row="12" column="4">
-                <widget class="QLineEdit" name="Requirement12"/>
-               </item>
-               <item row="11" column="4">
-                <widget class="QLineEdit" name="Requirement11"/>
-               </item>
-               <item row="2" column="4">
-                <widget class="QLineEdit" name="Requirement2"/>
-               </item>
-               <item row="5" column="4">
                 <widget class="QLineEdit" name="Requirement5"/>
                </item>
+               <item row="12" column="4">
+                <widget class="QLineEdit" name="Requirement11"/>
+               </item>
+               <item row="11" column="4">
+                <widget class="QLineEdit" name="Requirement10"/>
+               </item>
+               <item row="2" column="4">
+                <widget class="QLineEdit" name="Requirement1"/>
+               </item>
+               <item row="5" column="4">
+                <widget class="QLineEdit" name="Requirement4"/>
+               </item>
                <item row="2" column="0">
-                <widget class="QLabel" name="SlotLabel2">
+                <widget class="QLabel" name="SlotLabel1">
                  <property name="text">
                   <string>Slot 2:</string>
                  </property>
@@ -1882,10 +1894,10 @@
                 </widget>
                </item>
                <item row="4" column="4">
-                <widget class="QLineEdit" name="Requirement4"/>
+                <widget class="QLineEdit" name="Requirement3"/>
                </item>
                <item row="3" column="4">
-                <widget class="QLineEdit" name="Requirement3"/>
+                <widget class="QLineEdit" name="Requirement2"/>
                </item>
                <item row="0" column="5">
                 <widget class="QLabel" name="ImbuePointsLabel">
@@ -1918,103 +1930,103 @@
                 </widget>
                </item>
                <item row="8" column="1">
-                <widget class="QComboBox" name="Type8">
+                <widget class="QComboBox" name="EffectType7">
                  <property name="maxVisibleItems">
                   <number>20</number>
                  </property>
                 </widget>
                </item>
                <item row="7" column="3">
-                <widget class="QComboBox" name="Effect7">
+                <widget class="QComboBox" name="Effect6">
                  <property name="maxVisibleItems">
                   <number>20</number>
                  </property>
                 </widget>
                </item>
                <item row="11" column="0">
-                <widget class="QLabel" name="SlotLabel11">
+                <widget class="QLabel" name="SlotLabel10">
                  <property name="text">
                   <string>Slot 11:</string>
                  </property>
                 </widget>
                </item>
                <item row="8" column="0">
-                <widget class="QLabel" name="SlotLabel8">
+                <widget class="QLabel" name="SlotLabel7">
                  <property name="text">
                   <string>Slot 8:</string>
                  </property>
                 </widget>
                </item>
                <item row="10" column="2">
-                <widget class="QLineEdit" name="AmountEdit10"/>
+                <widget class="QLineEdit" name="AmountEdit9"/>
                </item>
                <item row="11" column="1">
-                <widget class="QComboBox" name="Type11">
+                <widget class="QComboBox" name="EffectType10">
                  <property name="maxVisibleItems">
                   <number>20</number>
                  </property>
                 </widget>
                </item>
                <item row="8" column="3">
-                <widget class="QComboBox" name="Effect8">
+                <widget class="QComboBox" name="Effect7">
                  <property name="maxVisibleItems">
                   <number>20</number>
                  </property>
                 </widget>
                </item>
                <item row="11" column="2">
-                <widget class="QLineEdit" name="AmountEdit11"/>
+                <widget class="QLineEdit" name="AmountEdit10"/>
                </item>
                <item row="10" column="0">
-                <widget class="QLabel" name="SlotLabel10">
+                <widget class="QLabel" name="SlotLabel9">
                  <property name="text">
                   <string>Slot 10:</string>
                  </property>
                 </widget>
                </item>
                <item row="9" column="0">
-                <widget class="QLabel" name="SlotLabel9">
+                <widget class="QLabel" name="SlotLabel8">
                  <property name="text">
                   <string>Slot 9:</string>
                  </property>
                 </widget>
                </item>
                <item row="12" column="0">
-                <widget class="QLabel" name="SlotLabel12">
+                <widget class="QLabel" name="SlotLabel11">
                  <property name="text">
                   <string>Slot 12:</string>
                  </property>
                 </widget>
                </item>
                <item row="8" column="2">
-                <widget class="QLineEdit" name="AmountEdit8"/>
+                <widget class="QLineEdit" name="AmountEdit7"/>
                </item>
                <item row="12" column="1">
-                <widget class="QComboBox" name="Type12">
+                <widget class="QComboBox" name="EffectType11">
                  <property name="maxVisibleItems">
                   <number>20</number>
                  </property>
                 </widget>
                </item>
                <item row="9" column="3">
-                <widget class="QComboBox" name="Effect9">
+                <widget class="QComboBox" name="Effect8">
                  <property name="maxVisibleItems">
                   <number>20</number>
                  </property>
                 </widget>
                </item>
                <item row="9" column="2">
-                <widget class="QLineEdit" name="AmountEdit9"/>
+                <widget class="QLineEdit" name="AmountEdit8"/>
                </item>
                <item row="4" column="6">
-                <widget class="QLabel" name="GemName4">
+                <widget class="QLabel" name="GemName3">
                  <property name="text">
                   <string/>
                  </property>
                 </widget>
                </item>
                <item row="4" column="5">
-                <widget class="QLabel" name="ImbuePoints4">
+                <widget class="QLabel" name="ImbuePoints3">
                  <property name="text">
                   <string>0.0</string>
                  </property>
@@ -2024,7 +2036,7 @@
                 </widget>
                </item>
                <item row="10" column="1">
-                <widget class="QComboBox" name="Type10">
+                <widget class="QComboBox" name="EffectType9">
                  <property name="maxVisibleItems">
                   <number>20</number>
                  </property>
@@ -2044,21 +2056,21 @@
                 </spacer>
                </item>
                <item row="2" column="6">
-                <widget class="QLabel" name="GemName2">
+                <widget class="QLabel" name="GemName1">
                  <property name="text">
                   <string/>
                  </property>
                 </widget>
                </item>
                <item row="3" column="6">
-                <widget class="QLabel" name="GemName3">
+                <widget class="QLabel" name="GemName2">
                  <property name="text">
                   <string/>
                  </property>
                 </widget>
                </item>
                <item row="3" column="5">
-                <widget class="QLabel" name="ImbuePoints3">
+                <widget class="QLabel" name="ImbuePoints2">
                  <property name="text">
                   <string>0.0</string>
                  </property>
@@ -2081,7 +2093,7 @@
                 </spacer>
                </item>
                <item row="2" column="5">
-                <widget class="QLabel" name="ImbuePoints2">
+                <widget class="QLabel" name="ImbuePoints1">
                  <property name="text">
                   <string>0.0</string>
                  </property>
@@ -2091,14 +2103,14 @@
                 </widget>
                </item>
                <item row="5" column="6">
-                <widget class="QLabel" name="GemName5">
+                <widget class="QLabel" name="GemName4">
                  <property name="text">
                   <string/>
                  </property>
                 </widget>
                </item>
                <item row="6" column="6">
-                <widget class="QLabel" name="GemName6">
+                <widget class="QLabel" name="GemName5">
                  <property name="text">
                   <string/>
                  </property>

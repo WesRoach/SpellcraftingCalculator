@@ -5,31 +5,9 @@ from PyQt5.Qt import Qt
 from PyQt5.QtCore import QSize
 from PyQt5.QtGui import QFont, QFontMetrics
 from PyQt5.QtWidgets import QMainWindow, QMenu, QToolBar, QTreeWidgetItem
-from Character import AllBonusList, ClassList, Races, Realms
+from Character import AllBonusList, AllRealms, ClassList, Races, Realms
 from Constants import Cap, DropLists, MythicalCap
 from Item import Item, SlotList
-
-
-# class ItemWidget(QWidget):
-#     def __init__(self, parent = None):
-#         QWidget.__init__(self, parent = parent)
-#         uic.loadUi(r'interface/ItemWidget.ui', self)
-#         self.enabled = True
-#         self.text = None
-#         self.data = None
-#
-#         height = 20
-#
-#         for i in range(1, 13):
-#             getattr(self, "AmountEdit{}".format(i)).setFixedHeight(height)
-#             getattr(self, "Effect{}".format(i)).setFixedHeight(height)
-#             getattr(self, "Requirement{}".format(i)).setFixedHeight(height)
-#             getattr(self, "Type{}".format(i)).setFixedHeight(height)
-#
-#         for i in range(1, 7):
-#             getattr(self, "AmountStatic{}".format(i)).setFixedHeight(height)
-#
-#         self.updateGeometry()
 
 
 class MainWindow(QMainWindow):
@@ -60,8 +38,6 @@ class MainWindow(QMainWindow):
         self.CurrentRealm = ''
         self.CurrentItemIndex = {}
         self.CurrentItemLabel = {}
-
-        self.SwitchOnType = {'crafted': [], 'drop': [], }
 
         self.initMenuBar()
         self.initToolBar()
@@ -165,6 +141,8 @@ class MainWindow(QMainWindow):
     def ItemSelected(self, selection):
         for index in self.SlotListTreeView.selectedIndexes():
             selection = index.data()
+
+            # DEBUGGING
             print(selection)
 
         for label, index in self.ItemIndexList.items():
@@ -173,34 +151,58 @@ class MainWindow(QMainWindow):
                 self.CurrentItemLabel = label
                 self.RestoreItem(self.ItemAttributeList[self.CurrentItemLabel])
 
+    # TODO: CLEAN THIS MESS UP
     def showFixedWidgets(self):
-        pass
+        for i in range(0, 6):
+            getattr(self, "SlotLabel{}".format(i)).setText('Slot %d:' % (i + 1))
+            getattr(self, "SlotLabel{}".format(i)).show()
+            getattr(self, "EffectType{}".format(i)).show()
+            getattr(self, "Effect{}".format(i)).show()
 
+    # TODO: CLEAN THIS MESS UP
     def showDropWidgets(self, item):
         self.showFixedWidgets()
-        for child in self.SwitchOnType['crafted']:
-            child.hide()
-        for child in self.SwitchOnType['drop']:
-            child.show()
+        self.ItemGroup.updateGeometry()
 
+        # TODO: CLEAN THIS MESS UP
     def showCraftWidgets(self, item):
         self.showFixedWidgets()
-        for child in self.SwitchOnType['drop']:
-            child.hide()
-        for child in self.SwitchOnType['crafted']:
-            child.show()
+        for i in range(0, item.slotCount()):
+            print(item.slot(i).__dict__)
+            if item.slot(i).itemType() == 'crafted':
+                getattr(self, "SlotLabel{}".format(i)).setText('Gem %d:' % (i + 1))
+            else:
+                if i < 4:
+                    getattr(self, "ImbuePoints{}".format(i)).hide()
+                getattr(self, "Requirement{}".format(i)).show()
+            if item.slot(i).itemType() == 'unused':
+                if item.slot(i).effectType() == 'Unused':
+                    print(item.slot(i).effectType())
+                    getattr(self, "SlotLabel{}".format(i)).hide()
+                    getattr(self, "EffectType{}".format(i)).hide()
+                    getattr(self, "AmountStatic{}".format(i)).hide()
+                    getattr(self, "Effect{}".format(i)).hide()
+                    getattr(self, "Requirement{}".format(i)).hide()
+                    getattr(self, "GemName{}".format(i)).hide()
+        self.ItemGroup.updateGeometry()
 
+    # TODO: CLEAN THIS MESS UP
     def RestoreItem(self, item):
         ItemType = item.ActiveState
 
         if ItemType == 'crafted':
+            realms = Realms
+            sources = ['Crafted']
             self.showCraftWidgets(item)
 
         elif ItemType == 'drop':
+            realms = AllRealms
+            sources = ['Drop', 'Quest', 'Artifact', 'Merchant', 'Unique', ]
             self.showDropWidgets(item)
 
-        else:
-            return
+        self.ItemName.clear()
+        self.ItemName.addItem(item.ItemName)
+        self.ItemName.setCurrentIndex(0)
 
     def RealmChanged(self, value):
         Realm = str(self.CharacterRealm.currentText())
@@ -249,27 +251,20 @@ class MainWindow(QMainWindow):
                 self.ItemIndexList[val] = self.ItemIndex
                 if key == 'Armor':
                     item = Item('crafted', val, self.CurrentRealm, self.ItemIndex)
-                    item.ItemName = "Crafted Item #" + str(self.ItemNumbering)
+                    item.ItemName = "Crafted Item"
                     self.ItemIndex += 1
-                    self.ItemNumbering += 1
                     self.ItemAttributeList[val] = item
                 else:
                     item = Item('drop', val, self.CurrentRealm, self.ItemIndex)
-                    item.ItemName = "Drop Item #" + str(self.ItemNumbering)
+                    item.ItemName = "Dropped Item"
                     self.ItemIndex += 1
-                    self.ItemNumbering += 1
                     self.ItemAttributeList[val] = item
 
         # SET THE INITIAL SLOT
         self.ItemSelected('Neck')
 
-        # THIS MIGHT NOT BE RIGHT ...
-        # for key, value in self.ItemIndexList.items():
-        #     self.ItemStackedWidget.insertWidget(value, ItemWidget())
-
-        # for item, index in self.ItemIndexList.items():
-        #     if index == self.ItemStackedWidget.currentIndex():
-        #         self.RestoreItem(self.ItemAttributeList[item])
+        # POPULATE THE CURRENT SELECTED ITEM
+        self.RestoreItem(self.ItemAttributeList[self.CurrentItemLabel])
 
     def showStat(self, stat, show):
         if self.StatLabel[stat].isHidden() != show:

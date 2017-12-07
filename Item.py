@@ -8,25 +8,25 @@ class ItemSlot:
     def __init__(self, itype = '', etype = 'Unused', effect = '', amount = '', requirement = ''):
         self.__dict__ = {
             'ItemType': str(itype),
-            'SlotEffectType': '',
-            'SlotEffect': '',
-            'SlotEffectAmount': '',
-            'SlotRequirement': '',
+            'Effect': '',
+            'EffectType': '',
+            'EffectAmount': '',
+            'Requirement': '',
         }
 
-        self.SlotEffect = ''
-        self.SlotEffectType = ''
-        self.SlotEffectAmount = ''
-        self.SlotRequirement = ''
+        self.Effect = ''
+        self.EffectType = ''
+        self.EffectAmount = ''
+        self.Requirement = ''
         self.CraftOkay = bool
 
         self.setAll(etype, effect, amount, requirement)
 
     def setAll(self, etype = 'Unused', effect = '', amount = '0', requirement = ''):
-        self.SlotEffect = str(effect)
-        self.SlotEffectType = str(etype)
-        self.SlotEffectAmount = str(amount)
-        self.SlotRequirement = str(requirement)
+        self.Effect = str(effect)
+        self.EffectType = str(etype)
+        self.EffectAmount = str(amount)
+        self.Requirement = str(requirement)
 
     def getAttribute(self, attribute):
         if attribute in self.__dict__:
@@ -38,6 +38,12 @@ class ItemSlot:
         if attribute in self.__dict__:
             self.__dict__[attribute] = str(value)
 
+    def itemType(self):
+        return self.ItemType
+
+    def effectType(self):
+        return self.EffectType
+
 
 class Item:
     def __init__(self, state = '', location = '', realm = 'All', index =- 1):
@@ -48,11 +54,11 @@ class Item:
             'ItemRealm': realm,
             'ItemLevel': '51',
             'ItemQuality': '100',
+            'ArmorType': '',
             'ItemName': '',
             'ItemAFDPS': '',
             'ItemSpeed': '',
             'ItemBonus': '',
-            'ItemType': '',
             'ItemSource': '',
             'LeftHand': '',
             'ItemDamageType': '',
@@ -88,7 +94,7 @@ class Item:
                 ItemSlots.append(ItemSlot(ItemType))
 
         elif ItemType == 'crafted':
-            for slot in range (0, 4):
+            for slot in range(0, 4):
                 ItemSlots.append(ItemSlot(ItemType))
 
             ItemSlots.append(ItemSlot('effect'))
