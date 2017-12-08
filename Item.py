@@ -39,10 +39,10 @@ class ItemSlot:
             self.__dict__[attribute] = str(value)
 
     def itemType(self):
-        return self.itemType
+        return self.ItemType
 
     def effectType(self):
-        return self.effectType
+        return self.EffectType
 
 
 class Item:

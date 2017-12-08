@@ -152,6 +152,7 @@ class MainWindow(QMainWindow):
                 self.RestoreItem(self.ItemAttributeList[self.CurrentItemLabel])
 
     def showDropWidgets(self, item):
+        self.ItemGroup.hide()
         for i in range(0, item.slotCount()):
             print(item.slot(i).__dict__)
             if item.slot(i).itemType() == 'drop':
@@ -161,9 +162,10 @@ class MainWindow(QMainWindow):
                 getattr(self, "AmountEdit{}".format(i)).show()
                 getattr(self, "Effect{}".format(i)).show()
                 getattr(self, "Requirement{}".format(i)).show()
-                getattr(self, "RequirementLabel").show()
             if i < 6:
                 getattr(self, "GemName{}".format(i)).hide()
+                getattr(self, "AmountStatic{}".format(i)).hide()
+                getattr(self, "AmountEdit{}".format(i)).show()
             if i < 4:
                 getattr(self, "ImbuePoints{}".format(i)).hide()
 
@@ -171,8 +173,10 @@ class MainWindow(QMainWindow):
         getattr(self, "GemNameLabel").hide()
         getattr(self, "RequirementLabel").show()
         self.ItemGroup.updateGeometry()
+        self.ItemGroup.show()
 
     def showCraftWidgets(self, item):
+        self.ItemGroup.hide()
         for i in range(0, item.slotCount()):
             print(item.__dict__)
             if item.slot(i).itemType() == 'crafted':
@@ -185,6 +189,8 @@ class MainWindow(QMainWindow):
                 getattr(self, "SlotLabel{}".format(i)).setText('Slot &%d:' % (i + 1))
 
             getattr(self, "GemName{}".format(i)).show()
+            getattr(self, "AmountEdit{}".format(i)).hide()
+            getattr(self, "AmountStatic{}".format(i)).show()
 
             if i < 4:
                 getattr(self, "Requirement{}".format(i)).hide()
@@ -201,6 +207,7 @@ class MainWindow(QMainWindow):
         getattr(self, "ImbuePointsLabel").show()
         getattr(self, "GemNameLabel").show()
         self.ItemGroup.updateGeometry()
+        self.ItemGroup.show()
 
     def RestoreItem(self, item):
         ItemType = item.ActiveState

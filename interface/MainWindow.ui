@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>874</width>
-    <height>635</height>
+    <width>733</width>
+    <height>587</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -1417,6 +1417,9 @@
            <bool>false</bool>
           </property>
           <widget class="QTreeWidget" name="SlotListTreeView">
+           <property name="enabled">
+            <bool>true</bool>
+           </property>
            <property name="sizePolicy">
             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
              <horstretch>0</horstretch>
@@ -2366,6 +2369,76 @@
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
  </widget>
+ <tabstops>
+  <tabstop>CharacterName</tabstop>
+  <tabstop>CharacterRealm</tabstop>
+  <tabstop>CharacterClass</tabstop>
+  <tabstop>CharacterRace</tabstop>
+  <tabstop>OutfitName</tabstop>
+  <tabstop>CharacterLevel</tabstop>
+  <tabstop>CharacterRealmRank</tabstop>
+  <tabstop>SlotListTreeView</tabstop>
+  <tabstop>ItemName</tabstop>
+  <tabstop>ItemNewButton</tabstop>
+  <tabstop>ItemAddButton</tabstop>
+  <tabstop>ItemDeleteButton</tabstop>
+  <tabstop>ItemChangeButton</tabstop>
+  <tabstop>ItemInformationButton</tabstop>
+  <tabstop>EffectType0</tabstop>
+  <tabstop>AmountStatic0</tabstop>
+  <tabstop>AmountEdit0</tabstop>
+  <tabstop>Effect0</tabstop>
+  <tabstop>Requirement0</tabstop>
+  <tabstop>EffectType1</tabstop>
+  <tabstop>AmountStatic1</tabstop>
+  <tabstop>AmountEdit1</tabstop>
+  <tabstop>Effect1</tabstop>
+  <tabstop>Requirement1</tabstop>
+  <tabstop>EffectType2</tabstop>
+  <tabstop>AmountStatic2</tabstop>
+  <tabstop>AmountEdit2</tabstop>
+  <tabstop>Effect2</tabstop>
+  <tabstop>Requirement2</tabstop>
+  <tabstop>EffectType3</tabstop>
+  <tabstop>AmountStatic3</tabstop>
+  <tabstop>AmountEdit3</tabstop>
+  <tabstop>Effect3</tabstop>
+  <tabstop>Requirement3</tabstop>
+  <tabstop>EffectType4</tabstop>
+  <tabstop>AmountStatic4</tabstop>
+  <tabstop>AmountEdit4</tabstop>
+  <tabstop>Effect4</tabstop>
+  <tabstop>Requirement4</tabstop>
+  <tabstop>EffectType5</tabstop>
+  <tabstop>AmountStatic5</tabstop>
+  <tabstop>AmountEdit5</tabstop>
+  <tabstop>Effect5</tabstop>
+  <tabstop>Requirement5</tabstop>
+  <tabstop>EffectType6</tabstop>
+  <tabstop>AmountEdit6</tabstop>
+  <tabstop>Effect6</tabstop>
+  <tabstop>Requirement6</tabstop>
+  <tabstop>EffectType7</tabstop>
+  <tabstop>AmountEdit7</tabstop>
+  <tabstop>Effect7</tabstop>
+  <tabstop>Requirement7</tabstop>
+  <tabstop>EffectType8</tabstop>
+  <tabstop>AmountEdit8</tabstop>
+  <tabstop>Effect8</tabstop>
+  <tabstop>Requirement8</tabstop>
+  <tabstop>EffectType9</tabstop>
+  <tabstop>AmountEdit9</tabstop>
+  <tabstop>Effect9</tabstop>
+  <tabstop>Requirement9</tabstop>
+  <tabstop>EffectType10</tabstop>
+  <tabstop>AmountEdit10</tabstop>
+  <tabstop>Effect10</tabstop>
+  <tabstop>Requirement10</tabstop>
+  <tabstop>EffectType11</tabstop>
+  <tabstop>AmountEdit11</tabstop>
+  <tabstop>Effect11</tabstop>
+  <tabstop>Requirement11</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>
