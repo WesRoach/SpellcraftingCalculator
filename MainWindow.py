@@ -34,6 +34,7 @@ class MainWindow(QMainWindow):
         self.ItemNumbering = 1
         self.ItemAttributeList = {}
         self.ItemWidget = {}
+        self.ItemInfo = uic.loadUi(r'interface/ItemInformation.ui')
 
         self.CurrentRealm = ''
         self.CurrentItem = {}
@@ -137,31 +138,11 @@ class MainWindow(QMainWindow):
         self.CharacterRealm.insertItems(0, list(Realms))
 
     def ItemInformation(self):
-        ItemInfo = uic.loadUi(r'interface/ItemInformation.ui')
-        ItemInfo.setFont(self.font())
-        ItemInfo.setWindowFlags(Qt.WindowCloseButtonHint)
-        currentItem = self.ItemAttributeList[self.CurrentItemLabel]
-
         # TODO: OVER-RIDE `MainWindow` ICON WITH 'ItemInformation' ICON
-
-        if currentItem.ItemType == 'weapon':
-            ItemInfo.ItemAFDPSLabel.setText('DPS:')
-            ItemInfo.ItemDamageType.show()
-            ItemInfo.ItemDamageTypeLabel.show()
-            ItemInfo.ItemSpeed.show()
-            ItemInfo.ItemSpeedLabel.show()
-            ItemInfo.ItemLeftHand.show()
-
-        else:
-            ItemInfo.ItemAFDPSLabel.setText('AF:')
-            ItemInfo.ItemDamageType.hide()
-            ItemInfo.ItemDamageTypeLabel.hide()
-            ItemInfo.ItemSpeed.hide()
-            ItemInfo.ItemSpeedLabel.hide()
-            ItemInfo.ItemLeftHand.hide()
-
-        ItemInfo.CloseButton.clicked.connect(ItemInfo.accept)
-        ItemInfo.exec_()
+        self.ItemInfo.setFont(self.font())
+        self.ItemInfo.setWindowFlags(Qt.WindowCloseButtonHint)
+        self.ItemInfo.CloseButton.clicked.connect(self.ItemInfo.accept)
+        self.ItemInfo.exec_()
 
     def initControls(self):
         self.ItemInformationButton.clicked.connect(self.ItemInformation)
@@ -242,17 +223,31 @@ class MainWindow(QMainWindow):
         self.ItemGroup.show()
 
     def RestoreItem(self, item):
-        ItemType = item.ActiveState
-
-        if ItemType == 'crafted':
+        if item.ActiveState == 'crafted':
             realms = Realms
             sources = ['Crafted']
             self.showCraftWidgets(item)
 
-        elif ItemType == 'drop':
+        elif item.ActiveState == 'drop':
             realms = AllRealms
             sources = ['Drop', 'Quest', 'Artifact', 'Merchant', 'Unique', ]
             self.showDropWidgets(item)
+
+        if item.ItemType == 'weapon':
+            self.ItemInfo.ItemAFDPSLabel.setText('DPS:')
+            self.ItemInfo.ItemDamageType.show()
+            self.ItemInfo.ItemDamageTypeLabel.show()
+            self.ItemInfo.ItemSpeed.show()
+            self.ItemInfo.ItemSpeedLabel.show()
+            self.ItemInfo.ItemLeftHand.show()
+
+        else:
+            self.ItemInfo.ItemAFDPSLabel.setText('AF:')
+            self.ItemInfo.ItemDamageType.hide()
+            self.ItemInfo.ItemDamageTypeLabel.hide()
+            self.ItemInfo.ItemSpeed.hide()
+            self.ItemInfo.ItemSpeedLabel.hide()
+            self.ItemInfo.ItemLeftHand.hide()
 
         self.ItemName.clear()
         self.ItemName.addItem(item.ItemName)
