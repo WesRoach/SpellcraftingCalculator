@@ -4,7 +4,7 @@ from PyQt5 import uic
 from PyQt5.Qt import Qt
 from PyQt5.QtCore import QSize
 from PyQt5.QtGui import QFont, QFontMetrics
-from PyQt5.QtWidgets import QMainWindow, QMenu, QToolBar, QTreeWidgetItem
+from PyQt5.QtWidgets import QMainWindow, QMenu, QToolBar, QTreeWidgetItem, QDialog
 from Character import AllBonusList, AllRealms, ClassList, Races, Realms
 from Constants import Cap, DropLists, MythicalCap
 from Item import Item, SlotList
@@ -36,6 +36,7 @@ class MainWindow(QMainWindow):
         self.ItemWidget = {}
 
         self.CurrentRealm = ''
+        self.CurrentItem = {}
         self.CurrentItemIndex = {}
         self.CurrentItemLabel = {}
 
@@ -126,13 +127,44 @@ class MainWindow(QMainWindow):
         self.ResistGroup.layout().setColumnMinimumWidth(3, width)
 
         for key, value in SlotList.items():
-            root = QTreeWidgetItem(self.SlotListTreeView, [key])
+            parent = QTreeWidgetItem(self.SlotListTreeView, [key])
             for val in value:
-                root.addChild(QTreeWidgetItem([val]))
+                child = QTreeWidgetItem([val])
+                child.setFlags(child.flags() | Qt.ItemIsUserCheckable)
+                child.setCheckState(0, Qt.Unchecked)
+                parent.addChild(child)
 
         self.CharacterRealm.insertItems(0, list(Realms))
 
+    def ItemInformation(self):
+        ItemInfo = uic.loadUi(r'interface/ItemInformation.ui')
+        ItemInfo.setFont(self.font())
+        ItemInfo.setWindowFlags(Qt.WindowCloseButtonHint)
+        currentItem = self.ItemAttributeList[self.CurrentItemLabel]
+
+        # TODO: OVER-RIDE `MainWindow` ICON WITH 'ItemInformation' ICON
+
+        if currentItem.ItemType == 'weapon':
+            ItemInfo.ItemAFDPSLabel.setText('DPS:')
+            ItemInfo.ItemDamageType.show()
+            ItemInfo.ItemDamageTypeLabel.show()
+            ItemInfo.ItemSpeed.show()
+            ItemInfo.ItemSpeedLabel.show()
+            ItemInfo.ItemLeftHand.show()
+
+        else:
+            ItemInfo.ItemAFDPSLabel.setText('AF:')
+            ItemInfo.ItemDamageType.hide()
+            ItemInfo.ItemDamageTypeLabel.hide()
+            ItemInfo.ItemSpeed.hide()
+            ItemInfo.ItemSpeedLabel.hide()
+            ItemInfo.ItemLeftHand.hide()
+
+        ItemInfo.CloseButton.clicked.connect(ItemInfo.accept)
+        ItemInfo.exec_()
+
     def initControls(self):
+        self.ItemInformationButton.clicked.connect(self.ItemInformation)
         self.SlotListTreeView.itemClicked.connect(self.ItemSelected)
         self.CharacterRealm.activated[int].connect(self.RealmChanged)
         self.CharacterClass.activated[int].connect(self.ClassChanged)

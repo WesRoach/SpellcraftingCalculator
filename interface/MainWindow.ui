@@ -1356,7 +1356,7 @@
             <widget class="QListView" name="SkillsView">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-               <horstretch>0</horstretch>
+               <horstretch>1</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
              </property>
@@ -1672,7 +1672,7 @@
                  </property>
                 </widget>
                </item>
-               <item row="1" column="4">
+               <item row="1" column="4" colspan="2">
                 <widget class="QLineEdit" name="Requirement0">
                  <property name="sizePolicy">
                   <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -1777,7 +1777,7 @@
                  </property>
                 </widget>
                </item>
-               <item row="7" column="4">
+               <item row="7" column="4" colspan="2">
                 <widget class="QLineEdit" name="Requirement6">
                  <property name="sizePolicy">
                   <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -1903,7 +1903,7 @@
                <item row="12" column="2">
                 <widget class="QLineEdit" name="AmountEdit11"/>
                </item>
-               <item row="10" column="4">
+               <item row="10" column="4" colspan="2">
                 <widget class="QLineEdit" name="Requirement9">
                  <property name="sizePolicy">
                   <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -1920,7 +1920,7 @@
                  </property>
                 </widget>
                </item>
-               <item row="8" column="4">
+               <item row="8" column="4" colspan="2">
                 <widget class="QLineEdit" name="Requirement7">
                  <property name="sizePolicy">
                   <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -1937,7 +1937,7 @@
                  </property>
                 </widget>
                </item>
-               <item row="9" column="4">
+               <item row="9" column="4" colspan="2">
                 <widget class="QLineEdit" name="Requirement8">
                  <property name="sizePolicy">
                   <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -1947,7 +1947,7 @@
                  </property>
                 </widget>
                </item>
-               <item row="6" column="4">
+               <item row="6" column="4" colspan="2">
                 <widget class="QLineEdit" name="Requirement5">
                  <property name="sizePolicy">
                   <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -1957,7 +1957,7 @@
                  </property>
                 </widget>
                </item>
-               <item row="12" column="4">
+               <item row="12" column="4" colspan="2">
                 <widget class="QLineEdit" name="Requirement11">
                  <property name="sizePolicy">
                   <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -1967,7 +1967,7 @@
                  </property>
                 </widget>
                </item>
-               <item row="11" column="4">
+               <item row="11" column="4" colspan="2">
                 <widget class="QLineEdit" name="Requirement10">
                  <property name="sizePolicy">
                   <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -1977,7 +1977,7 @@
                  </property>
                 </widget>
                </item>
-               <item row="2" column="4">
+               <item row="2" column="4" colspan="2">
                 <widget class="QLineEdit" name="Requirement1">
                  <property name="sizePolicy">
                   <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -1987,7 +1987,7 @@
                  </property>
                 </widget>
                </item>
-               <item row="5" column="4">
+               <item row="5" column="4" colspan="2">
                 <widget class="QLineEdit" name="Requirement4">
                  <property name="sizePolicy">
                   <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -2017,7 +2017,7 @@
                  </property>
                 </widget>
                </item>
-               <item row="4" column="4">
+               <item row="4" column="4" colspan="2">
                 <widget class="QLineEdit" name="Requirement3">
                  <property name="sizePolicy">
                   <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -2027,7 +2027,7 @@
                  </property>
                 </widget>
                </item>
-               <item row="3" column="4">
+               <item row="3" column="4" colspan="2">
                 <widget class="QLineEdit" name="Requirement2">
                  <property name="sizePolicy">
                   <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -2047,7 +2047,7 @@
                  </property>
                 </widget>
                </item>
-               <item row="0" column="4">
+               <item row="0" column="4" colspan="2">
                 <widget class="QLabel" name="RequirementLabel">
                  <property name="text">
                   <string>Requirement</string>

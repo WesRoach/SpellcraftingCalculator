@@ -49,12 +49,13 @@ class Item:
     def __init__(self, state = '', location = '', realm = 'All', index =- 1):
         self.__dict__ = {
             'ActiveState': state,
-            'Equipped': '0',
+            'ItemEquipped': '0',
             'ItemLocation': location,
             'ItemRealm': realm,
             'ItemLevel': '51',
             'ItemQuality': '100',
             'ArmorType': '',
+            'ItemType': '',
             'ItemName': '',
             'ItemAFDPS': '',
             'ItemSpeed': '',
@@ -79,6 +80,7 @@ class Item:
         elif location in SlotList['Weapons']:
             self.ActiveState = 'drop'
             self.ItemEquipped = '0'
+            self.ItemType = 'weapon'
         elif location in SlotList['Mythical']:
             self.ActiveState = 'drop'
             self.ItemEquipped = '1'
