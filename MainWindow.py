@@ -4,7 +4,7 @@ from PyQt5 import uic
 from PyQt5.Qt import Qt
 from PyQt5.QtCore import QSize
 from PyQt5.QtGui import QFont, QFontMetrics
-from PyQt5.QtWidgets import QMainWindow, QMenu, QToolBar, QTreeWidgetItem, QDialog
+from PyQt5.QtWidgets import QMainWindow, QMenu, QToolBar, QTreeWidgetItem, QTreeWidgetItemIterator
 from Character import AllBonusList, AllRealms, ClassList, Races, Realms
 from Constants import Cap, DropLists, MythicalCap
 from Item import Item, SlotList
@@ -31,14 +31,11 @@ class MainWindow(QMainWindow):
 
         self.ItemIndex = 0
         self.ItemIndexList = {}
-        self.ItemNumbering = 1
         self.ItemAttributeList = {}
-        self.ItemWidget = {}
         self.ItemInfo = uic.loadUi(r'interface/ItemInformation.ui')
 
         self.CurrentRealm = ''
         self.CurrentItem = {}
-        self.CurrentItemIndex = {}
         self.CurrentItemLabel = {}
 
         self.initMenuBar()
@@ -147,6 +144,7 @@ class MainWindow(QMainWindow):
     def initControls(self):
         self.ItemInformationButton.clicked.connect(self.ItemInformation)
         self.SlotListTreeView.itemClicked.connect(self.ItemSelected)
+        self.SlotListTreeView.itemChanged.connect(self.ItemStateChanged)
         self.CharacterRealm.activated[int].connect(self.RealmChanged)
         self.CharacterClass.activated[int].connect(self.ClassChanged)
         self.CharacterRace.activated[int].connect(self.RaceChanged)
@@ -154,20 +152,24 @@ class MainWindow(QMainWindow):
     def ItemSelected(self, selection):
         for index in self.SlotListTreeView.selectedIndexes():
             selection = index.data()
+        for key, value in SlotList.items():
+            for val in value:
+                if selection == val:
+                    self.CurrentItemLabel = val
+                    self.CurrentItem = self.ItemAttributeList[self.CurrentItemLabel]
+                    self.RestoreItem(self.ItemAttributeList[self.CurrentItemLabel])
 
-            # DEBUGGING
-            print('\n' + selection)
-
-        for label, index in self.ItemIndexList.items():
-            if selection == label:
-                self.CurrentItemIndex = index
-                self.CurrentItemLabel = label
-                self.RestoreItem(self.ItemAttributeList[self.CurrentItemLabel])
+    def ItemStateChanged(self, selection, column):
+        for key, value in SlotList.items():
+            for val in value:
+                if selection.text(column) == val:
+                    self.ItemAttributeList[selection.text(column)].ItemEquipped = selection.checkState(column)
+                    print(self.ItemAttributeList[selection.text(column)].__dict__)
 
     def showDropWidgets(self, item):
         self.ItemGroup.hide()
         for i in range(0, item.slotCount()):
-            print(item.slot(i).__dict__)
+            # print(item.slot(i).__dict__)
             if item.slot(i).itemType() == 'drop':
                 getattr(self, "SlotLabel{}".format(i)).setText('Slot &%d:' % (i + 1))
                 getattr(self, "SlotLabel{}".format(i)).show()
@@ -191,7 +193,6 @@ class MainWindow(QMainWindow):
     def showCraftWidgets(self, item):
         self.ItemGroup.hide()
         for i in range(0, item.slotCount()):
-            print(item.__dict__)
             if item.slot(i).itemType() == 'crafted':
                 getattr(self, "SlotLabel{}".format(i)).setText('Gem &%d:' % (i + 1))
 
@@ -253,6 +254,12 @@ class MainWindow(QMainWindow):
         self.ItemName.addItem(item.ItemName)
         self.ItemName.setCurrentIndex(0)
 
+        iterator = QTreeWidgetItemIterator(self.SlotListTreeView)
+        while iterator.value():
+            selection = iterator.value()
+            print(selection.text(0))
+            iterator += 1
+
     def RealmChanged(self, value):
         Realm = str(self.CharacterRealm.currentText())
         self.CharacterClass.clear()
@@ -295,6 +302,10 @@ class MainWindow(QMainWindow):
         self.CharacterRace.setCurrentIndex(2)
         self.RaceChanged(self.CharacterRace.currentIndex())
 
+        # POPULATES THE 'ItemIndexList'. [KEY] IS THE PARENT LABEL AND
+        # [VALUE] IS THE CHILD LABEL. AS WE ADD ITEMS TO THE TUPLE WE
+        # ARE TAKING AN ORDERED INDEX. THIS MIGHT NOT BE NECESSARY
+        # SINCE WE ARE NO LONGER USING 'ItemStackedWidget'
         for key, value in SlotList.items():
             for val in value:
                 self.ItemIndexList[val] = self.ItemIndex
@@ -311,9 +322,6 @@ class MainWindow(QMainWindow):
 
         # SET THE INITIAL SLOT
         self.ItemSelected('Neck')
-
-        # POPULATE THE CURRENT SELECTED ITEM
-        self.RestoreItem(self.ItemAttributeList[self.CurrentItemLabel])
 
     def showStat(self, stat, show):
         if self.StatLabel[stat].isHidden() != show:

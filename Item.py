@@ -73,17 +73,19 @@ class Item:
 
         if location in SlotList['Jewelery']:
             self.ActiveState = 'drop'
-            self.ItemEquipped = '1'
+            self.ItemEquipped = '2'
         elif location in SlotList['Armor']:
             self.ActiveState = 'crafted'
-            self.ItemEquipped = '1'
+            self.ItemEquipped = '2'
         elif location in SlotList['Weapons']:
             self.ActiveState = 'drop'
             self.ItemEquipped = '0'
             self.ItemType = 'weapon'
         elif location in SlotList['Mythical']:
             self.ActiveState = 'drop'
-            self.ItemEquipped = '1'
+            self.ItemEquipped = '2'
+
+        # TODO: DETERMINE 'ItemEquipped' FOR WEAPONS BASED ON CLASS SELECTION
 
         self.ItemSlotList = self.makeItemSlots()
 
