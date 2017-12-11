@@ -169,7 +169,10 @@ class MainWindow(QMainWindow):
     def showDropWidgets(self, item):
         self.ItemGroup.hide()
         for i in range(0, item.slotCount()):
+
+            # DEBUGGING
             # print(item.slot(i).__dict__)
+
             if item.slot(i).itemType() == 'drop':
                 getattr(self, "SlotLabel{}".format(i)).setText('Slot &%d:' % (i + 1))
                 getattr(self, "SlotLabel{}".format(i)).show()
