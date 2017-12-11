@@ -1,5 +1,7 @@
 # HEADER PLACE HOLDER
 
+# TODO: COMBINE ALL CONSTANTS INTO ONE FILE
+
 from BonusConstants import *
 from Character import *
 from CapConstants import *

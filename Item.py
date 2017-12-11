@@ -1,74 +1,37 @@
 # HEADER PLACE HOLDER
 
-from Constants import SlotList, ItemTypes
-
-
-class ItemSlot:
-
-    def __init__(self, itype = '', etype = 'Unused', effect = '', amount = '', requirement = ''):
-        self.__dict__ = {
-            'ItemType': str(itype),
-            'Effect': '',
-            'EffectType': '',
-            'EffectAmount': '',
-            'Requirement': '',
-        }
-
-        self.Effect = ''
-        self.EffectType = ''
-        self.EffectAmount = ''
-        self.Requirement = ''
-        self.CraftOkay = False
-
-        self.setAll(etype, effect, amount, requirement)
-
-    def setAll(self, etype = 'Unused', effect = '', amount = '0', requirement = ''):
-        self.Effect = str(effect)
-        self.EffectType = str(etype)
-        self.EffectAmount = str(amount)
-        self.Requirement = str(requirement)
-
-    def getAttribute(self, attribute):
-        if attribute in self.__dict__:
-            return self.__dict__[attribute]
-
-    def setAttribute(self, attribute, value):
-        self.CraftOkay = False
-
-        if attribute in self.__dict__:
-            self.__dict__[attribute] = str(value)
-
-    def itemType(self):
-        return self.ItemType
-
-    def effectType(self):
-        return self.EffectType
+from Constants import SlotList
 
 
 class Item:
-    def __init__(self, state = '', location = '', realm = 'All', index =- 1):
-        self.__dict__ = {
-            'ActiveState': state,
-            'ItemEquipped': 0,
-            'ItemLocation': location,
-            'ItemRealm': realm,
-            'ItemLevel': '51',
-            'ItemQuality': '100',
-            'ItemType': '',
-            'ItemName': '',
-            'ItemAFDPS': '',
-            'ItemSpeed': '',
-            'ItemBonus': '',
-            'ItemSource': '',
-            'LeftHand': '',
-            'ItemDamageType': '',
-            'ItemRestrictions': list(),
-            'ItemNotes': '',
-            'ItemRequirement': '',
-            'TemplateIndex': index,
-        }
 
-        self.ItemSlotList = list()
+    def __init__(self, state = '', location = '', realm = 'All', index = 0):
+        self.ActiveState = state
+        self.ItemEquipped = int
+        self.ItemLocation = location
+        self.ItemRealm = realm
+        self.ItemLevel = ''
+        self.ItemQuality = ''
+        self.ItemType = ''
+        self.ItemName = ''
+        self.ItemAFDPS = ''
+        self.ItemSpeed = ''
+        self.ItemBonus = ''
+        self.ItemSource = ''
+        self.LeftHand = ''
+        self.ItemDamageType = ''
+        self.ItemRestrictions = list()
+        self.ItemNotes = ''
+        self.ItemRequirement = ''
+        self.TemplateIndex = index
+        self.ItemSlotList = self.makeItemSlots()
+
+        # SET THE INITIAL ITEM PROPERTIES
+        self.setInitialItemProperties()
+
+    def setInitialItemProperties(self):
+        self.ItemLevel = '51'
+        self.ItemQuality = '100'
 
         if self.ItemLocation in SlotList['Jewelery']:
             self.ActiveState = 'drop'
@@ -76,16 +39,14 @@ class Item:
         elif self.ItemLocation in SlotList['Armor']:
             self.ActiveState = 'crafted'
             self.ItemEquipped = 2
+
+        # TODO: DETERMINE 'ItemEquipped' BASED ON CLASS SELECTION
         elif self.ItemLocation in SlotList['Weapons']:
             self.ActiveState = 'drop'
             self.ItemEquipped = 0
         elif self.ItemLocation in SlotList['Mythical']:
             self.ActiveState = 'drop'
             self.ItemEquipped = 2
-
-        # TODO: DETERMINE 'ItemEquipped' FOR WEAPONS BASED ON CLASS SELECTION
-
-        self.ItemSlotList = self.makeItemSlots()
 
     def makeItemSlots(self):
         ItemSlots = []
@@ -103,11 +64,28 @@ class Item:
 
         return ItemSlots
 
-    def slot(self, index):
+    def getSlotIndex(self, index):
         return self.ItemSlotList[index]
 
-    def slotCount(self):
+    def getSlotCount(self):
         return len(self.ItemSlotList)
 
-    def slots(self):
+    def getSlotList(self):
         return list(self.ItemSlotList)
+
+
+class ItemSlot:
+
+    def __init__(self, itype = '', etype = 'Unused', effect = '', amount = '', requirement = ''):
+        self.SlotType = itype
+        self.EffectType = etype
+        self.Effect = effect
+        self.EffectAmount = amount
+        self.Requirement = requirement
+        self.Craftable = False
+
+    def getSlotType(self):
+        return self.SlotType
+
+    def getEffectType(self):
+        return self.EffectType

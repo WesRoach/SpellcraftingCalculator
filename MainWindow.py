@@ -5,7 +5,7 @@ from PyQt5.Qt import Qt
 from PyQt5.QtCore import QSize
 from PyQt5.QtGui import QFont, QFontMetrics
 from PyQt5.QtWidgets import QMainWindow, QMenu, QToolBar, QTreeWidgetItem, QTreeWidgetItemIterator
-from Character import AllBonusList, AllRealms, ClassList, Races, Realms, ItemTypes
+from Character import AllBonusList, AllRealms, ClassList, Races, Realms
 from Constants import Cap, DropLists, MythicalCap, DamageTypeList, SourceTypeList
 from Item import Item, SlotList
 
@@ -138,9 +138,48 @@ class MainWindow(QMainWindow):
         self.ItemInformationButton.clicked.connect(self.ItemInformation)
         self.SlotListTreeView.itemClicked.connect(self.ItemSelected)
         self.SlotListTreeView.itemChanged.connect(self.ItemStateChanged)
-        self.CharacterRealm.activated[int].connect(self.RealmChanged)
-        self.CharacterClass.activated[int].connect(self.ClassChanged)
-        self.CharacterRace.activated[int].connect(self.RaceChanged)
+        self.CharacterRealm.activated[int].connect(self.CharacterRealmChanged)
+        self.CharacterClass.activated[int].connect(self.CharacterClassChanged)
+        self.CharacterRace.activated[int].connect(self.CharacterRaceChanged)
+
+    def LoadOptions(self):
+        pass
+
+    def SaveOptions(self):
+        pass
+
+    def initialize(self, boolean):
+        self.CharacterName.setText('')
+        self.CharacterLevel.setText('50')
+        self.CharacterRealmRank.setText('10')
+
+        # SETUP THE INITIAL CHARACTER ...
+        self.CharacterRealm.setCurrentIndex(2)
+        self.CharacterRealmChanged(self.CharacterRealm.currentIndex())
+        self.CharacterClass.setCurrentIndex(7)
+        self.CharacterClassChanged(self.CharacterClass.currentIndex())
+        self.CharacterRace.setCurrentIndex(2)
+        self.CharacterRaceChanged(self.CharacterRace.currentIndex())
+
+        for key, value in SlotList.items():
+            for val in value:
+                if key == 'Armor':
+                    item = Item('crafted', val, self.CurrentRealm, self.ItemIndex)
+                    item.ItemName = "Crafted Item"
+                    self.ItemIndex += 1
+                    self.ItemAttributeList[val] = item
+                else:
+                    item = Item('drop', val, self.CurrentRealm, self.ItemIndex)
+                    item.ItemName = "Dropped Item"
+                    self.ItemIndex += 1
+                    self.ItemAttributeList[val] = item
+
+        # SET THE INITIAL SLOT
+        self.ItemSelected('Neck')
+
+# =============================================== #
+#             DIALOG & WINDOW METHODS             #
+# =============================================== #
 
     # TODO: OVER-RIDE `MainWindow` ICON WITH 'ItemInformation' ICON
     def ItemInformation(self):
@@ -149,31 +188,30 @@ class MainWindow(QMainWindow):
         self.ItemInfo.CloseButton.clicked.connect(self.ItemInfo.accept)
         self.ItemInfo.exec_()
 
-    def ItemSelected(self, selection):
-        for index in self.SlotListTreeView.selectedIndexes():
-            selection = index.data()
-        for key, value in SlotList.items():
-            for val in value:
-                if selection == val:
-                    self.CurrentItemLabel = val
-                    self.CurrentItem = self.ItemAttributeList[self.CurrentItemLabel]
-                    self.RestoreItem(self.ItemAttributeList[self.CurrentItemLabel])
+# =============================================== #
+#          LAYOUT CHANGE/UPDATE METHODS           #
+# =============================================== #
 
-    def ItemStateChanged(self, selection, column):
-        for key, value in SlotList.items():
-            for val in value:
-                if selection.text(column) == val:
-                    self.ItemAttributeList[selection.text(column)].ItemEquipped = selection.checkState(column)
-                    print(self.ItemAttributeList[selection.text(column)].__dict__)
+    def showStat(self, stat, show):
+        if self.StatLabel[stat].isHidden() != show:
+            return
+        self.StatLabel[stat].setVisible(show)
+        self.StatValue[stat].setVisible(show)
+        self.StatCap[stat].setVisible(show)
+
+        try:  # NOT ALL STATS HAVE MYTHICAL CAP ...
+            self.StatMythicalCap[stat].setVisible(show)
+        except KeyError:
+            pass
 
     def showDropWidgets(self, item):
         self.ItemGroup.hide()
-        for i in range(0, item.slotCount()):
+        for i in range(0, item.getSlotCount()):
 
             # DEBUGGING
-            # print(item.slot(i).__dict__)
+            print(item.getSlotIndex(i).__dict__)
 
-            if item.slot(i).itemType() == 'drop':
+            if item.getSlotIndex(i).getSlotType() == 'drop':
                 getattr(self, "SlotLabel{}".format(i)).setText('Slot &%d:' % (i + 1))
                 getattr(self, "SlotLabel{}".format(i)).show()
                 getattr(self, "EffectType{}".format(i)).show()
@@ -195,14 +233,14 @@ class MainWindow(QMainWindow):
 
     def showCraftWidgets(self, item):
         self.ItemGroup.hide()
-        for i in range(0, item.slotCount()):
-            if item.slot(i).itemType() == 'crafted':
+        for i in range(0, item.SlotCount()):
+            if item.getSlotIndex(i).getSlotType() == 'crafted':
                 getattr(self, "SlotLabel{}".format(i)).setText('Gem &%d:' % (i + 1))
 
-            elif item.slot(i).itemType() == 'enhanced':
+            elif item.getSlotIndex(i).getSlotType() == 'enhanced':
                 getattr(self, "SlotLabel{}".format(i)).setText('Slot &%d:' % (i + 1))
 
-            elif item.slot(i).itemType() == 'effect':
+            elif item.getSlotIndex(i).getSlotType() == 'effect':
                 getattr(self, "SlotLabel{}".format(i)).setText('Slot &%d:' % (i + 1))
 
             getattr(self, "GemName{}".format(i)).show()
@@ -292,75 +330,9 @@ class MainWindow(QMainWindow):
         self.ItemInfo.ItemRequirement.setText(item.ItemRequirement)
         self.ItemInfo.ItemNotes.setPlainText(item.ItemNotes)
 
-    def RealmChanged(self, realm):
-        Realm = str(self.CharacterRealm.currentText())
-        self.CharacterClass.clear()
-        self.CharacterClass.insertItems(0, list(ClassList[Realm]))
-        self.ClassChanged(self.CharacterClass.currentIndex())
-        self.CurrentRealm = Realm
-
-    def ClassChanged(self, realm):
-        Realm = str(self.CharacterRealm.currentText())
-        Class = str(self.CharacterClass.currentText())
-        self.CharacterRace.clear()
-        self.CharacterRace.insertItems(0, AllBonusList[Realm][Class]['Races'])
-        self.RaceChanged(self.CharacterRace.currentIndex())
-        self.calculate()
-
-    def RaceChanged(self, realm):
-        Race = str(self.CharacterRace.currentText())
-        for Resist in DropLists['All']['Resist']:
-            if Resist in Races['All'][Race]['Resists']:
-                self.StatBonus[Resist].setText('+ ' + str(Races['All'][Race]['Resists'][Resist]))
-            else:
-                self.StatBonus[Resist].setText('-')
-
-    def LoadOptions(self):
-        pass
-
-    def SaveOptions(self):
-        pass
-
-    def initialize(self, boolean):
-        self.CharacterName.setText('')
-        self.CharacterLevel.setText('50')
-        self.CharacterRealmRank.setText('10')
-
-        # SETUP THE INITIAL CHARACTER ...
-        self.CharacterRealm.setCurrentIndex(2)
-        self.RealmChanged(self.CharacterRealm.currentIndex())
-        self.CharacterClass.setCurrentIndex(7)
-        self.ClassChanged(self.CharacterClass.currentIndex())
-        self.CharacterRace.setCurrentIndex(2)
-        self.RaceChanged(self.CharacterRace.currentIndex())
-
-        for key, value in SlotList.items():
-            for val in value:
-                if key == 'Armor':
-                    item = Item('crafted', val, self.CurrentRealm, self.ItemIndex)
-                    item.ItemName = "Crafted Item"
-                    self.ItemIndex += 1
-                    self.ItemAttributeList[val] = item
-                else:
-                    item = Item('drop', val, self.CurrentRealm, self.ItemIndex)
-                    item.ItemName = "Dropped Item"
-                    self.ItemIndex += 1
-                    self.ItemAttributeList[val] = item
-
-        # SET THE INITIAL SLOT
-        self.ItemSelected('Neck')
-
-    def showStat(self, stat, show):
-        if self.StatLabel[stat].isHidden() != show:
-            return
-        self.StatLabel[stat].setVisible(show)
-        self.StatValue[stat].setVisible(show)
-        self.StatCap[stat].setVisible(show)
-
-        try:  # NOT ALL STATS HAVE MYTHICAL CAP ...
-            self.StatMythicalCap[stat].setVisible(show)
-        except KeyError:
-            pass
+# =============================================== #
+#    SUMMARIZER, CALCULATOR, AND MISC METHODS     #
+# =============================================== #
 
     def summarize(self):
         Level = int(self.CharacterLevel.text())
@@ -500,3 +472,47 @@ class MainWindow(QMainWindow):
 
             if BaseMythicalCap == 0:
                 self.StatMythicalCap[key].setText('--  ')
+
+# =============================================== #
+#     GETTER, SETTER, AND SLOT/SIGNAL METHODS     #
+# =============================================== #
+
+    def CharacterRealmChanged(self, realm):
+        Realm = str(self.CharacterRealm.currentText())
+        self.CharacterClass.clear()
+        self.CharacterClass.insertItems(0, list(ClassList[Realm]))
+        self.CharacterClassChanged(self.CharacterClass.currentIndex())
+        self.CurrentRealm = Realm
+
+    def CharacterClassChanged(self, realm):
+        Realm = str(self.CharacterRealm.currentText())
+        Class = str(self.CharacterClass.currentText())
+        self.CharacterRace.clear()
+        self.CharacterRace.insertItems(0, AllBonusList[Realm][Class]['Races'])
+        self.CharacterRaceChanged(self.CharacterRace.currentIndex())
+        self.calculate()
+
+    def CharacterRaceChanged(self, realm):
+        Race = str(self.CharacterRace.currentText())
+        for Resist in DropLists['All']['Resist']:
+            if Resist in Races['All'][Race]['Resists']:
+                self.StatBonus[Resist].setText('+ ' + str(Races['All'][Race]['Resists'][Resist]))
+            else:
+                self.StatBonus[Resist].setText('-')
+
+    def ItemSelected(self, selection):
+        for index in self.SlotListTreeView.selectedIndexes():
+            selection = index.data()
+        for key, value in SlotList.items():
+            for val in value:
+                if selection == val:
+                    self.CurrentItemLabel = val
+                    self.CurrentItem = self.ItemAttributeList[self.CurrentItemLabel]
+                    self.RestoreItem(self.ItemAttributeList[self.CurrentItemLabel])
+
+    def ItemStateChanged(self, selection, column):
+        for key, value in SlotList.items():
+            for val in value:
+                if selection.text(column) == val:
+                    self.ItemAttributeList[selection.text(column)].ItemEquipped = selection.checkState(column)
+                    print(self.ItemAttributeList[selection.text(column)].__dict__)
