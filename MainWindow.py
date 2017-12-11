@@ -12,8 +12,8 @@ from Item import Item, SlotList
 
 class MainWindow(QMainWindow):
 
-    def __init__(self):
-        QMainWindow.__init__(self, None, Qt.Window)
+    def __init__(self, parent = None, flags = Qt.Window):
+        QMainWindow.__init__(self, parent, flags)
         uic.loadUi(r'interface/MainWindow.ui', self)
 
         self.FileMenu = QMenu('&File', self)
@@ -142,8 +142,8 @@ class MainWindow(QMainWindow):
         self.CharacterClass.activated[int].connect(self.ClassChanged)
         self.CharacterRace.activated[int].connect(self.RaceChanged)
 
+    # TODO: OVER-RIDE `MainWindow` ICON WITH 'ItemInformation' ICON
     def ItemInformation(self):
-        # TODO: OVER-RIDE `MainWindow` ICON WITH 'ItemInformation' ICON
         self.ItemInfo.setFont(self.font())
         self.ItemInfo.setWindowFlags(Qt.WindowCloseButtonHint)
         self.ItemInfo.CloseButton.clicked.connect(self.ItemInfo.accept)
