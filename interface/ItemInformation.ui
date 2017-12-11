@@ -252,7 +252,7 @@
         </sizepolicy>
        </property>
        <property name="title">
-        <string>Restrictions</string>
+        <string>Class Restrictions</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
@@ -313,7 +313,13 @@
        <number>8</number>
       </property>
       <item>
-       <widget class="QTextEdit" name="ItemNote">
+       <widget class="QTextEdit" name="ItemNotes">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
         <property name="focusPolicy">
          <enum>Qt::StrongFocus</enum>
         </property>

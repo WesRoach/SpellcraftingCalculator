@@ -5,8 +5,8 @@ from PyQt5.Qt import Qt
 from PyQt5.QtCore import QSize
 from PyQt5.QtGui import QFont, QFontMetrics
 from PyQt5.QtWidgets import QMainWindow, QMenu, QToolBar, QTreeWidgetItem, QTreeWidgetItemIterator
-from Character import AllBonusList, AllRealms, ClassList, Races, Realms
-from Constants import Cap, DropLists, MythicalCap
+from Character import AllBonusList, AllRealms, ClassList, Races, Realms, ItemTypes
+from Constants import Cap, DropLists, MythicalCap, DamageTypeList, SourceTypeList
 from Item import Item, SlotList
 
 
@@ -30,7 +30,6 @@ class MainWindow(QMainWindow):
         self.StatBonus = {}
 
         self.ItemIndex = 0
-        self.ItemIndexList = {}
         self.ItemAttributeList = {}
         self.ItemInfo = uic.loadUi(r'interface/ItemInformation.ui')
 
@@ -126,6 +125,7 @@ class MainWindow(QMainWindow):
 
         for key, value in SlotList.items():
             parent = QTreeWidgetItem(self.SlotListTreeView, [key])
+            parent.setFlags(parent.flags() & ~Qt.ItemIsUserCheckable)
             for val in value:
                 child = QTreeWidgetItem([val])
                 child.setFlags(child.flags() | Qt.ItemIsUserCheckable)
@@ -134,13 +134,6 @@ class MainWindow(QMainWindow):
 
         self.CharacterRealm.insertItems(0, list(Realms))
 
-    def ItemInformation(self):
-        # TODO: OVER-RIDE `MainWindow` ICON WITH 'ItemInformation' ICON
-        self.ItemInfo.setFont(self.font())
-        self.ItemInfo.setWindowFlags(Qt.WindowCloseButtonHint)
-        self.ItemInfo.CloseButton.clicked.connect(self.ItemInfo.accept)
-        self.ItemInfo.exec_()
-
     def initControls(self):
         self.ItemInformationButton.clicked.connect(self.ItemInformation)
         self.SlotListTreeView.itemClicked.connect(self.ItemSelected)
@@ -148,6 +141,13 @@ class MainWindow(QMainWindow):
         self.CharacterRealm.activated[int].connect(self.RealmChanged)
         self.CharacterClass.activated[int].connect(self.ClassChanged)
         self.CharacterRace.activated[int].connect(self.RaceChanged)
+
+    def ItemInformation(self):
+        # TODO: OVER-RIDE `MainWindow` ICON WITH 'ItemInformation' ICON
+        self.ItemInfo.setFont(self.font())
+        self.ItemInfo.setWindowFlags(Qt.WindowCloseButtonHint)
+        self.ItemInfo.CloseButton.clicked.connect(self.ItemInfo.accept)
+        self.ItemInfo.exec_()
 
     def ItemSelected(self, selection):
         for index in self.SlotListTreeView.selectedIndexes():
@@ -224,17 +224,27 @@ class MainWindow(QMainWindow):
         self.ItemGroup.show()
 
     def RestoreItem(self, item):
+
+        # DEBUGGING
+        print(item.__dict__)
+
+        realmList = {}
+        sourceTypes = []
+        damageTypes = []
+
         if item.ActiveState == 'crafted':
-            realms = Realms
-            sources = ['Crafted']
+            realmList = Realms
+            sourceTypes = list(SourceTypeList['Craft'])
+            damageTypes = list(DamageTypeList['Craft'])
             self.showCraftWidgets(item)
 
         elif item.ActiveState == 'drop':
-            realms = AllRealms
-            sources = ['Drop', 'Quest', 'Artifact', 'Merchant', 'Unique', ]
+            realmList = AllRealms
+            sourceTypes = list(SourceTypeList['Drop'])
+            damageTypes = list(DamageTypeList['Drop'])
             self.showDropWidgets(item)
 
-        if item.ItemType == 'weapon':
+        if item.ItemLocation in SlotList['Weapons']:
             self.ItemInfo.ItemAFDPSLabel.setText('DPS:')
             self.ItemInfo.ItemDamageType.show()
             self.ItemInfo.ItemDamageTypeLabel.show()
@@ -257,17 +267,36 @@ class MainWindow(QMainWindow):
         iterator = QTreeWidgetItemIterator(self.SlotListTreeView)
         while iterator.value():
             selection = iterator.value()
-            print(selection.text(0))
+            if selection.flags() & Qt.ItemIsUserCheckable:
+                currentState = self.ItemAttributeList[selection.text(0)].ItemEquipped
+                if currentState == 2:
+                    selection.setCheckState(0, Qt.Checked)
+                elif currentState == 0:
+                    selection.setCheckState(0, Qt.Unchecked)
             iterator += 1
 
-    def RealmChanged(self, value):
+        self.ItemInfo.ItemRealm.clear()
+        self.ItemInfo.ItemRealm.insertItems(0, realmList)
+        self.ItemInfo.ItemRealm.setCurrentIndex(realmList.index(item.ItemRealm))
+
+        # TODO: BASE `currentIndex` ON `item.ItemSource`
+        self.ItemInfo.ItemSource.clear()
+        self.ItemInfo.ItemSource.insertItems(0, sourceTypes)
+
+        self.ItemInfo.ItemDamageType.clear()
+        self.ItemInfo.ItemDamageType.insertItems(0, damageTypes)
+
+        self.ItemInfo.ItemRequirement.setText(item.ItemRequirement)
+        self.ItemInfo.ItemNotes.setPlainText(item.ItemNotes)
+
+    def RealmChanged(self, realm):
         Realm = str(self.CharacterRealm.currentText())
         self.CharacterClass.clear()
         self.CharacterClass.insertItems(0, list(ClassList[Realm]))
         self.ClassChanged(self.CharacterClass.currentIndex())
         self.CurrentRealm = Realm
 
-    def ClassChanged(self, value):
+    def ClassChanged(self, realm):
         Realm = str(self.CharacterRealm.currentText())
         Class = str(self.CharacterClass.currentText())
         self.CharacterRace.clear()
@@ -275,7 +304,7 @@ class MainWindow(QMainWindow):
         self.RaceChanged(self.CharacterRace.currentIndex())
         self.calculate()
 
-    def RaceChanged(self, value):
+    def RaceChanged(self, realm):
         Race = str(self.CharacterRace.currentText())
         for Resist in DropLists['All']['Resist']:
             if Resist in Races['All'][Race]['Resists']:
@@ -302,13 +331,8 @@ class MainWindow(QMainWindow):
         self.CharacterRace.setCurrentIndex(2)
         self.RaceChanged(self.CharacterRace.currentIndex())
 
-        # POPULATES THE 'ItemIndexList'. [KEY] IS THE PARENT LABEL AND
-        # [VALUE] IS THE CHILD LABEL. AS WE ADD ITEMS TO THE TUPLE WE
-        # ARE TAKING AN ORDERED INDEX. THIS MIGHT NOT BE NECESSARY
-        # SINCE WE ARE NO LONGER USING 'ItemStackedWidget'
         for key, value in SlotList.items():
             for val in value:
-                self.ItemIndexList[val] = self.ItemIndex
                 if key == 'Armor':
                     item = Item('crafted', val, self.CurrentRealm, self.ItemIndex)
                     item.ItemName = "Crafted Item"

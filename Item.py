@@ -1,6 +1,6 @@
 # HEADER PLACE HOLDER
 
-from Constants import SlotList
+from Constants import SlotList, ItemTypes
 
 
 class ItemSlot:
@@ -49,12 +49,11 @@ class Item:
     def __init__(self, state = '', location = '', realm = 'All', index =- 1):
         self.__dict__ = {
             'ActiveState': state,
-            'ItemEquipped': '0',
+            'ItemEquipped': 0,
             'ItemLocation': location,
             'ItemRealm': realm,
             'ItemLevel': '51',
             'ItemQuality': '100',
-            'ArmorType': '',
             'ItemType': '',
             'ItemName': '',
             'ItemAFDPS': '',
@@ -65,41 +64,39 @@ class Item:
             'ItemDamageType': '',
             'ItemRestrictions': list(),
             'ItemNotes': '',
-            'BonusRequirement': '',
+            'ItemRequirement': '',
             'TemplateIndex': index,
         }
 
         self.ItemSlotList = list()
 
-        if location in SlotList['Jewelery']:
+        if self.ItemLocation in SlotList['Jewelery']:
             self.ActiveState = 'drop'
-            self.ItemEquipped = '2'
-        elif location in SlotList['Armor']:
+            self.ItemEquipped = 2
+        elif self.ItemLocation in SlotList['Armor']:
             self.ActiveState = 'crafted'
-            self.ItemEquipped = '2'
-        elif location in SlotList['Weapons']:
+            self.ItemEquipped = 2
+        elif self.ItemLocation in SlotList['Weapons']:
             self.ActiveState = 'drop'
-            self.ItemEquipped = '0'
-            self.ItemType = 'weapon'
-        elif location in SlotList['Mythical']:
+            self.ItemEquipped = 0
+        elif self.ItemLocation in SlotList['Mythical']:
             self.ActiveState = 'drop'
-            self.ItemEquipped = '2'
+            self.ItemEquipped = 2
 
         # TODO: DETERMINE 'ItemEquipped' FOR WEAPONS BASED ON CLASS SELECTION
 
         self.ItemSlotList = self.makeItemSlots()
 
     def makeItemSlots(self):
-        ItemType = self.ActiveState
         ItemSlots = []
 
-        if ItemType == 'drop':
+        if self.ActiveState == 'drop':
             for slot in range(0, 12):
-                ItemSlots.append(ItemSlot(ItemType))
+                ItemSlots.append(ItemSlot(self.ActiveState))
 
-        elif ItemType == 'crafted':
+        elif self.ActiveState == 'crafted':
             for slot in range(0, 4):
-                ItemSlots.append(ItemSlot(ItemType))
+                ItemSlots.append(ItemSlot(self.ActiveState))
 
             ItemSlots.append(ItemSlot('enhanced'))
             ItemSlots.append(ItemSlot('effect'))

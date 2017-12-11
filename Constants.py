@@ -38,7 +38,7 @@ CraftLists = {  # GemLists
     }
 }
 
-CraftTables = {  #GemTables
+CraftTables = {  # GemTables
 
     'All': {
 

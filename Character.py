@@ -1,5 +1,8 @@
 # HEADER PLACE HOLDER
 
+from TupleTwo import *
+from DictionaryTwo import *
+
 __all__ = [
     'AllBonusList',
     'AllRealms',
@@ -11,9 +14,6 @@ __all__ = [
     'ServerCodes',
     'ServerIgnCodes',
 ]
-
-from TupleTwo import *
-from DictionaryTwo import *
 
 Realms = t2((
     'Albion',
@@ -802,6 +802,7 @@ ItemTypes = d2({
     'Right Wrist': t2(('Wrist',)),
     'Mythical': t2(('Mythirian',)),
 
+    # THIS CAN TECHNICALLY BE JUST 'Armor'
     'Chest': armorTypes,
     'Arms': armorTypes,
     'Head': armorTypes,
@@ -811,7 +812,7 @@ ItemTypes = d2({
 
     'Right Hand': rightHandTypes,
     'Left Hand': leftHandTypes,
-    '2 Handed': twoHandTypes,
+    'Two-Handed': twoHandTypes,
     'Ranged': rangedTypes,
     'Spare': spareTypes,
 })
