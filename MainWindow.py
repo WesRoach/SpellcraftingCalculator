@@ -243,6 +243,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             # DEBUGGING
             # print(item.getSlotIndex(i).__dict__)
 
+
             if item.getSlotIndex(i).getSlotType() == 'drop':
                 getattr(self, "SlotLabel{}".format(i)).setText('Slot &%d:' % (i + 1))
                 getattr(self, "SlotLabel{}".format(i)).show()
