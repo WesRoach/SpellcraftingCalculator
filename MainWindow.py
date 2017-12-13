@@ -4,17 +4,26 @@ from PyQt5 import uic
 from PyQt5.Qt import Qt
 from PyQt5.QtCore import QSize
 from PyQt5.QtGui import QFont, QFontMetrics
-from PyQt5.QtWidgets import QMainWindow, QMenu, QToolBar, QTreeWidgetItem, QTreeWidgetItemIterator
+from PyQt5.QtWidgets import QDialog, QMainWindow, QMenu, QToolBar, QTreeWidgetItem, QTreeWidgetItemIterator, QListWidgetItem
 from Character import AllBonusList, AllRealms, ClassList, Races, Realms
 from Constants import Cap, DropLists, MythicalCap, DamageTypeList, SourceTypeList
 from Item import Item, SlotList
 
+Ui_MainWindow = uic.loadUiType(r'interface/MainWindow.ui')[0]
+Ui_ItemInfoDialog = uic.loadUiType(r'interface/ItemInfoDialog.ui')[0]
 
-class MainWindow(QMainWindow):
+
+class ItemInformationDialog(QDialog, Ui_ItemInfoDialog):
+    def __init__(self, parent = None, flags = Qt.Dialog):
+        QDialog.__init__(self, parent, flags)
+        self.setupUi(self)
+
+
+class MainWindow(QMainWindow, Ui_MainWindow):
 
     def __init__(self, parent = None, flags = Qt.Window):
         QMainWindow.__init__(self, parent, flags)
-        uic.loadUi(r'interface/MainWindow.ui', self)
+        self.setupUi(self)
 
         self.FileMenu = QMenu('&File', self)
         self.EditMenu = QMenu('&Edit', self)
@@ -31,7 +40,7 @@ class MainWindow(QMainWindow):
 
         self.ItemIndex = 0
         self.ItemAttributeList = {}
-        self.ItemInfo = uic.loadUi(r'interface/ItemInformation.ui')
+        self.ItemInfoDialog = ItemInformationDialog(self)
 
         self.CurrentRealm = ''
         self.CurrentItem = {}
@@ -42,6 +51,10 @@ class MainWindow(QMainWindow):
         self.initLayout()
         self.initControls()
         self.initialize(False)
+
+# =============================================== #
+#       INTERFACE SETUP AND INITIALIZATION        #
+# =============================================== #
 
     def initMenuBar(self):
         self.FileMenu.addAction('E&xit', self.close)
@@ -134,13 +147,28 @@ class MainWindow(QMainWindow):
 
         self.CharacterRealm.insertItems(0, list(Realms))
 
+        tableEntry = QListWidgetItem('All')
+        tableEntry.setFlags(Qt.ItemIsUserCheckable | Qt.ItemIsEnabled)
+        tableEntry.setCheckState(Qt.Unchecked)
+        self.ItemInfoDialog.ItemRestrictionGroup.setFixedWidth(135)
+        self.ItemInfoDialog.ItemClassRestrictionList.clear()
+        self.ItemInfoDialog.ItemClassRestrictionList.addItem(tableEntry)
+
+        for key in ClassList['All']:
+            tableEntry = QListWidgetItem(key)
+            tableEntry.setFlags(Qt.ItemIsUserCheckable | Qt.ItemIsEnabled)
+            tableEntry.setCheckState(Qt.Unchecked)
+            self.ItemInfoDialog.ItemClassRestrictionList.addItem(tableEntry)
+
     def initControls(self):
-        self.ItemInformationButton.clicked.connect(self.ItemInformation)
+        self.ItemInformationButton.clicked.connect(self.showItemInfoDialog)
         self.SlotListTreeView.itemClicked.connect(self.ItemSelected)
         self.SlotListTreeView.itemChanged.connect(self.ItemStateChanged)
         self.CharacterRealm.activated[int].connect(self.CharacterRealmChanged)
         self.CharacterClass.activated[int].connect(self.CharacterClassChanged)
         self.CharacterRace.activated[int].connect(self.CharacterRaceChanged)
+
+
 
     def LoadOptions(self):
         pass
@@ -182,11 +210,15 @@ class MainWindow(QMainWindow):
 # =============================================== #
 
     # TODO: OVER-RIDE `MainWindow` ICON WITH 'ItemInformation' ICON
-    def ItemInformation(self):
-        self.ItemInfo.setFont(self.font())
-        self.ItemInfo.setWindowFlags(Qt.WindowCloseButtonHint)
-        self.ItemInfo.CloseButton.clicked.connect(self.ItemInfo.accept)
-        self.ItemInfo.exec_()
+    def showItemInfoDialog(self):
+        self.ItemInfoDialog.setFont(self.font())
+        self.ItemInfoDialog.setWindowFlags(self.ItemInfoDialog.windowFlags() | Qt.WindowCloseButtonHint)
+
+        self.ItemInfoDialog.ItemRealm.activated[int].connect(self.ItemRealmChanged)
+        self.ItemInfoDialog.ItemClassRestrictionList.itemChanged['QListWidgetItem *'].connect(self.ClassRestrictionsChanged)
+        self.ItemInfoDialog.CloseButton.clicked.connect(self.ItemInfoDialog.accept)
+
+        self.ItemInfoDialog.exec_()
 
 # =============================================== #
 #          LAYOUT CHANGE/UPDATE METHODS           #
@@ -209,7 +241,7 @@ class MainWindow(QMainWindow):
         for i in range(0, item.getSlotCount()):
 
             # DEBUGGING
-            print(item.getSlotIndex(i).__dict__)
+            # print(item.getSlotIndex(i).__dict__)
 
             if item.getSlotIndex(i).getSlotType() == 'drop':
                 getattr(self, "SlotLabel{}".format(i)).setText('Slot &%d:' % (i + 1))
@@ -233,13 +265,13 @@ class MainWindow(QMainWindow):
 
     def showCraftWidgets(self, item):
         self.ItemGroup.hide()
-        for i in range(0, item.SlotCount()):
+
+        # TODO: LETS GET AWAY FROM THE GETTERS AND SETTERS
+        for i in range(0, item.getSlotCount()):
             if item.getSlotIndex(i).getSlotType() == 'crafted':
                 getattr(self, "SlotLabel{}".format(i)).setText('Gem &%d:' % (i + 1))
-
             elif item.getSlotIndex(i).getSlotType() == 'enhanced':
                 getattr(self, "SlotLabel{}".format(i)).setText('Slot &%d:' % (i + 1))
-
             elif item.getSlotIndex(i).getSlotType() == 'effect':
                 getattr(self, "SlotLabel{}".format(i)).setText('Slot &%d:' % (i + 1))
 
@@ -264,10 +296,24 @@ class MainWindow(QMainWindow):
         self.ItemGroup.updateGeometry()
         self.ItemGroup.show()
 
+    def showClassRestrictions(self, item):
+        allRealmList = []
+        for value in range(self.ItemInfoDialog.ItemClassRestrictionList.count()):
+            allRealmList.append(self.ItemInfoDialog.ItemClassRestrictionList.item(value))
+        for key in allRealmList:
+            key.setHidden(True)
+        for key in allRealmList:
+            for value in ClassList[item.ItemRealm]:
+                if key.text() == 'All':
+                    key.setHidden(False)
+                if key.text() == value:
+                    key.setHidden(False)
+
+    # TODO: NEED TO RE-THINK THIS ...
     def RestoreItem(self, item):
 
         # DEBUGGING
-        print(item.__dict__)
+        # print(item.__dict__)
 
         realmList = {}
         sourceTypes = []
@@ -278,28 +324,38 @@ class MainWindow(QMainWindow):
             sourceTypes = list(SourceTypeList['Craft'])
             damageTypes = list(DamageTypeList['Craft'])
             self.showCraftWidgets(item)
-
         elif item.ActiveState == 'drop':
             realmList = AllRealms
             sourceTypes = list(SourceTypeList['Drop'])
             damageTypes = list(DamageTypeList['Drop'])
             self.showDropWidgets(item)
 
-        if item.ItemLocation in SlotList['Weapons']:
-            self.ItemInfo.ItemAFDPSLabel.setText('DPS:')
-            self.ItemInfo.ItemDamageType.show()
-            self.ItemInfo.ItemDamageTypeLabel.show()
-            self.ItemInfo.ItemSpeed.show()
-            self.ItemInfo.ItemSpeedLabel.show()
-            self.ItemInfo.ItemLeftHand.show()
-
-        else:
-            self.ItemInfo.ItemAFDPSLabel.setText('AF:')
-            self.ItemInfo.ItemDamageType.hide()
-            self.ItemInfo.ItemDamageTypeLabel.hide()
-            self.ItemInfo.ItemSpeed.hide()
-            self.ItemInfo.ItemSpeedLabel.hide()
-            self.ItemInfo.ItemLeftHand.hide()
+        if item.ItemLocation in SlotList['Jewelery']:
+            self.ItemInfoDialog.ItemAFDPS.hide()
+            self.ItemInfoDialog.ItemAFDPSLabel.hide()
+            self.ItemInfoDialog.ItemDamageType.hide()
+            self.ItemInfoDialog.ItemDamageTypeLabel.hide()
+            self.ItemInfoDialog.ItemSpeed.hide()
+            self.ItemInfoDialog.ItemSpeedLabel.hide()
+            self.ItemInfoDialog.ItemLeftHand.hide()
+        elif item.ItemLocation in SlotList['Armor']:
+            self.ItemInfoDialog.ItemAFDPS.show()
+            self.ItemInfoDialog.ItemAFDPSLabel.show()
+            self.ItemInfoDialog.ItemAFDPSLabel.setText('AF:')
+            self.ItemInfoDialog.ItemDamageType.hide()
+            self.ItemInfoDialog.ItemDamageTypeLabel.hide()
+            self.ItemInfoDialog.ItemSpeed.hide()
+            self.ItemInfoDialog.ItemSpeedLabel.hide()
+            self.ItemInfoDialog.ItemLeftHand.hide()
+        elif item.ItemLocation in SlotList['Weapons']:
+            self.ItemInfoDialog.ItemAFDPS.show()
+            self.ItemInfoDialog.ItemAFDPSLabel.show()
+            self.ItemInfoDialog.ItemAFDPSLabel.setText('DPS:')
+            self.ItemInfoDialog.ItemDamageType.show()
+            self.ItemInfoDialog.ItemDamageTypeLabel.show()
+            self.ItemInfoDialog.ItemSpeed.show()
+            self.ItemInfoDialog.ItemSpeedLabel.show()
+            self.ItemInfoDialog.ItemLeftHand.show()
 
         self.ItemName.clear()
         self.ItemName.addItem(item.ItemName)
@@ -316,22 +372,22 @@ class MainWindow(QMainWindow):
                     selection.setCheckState(0, Qt.Unchecked)
             iterator += 1
 
-        self.ItemInfo.ItemRealm.clear()
-        self.ItemInfo.ItemRealm.insertItems(0, realmList)
-        self.ItemInfo.ItemRealm.setCurrentIndex(realmList.index(item.ItemRealm))
+        self.ItemInfoDialog.ItemRealm.clear()
+        self.ItemInfoDialog.ItemRealm.insertItems(0, realmList)
+        self.ItemInfoDialog.ItemRealm.setCurrentIndex(realmList.index(item.ItemRealm))
 
         # TODO: BASE `currentIndex` ON `item.ItemSource`
-        self.ItemInfo.ItemSource.clear()
-        self.ItemInfo.ItemSource.insertItems(0, sourceTypes)
+        self.ItemInfoDialog.ItemSource.clear()
+        self.ItemInfoDialog.ItemSource.insertItems(0, sourceTypes)
+        self.ItemInfoDialog.ItemDamageType.clear()
+        self.ItemInfoDialog.ItemDamageType.insertItems(0, damageTypes)
+        self.ItemInfoDialog.ItemRequirement.setText(item.ItemRequirement)
+        self.ItemInfoDialog.ItemNotes.setPlainText(item.ItemNotes)
 
-        self.ItemInfo.ItemDamageType.clear()
-        self.ItemInfo.ItemDamageType.insertItems(0, damageTypes)
-
-        self.ItemInfo.ItemRequirement.setText(item.ItemRequirement)
-        self.ItemInfo.ItemNotes.setPlainText(item.ItemNotes)
+        self.showClassRestrictions(item)
 
 # =============================================== #
-#    SUMMARIZER, CALCULATOR, AND MISC METHODS     #
+#        SUMMARIZER AND CALCULATOR METHODS        #
 # =============================================== #
 
     def summarize(self):
@@ -474,7 +530,14 @@ class MainWindow(QMainWindow):
                 self.StatMythicalCap[key].setText('--  ')
 
 # =============================================== #
-#     GETTER, SETTER, AND SLOT/SIGNAL METHODS     #
+#       MISCELLANEOUS METHODS AND FUNCTIONS       #
+# =============================================== #
+
+    def placeHolder(self):
+        pass
+
+# =============================================== #
+#              SLOT/SIGNAL METHODS                #
 # =============================================== #
 
     def CharacterRealmChanged(self, realm):
@@ -500,6 +563,36 @@ class MainWindow(QMainWindow):
             else:
                 self.StatBonus[Resist].setText('-')
 
+    def ItemTypeChanged(self, item = None):
+        pass
+
+    def ItemRealmChanged(self, index = None, item = None):
+        if item is None:
+            item = self.ItemAttributeList[self.CurrentItemLabel]
+            item.ItemRealm = self.ItemInfoDialog.ItemRealm.currentText()
+        self.showClassRestrictions(item)
+
+    def ClassRestrictionsChanged(self, selection = None):
+        item = self.ItemAttributeList[self.CurrentItemLabel]
+        if selection.text() == 'All':
+            if selection.checkState() == Qt.Checked:
+                for i in range(1, self.ItemInfoDialog.ItemClassRestrictionList.count()):
+                    self.ItemInfoDialog.ItemClassRestrictionList.item(i).setCheckState(Qt.Unchecked)
+                item.ItemRestrictions = ['All']
+            elif 'All' in item.ItemRestrictions:
+                index = item.ItemRestrictions.index('All')
+                del item.ItemRestrictions[index]
+        elif selection.checkState() == Qt.Checked:
+            self.ItemInfoDialog.ItemClassRestrictionList.item(0).setCheckState(Qt.Unchecked)
+            if 'All' in item.ItemRestrictions:
+                index = item.ItemRestrictions.index('All')
+                del item.ItemRestrictions[index]
+            elif selection.text() not in item.ItemRestrictions:
+                item.ItemRestrictions.append(selection.text())
+        elif selection.text() in item.ItemRestrictions:
+            index = item.ItemRestrictions.index(selection.text())
+            del item.ItemRestrictions[index]
+
     def ItemSelected(self, selection):
         for index in self.SlotListTreeView.selectedIndexes():
             selection = index.data()
@@ -515,4 +608,6 @@ class MainWindow(QMainWindow):
             for val in value:
                 if selection.text(column) == val:
                     self.ItemAttributeList[selection.text(column)].ItemEquipped = selection.checkState(column)
-                    print(self.ItemAttributeList[selection.text(column)].__dict__)
+
+                    # DEBUGGING
+                    # print(self.ItemAttributeList[selection.text(column)].__dict__)
