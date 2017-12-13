@@ -241,7 +241,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         for i in range(0, item.getSlotCount()):
 
             # DEBUGGING
-            # print(item.getSlotIndex(i).__dict__)
+            print(item.getSlotIndex(i).__dict__)
 
             if item.getSlotIndex(i).getSlotType() == 'drop':
                 getattr(self, "SlotLabel{}".format(i)).setText('Slot &%d:' % (i + 1))
@@ -300,8 +300,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         allRealmList = []
         for value in range(self.ItemInfoDialog.ItemClassRestrictionList.count()):
             allRealmList.append(self.ItemInfoDialog.ItemClassRestrictionList.item(value))
-        for key in allRealmList:
-            key.setHidden(True)
+        for value in allRealmList:
+            value.setHidden(True)
         for key in allRealmList:
             for value in ClassList[item.ItemRealm]:
                 if key.text() == 'All':
@@ -313,7 +313,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def RestoreItem(self, item):
 
         # DEBUGGING
-        # print(item.__dict__)
+        print(item.__dict__)
 
         realmList = {}
         sourceTypes = []
@@ -576,8 +576,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         item = self.ItemAttributeList[self.CurrentItemLabel]
         if selection.text() == 'All':
             if selection.checkState() == Qt.Checked:
-                for i in range(1, self.ItemInfoDialog.ItemClassRestrictionList.count()):
-                    self.ItemInfoDialog.ItemClassRestrictionList.item(i).setCheckState(Qt.Unchecked)
+                for count in range(1, self.ItemInfoDialog.ItemClassRestrictionList.count()):
+                    self.ItemInfoDialog.ItemClassRestrictionList.item(count).setCheckState(Qt.Unchecked)
                 item.ItemRestrictions = ['All']
             elif 'All' in item.ItemRestrictions:
                 index = item.ItemRestrictions.index('All')
