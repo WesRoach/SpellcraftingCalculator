@@ -239,10 +239,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def showDropWidgets(self, item):
         self.ItemGroup.hide()
         for i in range(0, item.getSlotCount()):
-
-            # DEBUGGING
-            print(item.getSlotIndex(i).__dict__)
-
             if item.getSlotIndex(i).getSlotType() == 'drop':
                 getattr(self, "SlotLabel{}".format(i)).setText('Slot &%d:' % (i + 1))
                 getattr(self, "SlotLabel{}".format(i)).show()
@@ -311,10 +307,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     # TODO: NEED TO RE-THINK THIS ...
     def RestoreItem(self, item):
-
-        # DEBUGGING
-        print(item.__dict__)
-
         realmList = {}
         sourceTypes = []
         damageTypes = []
@@ -565,6 +557,15 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def ItemTypeChanged(self, item = None):
         pass
+        if item is None:
+            item = self.ItemAttributeList[self.CurrentItemLabel]
+            item.ItemType = self.ItemInfoDialog.ItemType.currentText()
+
+        # DEBUGGING
+        print(item.getSlotIndex(0).__dict__)
+        print(item.__dict__)
+
+        pass
 
     def ItemRealmChanged(self, index = None, item = None):
         if item is None:
@@ -608,6 +609,3 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             for val in value:
                 if selection.text(column) == val:
                     self.ItemAttributeList[selection.text(column)].ItemEquipped = selection.checkState(column)
-
-                    # DEBUGGING
-                    # print(self.ItemAttributeList[selection.text(column)].__dict__)
