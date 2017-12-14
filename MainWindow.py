@@ -211,6 +211,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ItemInfoDialog.setWindowFlags(self.ItemInfoDialog.windowFlags())
 
         self.ItemInfoDialog.ItemRealm.activated[int].connect(self.ItemRealmChanged)
+        self.ItemInfoDialog.ItemSource.activated[str].connect(self.ItemSourceChanged)
+        self.ItemInfoDialog.ItemDamageType.activated[str].connect(self.ItemDamageTypeChanged)
+        self.ItemInfoDialog.ItemBonus.textChanged[str].connect(self.ItemBonusChanged)
+        self.ItemInfoDialog.ItemAFDPS.textChanged[str].connect(self.ItemAFDPSChanged)
+        self.ItemInfoDialog.ItemSpeed.textChanged[str].connect(self.ItemSpeedChanged)
+        self.ItemInfoDialog.ItemRequirement.textChanged[str].connect(self.ItemRequirementChanged)
         self.ItemInfoDialog.ItemRestrictionList.itemChanged['QListWidgetItem *'].connect(self.ItemRestrictionsChanged)
         self.ItemInfoDialog.CloseButton.clicked.connect(self.ItemInfoDialog.accept)
 
@@ -582,34 +588,37 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if item is None:
             item = self.ItemAttributeList[self.CurrentItemLabel]
             item.ItemType = self.ItemInfoDialog.ItemType.currentText()
+        print('ItemTypechanged')
 
-    def ItemSourceChanged(self, item):
-        print('ItemSourceChanged')
-        pass
+    def ItemSourceChanged(self):
+        item = self.ItemAttributeList[self.CurrentItemLabel]
+        item.ItemSource = self.ItemInfoDialog.ItemSource.currentText()
 
-    def ItemDamageTypeChanged(self, item):
-        print('ItemDamageTypeChanged')
-        pass
+    def ItemDamageTypeChanged(self):
+        item = self.ItemAttributeList[self.CurrentItemLabel]
+        item.ItemDamageType = self.ItemInfoDialog.ItemDamageType.currentText()
 
-    def ItemBonusChanged(self, item):
-        print('ItemBonusChanged')
-        pass
+    # TODO: VALIDATE ENTRY
+    def ItemBonusChanged(self):
+        item = self.ItemAttributeList[self.CurrentItemLabel]
+        item.ItemBonus = self.ItemInfoDialog.ItemBonus.text()
 
-    def ItemAFDPSChanged(self, item):
-        print('ItemAFDPSChanged')
-        pass
+    # TODO: VALIDATE ENTRY
+    def ItemAFDPSChanged(self):
+        item = self.ItemAttributeList[self.CurrentItemLabel]
+        item.ItemAFDPS = self.ItemInfoDialog.ItemAFDPS.text()
 
-    def ItemSpeedChanged(self, item):
-        print('ItemSpeedChanged')
-        pass
+    def ItemSpeedChanged(self):
+        item = self.ItemAttributeList[self.CurrentItemLabel]
+        item.ItemSpeed = self.ItemInfoDialog.ItemSpeed.text()
 
     def ItemLeftHandChanged(self, item):
         print('ItemLeftHandChanged')
         pass
 
     def ItemRequirementChanged(self, item):
-        print('ItemRequirementChanged')
-        pass
+        item = self.ItemAttributeList[self.CurrentItemLabel]
+        item.ItemRequirement = self.ItemInfoDialog.ItemRequirement.text()
 
     def ItemNotesChanged(self, item):
         print('ItemNotesChanged')
