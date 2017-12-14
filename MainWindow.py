@@ -213,10 +213,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ItemInfoDialog.ItemRealm.activated[int].connect(self.ItemRealmChanged)
         self.ItemInfoDialog.ItemSource.activated[str].connect(self.ItemSourceChanged)
         self.ItemInfoDialog.ItemDamageType.activated[str].connect(self.ItemDamageTypeChanged)
-        self.ItemInfoDialog.ItemBonus.textChanged[str].connect(self.ItemBonusChanged)
-        self.ItemInfoDialog.ItemAFDPS.textChanged[str].connect(self.ItemAFDPSChanged)
+        self.ItemInfoDialog.ItemBonus.editingFinished.connect(self.ItemBonusChanged)
+        # self.ItemInfoDialog.ItemBonus.textChanged[str].connect(self.ItemBonusChanged)
+        self.ItemInfoDialog.ItemAFDPS.editingFinished.connect(self.ItemAFDPSChanged)
+        # self.ItemInfoDialog.ItemAFDPS.textChanged[str].connect(self.ItemAFDPSChanged)
         self.ItemInfoDialog.ItemSpeed.textChanged[str].connect(self.ItemSpeedChanged)
         self.ItemInfoDialog.ItemRequirement.textChanged[str].connect(self.ItemRequirementChanged)
+        self.ItemInfoDialog.ItemLeftHand.stateChanged[int].connect(self.ItemLeftHandChanged)
         self.ItemInfoDialog.ItemRestrictionList.itemChanged['QListWidgetItem *'].connect(self.ItemRestrictionsChanged)
         self.ItemInfoDialog.CloseButton.clicked.connect(self.ItemInfoDialog.accept)
 
@@ -584,43 +587,70 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             item.ItemRealm = self.ItemInfoDialog.ItemRealm.currentText()
         self.showItemRestrictions(item)
 
-    def ItemTypeChanged(self, item = None):
+    def ItemTypeChanged(self, index = None, item = None):
         if item is None:
             item = self.ItemAttributeList[self.CurrentItemLabel]
             item.ItemType = self.ItemInfoDialog.ItemType.currentText()
         print('ItemTypechanged')
 
-    def ItemSourceChanged(self):
-        item = self.ItemAttributeList[self.CurrentItemLabel]
-        item.ItemSource = self.ItemInfoDialog.ItemSource.currentText()
+    def ItemSourceChanged(self, value = None, item = None):
+        if item is None:
+            item = self.ItemAttributeList[self.CurrentItemLabel]
+            item.ItemSource = self.ItemInfoDialog.ItemSource.currentText()
 
-    def ItemDamageTypeChanged(self):
-        item = self.ItemAttributeList[self.CurrentItemLabel]
-        item.ItemDamageType = self.ItemInfoDialog.ItemDamageType.currentText()
+    def ItemDamageTypeChanged(self, value = None, item = None):
+        if item is None:
+            item = self.ItemAttributeList[self.CurrentItemLabel]
+            item.ItemDamageType = self.ItemInfoDialog.ItemDamageType.currentText()
+
+    def ItemBonusChanged(self, item = None):
+        if item is None:
+            item = self.ItemAttributeList[self.CurrentItemLabel]
+        if self.ItemInfoDialog.ItemBonus.isModified():
+            item.ItemBonus = int(self.ItemInfoDialog.ItemBonus.text())
+            if item.ItemBonus > 35:
+                item.ItemBonus = 35
+                self.ItemInfoDialog.ItemBonus.setText(str(item.ItemBonus))
+            elif item.ItemBonus < 0:
+                item.ItemBonus = 0
+                self.ItemInfoDialog.ItemBonus.setText(str(item.ItemBonus))
+        self.ItemInfoDialog.ItemBonus.setModified(False)
 
     # TODO: VALIDATE ENTRY
-    def ItemBonusChanged(self):
-        item = self.ItemAttributeList[self.CurrentItemLabel]
-        item.ItemBonus = self.ItemInfoDialog.ItemBonus.text()
+    def ItemAFDPSChanged(self, item = None):
+        if item is None:
+            item = self.ItemAttributeList[self.CurrentItemLabel]
+        if self.ItemInfoDialog.ItemAFDPS.isModified():
+            item.ItemAFDPS = int(self.ItemInfoDialog.ItemAFDPS.text())
+            if item.ItemLocation in SlotList['Armor']:
+                # NEED TO CHECK IF CLOTH OR NOT, THEN ASSIGN VALUE
+                print('Armor')
+            if item.ItemLocation in SlotList['Weapons']:
+                print('Weapon')
+        self.ItemInfoDialog.ItemAFDPS.setModified(False)
 
-    # TODO: VALIDATE ENTRY
-    def ItemAFDPSChanged(self):
-        item = self.ItemAttributeList[self.CurrentItemLabel]
-        item.ItemAFDPS = self.ItemInfoDialog.ItemAFDPS.text()
+    def ItemSpeedChanged(self, value = None, item = None, modified = False):
+        print(value)
+        print(item)
+        print(modified)
+        if item is None:
+            item = self.ItemAttributeList[self.CurrentItemLabel]
+            item.ItemSpeed = self.ItemInfoDialog.ItemSpeed.text()
 
-    def ItemSpeedChanged(self):
-        item = self.ItemAttributeList[self.CurrentItemLabel]
-        item.ItemSpeed = self.ItemInfoDialog.ItemSpeed.text()
+    def ItemLeftHandChanged(self, state, item = None):
+        if item is None:
+            item = self.ItemAttributeList[self.CurrentItemLabel]
+            item.LeftHand = state
 
-    def ItemLeftHandChanged(self, item):
-        print('ItemLeftHandChanged')
-        pass
+    def ItemRequirementChanged(self, value = None, item = None):
+        if item is None:
+            item = self.ItemAttributeList[self.CurrentItemLabel]
+            item.ItemRequirement = self.ItemInfoDialog.ItemRequirement.text()
 
-    def ItemRequirementChanged(self, item):
-        item = self.ItemAttributeList[self.CurrentItemLabel]
-        item.ItemRequirement = self.ItemInfoDialog.ItemRequirement.text()
-
-    def ItemNotesChanged(self, item):
+    def ItemNotesChanged(self, index = None, item = None, modified = False):
+        print(index)
+        print(item)
+        print(modified)
         print('ItemNotesChanged')
         pass
 

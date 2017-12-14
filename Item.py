@@ -15,9 +15,9 @@ class Item:
         self.ItemQuality = ''
         self.ItemType = ''
         self.ItemName = ''
-        self.ItemAFDPS = ''
+        self.ItemAFDPS = int
         self.ItemSpeed = ''
-        self.ItemBonus = ''
+        self.ItemBonus = int
         self.ItemSource = ''
         self.LeftHand = ''
         self.ItemDamageType = ''
