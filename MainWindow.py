@@ -621,22 +621,18 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             for count in range(0, self.ItemInfoDialog.ItemRestrictionList.count()):
                 self.ItemInfoDialog.ItemRestrictionList.item(count).setCheckState(Qt.Unchecked)
             item.ItemRestrictions.clear()
-            print(item.ItemRestrictions)
         elif selection.text() == 'All' and selection.checkState() == Qt.Checked:
             for count in range(1, self.ItemInfoDialog.ItemRestrictionList.count()):
                 self.ItemInfoDialog.ItemRestrictionList.item(count).setCheckState(Qt.Unchecked)
             item.ItemRestrictions.clear()
             item.ItemRestrictions.append(selection.text())
-            print(item.ItemRestrictions)
         elif selection.checkState() == Qt.Checked:
             if selection.text() != 'All' and 'All' in item.ItemRestrictions:
                 item.ItemRestrictions.remove('All')
                 self.ItemInfoDialog.ItemRestrictionList.item(0).setCheckState(Qt.Unchecked)
             item.ItemRestrictions.append(selection.text())
-            print(item.ItemRestrictions)
         elif selection.checkState() == Qt.Unchecked:
             try:  # 'All' IS NOT IN THE LIST SOMETIMES
                 item.ItemRestrictions.remove(selection.text())
-                print(item.ItemRestrictions)
             except ValueError:
                 pass
