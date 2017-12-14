@@ -40,7 +40,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         self.ItemIndex = 0
         self.ItemAttributeList = {}
-        self.ItemInfoDialog = ItemInformationDialog(self)
+        self.ItemInfoDialog = ItemInformationDialog(self, Qt.WindowCloseButtonHint)
 
         self.CurrentRealm = ''
         self.CurrentItem = {}
@@ -191,10 +191,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             for val in value:
                 if key == 'Armor':
                     item = Item('crafted', val, self.CurrentRealm, self.ItemIndex)
+                    item.ItemName = 'Crafted Item'
                     self.ItemIndex += 1
                     self.ItemAttributeList[val] = item
                 else:
                     item = Item('drop', val, self.CurrentRealm, self.ItemIndex)
+                    item.ItemName = 'Dropped Item'
                     self.ItemIndex += 1
                     self.ItemAttributeList[val] = item
 
@@ -208,21 +210,15 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     # TODO: OVER-RIDE `MainWindow` ICON WITH 'ItemInformation' ICON
     def showItemInfoDialog(self):
         self.ItemInfoDialog.setFont(self.font())
-        self.ItemInfoDialog.setWindowFlags(self.ItemInfoDialog.windowFlags())
-
         self.ItemInfoDialog.ItemRealm.activated[int].connect(self.ItemRealmChanged)
         self.ItemInfoDialog.ItemSource.activated[str].connect(self.ItemSourceChanged)
         self.ItemInfoDialog.ItemDamageType.activated[str].connect(self.ItemDamageTypeChanged)
         self.ItemInfoDialog.ItemBonus.editingFinished.connect(self.ItemBonusChanged)
-        # self.ItemInfoDialog.ItemBonus.textChanged[str].connect(self.ItemBonusChanged)
-        self.ItemInfoDialog.ItemAFDPS.editingFinished.connect(self.ItemAFDPSChanged)
-        # self.ItemInfoDialog.ItemAFDPS.textChanged[str].connect(self.ItemAFDPSChanged)
-        self.ItemInfoDialog.ItemSpeed.textChanged[str].connect(self.ItemSpeedChanged)
-        self.ItemInfoDialog.ItemRequirement.textChanged[str].connect(self.ItemRequirementChanged)
+        self.ItemInfoDialog.ItemRequirement.editingFinished.connect(self.ItemRequirementChanged)
+        self.ItemInfoDialog.ItemNotes.textChanged.connect(self.ItemNotesChanged)
         self.ItemInfoDialog.ItemLeftHand.stateChanged[int].connect(self.ItemLeftHandChanged)
         self.ItemInfoDialog.ItemRestrictionList.itemChanged['QListWidgetItem *'].connect(self.ItemRestrictionsChanged)
         self.ItemInfoDialog.CloseButton.clicked.connect(self.ItemInfoDialog.accept)
-
         self.ItemInfoDialog.exec_()
 
 # =============================================== #
@@ -317,23 +313,24 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     # TODO: NEED TO RE-THINK THIS ...
     def RestoreItem(self, item):
         realmList = {}
-        sourceTypes = []
-        damageTypes = []
+        sourceTypes = ['']
+        damageTypes = ['']
 
         if item.ActiveState == 'crafted':
             realmList = Realms
-            sourceTypes = list(SourceTypeList['Craft'])
-            damageTypes = list(DamageTypeList['Craft'])
+            sourceTypes.extend(list(SourceTypeList['Craft']))
+            damageTypes.extend(list(DamageTypeList['Craft']))
             self.showCraftWidgets(item)
         elif item.ActiveState == 'drop':
             realmList = AllRealms
-            sourceTypes = list(SourceTypeList['Drop'])
-            damageTypes = list(DamageTypeList['Drop'])
+            sourceTypes.extend(list(SourceTypeList['Drop']))
+            damageTypes.extend(list(DamageTypeList['Drop']))
             self.showDropWidgets(item)
 
         if item.ItemLocation in SlotList['Jewelery']:
             self.ItemInfoDialog.ItemAFDPS.hide()
             self.ItemInfoDialog.ItemAFDPSLabel.hide()
+            self.ItemInfoDialog.ItemAFDPSLabel.setText('')
             self.ItemInfoDialog.ItemDamageType.hide()
             self.ItemInfoDialog.ItemDamageTypeLabel.hide()
             self.ItemInfoDialog.ItemSpeed.hide()
@@ -357,6 +354,15 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.ItemInfoDialog.ItemSpeed.show()
             self.ItemInfoDialog.ItemSpeedLabel.show()
             self.ItemInfoDialog.ItemLeftHand.show()
+        elif item.ItemLocation in SlotList['Mythical']:
+            self.ItemInfoDialog.ItemAFDPS.hide()
+            self.ItemInfoDialog.ItemAFDPSLabel.hide()
+            self.ItemInfoDialog.ItemAFDPSLabel.setText('')
+            self.ItemInfoDialog.ItemDamageType.hide()
+            self.ItemInfoDialog.ItemDamageTypeLabel.hide()
+            self.ItemInfoDialog.ItemSpeed.hide()
+            self.ItemInfoDialog.ItemSpeedLabel.hide()
+            self.ItemInfoDialog.ItemLeftHand.hide()
 
         self.ItemName.clear()
         self.ItemName.addItem(item.ItemName)
@@ -377,16 +383,20 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ItemInfoDialog.ItemRealm.insertItems(0, realmList)
         self.ItemInfoDialog.ItemRealm.setCurrentIndex(realmList.index(item.ItemRealm))
 
-        # TODO: BASE `currentIndex` ON `item.ItemSource`
+        # TODO: ADD item.ItemType --> PITA
+
         self.ItemInfoDialog.ItemSource.clear()
         self.ItemInfoDialog.ItemSource.insertItems(0, sourceTypes)
+        self.ItemInfoDialog.ItemSource.setCurrentIndex(sourceTypes.index(item.ItemSource))
         self.ItemInfoDialog.ItemDamageType.clear()
         self.ItemInfoDialog.ItemDamageType.insertItems(0, damageTypes)
+        self.ItemInfoDialog.ItemDamageType.setCurrentIndex(damageTypes.index(item.ItemDamageType))
+        self.ItemInfoDialog.ItemBonus.setText(item.ItemBonus)
+        self.ItemInfoDialog.ItemAFDPS.setText(item.ItemAFDPS)
+        self.ItemInfoDialog.ItemSpeed.setText(item.ItemSpeed)
         self.ItemInfoDialog.ItemRequirement.setText(item.ItemRequirement)
         self.ItemInfoDialog.ItemNotes.setPlainText(item.ItemNotes)
-
         self.showItemRestrictions(item)
-        self.ItemTypeChanged(item)
 
 # =============================================== #
 #        SUMMARIZER AND CALCULATOR METHODS        #
@@ -580,12 +590,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             for val in value:
                 if selection.text(column) == val:
                     self.ItemAttributeList[selection.text(column)].ItemEquipped = selection.checkState(column)
+        print('ItemStateChanged')
 
     def ItemRealmChanged(self, index = None, item = None):
         if item is None:
             item = self.ItemAttributeList[self.CurrentItemLabel]
             item.ItemRealm = self.ItemInfoDialog.ItemRealm.currentText()
         self.showItemRestrictions(item)
+        print('ItemRealmChanged')
 
     def ItemTypeChanged(self, index = None, item = None):
         if item is None:
@@ -597,62 +609,50 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if item is None:
             item = self.ItemAttributeList[self.CurrentItemLabel]
             item.ItemSource = self.ItemInfoDialog.ItemSource.currentText()
+        print('ItemSourceChanged')
 
     def ItemDamageTypeChanged(self, value = None, item = None):
         if item is None:
             item = self.ItemAttributeList[self.CurrentItemLabel]
             item.ItemDamageType = self.ItemInfoDialog.ItemDamageType.currentText()
+        print('ItemDamageTypeChanged')
 
     def ItemBonusChanged(self, item = None):
         if item is None:
             item = self.ItemAttributeList[self.CurrentItemLabel]
-        if self.ItemInfoDialog.ItemBonus.isModified():
-            item.ItemBonus = int(self.ItemInfoDialog.ItemBonus.text())
-            if item.ItemBonus > 35:
-                item.ItemBonus = 35
-                self.ItemInfoDialog.ItemBonus.setText(str(item.ItemBonus))
-            elif item.ItemBonus < 0:
-                item.ItemBonus = 0
-                self.ItemInfoDialog.ItemBonus.setText(str(item.ItemBonus))
-        self.ItemInfoDialog.ItemBonus.setModified(False)
+            item.ItemBonus = self.ItemInfoDialog.ItemBonus.text()
+        print('ItemBonusChanged')
 
-    # TODO: VALIDATE ENTRY
     def ItemAFDPSChanged(self, item = None):
         if item is None:
             item = self.ItemAttributeList[self.CurrentItemLabel]
-        if self.ItemInfoDialog.ItemAFDPS.isModified():
-            item.ItemAFDPS = int(self.ItemInfoDialog.ItemAFDPS.text())
-            if item.ItemLocation in SlotList['Armor']:
-                # NEED TO CHECK IF CLOTH OR NOT, THEN ASSIGN VALUE
-                print('Armor')
-            if item.ItemLocation in SlotList['Weapons']:
-                print('Weapon')
-        self.ItemInfoDialog.ItemAFDPS.setModified(False)
+            item.ItemAFDPS = self.ItemInfoDialog.ItemAFDPS.text()
+        print('ItemAFDPSChanged')
 
     def ItemSpeedChanged(self, value = None, item = None, modified = False):
-        print(value)
-        print(item)
-        print(modified)
         if item is None:
             item = self.ItemAttributeList[self.CurrentItemLabel]
             item.ItemSpeed = self.ItemInfoDialog.ItemSpeed.text()
+        print('ItemSpeedChanged')
 
     def ItemLeftHandChanged(self, state, item = None):
         if item is None:
             item = self.ItemAttributeList[self.CurrentItemLabel]
             item.LeftHand = state
+        print('ItemLeftHandChanged')
 
     def ItemRequirementChanged(self, value = None, item = None):
         if item is None:
             item = self.ItemAttributeList[self.CurrentItemLabel]
             item.ItemRequirement = self.ItemInfoDialog.ItemRequirement.text()
+        self.ItemInfoDialog.ItemRequirement.setModified(False)
+        print('ItemRequirementChanged')
 
-    def ItemNotesChanged(self, index = None, item = None, modified = False):
-        print(index)
-        print(item)
-        print(modified)
+    def ItemNotesChanged(self, item = None):
+        if item is None:
+            item = self.ItemAttributeList[self.CurrentItemLabel]
+            item.ItemNotes = self.ItemInfoDialog.ItemNotes.toPlainText()
         print('ItemNotesChanged')
-        pass
 
     def ItemRestrictionsChanged(self, selection = None):
         item = self.ItemAttributeList[self.CurrentItemLabel]
@@ -675,3 +675,4 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 item.ItemRestrictions.remove(selection.text())
             except ValueError:
                 pass
+        print('ItemRestrictionsChanged')

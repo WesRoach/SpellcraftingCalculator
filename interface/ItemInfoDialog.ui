@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>511</width>
-    <height>486</height>
+    <height>438</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -88,24 +88,17 @@
         <property name="verticalSpacing">
          <number>2</number>
         </property>
-        <item row="6" column="0">
+        <item row="4" column="3">
+         <widget class="QLineEdit" name="ItemAFDPS"/>
+        </item>
+        <item row="3" column="0">
          <widget class="QLabel" name="ItemDamageTypeLabel">
           <property name="text">
            <string>Damage:</string>
           </property>
          </widget>
         </item>
-        <item row="7" column="3">
-         <widget class="QLineEdit" name="ItemAFDPS"/>
-        </item>
-        <item row="8" column="2" colspan="2">
-         <widget class="QCheckBox" name="ItemLeftHand">
-          <property name="text">
-           <string>Left Hand</string>
-          </property>
-         </widget>
-        </item>
-        <item row="7" column="2">
+        <item row="4" column="2">
          <widget class="QLabel" name="ItemAFDPSLabel">
           <property name="text">
            <string>AFDPS:</string>
@@ -115,10 +108,14 @@
           </property>
          </widget>
         </item>
-        <item row="8" column="1">
-         <widget class="QLineEdit" name="ItemSpeed"/>
+        <item row="5" column="2" colspan="2">
+         <widget class="QCheckBox" name="ItemLeftHand">
+          <property name="text">
+           <string>Left Hand</string>
+          </property>
+         </widget>
         </item>
-        <item row="9" column="0" colspan="4">
+        <item row="6" column="0" colspan="4">
          <layout class="QVBoxLayout">
           <property name="spacing">
            <number>5</number>
@@ -147,23 +144,16 @@
           </item>
          </layout>
         </item>
-        <item row="6" column="1" colspan="3">
-         <widget class="QComboBox" name="ItemDamageType"/>
-        </item>
-        <item row="7" column="1">
+        <item row="4" column="1">
          <widget class="QLineEdit" name="ItemBonus"/>
         </item>
-        <item row="8" column="0">
-         <widget class="QLabel" name="ItemSpeedLabel">
-          <property name="text">
-           <string>Speed: </string>
-          </property>
-          <property name="textFormat">
-           <enum>Qt::PlainText</enum>
-          </property>
-         </widget>
+        <item row="5" column="1">
+         <widget class="QLineEdit" name="ItemSpeed"/>
         </item>
-        <item row="5" column="1" colspan="3">
+        <item row="3" column="1" colspan="3">
+         <widget class="QComboBox" name="ItemDamageType"/>
+        </item>
+        <item row="2" column="1" colspan="3">
          <widget class="QComboBox" name="ItemSource">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -183,14 +173,7 @@
           </property>
          </widget>
         </item>
-        <item row="0" column="0">
-         <widget class="QLabel" name="ItemRealmLabel">
-          <property name="text">
-           <string>Realm:</string>
-          </property>
-         </widget>
-        </item>
-        <item row="7" column="0">
+        <item row="4" column="0">
          <widget class="QLabel" name="ItemBonusLabel">
           <property name="text">
            <string>Bonus: </string>
@@ -201,16 +184,23 @@
          </widget>
         </item>
         <item row="5" column="0">
-         <widget class="QLabel" name="ItemSourceLabel">
+         <widget class="QLabel" name="ItemSpeedLabel">
           <property name="text">
-           <string>Origin: </string>
+           <string>Speed: </string>
           </property>
           <property name="textFormat">
            <enum>Qt::PlainText</enum>
           </property>
          </widget>
         </item>
-        <item row="21" column="0" colspan="4">
+        <item row="0" column="0">
+         <widget class="QLabel" name="ItemRealmLabel">
+          <property name="text">
+           <string>Realm:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="7" column="0" colspan="4">
          <spacer>
           <property name="orientation">
            <enum>Qt::Vertical</enum>
@@ -227,6 +217,16 @@
          <widget class="QLabel" name="ItemTypeLabel">
           <property name="text">
            <string>Type: </string>
+          </property>
+          <property name="textFormat">
+           <enum>Qt::PlainText</enum>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <widget class="QLabel" name="ItemSourceLabel">
+          <property name="text">
+           <string>Origin: </string>
           </property>
           <property name="textFormat">
            <enum>Qt::PlainText</enum>
@@ -284,6 +284,9 @@
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
+          <property name="mouseTracking">
+           <bool>false</bool>
+          </property>
          </widget>
         </item>
        </layout>
@@ -333,7 +336,7 @@
          <bool>false</bool>
         </property>
         <property name="textInteractionFlags">
-         <set>Qt::TextEditable</set>
+         <set>Qt::TextEditorInteraction</set>
         </property>
        </widget>
       </item>

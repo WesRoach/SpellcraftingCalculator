@@ -15,9 +15,9 @@ class Item:
         self.ItemQuality = ''
         self.ItemType = ''
         self.ItemName = ''
-        self.ItemAFDPS = int
+        self.ItemAFDPS = ''
         self.ItemSpeed = ''
-        self.ItemBonus = int
+        self.ItemBonus = ''
         self.ItemSource = ''
         self.LeftHand = ''
         self.ItemDamageType = ''
@@ -38,34 +38,26 @@ class Item:
             for key, value in ItemTypes.items():
                 if self.ItemLocation == key:
                     self.ItemType = ItemTypes[key][0]
-            self.ActiveState = 'drop'
             self.ItemEquipped = 2
-            self.ItemName = 'Dropped Item'
 
         elif self.ItemLocation in SlotList['Armor']:
             for key, value in ItemTypes.items():
                 if self.ItemLocation == key:
                     self.ItemType = ItemTypes[key][self.ItemRealm][0]
-            self.ActiveState = 'crafted'
             self.ItemEquipped = 2
-            self.ItemName = 'Crafted Item'
 
         # TODO: DETERMINE 'ItemEquipped' BASED ON CLASS SELECTION
         elif self.ItemLocation in SlotList['Weapons']:
             for key, value in ItemTypes.items():
                 if self.ItemLocation == key:
                     self.ItemType = ItemTypes[key][self.ItemRealm][0]
-            self.ActiveState = 'drop'
             self.ItemEquipped = 0
-            self.ItemName = 'Dropped Item'
 
         elif self.ItemLocation in SlotList['Mythical']:
             for key, value in ItemTypes.items():
                 if self.ItemLocation in SlotList['Mythical'] == value:
                     self.ItemType = ItemTypes[key][0]
-            self.ActiveState = 'drop'
             self.ItemEquipped = 2
-            self.ItemName = 'Dropped Item'
 
         # DEBUGGING
         print(self.__dict__)
