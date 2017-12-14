@@ -802,7 +802,6 @@ ItemTypes = d2({
     'Right Wrist': t2(('Wrist',)),
     'Mythical': t2(('Mythirian',)),
 
-    # THIS CAN TECHNICALLY BE JUST 'Armor'
     'Chest': armorTypes,
     'Arms': armorTypes,
     'Head': armorTypes,
