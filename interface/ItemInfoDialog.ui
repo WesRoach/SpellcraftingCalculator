@@ -96,6 +96,9 @@
           <property name="text">
            <string>Damage:</string>
           </property>
+          <property name="buddy">
+           <cstring>ItemDamageType</cstring>
+          </property>
          </widget>
         </item>
         <item row="4" column="2">
@@ -105,6 +108,9 @@
           </property>
           <property name="alignment">
            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+          </property>
+          <property name="buddy">
+           <cstring>ItemAFDPS</cstring>
           </property>
          </widget>
         </item>
@@ -136,6 +142,9 @@
            <widget class="QLabel" name="ItemRequirementLabel">
             <property name="text">
              <string>Requirement:</string>
+            </property>
+            <property name="buddy">
+             <cstring>ItemRequirement</cstring>
             </property>
            </widget>
           </item>
@@ -181,6 +190,9 @@
           <property name="textFormat">
            <enum>Qt::PlainText</enum>
           </property>
+          <property name="buddy">
+           <cstring>ItemBonus</cstring>
+          </property>
          </widget>
         </item>
         <item row="5" column="0">
@@ -191,12 +203,18 @@
           <property name="textFormat">
            <enum>Qt::PlainText</enum>
           </property>
+          <property name="buddy">
+           <cstring>ItemSpeed</cstring>
+          </property>
          </widget>
         </item>
         <item row="0" column="0">
          <widget class="QLabel" name="ItemRealmLabel">
           <property name="text">
            <string>Realm:</string>
+          </property>
+          <property name="buddy">
+           <cstring>ItemRealm</cstring>
           </property>
          </widget>
         </item>
@@ -221,6 +239,9 @@
           <property name="textFormat">
            <enum>Qt::PlainText</enum>
           </property>
+          <property name="buddy">
+           <cstring>ItemType</cstring>
+          </property>
          </widget>
         </item>
         <item row="2" column="0">
@@ -230,6 +251,9 @@
           </property>
           <property name="textFormat">
            <enum>Qt::PlainText</enum>
+          </property>
+          <property name="buddy">
+           <cstring>ItemSource</cstring>
           </property>
          </widget>
         </item>
@@ -397,6 +421,20 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>ItemRealm</tabstop>
+  <tabstop>ItemType</tabstop>
+  <tabstop>ItemSource</tabstop>
+  <tabstop>ItemDamageType</tabstop>
+  <tabstop>ItemBonus</tabstop>
+  <tabstop>ItemAFDPS</tabstop>
+  <tabstop>ItemSpeed</tabstop>
+  <tabstop>ItemLeftHand</tabstop>
+  <tabstop>ItemRequirement</tabstop>
+  <tabstop>ItemRestrictionList</tabstop>
+  <tabstop>ItemNotes</tabstop>
+  <tabstop>CloseButton</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>
