@@ -312,7 +312,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             damageTypes.extend(list(DamageTypeList['Drop']))
             self.showDropWidgets(item)
 
-        # TODO: THIS DOES NOT BELONG HERE ...
+        # TODO: THIS DOES NOT BELONG HERE ... ITEMINFODIALOG
         if item.ItemLocation in SlotList['Jewelery']:
             self.ItemInfoDialog.ItemAFDPS.hide()
             self.ItemInfoDialog.ItemAFDPSLabel.hide()
@@ -354,7 +354,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ItemName.addItem(item.ItemName)
         self.ItemName.setCurrentIndex(0)
 
-        # TODO: THIS DOES NOT BELONG HERE ...
+        # TODO: THIS DOES NOT BELONG HERE ... INITIALIZE
         iterator = QTreeWidgetItemIterator(self.SlotListTreeView)
         while iterator.value():
             selection = iterator.value()
