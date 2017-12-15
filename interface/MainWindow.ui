@@ -1515,7 +1515,7 @@
                <item>
                 <widget class="QLabel" name="ItemNameLabel">
                  <property name="text">
-                  <string>Item &amp;Name:</string>
+                  <string>Item &amp;Name: </string>
                  </property>
                  <property name="buddy">
                   <cstring>ItemName</cstring>
@@ -1570,7 +1570,7 @@
                 </widget>
                </item>
                <item>
-                <widget class="QPushButton" name="ItemInformationButton">
+                <widget class="QPushButton" name="ItemInfoButton">
                  <property name="text">
                   <string>INFO</string>
                  </property>
@@ -2383,7 +2383,7 @@
   <tabstop>ItemAddButton</tabstop>
   <tabstop>ItemDeleteButton</tabstop>
   <tabstop>ItemChangeButton</tabstop>
-  <tabstop>ItemInformationButton</tabstop>
+  <tabstop>ItemInfoButton</tabstop>
   <tabstop>EffectType0</tabstop>
   <tabstop>AmountStatic0</tabstop>
   <tabstop>AmountEdit0</tabstop>

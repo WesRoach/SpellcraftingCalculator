@@ -3,7 +3,7 @@
 from PyQt5 import uic
 from PyQt5.Qt import Qt
 from PyQt5.QtCore import QSize
-from PyQt5.QtGui import QFont, QFontMetrics
+from PyQt5.QtGui import QFont, QFontMetrics, QIcon
 from PyQt5.QtWidgets import QDialog, QMainWindow, QMenu, QToolBar, QTreeWidgetItem, QTreeWidgetItemIterator, QListWidgetItem
 from Character import AllBonusList, AllRealms, ClassList, ItemTypes, Races, Realms
 from Constants import Cap, DropLists, MythicalCap, DamageTypeList, SourceTypeList
@@ -49,8 +49,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.initMenuBar()
         self.initToolBar()
         self.initLayout()
+        self.initialize()
         self.initControls()
-        self.initialize(False)
 
 # =============================================== #
 #       INTERFACE SETUP AND INITIALIZATION        #
@@ -78,8 +78,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         font.setPointSize(8)
         self.setFont(font)
 
-        # TODO: DYNAMICALLY ASSIGN SIZE
-        # self.setMinimumSize(780, 520)
         self.setWindowTitle('Spellcrafting Calculator')
 
         # MAKE SURE WE ARE TESTING WIDTH AND HEIGHT
@@ -160,21 +158,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             tableEntry.setCheckState(Qt.Unchecked)
             self.ItemInfoDialog.ItemRestrictionList.addItem(tableEntry)
 
-    def initControls(self):
-        self.ItemInformationButton.clicked.connect(self.showItemInfoDialog)
-        self.SlotListTreeView.itemClicked.connect(self.ItemSelected)
-        self.SlotListTreeView.itemChanged.connect(self.ItemStateChanged)
-        self.CharacterRealm.activated[int].connect(self.CharacterRealmChanged)
-        self.CharacterClass.activated[int].connect(self.CharacterClassChanged)
-        self.CharacterRace.activated[int].connect(self.CharacterRaceChanged)
-
-    def LoadOptions(self):
-        pass
-
-    def SaveOptions(self):
-        pass
-
-    def initialize(self, boolean):
+    def initialize(self):
         self.CharacterName.setText('')
         self.CharacterLevel.setText('50')
         self.CharacterRealmRank.setText('10')
@@ -203,29 +187,36 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # SET THE INITIAL SLOT
         self.ItemSelected('Neck')
 
+    def initControls(self):
+        self.ItemInfoButton.clicked.connect(self.showItemInfoDialog)
+        self.SlotListTreeView.itemClicked.connect(self.ItemSelected)
+        self.SlotListTreeView.itemChanged.connect(self.ItemStateChanged)
+        self.CharacterRealm.activated[int].connect(self.CharacterRealmChanged)
+        self.CharacterClass.activated[int].connect(self.CharacterClassChanged)
+        self.CharacterRace.activated[int].connect(self.CharacterRaceChanged)
+        self.ItemInfoDialog.CloseButton.clicked.connect(self.ItemInfoDialog.accept)
+
+    def LoadOptions(self):
+        pass
+
+    def SaveOptions(self):
+        pass
+
 # =============================================== #
 #             DIALOG & WINDOW METHODS             #
 # =============================================== #
 
     # TODO: OVER-RIDE `MainWindow` ICON WITH 'ItemInformation' ICON
     def showItemInfoDialog(self):
+        self.ItemInfoDialog.setWindowIcon(QIcon(None))
         self.ItemInfoDialog.setFont(self.font())
-        self.ItemInfoDialog.ItemRealm.activated[int].connect(self.ItemRealmChanged)
-        self.ItemInfoDialog.ItemSource.activated[str].connect(self.ItemSourceChanged)
-        self.ItemInfoDialog.ItemDamageType.activated[str].connect(self.ItemDamageTypeChanged)
-        self.ItemInfoDialog.ItemBonus.editingFinished.connect(self.ItemBonusChanged)
-        self.ItemInfoDialog.ItemRequirement.editingFinished.connect(self.ItemRequirementChanged)
-        self.ItemInfoDialog.ItemNotes.textChanged.connect(self.ItemNotesChanged)
-        self.ItemInfoDialog.ItemLeftHand.stateChanged[int].connect(self.ItemLeftHandChanged)
-        self.ItemInfoDialog.ItemRestrictionList.itemChanged['QListWidgetItem *'].connect(self.ItemRestrictionsChanged)
-        self.ItemInfoDialog.CloseButton.clicked.connect(self.ItemInfoDialog.accept)
         self.ItemInfoDialog.exec_()
 
 # =============================================== #
 #          LAYOUT CHANGE/UPDATE METHODS           #
 # =============================================== #
 
-    def showStat(self, stat, show):
+    def showCharacterStat(self, stat, show):
         if self.StatLabel[stat].isHidden() != show:
             return
         self.StatLabel[stat].setVisible(show)
@@ -238,8 +229,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             pass
 
     def showDropWidgets(self, item):
-        self.ItemGroup.hide()
-
         # TODO: LETS GET AWAY FROM THE GETTERS AND SETTERS
         for i in range(0, item.getSlotCount()):
             if item.getSlotIndex(i).getSlotType() == 'drop':
@@ -255,16 +244,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 getattr(self, "AmountEdit{}".format(i)).show()
             if i < 4:
                 getattr(self, "ImbuePoints{}".format(i)).hide()
-
         getattr(self, "ImbuePointsLabel").hide()
         getattr(self, "GemNameLabel").hide()
         getattr(self, "RequirementLabel").show()
-        self.ItemGroup.updateGeometry()
-        self.ItemGroup.show()
 
     def showCraftWidgets(self, item):
-        self.ItemGroup.hide()
-
         # TODO: LETS GET AWAY FROM THE GETTERS AND SETTERS
         for i in range(0, item.getSlotCount()):
             if item.getSlotIndex(i).getSlotType() == 'crafted':
@@ -292,15 +276,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         getattr(self, "RequirementLabel").hide()
         getattr(self, "ImbuePointsLabel").show()
         getattr(self, "GemNameLabel").show()
-        self.ItemGroup.updateGeometry()
-        self.ItemGroup.show()
 
+    # TODO: MISSING RESTORE FUNCTION
     def showItemRestrictions(self, item):
         allRealmList = []
         for value in range(self.ItemInfoDialog.ItemRestrictionList.count()):
             allRealmList.append(self.ItemInfoDialog.ItemRestrictionList.item(value))
             self.ItemInfoDialog.ItemRestrictionList.item(value).setCheckState(Qt.Unchecked)
-        item.ItemRestrictions.clear()
         for value in allRealmList:
             value.setHidden(True)
         for key in allRealmList:
@@ -311,6 +293,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     key.setHidden(False)
 
     # TODO: NEED TO RE-THINK THIS ...
+    # THERE IS TOO MUCH GOING ON HERE. THIS SHOULD BE FOR RESTORING AN
+    # ITEM FROM 'self.ItemAttributeList[self.CurrentItemLabel]' TO THE
+    # SELECTED USER-SPACE. WE NEED TO MOVE SETUP RELATED ITEMS OUT.
     def RestoreItem(self, item):
         realmList = {}
         sourceTypes = ['']
@@ -327,6 +312,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             damageTypes.extend(list(DamageTypeList['Drop']))
             self.showDropWidgets(item)
 
+        # TODO: THIS DOES NOT BELONG HERE ...
         if item.ItemLocation in SlotList['Jewelery']:
             self.ItemInfoDialog.ItemAFDPS.hide()
             self.ItemInfoDialog.ItemAFDPSLabel.hide()
@@ -368,6 +354,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ItemName.addItem(item.ItemName)
         self.ItemName.setCurrentIndex(0)
 
+        # TODO: THIS DOES NOT BELONG HERE ...
         iterator = QTreeWidgetItemIterator(self.SlotListTreeView)
         while iterator.value():
             selection = iterator.value()
@@ -383,14 +370,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ItemInfoDialog.ItemRealm.insertItems(0, realmList)
         self.ItemInfoDialog.ItemRealm.setCurrentIndex(realmList.index(item.ItemRealm))
 
-        # TODO: ADD item.ItemType --> PITA
-
         self.ItemInfoDialog.ItemSource.clear()
         self.ItemInfoDialog.ItemSource.insertItems(0, sourceTypes)
         self.ItemInfoDialog.ItemSource.setCurrentIndex(sourceTypes.index(item.ItemSource))
+
         self.ItemInfoDialog.ItemDamageType.clear()
         self.ItemInfoDialog.ItemDamageType.insertItems(0, damageTypes)
         self.ItemInfoDialog.ItemDamageType.setCurrentIndex(damageTypes.index(item.ItemDamageType))
+
         self.ItemInfoDialog.ItemBonus.setText(item.ItemBonus)
         self.ItemInfoDialog.ItemAFDPS.setText(item.ItemAFDPS)
         self.ItemInfoDialog.ItemSpeed.setText(item.ItemSpeed)
@@ -486,26 +473,26 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
             if key[:5] == "Power":
                 Skills = AllBonusList[Realm][Class]["All Magic Skills"]
-                self.showStat(key, (datum['TotalCapBonus'] > 0)
+                self.showCharacterStat(key, (datum['TotalCapBonus'] > 0)
                               or (datum['TotalMythicalCapBonus'] > 0)
                               or (TotalBonus > 0)
                               or (len(Skills) > 0))
 
             elif key == "Fatigue":
                 Skills = AllBonusList[Realm][Class]["All Melee Weapon Skills"]
-                self.showStat(key, (datum['TotalCapBonus'] > 0)
+                self.showCharacterStat(key, (datum['TotalCapBonus'] > 0)
                               or (datum['TotalMythicalCapBonus'] > 0)
                               or (TotalBonus > 0)
                               or (len(Skills) > 0))
 
             elif key == "Acuity":
-                self.showStat(key, ((datum['TotalCapBonus'] > 0)
+                self.showCharacterStat(key, ((datum['TotalCapBonus'] > 0)
                               or (datum['TotalMythicalCapBonus'] > 0)
                               or (TotalBonus > 0))
                               and (len(Acuity) == 0))
 
             elif key in ("Charisma", "Empathy", "Intelligence", "Piety"):
-                self.showStat(key, (datum['TotalCapBonus'] > 0)
+                self.showCharacterStat(key, (datum['TotalCapBonus'] > 0)
                               or (datum['TotalMythicalCapBonus'] > 0)
                               or (TotalBonus > 0)
                               or (key in Acuity))
@@ -559,6 +546,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.CharacterClassChanged(self.CharacterClass.currentIndex())
         self.CurrentRealm = Realm
 
+        # DEBUGGING
+        print('CharacterRealmChanged')
+
     def CharacterClassChanged(self, realm):
         Realm = str(self.CharacterRealm.currentText())
         Class = str(self.CharacterClass.currentText())
@@ -567,6 +557,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.CharacterRaceChanged(self.CharacterRace.currentIndex())
         self.calculate()
 
+        # DEBUGGING
+        print('CharacterClassChanged')
+
     def CharacterRaceChanged(self, realm):
         Race = str(self.CharacterRace.currentText())
         for Resist in DropLists['All']['Resist']:
@@ -574,6 +567,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 self.StatBonus[Resist].setText('+ ' + str(Races['All'][Race]['Resists'][Resist]))
             else:
                 self.StatBonus[Resist].setText('-')
+
+        # DEBUGGING
+        print('CharacterRaceChanged')
 
     def ItemSelected(self, selection):
         for index in self.SlotListTreeView.selectedIndexes():
@@ -585,60 +581,80 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     self.CurrentItem = self.ItemAttributeList[self.CurrentItemLabel]
                     self.RestoreItem(self.ItemAttributeList[self.CurrentItemLabel])
 
+        # DEBUGGING
+        print('ItemSelected')
+
     def ItemStateChanged(self, selection, column):
         for key, value in SlotList.items():
             for val in value:
                 if selection.text(column) == val:
                     self.ItemAttributeList[selection.text(column)].ItemEquipped = selection.checkState(column)
+
+        # DEBUGGING
         print('ItemStateChanged')
 
     def ItemRealmChanged(self, index = None, item = None):
         if item is None:
             item = self.ItemAttributeList[self.CurrentItemLabel]
             item.ItemRealm = self.ItemInfoDialog.ItemRealm.currentText()
-        self.showItemRestrictions(item)
+
+        # DEBUGGING
         print('ItemRealmChanged')
 
     def ItemTypeChanged(self, index = None, item = None):
         if item is None:
             item = self.ItemAttributeList[self.CurrentItemLabel]
             item.ItemType = self.ItemInfoDialog.ItemType.currentText()
+
+        # DEBUGGING
         print('ItemTypechanged')
 
     def ItemSourceChanged(self, value = None, item = None):
         if item is None:
             item = self.ItemAttributeList[self.CurrentItemLabel]
             item.ItemSource = self.ItemInfoDialog.ItemSource.currentText()
+
+        # DEBUGGING
         print('ItemSourceChanged')
 
     def ItemDamageTypeChanged(self, value = None, item = None):
         if item is None:
             item = self.ItemAttributeList[self.CurrentItemLabel]
             item.ItemDamageType = self.ItemInfoDialog.ItemDamageType.currentText()
+
+        # DEBUGGING
         print('ItemDamageTypeChanged')
 
     def ItemBonusChanged(self, item = None):
         if item is None:
             item = self.ItemAttributeList[self.CurrentItemLabel]
             item.ItemBonus = self.ItemInfoDialog.ItemBonus.text()
+
+        # DEBUGGING
         print('ItemBonusChanged')
 
     def ItemAFDPSChanged(self, item = None):
         if item is None:
             item = self.ItemAttributeList[self.CurrentItemLabel]
             item.ItemAFDPS = self.ItemInfoDialog.ItemAFDPS.text()
+
+        # DEBUGGING
         print('ItemAFDPSChanged')
 
     def ItemSpeedChanged(self, value = None, item = None, modified = False):
         if item is None:
             item = self.ItemAttributeList[self.CurrentItemLabel]
             item.ItemSpeed = self.ItemInfoDialog.ItemSpeed.text()
+
+        # DEBUGGING
         print('ItemSpeedChanged')
 
     def ItemLeftHandChanged(self, state, item = None):
         if item is None:
             item = self.ItemAttributeList[self.CurrentItemLabel]
             item.LeftHand = state
+
+        # DEBUGGING
         print('ItemLeftHandChanged')
 
     def ItemRequirementChanged(self, value = None, item = None):
@@ -646,33 +662,20 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             item = self.ItemAttributeList[self.CurrentItemLabel]
             item.ItemRequirement = self.ItemInfoDialog.ItemRequirement.text()
         self.ItemInfoDialog.ItemRequirement.setModified(False)
+
+        # DEBUGGING
         print('ItemRequirementChanged')
 
     def ItemNotesChanged(self, item = None):
         if item is None:
             item = self.ItemAttributeList[self.CurrentItemLabel]
             item.ItemNotes = self.ItemInfoDialog.ItemNotes.toPlainText()
+
+        # DEBUGGING
         print('ItemNotesChanged')
 
     def ItemRestrictionsChanged(self, selection = None):
         item = self.ItemAttributeList[self.CurrentItemLabel]
-        if selection is None:
-            for count in range(0, self.ItemInfoDialog.ItemRestrictionList.count()):
-                self.ItemInfoDialog.ItemRestrictionList.item(count).setCheckState(Qt.Unchecked)
-            item.ItemRestrictions.clear()
-        elif selection.text() == 'All' and selection.checkState() == Qt.Checked:
-            for count in range(1, self.ItemInfoDialog.ItemRestrictionList.count()):
-                self.ItemInfoDialog.ItemRestrictionList.item(count).setCheckState(Qt.Unchecked)
-            item.ItemRestrictions.clear()
-            item.ItemRestrictions.append(selection.text())
-        elif selection.checkState() == Qt.Checked:
-            if selection.text() != 'All' and 'All' in item.ItemRestrictions:
-                item.ItemRestrictions.remove('All')
-                self.ItemInfoDialog.ItemRestrictionList.item(0).setCheckState(Qt.Unchecked)
-            item.ItemRestrictions.append(selection.text())
-        elif selection.checkState() == Qt.Unchecked:
-            try:  # 'All' IS NOT IN THE LIST SOMETIMES
-                item.ItemRestrictions.remove(selection.text())
-            except ValueError:
-                pass
+
+        # DEBUGGING
         print('ItemRestrictionsChanged')

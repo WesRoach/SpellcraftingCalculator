@@ -40,6 +40,10 @@ class Item:
                     self.ItemType = ItemTypes[key][0]
             self.ItemEquipped = 2
 
+            # DEBUGGING
+            if self.ItemLocation == 'Neck':
+                self.ItemRestrictions = ['Shadowblade', 'Runemaster', 'Spiritmaster', 'Bonedancer']
+
         elif self.ItemLocation in SlotList['Armor']:
             for key, value in ItemTypes.items():
                 if self.ItemLocation == key:
