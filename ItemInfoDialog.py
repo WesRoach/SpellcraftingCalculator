@@ -13,14 +13,14 @@ class ItemInformationDialog(QDialog, Ui_ItemInfoDialog):
         QDialog.__init__(self, parent, flags)
         self.setupUi(self)
 
-        self.Item = item
+        self.CurrentItem = item
         self.RealmList = ()
         self.DamageTypes = ['']
         self.SourceTypes = ['']
 
-        self.initLayout(item)
+        self.initLayout(self.CurrentItem)
+        self.initItem(self.CurrentItem)
         self.initControls()
-        self.initItem(item)
 
     def initLayout(self, item):
         font = QFont(self.font())
@@ -196,59 +196,70 @@ class ItemInformationDialog(QDialog, Ui_ItemInfoDialog):
 #              SLOT/SIGNAL METHODS                #
 # =============================================== #
 
-    def ItemRealmChanged(self, item):
-        self.Item.ItemRealm = self.ItemRealm.currentText()
-        self.showItemRestrictions(self.Item)
+    def ItemRealmChanged(self):
+        item = self.CurrentItem
+        item.ItemRealm = self.ItemRealm.currentText()
+        self.showItemRestrictions(item)
         print('ItemRealmChanged')
 
     def ItemTypeChanged(self):
-        self.Item.ItemType = self.ItemType.currentText()
+        item = self.CurrentItem
+        item.ItemType = self.ItemType.currentText()
         print('ItemTypechanged')
 
     def ItemSourceChanged(self):
-        self.Item.ItemSource = self.ItemSource.currentText()
+        item = self.CurrentItem
+        item.ItemSource = self.ItemSource.currentText()
         print('ItemSourceChanged')
 
     def ItemDamageTypeChanged(self):
-        self.Item.ItemDamageType = self.ItemDamageType.currentText()
+        item = self.CurrentItem
+        item.ItemDamageType = self.ItemDamageType.currentText()
         print('ItemDamageTypeChanged')
 
     def ItemBonusChanged(self):
-        self.Item.ItemBonus = self.ItemBonus.text()
+        item = self.CurrentItem
+        item.ItemBonus = self.ItemBonus.text()
         print('ItemBonusChanged')
 
     def ItemAFDPSChanged(self):
-        self.Item.ItemAFDPS = self.ItemAFDPS.text()
+        item = self.CurrentItem
+        item.ItemAFDPS = self.ItemAFDPS.text()
         print('ItemAFDPSChanged')
 
     def ItemSpeedChanged(self):
-        self.Item.ItemSpeed = self.ItemSpeed.text()
+        item = self.CurrentItem
+        item.ItemSpeed = self.ItemSpeed.text()
         self.ItemSpeed.setModified(False)
         print('ItemSpeedChanged')
 
     def ItemLeftHandChanged(self, state):
-        self.Item.LeftHand = state
+        item = self.CurrentItem
+        item.LeftHand = state
         print('ItemLeftHandChanged')
 
     def ItemRequirementChanged(self):
-        self.Item.ItemRequirement = self.ItemRequirement.text()
+        item = self.CurrentItem
+        item.ItemRequirement = self.ItemRequirement.text()
         self.ItemRequirement.setModified(False)
         print('ItemRequirementChanged')
 
     def ItemNotesChanged(self):
-        self.Item.ItemNotes = self.ItemNotes.toPlainText()
+        item = self.CurrentItem
+        item.ItemNotes = self.ItemNotes.toPlainText()
         print('ItemNotesChanged')
 
     def ItemRestrictionsChanged(self, selection = None):
+        item = self.CurrentItem
         if selection.text() == 'All' and selection.checkState() == Qt.Checked:
             for count in range(1, self.ItemRestrictionList.count()):
                 self.ItemRestrictionList.item(count).setCheckState(Qt.Unchecked)
-            self.Item.ItemRestrictions.clear()
-            self.Item.ItemRestrictions.append(selection.text())
+            item.ItemRestrictions.clear()
+            item.ItemRestrictions.append(selection.text())
         elif selection.checkState() == Qt.Checked:
-            if selection.text() != 'All' and 'All' in self.Item.ItemRestrictions:
+            if selection.text() != 'All' and 'All' in item.ItemRestrictions:
                 self.ItemRestrictionList.item(0).setCheckState(Qt.Unchecked)
-            self.Item.ItemRestrictions.append(selection.text())
+            item.ItemRestrictions.append(selection.text())
         elif selection.checkState() == Qt.Unchecked:
-            self.Item.ItemRestrictions.remove(selection.text())
+            item.ItemRestrictions.remove(selection.text())
         print('ItemRestrictionsChanged')

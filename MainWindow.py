@@ -145,11 +145,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         # SETUP THE INITIAL CHARACTER ...
         self.CharacterRealm.setCurrentIndex(2)
-        self.CharacterRealmChanged(self.CharacterRealm.currentIndex())
+        self.CharacterRealmChanged()
         self.CharacterClass.setCurrentIndex(7)
-        self.CharacterClassChanged(self.CharacterClass.currentIndex())
+        self.CharacterClassChanged()
         self.CharacterRace.setCurrentIndex(2)
-        self.CharacterRaceChanged(self.CharacterRace.currentIndex())
+        self.CharacterRaceChanged()
 
         for key, value in SlotList.items():
             for val in value:
@@ -185,6 +185,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.CharacterRealm.activated[int].connect(self.CharacterRealmChanged)
         self.CharacterClass.activated[int].connect(self.CharacterClassChanged)
         self.CharacterRace.activated[int].connect(self.CharacterRaceChanged)
+        self.ItemLevel.editingFinished.connect(self.ItemLevelChanged)
 
     def LoadOptions(self):
         pass
@@ -226,6 +227,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ItemName.clear()
         self.ItemName.addItem(item.ItemName)
         self.ItemName.setCurrentIndex(0)
+        self.ItemLevel.setText(item.ItemLevel)
 
     def showDropWidgets(self, item):
         # TODO: LETS GET AWAY FROM THE GETTERS AND SETTERS
@@ -430,28 +432,28 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 #              SLOT/SIGNAL METHODS                #
 # =============================================== #
 
-    def CharacterRealmChanged(self, realm):
+    def CharacterRealmChanged(self):
         Realm = str(self.CharacterRealm.currentText())
         self.CharacterClass.clear()
         self.CharacterClass.insertItems(0, list(ClassList[Realm]))
-        self.CharacterClassChanged(self.CharacterClass.currentIndex())
+        self.CharacterClassChanged()
         self.CurrentRealm = Realm
 
         # DEBUGGING
         print('CharacterRealmChanged')
 
-    def CharacterClassChanged(self, realm):
+    def CharacterClassChanged(self):
         Realm = str(self.CharacterRealm.currentText())
         Class = str(self.CharacterClass.currentText())
         self.CharacterRace.clear()
         self.CharacterRace.insertItems(0, AllBonusList[Realm][Class]['Races'])
-        self.CharacterRaceChanged(self.CharacterRace.currentIndex())
+        self.CharacterRaceChanged()
         self.calculate()
 
         # DEBUGGING
         print('CharacterClassChanged')
 
-    def CharacterRaceChanged(self, realm):
+    def CharacterRaceChanged(self):
         Race = str(self.CharacterRace.currentText())
         for Resist in DropLists['All']['Resist']:
             if Resist in Races['All'][Race]['Resists']:
@@ -483,3 +485,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         # DEBUGGING
         print('ItemStateChanged')
+
+    def ItemLevelChanged(self):
+        item = self.ItemAttributeList[self.CurrentItemLabel]
+        item.ItemLevel = self.ItemLevel.text()
+        self.ItemLevel.setModified(False)
+
+        # DEBUGGING
+        print('ItemLevelChanged')
