@@ -37,6 +37,7 @@ AllBonusList = {
             'All Archery Skills': ('Crossbow',),
             'Other Skills': ('Parry', 'Shield',),
             'Races': t2(('Avalonian', 'Briton', 'Half Ogre', 'Highlander', 'Inconnu', 'Korazh', 'Saracen',)),
+            'Armor': ('Plate',),
         },
 
         'Cabalist': {
@@ -44,12 +45,14 @@ AllBonusList = {
             'All Magic Skills': ('Body Magic', 'Matter Magic', 'Spirit Magic',),
             'Races': t2(('Avalonian', 'Briton', 'Half Ogre', 'Inconnu', 'Saracen',)),
             'Acuity': ('Intelligence',),
+            'Armor': ('Cloth',),
         },
 
         'Cleric': {
             'All Magic Skills': ('Rejuvenation', 'Enhancement', 'Smite',),
             'Races': t2(('Avalonian', 'Briton', 'Highlander',)),
             'Acuity': ('Piety',),
+            'Armor': ('Chain',),
         },
 
         'Friar': {
@@ -58,6 +61,7 @@ AllBonusList = {
             'Other Skills': ('Parry',),
             'Races': t2(('Avalonian', 'Briton', 'Highlander',)),
             'Acuity': ('Piety',),
+            'Armor': ('Leather',),
         },
 
         'Heretic': {
@@ -66,6 +70,7 @@ AllBonusList = {
             'Other Skills': ('Shield',),
             'Races': t2(('Avalonian', 'Briton', 'Inconnu', 'Korazh',)),
             'Acuity': ('Piety',),
+            'Armor': ('Cloth',),
         },
 
         'Infiltrator': {
@@ -73,12 +78,14 @@ AllBonusList = {
             'All Dual Wield Skills': ('Dual Wield',),
             'Other Skills': ('Critical Strike', 'Envenom', 'Stealth',),
             'Races': t2(('Briton', 'Inconnu', 'Saracen',)),
+            'Armor': ('Leather',),
         },
 
         'Mauler': {
             'All Magic Skills': ('Aura Manipulation', 'Magnetism', 'Power Strikes',),
             'All Melee Weapon Skills': ('Fist Wraps', 'Mauler Staff',),
             'Races': t2(('Briton', 'Half Ogre', 'Korazh',)),
+            'Armor': ('Leather',),
         },
 
         'Mercenary': {
@@ -86,6 +93,7 @@ AllBonusList = {
             'All Dual Wield Skills': ('Dual Wield',),
             'Other Skills': ('Parry', 'Shield',),
             'Races': t2(('Avalonian', 'Briton', 'Half Ogre', 'Highlander', 'Inconnu', 'Korazh', 'Saracen',)),
+            'Armor': ('Chain',),
         },
 
         'Minstrel': {
@@ -94,6 +102,7 @@ AllBonusList = {
             'Other Skills': ('Stealth',),
             'Races': t2(('Briton', 'Highlander', 'Inconnu', 'Saracen',)),
             'Acuity': ('Charisma',),
+            'Armor': ('Chain',),
         },
 
         'Necromancer': {
@@ -101,6 +110,7 @@ AllBonusList = {
             'All Magic Skills': ('Deathsight', 'Death Servant', 'Painworking',),
             'Races': t2(('Avalonian', 'Briton', 'Inconnu', 'Saracen',)),
             'Acuity': ('Intelligence',),
+            'Armor': ('Cloth',),
         },
 
         'Paladin': {
@@ -109,6 +119,7 @@ AllBonusList = {
             'No Skill Effect': ('Chants',),
             'Races': t2(('Avalonian', 'Briton', 'Highlander', 'Saracen',)),
             'Acuity': ('Piety',),
+            'Armor': ('Plate',),
         },
 
         'Reaver': {
@@ -117,6 +128,7 @@ AllBonusList = {
             'Other Skills': ('Parry', 'Shield',),
             'Races': t2(('Briton', 'Inconnu', 'Korazh', 'Saracen',)),
             'Acuity': ('Piety',),
+            'Armor': ('Chain',),
         },
 
         'Scout': {
@@ -124,6 +136,7 @@ AllBonusList = {
             'All Archery Skills': ('Archery',),
             'Other Skills': ('Stealth', 'Shield',),
             'Races': t2(('Briton', 'Highlander', 'Inconnu', 'Saracen',)),
+            'Armor': ('Studded',),
         },
 
         'Sorcerer': {
@@ -131,6 +144,7 @@ AllBonusList = {
             'All Magic Skills': ('Body Magic', 'Mind Magic', 'Matter Magic',),
             'Races': t2(('Avalonian', 'Briton', 'Half Ogre', 'Inconnu', 'Saracen',)),
             'Acuity': ('Intelligence',),
+            'Armor': ('Cloth',),
         },
 
         'Theurgist': {
@@ -138,6 +152,7 @@ AllBonusList = {
             'All Magic Skills': ('Earth Magic', 'Cold Magic', 'Wind Magic',),
             'Races': t2(('Avalonian', 'Briton', 'Half Ogre',)),
             'Acuity': ('Intelligence',),
+            'Armor': ('Cloth',),
         },
 
         'Wizard': {
@@ -145,6 +160,7 @@ AllBonusList = {
             'All Magic Skills': ('Earth Magic', 'Cold Magic', 'Fire Magic',),
             'Races': t2(('Avalonian', 'Briton', 'Half Ogre', 'Inconnu',)),
             'Acuity': ('Intelligence',),
+            'Armor': ('Cloth',),
         },
     },
 
@@ -155,6 +171,7 @@ AllBonusList = {
             'All Magic Skills': ('Arboreal Path', 'Creeping Path', 'Verdant Path',),
             'Races': t2(('Celt', 'Elf', 'Firbolg', 'Sylvan',)),
             'Acuity': ('Intelligence',),
+            'Armor': ('Cloth',),
         },
 
         'Bainshee': {
@@ -162,6 +179,7 @@ AllBonusList = {
             'All Magic Skills': ('Ethereal Shriek', 'Phantasmal Wail', 'Spectral Guard',),
             'Races': t2(('Celt', 'Elf', 'Lurikeen',)),
             'Acuity': ('Intelligence',),
+            'Armor': ('Cloth',),
         },
 
         'Bard': {
@@ -169,6 +187,7 @@ AllBonusList = {
             'All Melee Weapon Skills': ('Blades', 'Blunt',),
             'Races': t2(('Celt', 'Firbolg',)),
             'Acuity': ('Charisma',),
+            'Armor': ('Reinforced',),
         },
 
         'Blademaster': {
@@ -176,6 +195,7 @@ AllBonusList = {
             'All Dual Wield Skills': ('Celtic Dual',),
             'Other Skills': ('Parry', 'Shield',),
             'Races': t2(('Celt', 'Elf', 'Firbolg', 'Graoch', 'Lurikeen', 'Shar',)),
+            'Armor': ('Reinforced',),
         },
 
         'Champion': {
@@ -184,12 +204,14 @@ AllBonusList = {
             'Other Skills': ('Parry', 'Shield',),
             'Races': t2(('Celt', 'Elf', 'Lurikeen', 'Shar', 'Sylvan',)),
             'Acuity': ('Intelligence',),
+            'Armor': ('Scale',),
         },
 
         'Druid': {
             'All Magic Skills': ('Regrowth', 'Nature', 'Nurture',),
             'Races': t2(('Celt', 'Firbolg', 'Sylvan',)),
             'Acuity': ('Empathy',),
+            'Armor': ('Scale',),
         },
 
         'Eldritch': {
@@ -197,6 +219,7 @@ AllBonusList = {
             'All Magic Skills': ('Light', 'Mana', 'Void',),
             'Races': t2(('Elf', 'Lurikeen',)),
             'Acuity': ('Intelligence',),
+            'Armor': ('Cloth',),
         },
 
         'Enchanter': {
@@ -204,12 +227,14 @@ AllBonusList = {
             'All Magic Skills': ('Light', 'Mana', 'Enchantments',),
             'Races': t2(('Elf', 'Lurikeen',)),
             'Acuity': ('Intelligence',),
+            'Armor': ('Cloth',),
         },
 
         'Mauler': {
             'All Magic Skills': ('Aura Manipulation', 'Magnetism', 'Power Strikes',),
             'All Melee Weapon Skills': ('Fist Wraps', 'Mauler Staff',),
             'Races': t2(('Celt', 'Graoch', 'Lurikeen',)),
+            'Armor': ('Leather',),
         },
 
         'Mentalist': {
@@ -217,12 +242,14 @@ AllBonusList = {
             'All Magic Skills': ('Light', 'Mana', 'Mentalism',),
             'Races': t2(('Celt', 'Elf', 'Lurikeen', 'Shar',)),
             'Acuity': ('Intelligence',),
+            'Armor': ('Cloth',),
         },
 
         'Hero': {
             'All Melee Weapon Skills': ('Blades', 'Blunt', 'Celtic Spear', 'Large Weaponry', 'Piercing',),
             'Other Skills': ('Parry', 'Shield',),
             'Races': t2(('Celt', 'Firbolg', 'Graoch', 'Lurikeen', 'Shar', 'Sylvan',)),
+            'Armor': ('Scale',),
         },
 
         'Nightshade': {
@@ -230,6 +257,7 @@ AllBonusList = {
             'All Dual Wield Skills': ('Celtic Dual',),
             'Other Skills': ('Critical Strike', 'Envenom', 'Stealth',),
             'Races': t2(('Celt', 'Elf', 'Lurikeen',)),
+            'Armor': ('Leather',),
         },
 
         'Ranger': {
@@ -238,6 +266,7 @@ AllBonusList = {
             'All Archery Skills': ('Archery',),
             'Other Skills': ('Stealth',),
             'Races': t2(('Celt', 'Elf', 'Lurikeen', 'Shar',)),
+            'Armor': ('Reinforced',),
         },
 
         'Valewalker': {
@@ -246,12 +275,14 @@ AllBonusList = {
             'Other Skills': ('Parry',),
             'Races': t2(('Celt', 'Firbolg', 'Graoch', 'Sylvan',)),
             'Acuity': ('Intelligence',),
+            'Armor': ('Cloth',),
         },
 
         'Vampiir': {
             'All Magic Skills': ('Dementia', 'Shadow Mastery', 'Vampiiric Embrace',),
             'All Melee Weapon Skills': ('Piercing',),
             'Races': t2(('Celt', 'Lurikeen', 'Shar',)),
+            'Armor': ('Leather',),
         },
 
         'Warden': {
@@ -260,6 +291,7 @@ AllBonusList = {
             'Other Skills': ('Parry', 'Shield',),
             'Races': t2(('Celt', 'Firbolg', 'Graoch', 'Shar', 'Sylvan',)),
             'Acuity': ('Empathy',),
+            'Armor': ('Scale',),
         },
     },
 
@@ -270,6 +302,7 @@ AllBonusList = {
             'All Dual Wield Skills': ('Left Axe',),
             'Other Skills': ('Parry',),
             'Races': t2(('Deifrang', 'Dwarf', 'Kobold', 'Norseman', 'Troll', 'Valkyn',)),
+            'Armor': ('Studded',),
         },
 
         'Bonedancer': {
@@ -277,6 +310,7 @@ AllBonusList = {
             'All Magic Skills': ('Darkness', 'Suppression', 'Bone Army',),
             'Races': t2(('Kobold', 'Troll', 'Valkyn',)),
             'Acuity': ('Piety',),
+            'Armor': ('Cloth',),
         },
 
         'Healer': {
@@ -284,6 +318,7 @@ AllBonusList = {
             'No Skill Effect': ('Pacification',),
             'Races': t2(('Dwarf', 'Frostalf', 'Norseman',)),
             'Acuity': ('Piety',),
+            'Armor': ('Chain',),
         },
 
         'Hunter': {
@@ -292,12 +327,14 @@ AllBonusList = {
             'All Archery Skills': ('Archery',),
             'Other Skills': ('Stealth',),
             'Races': t2(('Dwarf', 'Frostalf', 'Kobold', 'Norseman', 'Valkyn',)),
+            'Armor': ('Studded',),
         },
 
         'Mauler': {
             'All Magic Skills': ('Aura Manipulation', 'Magnetism', 'Power Strikes',),
             'All Melee Weapon Skills': ('Fist Wraps', 'Mauler Staff',),
             'Races': t2(('Kobold', 'Norseman', 'Deifrang',)),
+            'Armor': ('Leather',),
         },
 
         'Runemaster': {
@@ -305,6 +342,7 @@ AllBonusList = {
             'All Magic Skills': ('Darkness', 'Suppression', 'Runecarving',),
             'Races': t2(('Dwarf', 'Frostalf', 'Kobold', 'Norseman',)),
             'Acuity': ('Piety',),
+            'Armor': ('Cloth',),
         },
 
         'Savage': {
@@ -312,6 +350,7 @@ AllBonusList = {
             'Other Skills': ('Parry',),
             'No Skill Effect': ('Savagery',),
             'Races': t2(('Dwarf', 'Kobold', 'Norseman', 'Troll', 'Valkyn',)),
+            'Armor': ('Studded',),
         },
 
         'Shadowblade': {
@@ -319,12 +358,14 @@ AllBonusList = {
             'All Dual Wield Skills': ('Left Axe',),
             'Other Skills': ('Critical Strike', 'Envenom', 'Stealth',),
             'Races': t2(('Frostalf', 'Kobold', 'Norseman', 'Valkyn',)),
+            'Armor': ('Leather',),
         },
 
         'Shaman': {
             'All Magic Skills': ('Augmentation', 'Cave Magic', 'Mending',),
             'Races': t2(('Dwarf', 'Frostalf', 'Kobold', 'Troll',)),
             'Acuity': ('Piety',),
+            'Armor': ('Chain',),
         },
 
         'Skald': {
@@ -333,6 +374,7 @@ AllBonusList = {
             'Other Skills': ('Parry',),
             'Races': t2(('Deifrang', 'Dwarf', 'Kobold', 'Frostalf', 'Norseman', 'Troll',)),
             'Acuity': ('Charisma',),
+            'Armor': ('Chain',),
         },
 
         'Spiritmaster': {
@@ -340,6 +382,7 @@ AllBonusList = {
             'All Magic Skills': ('Darkness', 'Suppression', 'Summoning',),
             'Races': t2(('Frostalf', 'Kobold', 'Norseman',)),
             'Acuity': ('Piety',),
+            'Armor': ('Cloth',),
         },
 
         'Thane': {
@@ -348,6 +391,7 @@ AllBonusList = {
             'Other Skills': ('Parry', 'Shield',),
             'Races': t2(('Deifrang', 'Dwarf', 'Frostalf', 'Norseman', 'Troll', 'Valkyn',)),
             'Acuity': ('Piety',),
+            'Armor': ('Chain',),
         },
 
         'Valkyrie': {
@@ -356,6 +400,7 @@ AllBonusList = {
             'Other Skills': ('Parry', 'Shield',),
             'Races': t2(('Dwarf', 'Frostalf', 'Norseman',)),
             'Acuity': ('Piety',),
+            'Armor': ('Chain',),
         },
 
         'Warlock': {
@@ -364,6 +409,7 @@ AllBonusList = {
             'No Skill Effect': ('Witchcraft',),
             'Races': t2(('Frostalf', 'Kobold', 'Norseman', 'Troll',)),
             'Acuity': ('Piety',),
+            'Armor': ('Cloth',),
         },
 
         'Warrior': {
@@ -371,6 +417,7 @@ AllBonusList = {
             'Other Skills': ('Parry', 'Shield',),
             'No Skill Effect': ('Thrown Weapons',),
             'Races': t2(('Deifrang', 'Dwarf', 'Kobold', 'Norseman', 'Troll', 'Valkyn',)),
+            'Armor': ('Chain',),
         },
     },
 }

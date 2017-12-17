@@ -196,12 +196,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 #             DIALOG & WINDOW METHODS             #
 # =============================================== #
 
-    # TODO: OVER-RIDE `MainWindow` ICON WITH 'ItemInformation' ICON
     def showItemInfoDialog(self):
         currentItem = self.ItemAttributeList[self.CurrentItemLabel]
         self.ItemInfoDialog = ItemInformationDialog(self, Qt.WindowCloseButtonHint, item = currentItem)
         self.ItemInfoDialog.setWindowIcon(QIcon(None))
-        self.ItemInfoDialog.setFont(self.font())
         self.ItemInfoDialog.exec_()
 
 # =============================================== #
@@ -220,7 +218,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             pass
 
     def RestoreItem(self, item):
-
         if item.ActiveState == 'crafted':
             self.showCraftWidgets(item)
         elif item.ActiveState == 'drop':

@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>511</width>
-    <height>438</height>
+    <height>431</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -20,7 +20,7 @@
    <bool>true</bool>
   </property>
   <property name="modal">
-   <bool>true</bool>
+   <bool>false</bool>
   </property>
   <layout class="QVBoxLayout">
    <property name="spacing">
@@ -74,7 +74,7 @@
          <number>8</number>
         </property>
         <property name="topMargin">
-         <number>8</number>
+         <number>5</number>
         </property>
         <property name="rightMargin">
          <number>8</number>
@@ -90,16 +90,6 @@
         </property>
         <item row="4" column="3">
          <widget class="QLineEdit" name="ItemAFDPS"/>
-        </item>
-        <item row="3" column="0">
-         <widget class="QLabel" name="ItemDamageTypeLabel">
-          <property name="text">
-           <string>Damage:</string>
-          </property>
-          <property name="buddy">
-           <cstring>ItemDamageType</cstring>
-          </property>
-         </widget>
         </item>
         <item row="4" column="2">
          <widget class="QLabel" name="ItemAFDPSLabel">
@@ -121,8 +111,18 @@
           </property>
          </widget>
         </item>
+        <item row="3" column="0">
+         <widget class="QLabel" name="ItemDamageTypeLabel">
+          <property name="text">
+           <string>Damage:</string>
+          </property>
+          <property name="buddy">
+           <cstring>ItemDamageType</cstring>
+          </property>
+         </widget>
+        </item>
         <item row="6" column="0" colspan="4">
-         <layout class="QVBoxLayout">
+         <layout class="QVBoxLayout" name="ItemRequirementLayout">
           <property name="spacing">
            <number>5</number>
           </property>
@@ -156,9 +156,6 @@
         <item row="4" column="1">
          <widget class="QLineEdit" name="ItemBonus"/>
         </item>
-        <item row="5" column="1">
-         <widget class="QLineEdit" name="ItemSpeed"/>
-        </item>
         <item row="3" column="1" colspan="3">
          <widget class="QComboBox" name="ItemDamageType"/>
         </item>
@@ -172,15 +169,8 @@
           </property>
          </widget>
         </item>
-        <item row="1" column="1" colspan="3">
-         <widget class="QComboBox" name="ItemType">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-         </widget>
+        <item row="5" column="1">
+         <widget class="QLineEdit" name="ItemSpeed"/>
         </item>
         <item row="4" column="0">
          <widget class="QLabel" name="ItemBonusLabel">
@@ -192,6 +182,26 @@
           </property>
           <property name="buddy">
            <cstring>ItemBonus</cstring>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1" colspan="3">
+         <widget class="QComboBox" name="ItemType">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="0">
+         <widget class="QLabel" name="ItemRealmLabel">
+          <property name="text">
+           <string>Realm:</string>
+          </property>
+          <property name="buddy">
+           <cstring>ItemRealm</cstring>
           </property>
          </widget>
         </item>
@@ -207,29 +217,6 @@
            <cstring>ItemSpeed</cstring>
           </property>
          </widget>
-        </item>
-        <item row="0" column="0">
-         <widget class="QLabel" name="ItemRealmLabel">
-          <property name="text">
-           <string>Realm:</string>
-          </property>
-          <property name="buddy">
-           <cstring>ItemRealm</cstring>
-          </property>
-         </widget>
-        </item>
-        <item row="7" column="0" colspan="4">
-         <spacer>
-          <property name="orientation">
-           <enum>Qt::Vertical</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>20</width>
-            <height>40</height>
-           </size>
-          </property>
-         </spacer>
         </item>
         <item row="1" column="0">
          <widget class="QLabel" name="ItemTypeLabel">
@@ -267,6 +254,19 @@
           </property>
          </widget>
         </item>
+        <item row="7" column="0" colspan="4">
+         <spacer>
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
        </layout>
       </widget>
      </item>
@@ -289,16 +289,16 @@
          <number>5</number>
         </property>
         <property name="leftMargin">
-         <number>8</number>
+         <number>5</number>
         </property>
         <property name="topMargin">
-         <number>8</number>
+         <number>5</number>
         </property>
         <property name="rightMargin">
-         <number>8</number>
+         <number>5</number>
         </property>
         <property name="bottomMargin">
-         <number>8</number>
+         <number>5</number>
         </property>
         <item>
          <widget class="QListWidget" name="ItemRestrictionList">
@@ -331,16 +331,16 @@
        <number>0</number>
       </property>
       <property name="leftMargin">
-       <number>8</number>
+       <number>5</number>
       </property>
       <property name="topMargin">
-       <number>8</number>
+       <number>5</number>
       </property>
       <property name="rightMargin">
-       <number>8</number>
+       <number>5</number>
       </property>
       <property name="bottomMargin">
-       <number>8</number>
+       <number>5</number>
       </property>
       <item>
        <widget class="QTextEdit" name="ItemNotes">

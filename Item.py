@@ -39,47 +39,32 @@ class Item:
                 if self.ItemLocation == key:
                     self.ItemType = ItemTypes[key][0]
             self.ItemEquipped = 2
-
-            # DEBUGGING
-            if self.ItemLocation == 'Neck':
-                self.ItemRestrictions = ['Shadowblade', 'Runemaster', 'Spiritmaster', 'Bonedancer']
-
         elif self.ItemLocation in SlotList['Armor']:
             for key, value in ItemTypes.items():
                 if self.ItemLocation == key:
                     self.ItemType = ItemTypes[key][self.ItemRealm][0]
             self.ItemEquipped = 2
-
-        # TODO: DETERMINE 'ItemEquipped' BASED ON CLASS SELECTION
         elif self.ItemLocation in SlotList['Weapons']:
             for key, value in ItemTypes.items():
                 if self.ItemLocation == key:
                     self.ItemType = ItemTypes[key][self.ItemRealm][0]
             self.ItemEquipped = 0
-
         elif self.ItemLocation in SlotList['Mythical']:
             for key, value in ItemTypes.items():
                 if self.ItemLocation in SlotList['Mythical'] == value:
                     self.ItemType = ItemTypes[key][0]
             self.ItemEquipped = 2
 
-        # DEBUGGING
-        print(self.__dict__)
-
     def makeItemSlots(self):
         ItemSlots = []
-
         if self.ActiveState == 'drop':
             for slot in range(0, 12):
                 ItemSlots.append(ItemSlot(self.ActiveState))
-
         elif self.ActiveState == 'crafted':
             for slot in range(0, 4):
                 ItemSlots.append(ItemSlot(self.ActiveState))
-
             ItemSlots.append(ItemSlot('enhanced'))
             ItemSlots.append(ItemSlot('effect'))
-
         return ItemSlots
 
     def getSlotIndex(self, index):

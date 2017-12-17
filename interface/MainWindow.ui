@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>733</width>
+    <width>870</width>
     <height>587</height>
    </rect>
   </property>
@@ -1501,21 +1501,41 @@
                 <number>2</number>
                </property>
                <property name="leftMargin">
-                <number>8</number>
+                <number>5</number>
                </property>
                <property name="topMargin">
-                <number>8</number>
+                <number>5</number>
                </property>
                <property name="rightMargin">
-                <number>8</number>
+                <number>5</number>
                </property>
                <property name="bottomMargin">
-                <number>8</number>
+                <number>5</number>
                </property>
+               <item>
+                <widget class="QLabel" name="ItemLevelLabel">
+                 <property name="text">
+                  <string>&amp;Level: </string>
+                 </property>
+                 <property name="buddy">
+                  <cstring>ItemLevel</cstring>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLineEdit" name="ItemLevel">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                </widget>
+               </item>
                <item>
                 <widget class="QLabel" name="ItemNameLabel">
                  <property name="text">
-                  <string>Item &amp;Name: </string>
+                  <string>  Item &amp;Name: </string>
                  </property>
                  <property name="buddy">
                   <cstring>ItemName</cstring>
@@ -1544,35 +1564,59 @@
                   </sizepolicy>
                  </property>
                  <property name="text">
-                  <string>NEW</string>
+                  <string>New</string>
                  </property>
                 </widget>
                </item>
                <item>
                 <widget class="QPushButton" name="ItemAddButton">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
                  <property name="text">
-                  <string>ADD</string>
+                  <string>Add</string>
                  </property>
                 </widget>
                </item>
                <item>
                 <widget class="QPushButton" name="ItemDeleteButton">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
                  <property name="text">
-                  <string>DELETE</string>
+                  <string>Delete</string>
                  </property>
                 </widget>
                </item>
                <item>
                 <widget class="QPushButton" name="ItemChangeButton">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
                  <property name="text">
-                  <string>CHANGE</string>
+                  <string>Change</string>
                  </property>
                 </widget>
                </item>
                <item>
                 <widget class="QPushButton" name="ItemInfoButton">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
                  <property name="text">
-                  <string>INFO</string>
+                  <string> Info </string>
                  </property>
                 </widget>
                </item>
@@ -2378,6 +2422,7 @@
   <tabstop>CharacterLevel</tabstop>
   <tabstop>CharacterRealmRank</tabstop>
   <tabstop>SlotListTreeView</tabstop>
+  <tabstop>ItemLevel</tabstop>
   <tabstop>ItemName</tabstop>
   <tabstop>ItemNewButton</tabstop>
   <tabstop>ItemAddButton</tabstop>
