@@ -53,20 +53,25 @@ CraftTables = {  # GemTables
 }
 
 EnhancedLists = {  # CraftedLists
+
     'All': d2({
+
         'Unused': UnusedList,
+
         'Focus': t2((
             'All Spell Lines',
         )),
+
         'Skill': t2((
             'All Archery Skills',
             'All Dual Wield Skills',
             'All Magic Skills',
             'All Melee Weapon Skills',
-            'Shield',)),
-        'Stat': t2(
-            DropStatList[0:4] + DropStatList[9:]
-        ),
+            'Shield',
+        )),
+
+        'Stat': t2(DropStatList[0:4] + DropStatList[9:]),
+
         'Cap Increase': t2((
             'Strength',
             'Constitution',
@@ -77,6 +82,7 @@ EnhancedLists = {  # CraftedLists
             'Power',
             'Fatigue',
         )),
+
         'Other Bonus': t2((
             '% Power Pool',
             'Fatigue',
@@ -88,16 +94,19 @@ EnhancedLists = {  # CraftedLists
             'Healing Effectiveness',
             'Stat Buff Effectiveness',
         )),
+
         'PvE Bonus': t2((
             'Defensive',
             'To Hit',
         )),
+
         'Charged Effect': t2((  # WHY ARE THESE HERE!?!
             'Dmg w/Resist Debuff (Fire)',
             'Dmg w/Resist Debuff (Cold)',
             'Dmg w/Resist Debuff (Matter)',
             'Dmg w/Resist Debuff (Spirit)',
         )),
+
         'Offensive Effect': t2((  # WHY ARE THESE HERE!?!
             'Direct Damage (Fire)',
             'Direct Damage (Cold)',
@@ -113,7 +122,6 @@ EnhancedLists = {  # CraftedLists
 DropLists = {  # DropLists
 
     'All': {
-
         'Unused': UnusedList,
         'Resist': DropResistList,
         'Stat': DropStatList,
@@ -155,7 +163,6 @@ DropLists = d2(DropLists)
 ValuesLists = d2({  # ValuesLists
 
     'Stat': d2({
-
         None: StatValues,
         'Hits': HitsValues,
         'Power': PowerValues,
@@ -170,6 +177,7 @@ ValuesLists = d2({  # ValuesLists
     'Unused': UnusedValues,
 })
 
+# THIS IS A MESS
 EnhancedValuesLists = d2({  # CraftedValuesLists
     'Unused': UnusedValues,
     'Focus': t2(('50',)),

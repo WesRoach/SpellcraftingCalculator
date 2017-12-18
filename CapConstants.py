@@ -35,6 +35,10 @@ MythicalCapList = t2((
     'Acuity',
 ))
 
+# CAPS ARE CALCULATED AS % OF LEVEL + CONSTANT
+# E.G. [.25,  1] IS THE LEVEL / 4 + 1
+#      [  0, 10] IS A FIXED VALUE OF 10
+#      [  4,  0] IS THE LEVEL * 4
 Cap = d2({
     'Armor Factor': (1.00, 0),
     'Armor Factor Cap': (1.00, 0),
@@ -61,6 +65,10 @@ Cap = d2({
     'Other Bonus': (.20, 0),
 })
 
+# CAPS ARE CALCULATED AS % OF LEVEL + CONSTANT
+# E.G. [.25,  1] IS THE LEVEL / 4 + 1
+#      [  0, 10] IS A FIXED VALUE OF 10
+#      [  4,  0] IS THE LEVEL * 4
 MythicalCap = d2({
     'Crowd Control Reduction': (1.00, 0),
     'DPS': (.20, 0),
