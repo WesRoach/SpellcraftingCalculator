@@ -3,10 +3,10 @@
 from PyQt5 import uic
 from PyQt5.Qt import Qt
 from PyQt5.QtCore import QSize
-from PyQt5.QtGui import QFont, QFontMetrics, QIcon
-from PyQt5.QtWidgets import QMainWindow, QMenu, QToolBar, QTreeWidgetItem, QTreeWidgetItemIterator
+from PyQt5.QtGui import QFont, QFontMetrics, QIcon, QIntValidator
+from PyQt5.QtWidgets import QLabel, QMainWindow, QMenu, QToolBar, QTreeWidgetItem, QTreeWidgetItemIterator, QStyle, QStyleOptionComboBox
 from Character import AllBonusList, ClassList, Races, Realms
-from Constants import Cap, DropLists, MythicalCap
+from Constants import Cap, CraftLists, CraftTypeList, DropLists, DropTypeList, EffectTypeList, EnhancedLists, EnhancedTypeList, MythicalCap
 from Item import Item, SlotList
 from ItemInfoDialog import ItemInformationDialog
 
@@ -34,6 +34,23 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         self.ItemIndex = 0
         self.ItemAttributeList = {}
+
+        self.SlotLabel = []
+        self.Effect = []
+        self.EffectType = []
+        self.AmountEdit = []
+        self.AmountStatic = []
+        self.Requirement = []
+        self.ImbuePoints = []
+        self.GemName = []
+        self.SwitchOnType = {}
+
+        # PLACE HOLDER
+        self.ItemImbuePoints = QLabel()
+        self.ItemImbuePointsTotal = QLabel()
+        self.ItemImbuePointsLabel = QLabel()
+        self.ItemOvercharge = QLabel()
+        self.ItemOverchargeLabel = QLabel()
 
         self.CurrentRealm = ''
         self.CurrentItem = {}
@@ -78,16 +95,20 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         testFont = QFontMetrics(self.font())
 
         # TODO: DYNAMICALLY ASSIGN SIZE
-        width = 100
-        height = 20
+        defaultFixedWidth = 100
+        defaultFixedHeight = 20
+        effectWidth = self.setMinimumWidth(["Archery and Casting Speed"])
+        effectTypeWidth = self.setMinimumWidth(list(DropTypeList))
+        amountEditWidth = self.setMinimumWidth(['100'])
+        amountStaticWidth = self.setMinimumWidth(['100'])
 
-        self.CharacterName.setFixedSize(QSize(width, height))
-        self.CharacterRealm.setFixedSize(QSize(width, height))
-        self.CharacterClass.setFixedSize(QSize(width, height))
-        self.CharacterRace.setFixedSize(QSize(width, height))
-        self.CharacterLevel.setFixedSize(QSize(width, height))
-        self.CharacterRealmRank.setFixedSize(QSize(width, height))
-        self.OutfitName.setFixedSize(QSize(width, height))
+        self.CharacterName.setFixedSize(QSize(defaultFixedWidth, defaultFixedHeight))
+        self.CharacterRealm.setFixedSize(QSize(defaultFixedWidth, defaultFixedHeight))
+        self.CharacterClass.setFixedSize(QSize(defaultFixedWidth, defaultFixedHeight))
+        self.CharacterRace.setFixedSize(QSize(defaultFixedWidth, defaultFixedHeight))
+        self.CharacterLevel.setFixedSize(QSize(defaultFixedWidth, defaultFixedHeight))
+        self.CharacterRealmRank.setFixedSize(QSize(defaultFixedWidth, defaultFixedHeight))
+        self.OutfitName.setFixedSize(QSize(defaultFixedWidth, defaultFixedHeight))
 
         for stat in (DropLists['All']['Stat'] + ('ArmorFactor', 'Fatigue', 'PowerPool',)):
             self.StatLabel[stat] = getattr(self, stat + 'Label')
@@ -137,6 +158,59 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 parent.addChild(child)
 
         self.CharacterRealm.insertItems(0, list(Realms))
+
+        self.SwitchOnType = {
+
+            'craft': [
+                self.GemNameLabel,
+                self.ImbuePointsLabel,
+                # self.ItemImbuePoints,
+                # self.ItemImbuePointsTotal,
+                # self.ItemImbuePointsLabel,
+                # self.ItemOvercharge,
+                # self.ItemOverchargeLabel,
+            ],
+
+            'drop': [self.RequirementLabel]}
+
+        for i in range(0, 12):
+            self.SlotLabel.append(getattr(self, 'SlotLabel%d' % i))
+            self.Effect.append(getattr(self, 'Effect%d' % i))
+            self.Effect[i].setFixedSize(QSize(effectWidth, defaultFixedHeight))
+            self.Effect[i].activated.connect(self.EffectChanged)
+            self.Effect[i].editTextChanged.connect(self.EffectChanged)
+
+            self.EffectType.append(getattr(self, 'EffectType%d' % i))
+            self.EffectType[i].setFixedSize(QSize(effectTypeWidth, defaultFixedHeight))
+            self.EffectType[i].activated.connect(self.EffectTypeChanged)
+
+            self.AmountEdit.append(getattr(self, 'AmountEdit%d' % i))
+            self.AmountEdit[i].setFixedSize(QSize(amountEditWidth, defaultFixedHeight))
+            self.AmountEdit[i].setValidator(QIntValidator(-999, +999, self))
+            self.AmountEdit[i].editingFinished.connect(self.EffectAmountChanged)
+            self.SwitchOnType['drop'].append(self.AmountEdit[i])
+
+            self.Requirement.append(getattr(self, 'Requirement%d' % i))
+            self.Requirement[i].setFixedSize(QSize(defaultFixedWidth, defaultFixedHeight))
+            self.Requirement[i].editingFinished.connect(self.EffectRequirementChanged)
+            self.SwitchOnType['drop'].append(self.Requirement[i])
+
+        for i in range(0, 6):
+            self.AmountStatic.append(getattr(self, 'AmountStatic%d' % i))
+            self.AmountStatic[i].setFixedSize(QSize(amountStaticWidth, defaultFixedHeight))
+            self.AmountStatic[i].activated.connect(self.EffectAmountChanged)
+            self.SwitchOnType['craft'].append(self.AmountStatic[i])
+            self.GemName.append(getattr(self, 'GemName%d' % i))
+            self.SwitchOnType['craft'].append(self.GemName[i])
+
+        for i in range(0, 4):
+            self.ImbuePoints.append(getattr(self, 'ImbuePoints%d' % i))
+            self.SwitchOnType['craft'].append(self.ImbuePoints[i])
+
+        for i in range(6, 12):
+            self.SwitchOnType['drop'].append(self.SlotLabel[i])
+            self.SwitchOnType['drop'].append(self.EffectType[i])
+            self.SwitchOnType['drop'].append(self.Effect[i])
 
     def initialize(self):
         self.CharacterName.setText('')
@@ -206,6 +280,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 # =============================================== #
 #          LAYOUT CHANGE/UPDATE METHODS           #
 # =============================================== #
+
     def showCharacterStat(self, stat, show):
         if self.StatLabel[stat].isHidden() != show:
             return
@@ -218,6 +293,52 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         except KeyError:
             pass
 
+    def showDropWidgets(self, item):
+        for widget in self.SwitchOnType['craft']:
+            widget.hide()
+        for widget in self.SwitchOnType['drop']:
+            widget.show()
+        for index in range(0, item.getSlotCount() - 3):
+            if item.getSlotIndex(index).getSlotType() == 'drop':
+                self.SlotLabel[index].setText('Slot &%d:' % (index + 1))
+
+        # DEBUGGING
+        print('showDropWidgets')
+
+    def showCraftWidgets(self, item):
+        for widget in self.SwitchOnType['drop']:
+            widget.hide()
+        for widget in self.SwitchOnType['craft']:
+            widget.show()
+        for index in range(0, item.getSlotCount()):
+            if item.getSlotIndex(index).getSlotType() == 'crafted':
+                self.SlotLabel[index].setText('Gem &%d:' % (index + 1))
+        self.GemName[4].setText('(Crafted Item Bonus)')
+        self.Requirement[4].show()
+        self.Requirement[5].show()
+
+        # DEBUGGING
+        print('showCraftWidgets')
+
+    def showEffectTypes(self, item):
+        activeTypeList = list()
+        for slot in range(0, item.getSlotCount()):
+            currentSlot = self.EffectType[slot]
+            currentSlot.clear()
+            if item.ActiveState == 'crafted':
+                if item.getSlotIndex(slot).getSlotType() == 'crafted':
+                    activeTypeList = list(CraftTypeList)
+                if item.getSlotIndex(slot).getSlotType() == 'effect':
+                    activeTypeList = list(EffectTypeList)
+                if item.getSlotIndex(slot).getSlotType() == 'enhanced':
+                    activeTypeList = list(EnhancedTypeList)
+            elif item.ActiveState == 'drop':
+                activeTypeList = list(DropTypeList)
+            currentSlot.insertItems(0, activeTypeList)
+
+        # DEBUGGING
+        print('showEffectTypes')
+
     def RestoreItem(self, item):
         if item.ActiveState == 'crafted':
             self.showCraftWidgets(item)
@@ -229,54 +350,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ItemName.setCurrentIndex(0)
         self.ItemLevel.setText(item.ItemLevel)
 
-    def showDropWidgets(self, item):
-        # TODO: LETS GET AWAY FROM THE GETTERS AND SETTERS
-        for i in range(0, item.getSlotCount()):
-            if item.getSlotIndex(i).getSlotType() == 'drop':
-                getattr(self, "SlotLabel{}".format(i)).setText('Slot &%d:' % (i + 1))
-                getattr(self, "SlotLabel{}".format(i)).show()
-                getattr(self, "EffectType{}".format(i)).show()
-                getattr(self, "AmountEdit{}".format(i)).show()
-                getattr(self, "Effect{}".format(i)).show()
-                getattr(self, "Requirement{}".format(i)).show()
-            if i < 6:
-                getattr(self, "GemName{}".format(i)).hide()
-                getattr(self, "AmountStatic{}".format(i)).hide()
-                getattr(self, "AmountEdit{}".format(i)).show()
-            if i < 4:
-                getattr(self, "ImbuePoints{}".format(i)).hide()
-        getattr(self, "ImbuePointsLabel").hide()
-        getattr(self, "GemNameLabel").hide()
-        getattr(self, "RequirementLabel").show()
-
-    def showCraftWidgets(self, item):
-        # TODO: LETS GET AWAY FROM THE GETTERS AND SETTERS
-        for i in range(0, item.getSlotCount()):
-            if item.getSlotIndex(i).getSlotType() == 'crafted':
-                getattr(self, "SlotLabel{}".format(i)).setText('Gem &%d:' % (i + 1))
-            elif item.getSlotIndex(i).getSlotType() == 'enhanced':
-                getattr(self, "SlotLabel{}".format(i)).setText('Slot &%d:' % (i + 1))
-            elif item.getSlotIndex(i).getSlotType() == 'effect':
-                getattr(self, "SlotLabel{}".format(i)).setText('Slot &%d:' % (i + 1))
-
-            getattr(self, "GemName{}".format(i)).show()
-            getattr(self, "AmountEdit{}".format(i)).hide()
-            getattr(self, "AmountStatic{}".format(i)).show()
-
-            if i < 4:
-                getattr(self, "Requirement{}".format(i)).hide()
-                getattr(self, "ImbuePoints{}".format(i)).show()
-
-        for i in range(6, 12):
-            getattr(self, "SlotLabel{}".format(i)).hide()
-            getattr(self, "EffectType{}".format(i)).hide()
-            getattr(self, "AmountEdit{}".format(i)).hide()
-            getattr(self, "Effect{}".format(i)).hide()
-            getattr(self, "Requirement{}".format(i)).hide()
-
-        getattr(self, "RequirementLabel").hide()
-        getattr(self, "ImbuePointsLabel").show()
-        getattr(self, "GemNameLabel").show()
+        self.showEffectTypes(item)
 
 # =============================================== #
 #        SUMMARIZER AND CALCULATOR METHODS        #
@@ -425,8 +499,26 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 #       MISCELLANEOUS METHODS AND FUNCTIONS       #
 # =============================================== #
 
-    def placeHolder(self):
-        pass
+    def setMinimumWidth(self, items = None):
+        font = QFontMetrics(self.font())
+        option = QStyleOptionComboBox()
+        style = self.style()
+        maxWidth = 0
+        if items is not None:
+            for value in items:
+                option.currentText = value
+                size = QSize(font.width(option.currentText), font.height())
+                maxWidth = max(maxWidth, style.sizeFromContents(QStyle.CT_ComboBox, option, size, self).width())
+        elif maxWidth == 0 and self.count() > 0:
+            for i in range(0, self.count()):
+                option.currentText = self.itemText(i)
+                size = QSize(font.width(option.currentText), font.height())
+                maxWidth = max(maxWidth, style.sizeFromContents(QStyle.CT_ComboBox, option, size, self).width())
+        elif maxWidth == 0:
+            option.currentText = ' '
+            size = QSize(font.width(option.currentText), font.height())
+            maxWidth = max(maxWidth, style.sizeFromContents(QStyle.CT_ComboBox, option, size, self).width())
+        return maxWidth
 
 # =============================================== #
 #              SLOT/SIGNAL METHODS                #
@@ -493,3 +585,23 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         # DEBUGGING
         print('ItemLevelChanged')
+
+    def EffectChanged(self, value = None, slot = 0):
+
+        # DEBUGGING
+        print('EffectChanged')
+
+    def EffectTypeChanged(self, value = None, slot = 0):
+
+        # DEBUGGING
+        print('EffectTypeChanged')
+
+    def EffectAmountChanged(self, amount = None, slot = 0):
+
+        # DEBUGGING
+        print('EffectAmountChanged')
+
+    def EffectRequirementChanged(self):
+
+        # DEBUGGING
+        print('EffectRequirementChanged')

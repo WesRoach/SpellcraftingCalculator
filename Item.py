@@ -87,6 +87,20 @@ class ItemSlot:
         self.Requirement = requirement
         self.Craftable = False
 
+    def setAll(self, etype='Unused', effect='', amount='0', requirement=''):
+        self.EffectType = etype
+        self.Effect = effect
+        self.EffectAmount = amount
+        self.Requirement = requirement
+        self.Craftable = False
+
+    def setEffectType(self, etype):
+        self.Craftable = False
+        if etype == 'Unused' or etype == '':
+            self.setAll()
+        else:
+            self.EffectType = etype
+
     def getSlotType(self):
         return self.SlotType
 

@@ -7,14 +7,14 @@ __all__ = [
     'CraftTypeList',
     'DamageTypeList',
     'DropTypeList',
-    'FifthSlotTypeList',
+    'EffectTypeList',
+    'EnhancedTypeList',
     'SourceTypeList',
 ]
 
 SlotList = d2({
 
     'Jewelery': t2((
-
         'Neck',
         'Cloak',
         'Jewel',
@@ -26,7 +26,6 @@ SlotList = d2({
     )),
 
     'Armor': t2((
-
         'Chest',
         'Arms',
         'Head',
@@ -36,7 +35,6 @@ SlotList = d2({
     )),
 
     'Weapons': t2((
-
         'Right Hand',
         'Left Hand',
         'Two-Handed',
@@ -45,7 +43,6 @@ SlotList = d2({
     )),
 
     'Mythical': t2((
-
         'Mythirian',
     ))
 })
@@ -70,7 +67,7 @@ DropTypeList = t2((  # DropTypeList
     'Focus',
     'Skill',
     'Cap Increase',
-    'Mythical Cap Increase'
+    'Mythical Cap Increase',
     'Mythical Bonus',
     'PvE Bonus',
     'Other Bonus',
@@ -80,7 +77,14 @@ DropTypeList = t2((  # DropTypeList
     # 'Other Effect',
 ))
 
-FifthSlotTypeList = t2((  # CraftedTypeList
+EffectTypeList = t2((  # EffectTypeList
+    'Unused',
+    'Offensive Effect',
+    'Reactive Effect',
+    'Charged Effect',
+))
+
+EnhancedTypeList = t2((  # CraftedTypeList
     'Unused',
     'Focus',
     'Skill',
@@ -88,8 +92,8 @@ FifthSlotTypeList = t2((  # CraftedTypeList
     'Cap Increase',
     'PvE Bonus',
     'Other Bonus',
-    # 'Charged Effect',
-    # 'Offensive Effect',
+    'Charged Effect',
+    'Offensive Effect',
 ))
 
 DamageTypeList = d2({
