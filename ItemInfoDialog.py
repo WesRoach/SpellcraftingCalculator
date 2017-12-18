@@ -40,12 +40,12 @@ class ItemInformationDialog(QDialog, Ui_ItemInfoDialog):
 
         if item.ActiveState == 'crafted':
             self.RealmList = Realms
-            self.SourceTypes.extend(list(SourceTypeList['Craft']))
-            self.DamageTypes.extend(list(DamageTypeList['Craft']))
+            self.SourceTypes.extend(SourceTypeList['Crafted'])
+            self.DamageTypes.extend(DamageTypeList['Crafted'])
         elif item.ActiveState == 'drop':
             self.RealmList = AllRealms
-            self.SourceTypes.extend(list(SourceTypeList['Drop']))
-            self.DamageTypes.extend(list(DamageTypeList['Drop']))
+            self.SourceTypes.extend(SourceTypeList['Drop'])
+            self.DamageTypes.extend(DamageTypeList['Drop'])
 
         if item.ItemLocation in SlotList['Jewelery']:
             self.showJeweleryWidgets()

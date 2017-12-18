@@ -98,7 +98,7 @@ EnhancedTypeList = t2((  # CraftedTypeList
 
 DamageTypeList = d2({
 
-    'Craft': t2((
+    'Crafted': t2((
         'Slash',
         'Thrust',
         'Crush',
@@ -120,7 +120,7 @@ DamageTypeList = d2({
 
 SourceTypeList = d2({
 
-    'Craft': t2((
+    'Crafted': t2((
         'Crafted',
     )),
 

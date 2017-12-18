@@ -17,7 +17,7 @@ class d2(dict):
     def clear(self):
         raise TypeError("invalid clear() - d2 object is read-only")
 
-    def fromkeys(self):  # CHANGED FROM def fromkeys(self, k, default=None):
+    def fromkeys(self):
         raise TypeError("invalid fromkeys() - d2 object is read-only")
 
     def setdefault(self, k, default = None):
@@ -29,7 +29,7 @@ class d2(dict):
     def popitem(self):
         raise TypeError("invalid popitem() - d2 object is read-only")
 
-    def update(self, d, default = None):  # CHANGED FROM def update(self, d):
+    def update(self, d, default = None):
         raise TypeError("invalid update() - d2 object is read-only")
 
     def __delitem__(self, k):
