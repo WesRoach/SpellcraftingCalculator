@@ -313,7 +313,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         for index in range(0, item.getSlotCount()):
             if item.getSlotIndex(index).getSlotType() == 'crafted':
                 self.SlotLabel[index].setText('Gem &%d:' % (index + 1))
-        self.GemName[4].setText('(Crafted Item Bonus)')
         self.Requirement[4].show()
         self.Requirement[5].show()
 
@@ -520,14 +519,18 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             maxWidth = max(maxWidth, style.sizeFromContents(QStyle.CT_ComboBox, option, size, self).width())
         return maxWidth
 
+    def getSignalSlot(self):
+        index = self.sender().objectName()[-1:]
+        return int(index)
+
 # =============================================== #
 #              SLOT/SIGNAL METHODS                #
 # =============================================== #
 
     def CharacterRealmChanged(self):
-        Realm = str(self.CharacterRealm.currentText())
+        Realm = self.CharacterRealm.currentText()
         self.CharacterClass.clear()
-        self.CharacterClass.insertItems(0, list(ClassList[Realm]))
+        self.CharacterClass.insertItems(0, ClassList[Realm])
         self.CharacterClassChanged()
         self.CurrentRealm = Realm
 
@@ -535,8 +538,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         print('CharacterRealmChanged')
 
     def CharacterClassChanged(self):
-        Realm = str(self.CharacterRealm.currentText())
-        Class = str(self.CharacterClass.currentText())
+        Realm = self.CharacterRealm.currentText()
+        Class = self.CharacterClass.currentText()
         self.CharacterRace.clear()
         self.CharacterRace.insertItems(0, AllBonusList[Realm][Class]['Races'])
         self.CharacterRaceChanged()
@@ -546,7 +549,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         print('CharacterClassChanged')
 
     def CharacterRaceChanged(self):
-        Race = str(self.CharacterRace.currentText())
+        Race = self.CharacterRace.currentText()
         for Resist in DropLists['All']['Resist']:
             if Resist in Races['All'][Race]['Resists']:
                 self.StatBonus[Resist].setText('+ ' + str(Races['All'][Race]['Resists'][Resist]))
@@ -586,17 +589,17 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # DEBUGGING
         print('ItemLevelChanged')
 
-    def EffectChanged(self, value = None, slot = 0):
+    def EffectChanged(self, value = None, slot = -1):
 
         # DEBUGGING
         print('EffectChanged')
 
-    def EffectTypeChanged(self, value = None, slot = 0):
+    def EffectTypeChanged(self, value = None, index = -1):
 
         # DEBUGGING
         print('EffectTypeChanged')
 
-    def EffectAmountChanged(self, amount = None, slot = 0):
+    def EffectAmountChanged(self, amount = None, slot = -1):
 
         # DEBUGGING
         print('EffectAmountChanged')

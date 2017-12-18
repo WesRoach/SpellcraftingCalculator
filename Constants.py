@@ -52,6 +52,64 @@ CraftTables = {  # GemTables
     }
 }
 
+EnhancedLists = {  # CraftedLists
+    'All': d2({
+        'Unused': UnusedList,
+        'Focus': t2((
+            'All Spell Lines',
+        )),
+        'Skill': t2((
+            'All Archery Skills',
+            'All Dual Wield Skills',
+            'All Magic Skills',
+            'All Melee Weapon Skills',
+            'Shield',)),
+        'Stat': t2(
+            DropStatList[0:4] + DropStatList[9:]
+        ),
+        'Cap Increase': t2((
+            'Strength',
+            'Constitution',
+            'Dexterity',
+            'Quickness',
+            'Acuity',
+            'Hits',
+            'Power',
+            'Fatigue',
+        )),
+        'Other Bonus': t2((
+            '% Power Pool',
+            'Fatigue',
+            'AF',
+            'Archery Damage',
+            'Melee Damage',
+            'Spell Damage',
+            'Duration of Spells',
+            'Healing Effectiveness',
+            'Stat Buff Effectiveness',
+        )),
+        'PvE Bonus': t2((
+            'Defensive',
+            'To Hit',
+        )),
+        'Charged Effect': t2((  # WHY ARE THESE HERE!?!
+            'Dmg w/Resist Debuff (Fire)',
+            'Dmg w/Resist Debuff (Cold)',
+            'Dmg w/Resist Debuff (Matter)',
+            'Dmg w/Resist Debuff (Spirit)',
+        )),
+        'Offensive Effect': t2((  # WHY ARE THESE HERE!?!
+            'Direct Damage (Fire)',
+            'Direct Damage (Cold)',
+            'Direct Damage (Energy)',
+            'Dmg w/Resist Debuff (Fire)',
+            'Dmg w/Resist Debuff (Cold)',
+            'Dmg w/Resist Debuff (Matter)',
+            'Dmg w/Resist Debuff (Spirit)',
+        )),
+    }),
+}
+
 DropLists = {  # DropLists
 
     'All': {
@@ -111,64 +169,6 @@ ValuesLists = d2({  # ValuesLists
     # 'Reactive Effect': reactiveEffectValues,
     'Unused': UnusedValues,
 })
-
-EnhancedLists = {  # CraftedLists
-    'All': d2({
-        'Unused': UnusedList,
-        'Focus': t2((
-            'All Spell Lines',
-        )),
-        'Skill': t2((
-            'All Archery Skills',
-            'All Dual Wield Skills',
-            'All Magic Skills',
-            'All Melee Weapon Skills',
-            'Shield',)),
-        'Stat': t2(
-            DropStatList[0:4] + DropStatList[9:]
-        ),
-        'Cap Increase': t2((
-            'Strength',
-            'Constitution',
-            'Dexterity',
-            'Quickness',
-            'Acuity',
-            'Hits',
-            'Power',
-            'Fatigue',
-        )),
-        'Other Bonus': t2((
-            '% Power Pool',
-            'Fatigue',
-            'AF',
-            'Archery Damage',
-            'Melee Damage',
-            'Spell Damage',
-            'Duration of Spells',
-            'Healing Effectiveness',
-            'Stat Buff Effectiveness',
-        )),
-        'PvE Bonus': t2((
-            'Defensive',
-            'To Hit',
-        )),
-        'Charged Effect': t2((
-            'Dmg w/Resist Debuff (Fire)',
-            'Dmg w/Resist Debuff (Cold)',
-            'Dmg w/Resist Debuff (Matter)',
-            'Dmg w/Resist Debuff (Spirit)',
-        )),
-        'Offensive Effect': t2((
-            'Direct Damage (Fire)',
-            'Direct Damage (Cold)',
-            'Direct Damage (Energy)',
-            'Dmg w/Resist Debuff (Fire)',
-            'Dmg w/Resist Debuff (Cold)',
-            'Dmg w/Resist Debuff (Matter)',
-            'Dmg w/Resist Debuff (Spirit)',
-        )),
-    }),
-}
 
 EnhancedValuesLists = d2({  # CraftedValuesLists
     'Unused': UnusedValues,
