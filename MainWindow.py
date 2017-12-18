@@ -6,7 +6,7 @@ from PyQt5.QtCore import QSize
 from PyQt5.QtGui import QFont, QFontMetrics, QIcon, QIntValidator
 from PyQt5.QtWidgets import QLabel, QMainWindow, QMenu, QToolBar, QTreeWidgetItem, QTreeWidgetItemIterator, QStyle, QStyleOptionComboBox
 from Character import AllBonusList, ClassList, Races, Realms
-from Constants import Cap, CraftLists, CraftTypeList, DropLists, DropTypeList, EffectTypeList, EnhancedLists, EnhancedTypeList, MythicalCap
+from Constants import Cap, CraftTypeList, DropLists, DropTypeList, EffectTypeList, EnhancedTypeList, MythicalCap
 from Item import Item, SlotList
 from ItemInfoDialog import ItemInformationDialog
 
@@ -320,20 +320,20 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         print('showCraftWidgets')
 
     def showEffectTypes(self, item):
-        activeTypeList = list()
+        effectTypeList = list()
         for slot in range(0, item.getSlotCount()):
             currentSlot = self.EffectType[slot]
             currentSlot.clear()
             if item.ActiveState == 'crafted':
                 if item.getSlotIndex(slot).getSlotType() == 'crafted':
-                    activeTypeList = list(CraftTypeList)
+                    effectTypeList = CraftTypeList
                 if item.getSlotIndex(slot).getSlotType() == 'effect':
-                    activeTypeList = list(EffectTypeList)
+                    effectTypeList = EffectTypeList
                 if item.getSlotIndex(slot).getSlotType() == 'enhanced':
-                    activeTypeList = list(EnhancedTypeList)
+                    effectTypeList = EnhancedTypeList
             elif item.ActiveState == 'drop':
-                activeTypeList = list(DropTypeList)
-            currentSlot.insertItems(0, activeTypeList)
+                effectTypeList = DropTypeList
+            currentSlot.insertItems(0, effectTypeList)
 
         # DEBUGGING
         print('showEffectTypes')
