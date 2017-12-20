@@ -1,12 +1,12 @@
 # HEADER PLACE HOLDER
 
 from PyQt5 import uic
-from PyQt5.Qt import Qt
+from PyQt5.Qt import QAction, Qt, QKeySequence
 from PyQt5.QtCore import QSize
 from PyQt5.QtGui import QFont, QFontMetrics, QIcon, QIntValidator
 from PyQt5.QtWidgets import QLabel, QMainWindow, QMenu, QToolBar, QTreeWidgetItem, QTreeWidgetItemIterator, QStyle, QStyleOptionComboBox
 from Character import AllBonusList, ClassList, Races, Realms
-from Constants import Cap, CraftTypeList, DropLists, DropTypeList, EffectTypeList, EnhancedTypeList, MythicalCap
+from Constants import Cap, CraftLists, CraftTypeList, DropLists, DropTypeList, EffectTypeList, EnhancedLists, EnhancedTypeList, MythicalCap
 from Item import Item, SlotList
 from ItemInfoDialog import ItemInformationDialog
 
@@ -25,6 +25,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ErrorMenu = QMenu('&Errors', self)
         self.HelpMenu = QMenu('&Help', self)
         self.ToolBar = QToolBar("Crafting")
+
+        self.DistanceToCap = QAction()
+        self.NonClassSkills = QAction()
 
         self.StatLabel = {}
         self.StatValue = {}
@@ -68,6 +71,19 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def initMenuBar(self):
         self.FileMenu.addAction('E&xit', self.close)
+
+        self.ViewMenu.addAction('&Material Report', self.showMaterialReport, QKeySequence(Qt.ALT + Qt.Key_M))
+        self.ViewMenu.addAction('&Configuration Report', self.showConfigurationReport, QKeySequence(Qt.ALT + Qt.Key_C))
+
+        self.ViewMenu.addSeparator()
+
+        self.DistanceToCap = QAction('Show Distance to Cap', self)
+        self.DistanceToCap.setCheckable(True)
+        self.ViewMenu.addAction(self.DistanceToCap)
+
+        self.NonClassSkills = QAction('Show Non-Player Skills', self)
+        self.NonClassSkills.setCheckable(True)
+        self.ViewMenu.addAction(self.NonClassSkills)
 
         self.menuBar().addMenu(self.FileMenu)
         self.menuBar().addMenu(self.EditMenu)
@@ -177,12 +193,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.SlotLabel.append(getattr(self, 'SlotLabel%d' % i))
             self.Effect.append(getattr(self, 'Effect%d' % i))
             self.Effect[i].setFixedSize(QSize(effectWidth, defaultFixedHeight))
-            self.Effect[i].activated.connect(self.EffectChanged)
+            self.Effect[i].activated[str].connect(self.EffectChanged)
             self.Effect[i].editTextChanged.connect(self.EffectChanged)
 
             self.EffectType.append(getattr(self, 'EffectType%d' % i))
             self.EffectType[i].setFixedSize(QSize(effectTypeWidth, defaultFixedHeight))
-            self.EffectType[i].activated.connect(self.EffectTypeChanged)
+            self.EffectType[i].activated[str].connect(self.EffectTypeChanged)
 
             self.AmountEdit.append(getattr(self, 'AmountEdit%d' % i))
             self.AmountEdit[i].setFixedSize(QSize(amountEditWidth, defaultFixedHeight))
@@ -198,7 +214,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         for i in range(0, 6):
             self.AmountStatic.append(getattr(self, 'AmountStatic%d' % i))
             self.AmountStatic[i].setFixedSize(QSize(amountStaticWidth, defaultFixedHeight))
-            self.AmountStatic[i].activated.connect(self.EffectAmountChanged)
+            self.AmountStatic[i].activated[str].connect(self.EffectAmountChanged)
             self.SwitchOnType['craft'].append(self.AmountStatic[i])
             self.GemName.append(getattr(self, 'GemName%d' % i))
             self.SwitchOnType['craft'].append(self.GemName[i])
@@ -327,10 +343,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             if item.ActiveState == 'crafted':
                 if item.getSlotIndex(slot).getSlotType() == 'crafted':
                     effectTypeList = CraftTypeList
-                if item.getSlotIndex(slot).getSlotType() == 'effect':
-                    effectTypeList = EffectTypeList
                 if item.getSlotIndex(slot).getSlotType() == 'enhanced':
                     effectTypeList = EnhancedTypeList
+                if item.getSlotIndex(slot).getSlotType() == 'effect':
+                    effectTypeList = EffectTypeList
             elif item.ActiveState == 'drop':
                 effectTypeList = DropTypeList
             currentSlot.insertItems(0, effectTypeList)
@@ -524,6 +540,20 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         return int(index)
 
 # =============================================== #
+#       CONFIGURATION AND MATERIAL REPORTS        #
+# =============================================== #
+
+    def showMaterialReport(self):
+
+        # DEBUGGING
+        print('showMaterialReport')
+
+    def showConfigurationReport(self):
+
+        # DEBUGGING
+        print('showConfigurationReport')
+
+# =============================================== #
 #              SLOT/SIGNAL METHODS                #
 # =============================================== #
 
@@ -589,17 +619,44 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # DEBUGGING
         print('ItemLevelChanged')
 
-    def EffectChanged(self, value = None, slot = -1):
-
-        # DEBUGGING
-        print('EffectChanged')
-
     def EffectTypeChanged(self, value = None, index = -1):
+        if index == -1:
+            index = self.getSignalSlot()
+
+        item = self.ItemAttributeList[self.CurrentItemLabel]
+        item.getSlotIndex(index).setEffectType(value)
+
+        effectComboBox = self.Effect[index]
+        effectComboBox.clear()
+        effectList = list()
+
+        if item.ActiveState == 'crafted':
+            if item.getSlotIndex(index).getSlotType() == 'crafted':
+                effectList = CraftLists[self.CharacterRealm.currentText()][value]
+            if value == 'Skill':
+                effectList = AllBonusList['All'][self.CharacterClass.currentText()]['All Skills']
+            elif item.getSlotIndex(index).getSlotType() == 'enhanced':
+                effectList = EnhancedLists[self.CharacterRealm.currentText()][value]
+        elif item.ActiveState == 'drop':
+            effectList = DropLists[self.CharacterRealm.currentText()][value]
+
+        effectComboBox.insertItems(0, effectList)
 
         # DEBUGGING
         print('EffectTypeChanged')
 
-    def EffectAmountChanged(self, amount = None, slot = -1):
+    def EffectChanged(self, value = None, index = -1):
+        if index == -1:
+            index = self.getSignalSlot()
+        item = self.ItemAttributeList[self.CurrentItemLabel]
+
+        # DEBUGGING
+        print('EffectChanged')
+
+    def EffectAmountChanged(self, amount = None, index = -1):
+        if index == -1:
+            index = self.getSignalSlot()
+        item = self.ItemAttributeList[self.CurrentItemLabel]
 
         # DEBUGGING
         print('EffectAmountChanged')

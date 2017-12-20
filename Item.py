@@ -95,14 +95,22 @@ class ItemSlot:
         self.Craftable = False
 
     def setEffectType(self, etype):
-        self.Craftable = False
-        if etype == 'Unused' or etype == '':
-            self.setAll()
-        else:
-            self.EffectType = etype
+        self.EffectType = etype
 
-    def getSlotType(self):
-        return self.SlotType
+    def setEffect(self, effect):
+        self.Effect = effect
+
+    def setEffectAmount(self, amount):
+        self.EffectAmount = amount
 
     def getEffectType(self):
         return self.EffectType
+
+    def getEffect(self):
+        return self.Effect
+
+    def getEffectAmount(self):
+        return self.EffectAmount
+
+    def getSlotType(self):
+        return self.SlotType
