@@ -29,6 +29,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.DistanceToCap = QAction()
         self.NonClassSkills = QAction()
 
+        self.EffectList = list()
+        self.EffectTypeList = list()
+        self.EnhancedTypeList = list()
+
         self.StatLabel = {}
         self.StatValue = {}
         self.StatCap = {}
@@ -79,10 +83,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         self.DistanceToCap = QAction('Show Distance to Cap', self)
         self.DistanceToCap.setCheckable(True)
+        self.DistanceToCap.setChecked(True)
         self.ViewMenu.addAction(self.DistanceToCap)
 
-        self.NonClassSkills = QAction('Show Non-Player Skills', self)
+        self.NonClassSkills = QAction('Show Non-Class Skills', self)
         self.NonClassSkills.setCheckable(True)
+        self.NonClassSkills.setChecked(False)
         self.ViewMenu.addAction(self.NonClassSkills)
 
         self.menuBar().addMenu(self.FileMenu)
@@ -177,7 +183,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         self.SwitchOnType = {
 
-            'craft': [
+            'crafted': [
                 self.GemNameLabel,
                 self.ImbuePointsLabel,
                 # self.ItemImbuePoints,
@@ -215,13 +221,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.AmountStatic.append(getattr(self, 'AmountStatic%d' % i))
             self.AmountStatic[i].setFixedSize(QSize(amountStaticWidth, defaultFixedHeight))
             self.AmountStatic[i].activated[str].connect(self.EffectAmountChanged)
-            self.SwitchOnType['craft'].append(self.AmountStatic[i])
+            self.SwitchOnType['crafted'].append(self.AmountStatic[i])
             self.GemName.append(getattr(self, 'GemName%d' % i))
-            self.SwitchOnType['craft'].append(self.GemName[i])
+            self.SwitchOnType['crafted'].append(self.GemName[i])
 
         for i in range(0, 4):
             self.ImbuePoints.append(getattr(self, 'ImbuePoints%d' % i))
-            self.SwitchOnType['craft'].append(self.ImbuePoints[i])
+            self.SwitchOnType['crafted'].append(self.ImbuePoints[i])
 
         for i in range(6, 12):
             self.SwitchOnType['drop'].append(self.SlotLabel[i])
@@ -269,6 +275,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             iterator += 1
 
     def initControls(self):
+        self.DistanceToCap.triggered.connect(self.setDistanceToCap)
         self.ItemInfoButton.clicked.connect(self.showItemInfoDialog)
         self.SlotListTreeView.itemClicked.connect(self.ItemSelected)
         self.SlotListTreeView.itemChanged.connect(self.ItemStateChanged)
@@ -297,25 +304,25 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 #          LAYOUT CHANGE/UPDATE METHODS           #
 # =============================================== #
 
-    def showCharacterStat(self, stat, show):
-        if self.StatLabel[stat].isHidden() != show:
+    def showCharacterStat(self, stat, state):
+        if self.StatLabel[stat].isHidden() != state:
             return
-        self.StatLabel[stat].setVisible(show)
-        self.StatValue[stat].setVisible(show)
-        self.StatCap[stat].setVisible(show)
+        self.StatLabel[stat].setVisible(state)
+        self.StatValue[stat].setVisible(state)
+        self.StatCap[stat].setVisible(state)
 
         try:  # NOT ALL STATS HAVE MYTHICAL CAP ...
-            self.StatMythicalCap[stat].setVisible(show)
+            self.StatMythicalCap[stat].setVisible(state)
         except KeyError:
             pass
 
     def showDropWidgets(self, item):
-        for widget in self.SwitchOnType['craft']:
+        for widget in self.SwitchOnType['crafted']:
             widget.hide()
         for widget in self.SwitchOnType['drop']:
             widget.show()
         for index in range(0, item.getSlotCount() - 3):
-            if item.getSlotIndex(index).getSlotType() == 'drop':
+            if item.getSlot(index).getSlotType() == 'drop':
                 self.SlotLabel[index].setText('Slot &%d:' % (index + 1))
 
         # DEBUGGING
@@ -324,10 +331,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def showCraftWidgets(self, item):
         for widget in self.SwitchOnType['drop']:
             widget.hide()
-        for widget in self.SwitchOnType['craft']:
+        for widget in self.SwitchOnType['crafted']:
             widget.show()
         for index in range(0, item.getSlotCount()):
-            if item.getSlotIndex(index).getSlotType() == 'crafted':
+            if item.getSlot(index).getSlotType() == 'crafted':
                 self.SlotLabel[index].setText('Gem &%d:' % (index + 1))
         self.Requirement[4].show()
         self.Requirement[5].show()
@@ -335,37 +342,42 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # DEBUGGING
         print('showCraftWidgets')
 
-    def showEffectTypes(self, item):
-        effectTypeList = list()
-        for slot in range(0, item.getSlotCount()):
-            currentSlot = self.EffectType[slot]
-            currentSlot.clear()
-            if item.ActiveState == 'crafted':
-                if item.getSlotIndex(slot).getSlotType() == 'crafted':
-                    effectTypeList = CraftTypeList
-                if item.getSlotIndex(slot).getSlotType() == 'enhanced':
-                    effectTypeList = EnhancedTypeList
-                if item.getSlotIndex(slot).getSlotType() == 'effect':
-                    effectTypeList = EffectTypeList
-            elif item.ActiveState == 'drop':
-                effectTypeList = DropTypeList
-            currentSlot.insertItems(0, effectTypeList)
-
-        # DEBUGGING
-        print('showEffectTypes')
-
     def RestoreItem(self, item):
         if item.ActiveState == 'crafted':
             self.showCraftWidgets(item)
         elif item.ActiveState == 'drop':
             self.showDropWidgets(item)
 
+        # DEBUGGING
+        item = self.ItemAttributeList['Neck']
+        item.getSlot(0).setEffectType('Stat')
+        item.getSlot(0).setEffect('Strength')
+        item.getSlot(0).setEffectAmount('20')
+
         self.ItemName.clear()
         self.ItemName.addItem(item.ItemName)
         self.ItemName.setCurrentIndex(0)
         self.ItemLevel.setText(item.ItemLevel)
 
-        self.showEffectTypes(item)
+        effectTypeList = list()
+        for index in range(0, item.getSlotCount()):
+            self.EffectType[index].clear()
+            if item.ActiveState == 'crafted':
+                if item.getSlot(index).getSlotType() == 'crafted':
+                    effectTypeList = CraftTypeList
+                if item.getSlot(index).getSlotType() == 'enhanced':
+                    effectTypeList = EnhancedTypeList
+                if item.getSlot(index).getSlotType() == 'effect':
+                    effectTypeList = EffectTypeList
+            elif item.ActiveState == 'drop':
+                effectTypeList = DropTypeList
+
+            self.EffectType[index].insertItems(0, effectTypeList)
+
+            if item.getSlot(index).getEffectType() in effectTypeList:
+                self.EffectType[index].setCurrentText(item.getSlot(index).getEffectType())
+            elif item.getSlot(index).getEffectType() not in effectTypeList:
+                self.EffectType[index].setCurrentText('Unused')
 
 # =============================================== #
 #        SUMMARIZER AND CALCULATOR METHODS        #
@@ -440,8 +452,16 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             TotalBonus = amounts['TotalBonus']
             BaseMythicalCap = amounts['BaseMythicalCap']
             TotalMythicalCapBonus = amounts['TotalMythicalCapBonus']
-            self.StatValue[key].setText(str(int(Base - TotalBonus)))
-            self.StatMythicalCap[key].setText('(' + str(int(BaseMythicalCap - TotalMythicalCapBonus)) + ')')
+
+            if not self.DistanceToCap.isChecked():
+                self.StatValue[key].setText(str(amounts['TotalBonus']))
+                self.StatMythicalCap[key].setText('(' + str(amounts['TotalMythicalCapBonus']) + ')')
+                print('Not DistanceToCap')
+
+            elif self.DistanceToCap.isChecked():
+                self.StatValue[key].setText(str(int(Base - TotalBonus)))
+                self.StatMythicalCap[key].setText('(' + str(int(BaseMythicalCap - TotalMythicalCapBonus)) + ')')
+                print('DistanceToCap')
 
         for (key, datum) in list(Total['Stats'].items()):
             Acuity = AllBonusList[Realm][Class]["Acuity"]
@@ -479,36 +499,43 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                               or (TotalBonus > 0)
                               or (key in Acuity))
 
-            Base = datum['Base']
-            BaseCap = datum['BaseCap']
+            if not self.DistanceToCap.isChecked():
+                self.StatValue[key].setText(str(datum['TotalBonus']))
+                self.StatCap[key].setText('(' + str(datum['TotalCapBonus']) + ')')
+                self.StatMythicalCap[key].setText('(' + str(datum['TotalMythicalCapBonus']) + ')')
 
-            try:  # NOT ALL STATS HAVE MYTHICAL CAP ...
-                BaseMythicalCap = datum['BaseMythicalCap']
-            except KeyError:
-                BaseMythicalCap = 0
+            elif self.DistanceToCap.isChecked():
 
-            if datum['TotalCapBonus'] > 0:
-                TotalCapBonus = datum['TotalCapBonus']
+                Base = datum['Base']
+                BaseCap = datum['BaseCap']
 
-            if datum['TotalMythicalCapBonus'] > 0:
-                TotalMythicalCapBonus = datum['TotalMythicalCapBonus']
+                try:  # NOT ALL STATS HAVE MYTHICAL CAP ...
+                    BaseMythicalCap = datum['BaseMythicalCap']
+                except KeyError:
+                    BaseMythicalCap = 0
 
-            else:
-                TotalCapBonus = 0
-                TotalMythicalCapBonus = 0
+                if datum['TotalCapBonus'] > 0:
+                    TotalCapBonus = datum['TotalCapBonus']
 
-            if TotalCapBonus > BaseCap:
-                TotalCapBonus = BaseCap
+                if datum['TotalMythicalCapBonus'] > 0:
+                    TotalMythicalCapBonus = datum['TotalMythicalCapBonus']
 
-            if TotalMythicalCapBonus > BaseMythicalCap:
-                TotalMythicalCapBonus = BaseMythicalCap
+                else:
+                    TotalCapBonus = 0
+                    TotalMythicalCapBonus = 0
 
-            self.StatValue[key].setText(str(int(Base + TotalCapBonus) - TotalBonus))
-            self.StatCap[key].setText('(' + str(int(BaseCap - TotalCapBonus)) + ')')
-            self.StatMythicalCap[key].setText('(' + str(int(BaseMythicalCap - TotalMythicalCapBonus)) + ')')
+                if TotalCapBonus > BaseCap:
+                    TotalCapBonus = BaseCap
 
-            if BaseMythicalCap == 0:
-                self.StatMythicalCap[key].setText('--  ')
+                if TotalMythicalCapBonus > BaseMythicalCap:
+                    TotalMythicalCapBonus = BaseMythicalCap
+
+                self.StatValue[key].setText(str(int(Base + TotalCapBonus) - TotalBonus))
+                self.StatCap[key].setText('(' + str(int(BaseCap - TotalCapBonus)) + ')')
+                self.StatMythicalCap[key].setText('(' + str(int(BaseMythicalCap - TotalMythicalCapBonus)) + ')')
+
+                if BaseMythicalCap == 0:
+                    self.StatMythicalCap[key].setText('--  ')
 
 # =============================================== #
 #       MISCELLANEOUS METHODS AND FUNCTIONS       #
@@ -556,6 +583,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 # =============================================== #
 #              SLOT/SIGNAL METHODS                #
 # =============================================== #
+
+    def setDistanceToCap(self):
+        self.calculate()
+
+        # DEBUGGING
+        print('setDistanceToCap')
 
     def CharacterRealmChanged(self):
         Realm = self.CharacterRealm.currentText()
@@ -619,28 +652,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # DEBUGGING
         print('ItemLevelChanged')
 
+    # THIS IS REDUNDANT
     def EffectTypeChanged(self, value = None, index = -1):
         if index == -1:
             index = self.getSignalSlot()
-
         item = self.ItemAttributeList[self.CurrentItemLabel]
-        item.getSlotIndex(index).setEffectType(value)
-
-        effectComboBox = self.Effect[index]
-        effectComboBox.clear()
-        effectList = list()
-
-        if item.ActiveState == 'crafted':
-            if item.getSlotIndex(index).getSlotType() == 'crafted':
-                effectList = CraftLists[self.CharacterRealm.currentText()][value]
-            if value == 'Skill':
-                effectList = AllBonusList['All'][self.CharacterClass.currentText()]['All Skills']
-            elif item.getSlotIndex(index).getSlotType() == 'enhanced':
-                effectList = EnhancedLists[self.CharacterRealm.currentText()][value]
-        elif item.ActiveState == 'drop':
-            effectList = DropLists[self.CharacterRealm.currentText()][value]
-
-        effectComboBox.insertItems(0, effectList)
 
         # DEBUGGING
         print('EffectTypeChanged')

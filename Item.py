@@ -67,7 +67,7 @@ class Item:
             ItemSlots.append(ItemSlot('effect'))
         return ItemSlots
 
-    def getSlotIndex(self, index):
+    def getSlot(self, index):
         return self.ItemSlotList[index]
 
     def getSlotCount(self):
