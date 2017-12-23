@@ -57,14 +57,14 @@ class Item:
 
     def makeItemSlots(self):
         ItemSlots = []
-        if self.ActiveState == 'drop':
-            for slot in range(0, 12):
-                ItemSlots.append(ItemSlot(self.ActiveState))
-        elif self.ActiveState == 'crafted':
+        if self.ActiveState == 'Crafted':
             for slot in range(0, 4):
                 ItemSlots.append(ItemSlot(self.ActiveState))
-            ItemSlots.append(ItemSlot('enhanced'))
-            ItemSlots.append(ItemSlot('effect'))
+            ItemSlots.append(ItemSlot('Enhanced'))
+            ItemSlots.append(ItemSlot('Effect'))
+        elif self.ActiveState == 'Dropped':
+            for slot in range(0, 12):
+                ItemSlots.append(ItemSlot(self.ActiveState))
         return ItemSlots
 
     def getSlot(self, index):
