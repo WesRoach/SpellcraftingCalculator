@@ -21,8 +21,8 @@ StatTableOrdered = (
     ('Quickness', 'Airy',),
     ('Intelligence', 'Dusty',),
     ('Piety', 'Watery',),
-    ('Charisma', 'Icy',),
     ('Empathy', 'Heated',),
+    ('Charisma', 'Icy',),
     ('Power', 'Mystical',),
     ('Hits', 'Blood',),
 )
