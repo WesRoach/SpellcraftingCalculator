@@ -6,7 +6,7 @@ from PyQt5.QtCore import QSize
 from PyQt5.QtGui import QFont, QFontMetrics, QIcon, QIntValidator
 from PyQt5.QtWidgets import QLabel, QMainWindow, QMenu, QToolBar, QTreeWidgetItem, QTreeWidgetItemIterator, QStyle, QStyleOptionComboBox
 from Character import AllBonusList, ClassList, Races, Realms
-from Constants import Cap, CraftLists, CraftTypeList, DropLists, DropTypeList, EffectTypeList, EnhancedLists, EnhancedTypeList, MythicalCap
+from Constants import Cap, CraftLists, CraftTypeList, DropLists, DropTypeList, EffectTypeList, EnhancedLists, EnhancedTypeList, EnhancedValuesLists, MythicalCap, ValuesLists
 from Item import Item, SlotList
 from ItemInfoDialog import ItemInformationDialog
 
@@ -183,7 +183,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         self.SwitchOnType = {
 
-            'crafted': [
+            'Crafted': [
                 self.GemNameLabel,
                 self.ImbuePointsLabel,
                 # self.ItemImbuePoints,
@@ -193,7 +193,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 # self.ItemOverchargeLabel,
             ],
 
-            'drop': [self.RequirementLabel]}
+            'Dropped': [self.RequirementLabel]}
 
         for i in range(0, 12):
             self.SlotLabel.append(getattr(self, 'SlotLabel%d' % i))
@@ -210,29 +210,29 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.AmountEdit[i].setFixedSize(QSize(amountEditWidth, defaultFixedHeight))
             self.AmountEdit[i].setValidator(QIntValidator(-999, +999, self))
             self.AmountEdit[i].editingFinished.connect(self.EffectAmountChanged)
-            self.SwitchOnType['drop'].append(self.AmountEdit[i])
+            self.SwitchOnType['Dropped'].append(self.AmountEdit[i])
 
             self.Requirement.append(getattr(self, 'Requirement%d' % i))
             self.Requirement[i].setFixedSize(QSize(defaultFixedWidth, defaultFixedHeight))
             self.Requirement[i].editingFinished.connect(self.EffectRequirementChanged)
-            self.SwitchOnType['drop'].append(self.Requirement[i])
+            self.SwitchOnType['Dropped'].append(self.Requirement[i])
 
         for i in range(0, 6):
             self.AmountStatic.append(getattr(self, 'AmountStatic%d' % i))
             self.AmountStatic[i].setFixedSize(QSize(amountStaticWidth, defaultFixedHeight))
             self.AmountStatic[i].activated[str].connect(self.EffectAmountChanged)
-            self.SwitchOnType['crafted'].append(self.AmountStatic[i])
+            self.SwitchOnType['Crafted'].append(self.AmountStatic[i])
             self.GemName.append(getattr(self, 'GemName%d' % i))
-            self.SwitchOnType['crafted'].append(self.GemName[i])
+            self.SwitchOnType['Crafted'].append(self.GemName[i])
 
         for i in range(0, 4):
             self.ImbuePoints.append(getattr(self, 'ImbuePoints%d' % i))
-            self.SwitchOnType['crafted'].append(self.ImbuePoints[i])
+            self.SwitchOnType['Crafted'].append(self.ImbuePoints[i])
 
         for i in range(6, 12):
-            self.SwitchOnType['drop'].append(self.SlotLabel[i])
-            self.SwitchOnType['drop'].append(self.EffectType[i])
-            self.SwitchOnType['drop'].append(self.Effect[i])
+            self.SwitchOnType['Dropped'].append(self.SlotLabel[i])
+            self.SwitchOnType['Dropped'].append(self.EffectType[i])
+            self.SwitchOnType['Dropped'].append(self.Effect[i])
 
     def initialize(self):
         self.CharacterName.setText('')
@@ -250,12 +250,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         for key, value in SlotList.items():
             for val in value:
                 if key == 'Armor':
-                    item = Item('crafted', val, self.CurrentRealm, self.ItemIndex)
+                    item = Item('Crafted', val, self.CurrentRealm, self.ItemIndex)
                     item.ItemName = 'Crafted Item'
                     self.ItemIndex += 1
                     self.ItemAttributeList[val] = item
                 else:
-                    item = Item('drop', val, self.CurrentRealm, self.ItemIndex)
+                    item = Item('Dropped', val, self.CurrentRealm, self.ItemIndex)
                     item.ItemName = 'Dropped Item'
                     self.ItemIndex += 1
                     self.ItemAttributeList[val] = item
@@ -317,24 +317,24 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             pass
 
     def showDropWidgets(self, item):
-        for widget in self.SwitchOnType['crafted']:
+        for widget in self.SwitchOnType['Crafted']:
             widget.hide()
-        for widget in self.SwitchOnType['drop']:
+        for widget in self.SwitchOnType['Dropped']:
             widget.show()
         for index in range(0, item.getSlotCount() - 3):
-            if item.getSlot(index).getSlotType() == 'drop':
+            if item.getSlot(index).getSlotType() == 'Dropped':
                 self.SlotLabel[index].setText('Slot &%d:' % (index + 1))
 
         # DEBUGGING
         print('showDropWidgets')
 
     def showCraftWidgets(self, item):
-        for widget in self.SwitchOnType['drop']:
+        for widget in self.SwitchOnType['Dropped']:
             widget.hide()
-        for widget in self.SwitchOnType['crafted']:
+        for widget in self.SwitchOnType['Crafted']:
             widget.show()
         for index in range(0, item.getSlotCount()):
-            if item.getSlot(index).getSlotType() == 'crafted':
+            if item.getSlot(index).getSlotType() == 'Crafted':
                 self.SlotLabel[index].setText('Gem &%d:' % (index + 1))
         self.Requirement[4].show()
         self.Requirement[5].show()
@@ -343,16 +343,15 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         print('showCraftWidgets')
 
     def RestoreItem(self, item):
-        if item.ActiveState == 'crafted':
+        if item.ActiveState == 'Crafted':
             self.showCraftWidgets(item)
-        elif item.ActiveState == 'drop':
+        elif item.ActiveState == 'Dropped':
             self.showDropWidgets(item)
 
         # DEBUGGING
-        item = self.ItemAttributeList['Neck']
-        item.getSlot(0).setEffectType('Stat')
-        item.getSlot(0).setEffect('Strength')
-        item.getSlot(0).setEffectAmount('20')
+        testItem = self.ItemAttributeList['Chest']
+        testItem.getSlot(0).setEffectType('Stat')
+        testItem.getSlot(0).setEffect('Constitution')
 
         self.ItemName.clear()
         self.ItemName.addItem(item.ItemName)
@@ -362,14 +361,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         effectTypeList = list()
         for index in range(0, item.getSlotCount()):
             self.EffectType[index].clear()
-            if item.ActiveState == 'crafted':
-                if item.getSlot(index).getSlotType() == 'crafted':
+            if item.ActiveState == 'Crafted':
+                if item.getSlot(index).getSlotType() == 'Crafted':
                     effectTypeList = CraftTypeList
-                if item.getSlot(index).getSlotType() == 'enhanced':
+                elif item.getSlot(index).getSlotType() == 'Enhanced':
                     effectTypeList = EnhancedTypeList
-                if item.getSlot(index).getSlotType() == 'effect':
+                elif item.getSlot(index).getSlotType() == 'Effect':
                     effectTypeList = EffectTypeList
-            elif item.ActiveState == 'drop':
+            elif item.ActiveState == 'Dropped':
                 effectTypeList = DropTypeList
 
             self.EffectType[index].insertItems(0, effectTypeList)
@@ -378,6 +377,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 self.EffectType[index].setCurrentText(item.getSlot(index).getEffectType())
             elif item.getSlot(index).getEffectType() not in effectTypeList:
                 self.EffectType[index].setCurrentText('Unused')
+
+            self.EffectTypeChanged(item.getSlot(index).getEffectType(), index)
+
+        effectList = list()
+        for index in range(0, item.getSlotCount()):
+            pass
 
 # =============================================== #
 #        SUMMARIZER AND CALCULATOR METHODS        #
@@ -652,11 +657,30 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # DEBUGGING
         print('ItemLevelChanged')
 
-    # THIS IS REDUNDANT
     def EffectTypeChanged(self, value = None, index = -1):
         if index == -1:
             index = self.getSignalSlot()
+
         item = self.ItemAttributeList[self.CurrentItemLabel]
+        item.getSlot(index).setEffectType(value)
+        self.Effect[index].clear()
+
+        effectList = list()
+        if item.ActiveState == 'Crafted':
+            if item.getSlot(index).getSlotType() == 'Crafted':
+                effectList = CraftLists[self.CharacterRealm.currentText()][value]
+            if item.getSlot(index).getSlotType() != 'Enhanced' and value == 'Skill':
+                effectList = AllBonusList['All'][self.CharacterClass.currentText()]['All Skills']
+            elif item.getSlot(index).getSlotType() == 'Enhanced':
+                effectList = EnhancedLists['All'][value]
+        elif item.ActiveState == 'Dropped':
+            effectList = DropLists[self.CharacterRealm.currentText()][value]
+
+        self.Effect[index].insertItems(0, effectList)
+        self.Effect[index].setCurrentIndex(0)
+
+        # CASCADING CHANGES ...
+        self.EffectChanged(self.Effect[index].currentText(), index)
 
         # DEBUGGING
         print('EffectTypeChanged')
@@ -664,7 +688,36 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def EffectChanged(self, value = None, index = -1):
         if index == -1:
             index = self.getSignalSlot()
+
         item = self.ItemAttributeList[self.CurrentItemLabel]
+
+        if isinstance(value, str):
+            item.getSlot(index).setEffect(self.Effect[index].currentText())
+            self.Effect[index].setEditable(False)
+        elif not isinstance(value, str):
+            item.getSlot(index).setEffect(self.Effect[index].lineEdit().text())
+            self.Effect[index].setEditable(True)
+
+        valuesList = list()
+        if item.ActiveState == 'Crafted':
+            if item.getSlot(index).getEffectType() == 'Unused':
+                self.AmountStatic[index].clear()
+            elif item.getSlot(index).getSlotType() == 'Crafted':
+                valuesList = ValuesLists
+            elif item.getSlot(index).getSlotType() == 'Enhanced':
+                valuesList = EnhancedValuesLists
+            if item.getSlot(index).getEffectType() in valuesList:
+                valuesList = valuesList[item.getSlot(index).getEffectType()]
+                if isinstance(valuesList, dict):
+                    valuesList = valuesList[item.getSlot(index).getEffect()]
+
+            self.AmountStatic[index].clear()
+            self.AmountStatic[index].insertItems(0, valuesList)
+
+        elif item.ActiveState == 'drop':
+            if item.getSlot(index).getEffectType() == 'Unused':
+                self.AmountEdit[index].clear()
+                self.Requirement[index].setText('')
 
         # DEBUGGING
         print('EffectChanged')
