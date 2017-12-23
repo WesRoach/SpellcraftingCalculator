@@ -3,7 +3,7 @@
 from PyQt5 import uic
 from PyQt5.Qt import Qt, QFont, QFontMetrics
 from PyQt5.QtWidgets import QDialog, QListWidgetItem
-from Constants import AllRealms, ClassList, DamageTypeList, ItemTypes, Realms, SlotList, SourceTypeList
+from Constants import AllRealms, ClassList, ItemTypes, Realms, SlotList
 
 Ui_ItemInfoDialog = uic.loadUiType(r'interface/ItemInfoDialog.ui')[0]
 
@@ -40,12 +40,12 @@ class ItemInformationDialog(QDialog, Ui_ItemInfoDialog):
 
         if item.ActiveState == 'crafted':
             self.RealmList = Realms
-            self.SourceTypes.extend(SourceTypeList['Crafted'])
-            self.DamageTypes.extend(DamageTypeList['Crafted'])
+            self.SourceTypes.extend(('Crafted',))
+            self.DamageTypes.extend(('Slash', 'Thrust', 'Crush', 'Elemental',))
         elif item.ActiveState == 'drop':
             self.RealmList = AllRealms
-            self.SourceTypes.extend(SourceTypeList['Drop'])
-            self.DamageTypes.extend(DamageTypeList['Drop'])
+            self.SourceTypes.extend(('Drop', 'Quest', 'Artifact', 'Merchant',))
+            self.DamageTypes.extend(('Slash', 'Thrust', 'Crush',))
 
         if item.ItemLocation in SlotList['Jewelery']:
             self.showJeweleryWidgets()
