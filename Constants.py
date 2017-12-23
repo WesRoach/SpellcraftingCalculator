@@ -162,8 +162,17 @@ DropLists = d2(DropLists)
 
 ValuesLists = d2({  # ValuesLists
 
+    'Unused': UnusedValues,
+
     'Stat': d2({
-        None: StatValues,
+        'Strength': StatValues,
+        'Constitution': StatValues,
+        'Dexterity': StatValues,
+        'Quickness': StatValues,
+        'Intelligence': StatValues,
+        'Piety': StatValues,
+        'Empathy': StatValues,
+        'Charisma': StatValues,
         'Hits': HitsValues,
         'Power': PowerValues,
     }),
@@ -174,7 +183,7 @@ ValuesLists = d2({  # ValuesLists
     # 'Charged Effect': chargedEffectValues,
     # 'Offensive Effect': offensiveEffectValues,
     # 'Reactive Effect': reactiveEffectValues,
-    'Unused': UnusedValues,
+
 })
 
 # THIS IS A MESS
