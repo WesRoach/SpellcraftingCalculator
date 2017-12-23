@@ -5,11 +5,9 @@ __all__ = [
     'SlotList',
     'FocusSlotList',
     'CraftTypeList',
-    'DamageTypeList',
     'DropTypeList',
     'EffectTypeList',
     'EnhancedTypeList',
-    'SourceTypeList',
 ]
 
 SlotList = d2({
@@ -95,42 +93,6 @@ EnhancedTypeList = t2((  # CraftedTypeList
     'Charged Effect',
     'Offensive Effect',
 ))
-
-DamageTypeList = d2({
-
-    'Crafted': t2((
-        'Slash',
-        'Thrust',
-        'Crush',
-        'Elemental',
-    )),
-
-    'Drop': t2((
-        'Slash',
-        'Thrust',
-        'Crush',
-        'Body',
-        'Cold',
-        'Heat',
-        'Energy',
-        'Matter',
-        'Spirit',
-    )),
-})
-
-SourceTypeList = d2({
-
-    'Crafted': t2((
-        'Crafted',
-    )),
-
-    'Drop': t2((
-        'Drop',
-        'Quest',
-        'Artifact',
-        'Merchant',
-    )),
-})
 
 if __name__ == "__main__":
     pass
