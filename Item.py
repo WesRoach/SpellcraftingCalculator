@@ -59,9 +59,8 @@ class Item:
         ItemSlots = []
         if self.ActiveState == 'Crafted':
             for slot in range(0, 4):
-                ItemSlots.append(ItemSlot(self.ActiveState))
+                ItemSlots.append(ItemSlot('Craftable'))
             ItemSlots.append(ItemSlot('Enhanced'))
-            ItemSlots.append(ItemSlot('Effect'))
         elif self.ActiveState == 'Dropped':
             for slot in range(0, 12):
                 ItemSlots.append(ItemSlot(self.ActiveState))

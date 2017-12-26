@@ -1691,13 +1691,6 @@
                  </property>
                 </widget>
                </item>
-               <item row="6" column="2">
-                <widget class="QComboBox" name="AmountStatic5">
-                 <property name="maxVisibleItems">
-                  <number>20</number>
-                 </property>
-                </widget>
-               </item>
                <item row="1" column="2">
                 <widget class="QComboBox" name="AmountStatic0">
                  <property name="maxVisibleItems">
@@ -2345,7 +2338,6 @@
               <zorder>AmountEdit5</zorder>
               <zorder>AmountStatic0</zorder>
               <zorder>AmountStatic4</zorder>
-              <zorder>AmountStatic5</zorder>
               <zorder>SlotLabel0</zorder>
               <zorder>GemName0</zorder>
               <zorder>AmountStatic3</zorder>
@@ -2467,7 +2459,6 @@
   <tabstop>Effect4</tabstop>
   <tabstop>Requirement4</tabstop>
   <tabstop>EffectType5</tabstop>
-  <tabstop>AmountStatic5</tabstop>
   <tabstop>AmountEdit5</tabstop>
   <tabstop>Effect5</tabstop>
   <tabstop>Requirement5</tabstop>

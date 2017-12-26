@@ -3,7 +3,8 @@
 from PyQt5 import uic
 from PyQt5.Qt import Qt, QFont, QFontMetrics
 from PyQt5.QtWidgets import QDialog, QListWidgetItem
-from Constants import AllRealms, ClassList, ItemTypes, Realms, SlotList
+from Character import AllRealms, ClassList, ItemTypes, Realms
+from Constants import SlotList
 
 Ui_ItemInfoDialog = uic.loadUiType(r'interface/ItemInfoDialog.ui')[0]
 
@@ -38,11 +39,11 @@ class ItemInformationDialog(QDialog, Ui_ItemInfoDialog):
         width = testFont.size(Qt.TextSingleLine, "Type:", tabArray = None).width()
         self.ItemInfoGroup.layout().setColumnMinimumWidth(0, width)
 
-        if item.ActiveState == 'crafted':
+        if item.ActiveState == 'Crafted':
             self.RealmList = Realms
             self.SourceTypes.extend(('Crafted',))
             self.DamageTypes.extend(('Slash', 'Thrust', 'Crush', 'Elemental',))
-        elif item.ActiveState == 'drop':
+        elif item.ActiveState == 'Dropped':
             self.RealmList = AllRealms
             self.SourceTypes.extend(('Drop', 'Quest', 'Artifact', 'Merchant',))
             self.DamageTypes.extend(('Slash', 'Thrust', 'Crush',))

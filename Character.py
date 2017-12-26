@@ -11,8 +11,6 @@ __all__ = [
     'RaceList',
     'Races',
     'Realms',
-    'ServerCodes',
-    'ServerIgnCodes',
 ]
 
 Realms = t2((
@@ -811,29 +809,6 @@ ItemTypes = d2({
     'Two-Handed': twoHandTypes,
     'Ranged': rangedTypes,
     'Spare': spareTypes,
-})
-
-# SERVER CODES (*.IGN)
-ServerIgnCodes = d2({
-    'Pendragon': '74',
-    'Gaheris': '95',
-    'Ywain': '143',
-})
-
-# SERVER CODES (*.INI)
-ServerCodes = d2({
-    '5': 'Pendragon',
-    '23': 'Gaheris',
-    '41': 'Ywain-1',
-    '49': 'Ywain-2',
-    '50': 'Ywain-3',
-    '51': 'Ywain-4',
-    '52': 'Ywain-5',
-    '53': 'Ywain-6',
-    '54': 'Ywain-7',
-    '55': 'Ywain-8',
-    '56': 'Ywain-9',
-    '57': 'Ywain-10',
 })
 
 if __name__ == "__main__":
