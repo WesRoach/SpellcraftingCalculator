@@ -617,7 +617,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # DEBUGGING
         print('ItemStateChanged')
 
-    # TODO: SET AFDPS BASED ON 'item.ItemLevel
+    # TODO: SET AFDPS BASED ON 'item.ItemLevel'
     def ItemLevelChanged(self):
         item = self.ItemAttributeList[self.CurrentItemLabel]
         item.ItemLevel = self.ItemLevel.text()
