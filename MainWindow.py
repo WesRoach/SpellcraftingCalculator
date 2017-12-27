@@ -6,7 +6,7 @@ from PyQt5.QtCore import QSize
 from PyQt5.QtGui import QFont, QFontMetrics, QIcon, QIntValidator
 from PyQt5.QtWidgets import QLabel, QMainWindow, QMenu, QToolBar, QTreeWidgetItem, QTreeWidgetItemIterator, QStyle, QStyleOptionComboBox
 from Character import AllBonusList, ClassList, Races, Realms
-from Constants import CapValueDict, DropEffectLists, EffectTypeDict, SlotList
+from Constants import Cap, CraftedEffectList, CraftedValuesList, DropEffectList, EffectTypeList, EnhancedEffectList, EnhancedValuesList, MythicalCap, SlotList
 from Item import Item
 from ItemInfoDialog import ItemInformationDialog
 
@@ -27,7 +27,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ToolBar = QToolBar("Crafting")
 
         self.DistanceToCap = QAction()
-        self.NonClassSkills = QAction()
 
         self.EffectList = list()
         self.EffectTypeList = list()
@@ -62,7 +61,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.CurrentRealm = ''
         self.CurrentClass = ''
         self.CurrentRace = ''
-        self.CurrentItem = {}
         self.CurrentItemLabel = {}
 
         self.initMenuBar()
@@ -78,7 +76,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def initMenuBar(self):
         self.FileMenu.addAction('E&xit', self.close)
 
-        self.ViewMenu.addAction('&Material Report', self.showMaterialReport, QKeySequence(Qt.ALT + Qt.Key_M))
+        self.ViewMenu.addAction('&Materials Report', self.showMaterialsReport, QKeySequence(Qt.ALT + Qt.Key_M))
         self.ViewMenu.addAction('&Configuration Report', self.showConfigurationReport, QKeySequence(Qt.ALT + Qt.Key_C))
 
         self.ViewMenu.addSeparator()
@@ -87,11 +85,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.DistanceToCap.setCheckable(True)
         self.DistanceToCap.setChecked(True)
         self.ViewMenu.addAction(self.DistanceToCap)
-
-        self.NonClassSkills = QAction('Show Non-Class Skills', self)
-        self.NonClassSkills.setCheckable(True)
-        self.NonClassSkills.setChecked(False)
-        self.ViewMenu.addAction(self.NonClassSkills)
 
         self.menuBar().addMenu(self.FileMenu)
         self.menuBar().addMenu(self.EditMenu)
@@ -134,7 +127,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.CharacterRealmRank.setFixedSize(QSize(defaultFixedWidth, defaultFixedHeight))
         self.OutfitName.setFixedSize(QSize(defaultFixedWidth, defaultFixedHeight))
 
-        for stat in (DropEffectLists['All']['Stat'] + ('ArmorFactor', 'Fatigue', 'PowerPool',)):
+        for stat in (DropEffectList['All']['Stat'] + ('ArmorFactor', 'Fatigue', 'PowerPool',)):
             self.StatLabel[stat] = getattr(self, stat + 'Label')
             self.StatValue[stat] = getattr(self, stat)
             self.StatCap[stat] = getattr(self, stat + 'Cap')
@@ -153,7 +146,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         width = testFont.size(Qt.TextSingleLine, "(26)", tabArray = None).width()
         self.StatsGroup.layout().setColumnMinimumWidth(3, width)
 
-        for resist in (DropEffectLists['All']['Resist']):
+        for resist in (DropEffectList['All']['Resist']):
             self.StatLabel[resist] = getattr(self, resist + 'Label')
             self.StatValue[resist] = getattr(self, resist)
             self.StatBonus[resist] = getattr(self, resist + 'Cap')
@@ -351,25 +344,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         testItem = self.ItemAttributeList['Chest']
         testItem.getSlot(0).setEffectType('Stat')
         testItem.getSlot(0).setEffect('Constitution')
+        testItem.getSlot(1).setEffectType('Skill')
+        testItem.getSlot(1).setEffect('Axe')
 
         self.ItemName.clear()
         self.ItemName.addItem(item.ItemName)
         self.ItemName.setCurrentIndex(0)
         self.ItemLevel.setText(item.ItemLevel)
-
-        for index in range(0, item.getSlotCount()):
-            self.EffectType[index].clear()
-            self.EffectType[index].insertItems(0, EffectTypeDict[item.getSlot(index).getSlotType()])
-            if item.getSlot(index).getEffectType() in EffectTypeDict[item.getSlot(index).getSlotType()]:
-                self.EffectType[index].setCurrentText(item.getSlot(index).getEffectType())
-            elif item.getSlot(index).getEffectType() not in EffectTypeDict[item.getSlot(index).getSlotType()]:
-                self.EffectType[index].setCurrentText('Unused')
-
-            self.EffectTypeChanged(item.getSlot(index).getEffectType(), index)
-
-        effectList = list()
-        for index in range(0, item.getSlotCount()):
-            pass
 
 # =============================================== #
 #        SUMMARIZER AND CALCULATOR METHODS        #
@@ -388,7 +369,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             'PvEBonuses': {}
         }
 
-        for effect in DropEffectLists['All']['Resist']:
+        for effect in DropEffectList['All']['Resist']:
             Total['Resists'][effect] = {}
             Total['Resists'][effect]['Bonus'] = 0
             Total['Resists'][effect]['TotalBonus'] = 0
@@ -399,12 +380,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             if effect in Races['All'][Race]['Resists']:
                 Total['Resists'][effect]['RacialBonus'] = Races['All'][Race]['Resists'][effect]
 
-            Base = CapValueDict['Cap']['Resist']
-            BaseMythicalCap = CapValueDict['MythicalCap']['Resist Cap']
+            Base = Cap['Resist']
+            BaseMythicalCap = MythicalCap['Resist Cap']
             Total['Resists'][effect]['Base'] = int(Level * Base[0]) + Base[1]
             Total['Resists'][effect]['BaseMythicalCap'] = int(Level * BaseMythicalCap[0]) + BaseMythicalCap[1]
 
-        for effect in DropEffectLists['All']['Stat'] + ('Armor Factor', 'Fatigue', '% Power Pool'):
+        for effect in DropEffectList['All']['Stat'] + ('Armor Factor', 'Fatigue', '% Power Pool'):
             Total['Stats'][effect] = {}
             Total['Stats'][effect]['Bonus'] = 0
             Total['Stats'][effect]['TotalBonus'] = 0
@@ -413,23 +394,23 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             Total['Stats'][effect]['MythicalCapBonus'] = 0
             Total['Stats'][effect]['TotalMythicalCapBonus'] = 0
 
-            if effect in CapValueDict['Cap']:
-                Base = CapValueDict['Cap'][effect]
-                BaseCap = CapValueDict['Cap'][effect + ' Cap']
+            if effect in Cap:
+                Base = Cap[effect]
+                BaseCap = Cap[effect + ' Cap']
 
             else:
-                Base = CapValueDict['Cap']['Stat']
-                BaseCap = CapValueDict['Cap']['Stat Cap']
+                Base = Cap['Stat']
+                BaseCap = Cap['Stat Cap']
 
             Total['Stats'][effect]['Base'] = int(Level * Base[0]) + Base[1]
             Total['Stats'][effect]['BaseCap'] = int(Level * BaseCap[0]) + BaseCap[1]
 
-            if effect in DropEffectLists['All']['Mythical Cap Increase']:
-                BaseMythicalCap = CapValueDict['MythicalCap']['Stat Cap']
+            if effect in DropEffectList['All']['Mythical Cap Increase']:
+                BaseMythicalCap = MythicalCap['Stat Cap']
                 Total['Stats'][effect]['BaseMythicalCap'] = int(Level * BaseMythicalCap[0]) + BaseMythicalCap[1]
 
-            if effect in CapValueDict['MythicalCap']:
-                BaseMythicalCap = CapValueDict['MythicalCap'][effect]
+            if effect in MythicalCap:
+                BaseMythicalCap = MythicalCap[effect]
                 Total['Stats'][effect]['BaseMythicalCap'] = int(Level * BaseMythicalCap[0]) + BaseMythicalCap[1]
 
         return Total
@@ -448,12 +429,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             if not self.DistanceToCap.isChecked():
                 self.StatValue[key].setText(str(amounts['TotalBonus']))
                 self.StatMythicalCap[key].setText('(' + str(amounts['TotalMythicalCapBonus']) + ')')
-                print('Not DistanceToCap')
 
             elif self.DistanceToCap.isChecked():
                 self.StatValue[key].setText(str(int(Base - TotalBonus)))
                 self.StatMythicalCap[key].setText('(' + str(int(BaseMythicalCap - TotalMythicalCapBonus)) + ')')
-                print('DistanceToCap')
 
         for (key, datum) in list(Total['Stats'].items()):
             Acuity = AllBonusList[Realm][Class]["Acuity"]
@@ -563,10 +542,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 #       CONFIGURATION AND MATERIAL REPORTS        #
 # =============================================== #
 
-    def showMaterialReport(self):
+    def showMaterialsReport(self):
 
         # DEBUGGING
-        print('showMaterialReport')
+        print('showMaterialsReport')
 
     def showConfigurationReport(self):
 
@@ -607,7 +586,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def CharacterRaceChanged(self):
         Race = self.CharacterRace.currentText()
-        for Resist in DropEffectLists['All']['Resist']:
+        for Resist in DropEffectList['All']['Resist']:
             if Resist in Races['All'][Race]['Resists']:
                 self.StatBonus[Resist].setText('+ ' + str(Races['All'][Race]['Resists'][Resist]))
             else:
@@ -624,7 +603,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             for val in value:
                 if selection == val:
                     self.CurrentItemLabel = val
-                    self.CurrentItem = self.ItemAttributeList[self.CurrentItemLabel]
                     self.RestoreItem(self.ItemAttributeList[self.CurrentItemLabel])
 
         # DEBUGGING
@@ -639,6 +617,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # DEBUGGING
         print('ItemStateChanged')
 
+    # TODO: SET AFDPS BASED ON 'item.ItemLevel
     def ItemLevelChanged(self):
         item = self.ItemAttributeList[self.CurrentItemLabel]
         item.ItemLevel = self.ItemLevel.text()
@@ -652,8 +631,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             index = self.getSignalSlot()
         item = self.ItemAttributeList[self.CurrentItemLabel]
 
-        # CASCADING CHANGES ...
-        self.EffectChanged(self.Effect[index].currentText(), index)
+        # CASCADE THE CHANGES ...
+        self.EffectChanged(item.getSlot(index).getEffect(), index)
 
         # DEBUGGING
         print('EffectTypeChanged')
@@ -663,8 +642,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             index = self.getSignalSlot()
         item = self.ItemAttributeList[self.CurrentItemLabel]
 
-        # CASCADING CHANGES ...
-        self.EffectAmountChanged(None, index)
+        # CASCADE THE CHANGES ...
+        self.EffectAmountChanged(item.getSlot(index).getEffectAmount(), index)
 
         # DEBUGGING
         print('EffectChanged')
@@ -672,15 +651,22 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def EffectAmountChanged(self, amount = None, index = -1):
         if index == -1:
             index = self.getSignalSlot()
-        item = self.ItemAttributeList[self.CurrentItemLabel]
 
-        # CASCADING CHANGES ...
+        # CASCADING THE CHANGES ...
         self.calculate()
 
         # DEBUGGING
         print('EffectAmountChanged')
 
-    def EffectRequirementChanged(self):
+    def EffectRequirementChanged(self, index = -1):
+        if index == -1:
+            index = self.getSignalSlot()
+        item = self.ItemAttributeList[self.CurrentItemLabel]
+        if item.getSlot(index).getEffectType() == 'Unused':
+            self.Requirement[index].setText('')
+        item.getSlot(index).setEffectRequirement(self.Requirement[index].text())
+        self.Requirement[index].setText(self.Requirement[index].text())
+        self.Requirement[index].setModified(False)
 
         # DEBUGGING
         print('EffectRequirementChanged')

@@ -19,8 +19,8 @@ class ItemInformationDialog(QDialog, Ui_ItemInfoDialog):
         self.DamageTypes = ['']
         self.SourceTypes = ['']
 
-        self.initLayout(self.CurrentItem)
-        self.initItem(self.CurrentItem)
+        self.initLayout(item)
+        self.initItem(item)
         self.initControls()
 
     def initLayout(self, item):

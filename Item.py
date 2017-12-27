@@ -102,6 +102,9 @@ class ItemSlot:
     def setEffectAmount(self, amount):
         self.EffectAmount = amount
 
+    def setEffectRequirement(self, value):
+        self.Requirement = value
+
     def getEffectType(self):
         return self.EffectType
 
@@ -110,6 +113,9 @@ class ItemSlot:
 
     def getEffectAmount(self):
         return self.EffectAmount
+
+    def getEffectRequirement(self):
+        return self.Requirement
 
     def getSlotType(self):
         return self.SlotType
