@@ -6,7 +6,7 @@ from PyQt5.QtCore import QSize
 from PyQt5.QtGui import QFont, QFontMetrics, QIcon, QIntValidator
 from PyQt5.QtWidgets import QLabel, QMainWindow, QMenu, QToolBar, QTreeWidgetItem, QTreeWidgetItemIterator, QStyle, QStyleOptionComboBox
 from Character import AllBonusList, ClassList, Races, Realms
-from Constants import Cap, CraftedEffectList, CraftedValuesList, DropEffectList, EffectTypeList, EnhancedEffectList, EnhancedValuesList, MythicalCap, SlotList
+from Constants import Cap, DropEffectList, MythicalCap, SlotList
 from Item import Item
 from ItemInfoDialog import ItemInformationDialog
 
@@ -340,13 +340,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         elif item.ActiveState == 'Dropped':
             self.showDropWidgets(item)
 
-        # DEBUGGING
-        testItem = self.ItemAttributeList['Chest']
-        testItem.getSlot(0).setEffectType('Stat')
-        testItem.getSlot(0).setEffect('Constitution')
-        testItem.getSlot(1).setEffectType('Skill')
-        testItem.getSlot(1).setEffect('Axe')
-
         self.ItemName.clear()
         self.ItemName.addItem(item.ItemName)
         self.ItemName.setCurrentIndex(0)
@@ -627,33 +620,16 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         print('ItemLevelChanged')
 
     def EffectTypeChanged(self, value = None, index = -1):
-        if index == -1:
-            index = self.getSignalSlot()
-        item = self.ItemAttributeList[self.CurrentItemLabel]
-
-        # CASCADE THE CHANGES ...
-        self.EffectChanged(item.getSlot(index).getEffect(), index)
 
         # DEBUGGING
         print('EffectTypeChanged')
 
     def EffectChanged(self, value = None, index = -1):
-        if index == -1:
-            index = self.getSignalSlot()
-        item = self.ItemAttributeList[self.CurrentItemLabel]
-
-        # CASCADE THE CHANGES ...
-        self.EffectAmountChanged(item.getSlot(index).getEffectAmount(), index)
 
         # DEBUGGING
         print('EffectChanged')
 
     def EffectAmountChanged(self, amount = None, index = -1):
-        if index == -1:
-            index = self.getSignalSlot()
-
-        # CASCADING THE CHANGES ...
-        self.calculate()
 
         # DEBUGGING
         print('EffectAmountChanged')
