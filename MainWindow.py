@@ -6,7 +6,7 @@ from PyQt5.QtCore import QSize
 from PyQt5.QtGui import QFont, QFontMetrics, QIcon, QIntValidator
 from PyQt5.QtWidgets import QLabel, QMainWindow, QMenu, QToolBar, QTreeWidgetItem, QTreeWidgetItemIterator, QStyle, QStyleOptionComboBox
 from Character import AllBonusList, ClassList, Races, Realms
-from Constants import Cap, DropEffectList, MythicalCap, SlotList
+from Constants import Cap, CraftedEffectList, CraftedValuesList, DropEffectList, EffectTypeList, EnhancedEffectList, EnhancedValuesList, MythicalCap, SlotList
 from Item import Item
 from ItemInfoDialog import ItemInformationDialog
 
@@ -27,6 +27,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ToolBar = QToolBar("Crafting")
 
         self.DistanceToCap = QAction()
+        self.NonClassSkills = QAction()
 
         self.EffectList = list()
         self.EffectTypeList = list()
@@ -86,6 +87,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.DistanceToCap.setChecked(True)
         self.ViewMenu.addAction(self.DistanceToCap)
 
+        self.NonClassSkills = QAction('Show Non-Class Skills', self)
+        self.NonClassSkills.setCheckable(True)
+        self.NonClassSkills.setChecked(False)
+        self.ViewMenu.addAction(self.NonClassSkills)
+
         self.menuBar().addMenu(self.FileMenu)
         self.menuBar().addMenu(self.EditMenu)
         self.menuBar().addMenu(self.ViewMenu)
@@ -111,13 +117,15 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # VALUES BASED ON THE FONT BEING USED ...
         testFont = QFontMetrics(self.font())
 
-        # TODO: DYNAMICALLY ASSIGN SIZE
         defaultFixedWidth = 100
         defaultFixedHeight = 20
+        buttonFixedWidth = 35
+        buttonFixedHeight = 22
         effectWidth = self.setMinimumWidth(["Crowd Control Reduction"])
         effectTypeWidth = self.setMinimumWidth(['Mythical Cap Increase'])
         amountEditWidth = self.setMinimumWidth(['100'])
         amountStaticWidth = self.setMinimumWidth(['100'])
+        treeViewWidth = self.ConfigurationGroup.sizeHint().width()
 
         self.CharacterName.setFixedSize(QSize(defaultFixedWidth, defaultFixedHeight))
         self.CharacterRealm.setFixedSize(QSize(defaultFixedWidth, defaultFixedHeight))
@@ -174,6 +182,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 child.setCheckState(0, Qt.Unchecked)
                 parent.addChild(child)
 
+        self.SlotListTreeView.setFixedWidth(155)
         self.CharacterRealm.insertItems(0, list(Realms))
 
         self.SwitchOnType = {
@@ -189,6 +198,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             ],
 
             'Dropped': [self.RequirementLabel]}
+
+        self.ItemLevel.setFixedSize(QSize(amountEditWidth, defaultFixedHeight))
+        self.ItemNewButton.setFixedSize(QSize(buttonFixedWidth, buttonFixedHeight))
+        self.ItemAddButton.setFixedSize(QSize(buttonFixedWidth, buttonFixedHeight))
+        self.ItemChangeButton.setFixedSize(QSize(buttonFixedWidth, buttonFixedHeight))
+        self.ItemDeleteButton.setFixedSize(QSize(buttonFixedWidth, buttonFixedHeight))
+        self.ItemInfoButton.setFixedSize(QSize(buttonFixedWidth, buttonFixedHeight))
+        self.ItemName.setFixedHeight(defaultFixedHeight)
 
         for i in range(0, 12):
             self.SlotLabel.append(getattr(self, 'SlotLabel%d' % i))
@@ -340,10 +357,24 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         elif item.ActiveState == 'Dropped':
             self.showDropWidgets(item)
 
+        # DEBUGGING
+        testItem = self.ItemAttributeList['Chest']
+        testItem.getSlot(0).setEffectType('Stat')
+        testItem.getSlot(0).setEffect('Constitution')
+        testItem.getSlot(0).setEffectAmount('20')
+        testItem.getSlot(1).setEffectType('Skill')
+        testItem.getSlot(1).setEffect('Axe')
+        testItem.getSlot(1).setEffectAmount('3')
+
         self.ItemName.clear()
         self.ItemName.addItem(item.ItemName)
         self.ItemName.setCurrentIndex(0)
         self.ItemLevel.setText(item.ItemLevel)
+
+        for index in range(0, item.getSlotCount()):
+            self.EffectTypeChanged(item.getSlot(index).getEffectType(), index)
+            self.EffectChanged(item.getSlot(index).getEffect(), index)
+            self.EffectAmountChanged(item.getSlot(index).getEffectAmount(), index)
 
 # =============================================== #
 #        SUMMARIZER AND CALCULATOR METHODS        #
@@ -622,21 +653,22 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def EffectTypeChanged(self, value = None, index = -1):
 
         # DEBUGGING
-        print('EffectTypeChanged')
+        print('EffectTypeChanged, Value = ' + str(value))
 
     def EffectChanged(self, value = None, index = -1):
 
         # DEBUGGING
-        print('EffectChanged')
+        print('EffectChanged, Value = ' + str(value))
 
     def EffectAmountChanged(self, amount = None, index = -1):
 
         # DEBUGGING
-        print('EffectAmountChanged')
+        print('EffectAmountChanged, Amount = ' + str(amount))
 
     def EffectRequirementChanged(self, index = -1):
         if index == -1:
             index = self.getSignalSlot()
+
         item = self.ItemAttributeList[self.CurrentItemLabel]
         if item.getSlot(index).getEffectType() == 'Unused':
             self.Requirement[index].setText('')

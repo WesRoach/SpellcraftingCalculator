@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>885</width>
-    <height>582</height>
+    <width>804</width>
+    <height>622</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -1404,10 +1404,13 @@
         </property>
         <item>
          <widget class="QSplitter" name="SlotItemSplitter">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
             <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
+            <verstretch>1</verstretch>
            </sizepolicy>
           </property>
           <property name="frameShape">
@@ -1432,6 +1435,12 @@
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
+           <property name="baseSize">
+            <size>
+             <width>0</width>
+             <height>0</height>
+            </size>
+           </property>
            <property name="contextMenuPolicy">
             <enum>Qt::DefaultContextMenu</enum>
            </property>
@@ -1446,6 +1455,9 @@
            </property>
            <property name="tabKeyNavigation">
             <bool>true</bool>
+           </property>
+           <property name="showDropIndicator" stdset="0">
+            <bool>false</bool>
            </property>
            <property name="selectionBehavior">
             <enum>QAbstractItemView::SelectItems</enum>
@@ -1468,6 +1480,9 @@
            <attribute name="headerVisible">
             <bool>false</bool>
            </attribute>
+           <attribute name="headerMinimumSectionSize">
+            <number>100</number>
+           </attribute>
            <column>
             <property name="text">
              <string notr="true">1</string>
@@ -1475,6 +1490,12 @@
            </column>
           </widget>
           <widget class="QFrame" name="ItemGroup">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <layout class="QVBoxLayout">
             <property name="spacing">
              <number>5</number>
@@ -1493,6 +1514,9 @@
             </property>
             <item>
              <widget class="QFrame" name="ItemHeaderFrame">
+              <property name="enabled">
+               <bool>true</bool>
+              </property>
               <property name="sizePolicy">
                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -1568,7 +1592,10 @@
                 </widget>
                </item>
                <item>
-                <widget class="QPushButton" name="ItemNewButton">
+                <widget class="QToolButton" name="ItemNewButton">
+                 <property name="enabled">
+                  <bool>true</bool>
+                 </property>
                  <property name="sizePolicy">
                   <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                    <horstretch>0</horstretch>
@@ -1576,12 +1603,15 @@
                   </sizepolicy>
                  </property>
                  <property name="text">
-                  <string>New</string>
+                  <string>N</string>
+                 </property>
+                 <property name="popupMode">
+                  <enum>QToolButton::MenuButtonPopup</enum>
                  </property>
                 </widget>
                </item>
                <item>
-                <widget class="QPushButton" name="ItemAddButton">
+                <widget class="QToolButton" name="ItemAddButton">
                  <property name="sizePolicy">
                   <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                    <horstretch>0</horstretch>
@@ -1589,7 +1619,29 @@
                   </sizepolicy>
                  </property>
                  <property name="text">
-                  <string>Add</string>
+                  <string>A</string>
+                 </property>
+                 <property name="popupMode">
+                  <enum>QToolButton::MenuButtonPopup</enum>
+                 </property>
+                 <property name="arrowType">
+                  <enum>Qt::NoArrow</enum>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QToolButton" name="ItemChangeButton">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="text">
+                  <string>C</string>
+                 </property>
+                 <property name="popupMode">
+                  <enum>QToolButton::MenuButtonPopup</enum>
                  </property>
                 </widget>
                </item>
@@ -1602,20 +1654,7 @@
                   </sizepolicy>
                  </property>
                  <property name="text">
-                  <string>Delete</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QPushButton" name="ItemChangeButton">
-                 <property name="sizePolicy">
-                  <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
-                 </property>
-                 <property name="text">
-                  <string>Change</string>
+                  <string>D</string>
                  </property>
                 </widget>
                </item>
@@ -1628,7 +1667,7 @@
                   </sizepolicy>
                  </property>
                  <property name="text">
-                  <string> Info </string>
+                  <string>I</string>
                  </property>
                 </widget>
                </item>
@@ -1639,7 +1678,7 @@
              <widget class="QFrame" name="ItemFrame">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-                <horstretch>1</horstretch>
+                <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
               </property>
@@ -1693,6 +1732,9 @@
                </item>
                <item row="1" column="2">
                 <widget class="QComboBox" name="AmountStatic0">
+                 <property name="enabled">
+                  <bool>true</bool>
+                 </property>
                  <property name="maxVisibleItems">
                   <number>20</number>
                  </property>
@@ -1736,7 +1778,11 @@
                 </widget>
                </item>
                <item row="6" column="2">
-                <widget class="QLineEdit" name="AmountEdit5"/>
+                <widget class="QLineEdit" name="AmountEdit5">
+                 <property name="enabled">
+                  <bool>true</bool>
+                 </property>
+                </widget>
                </item>
                <item row="0" column="1">
                 <widget class="QLabel" name="EffectTypeLabel">
@@ -2431,7 +2477,6 @@
   <tabstop>ItemNewButton</tabstop>
   <tabstop>ItemAddButton</tabstop>
   <tabstop>ItemDeleteButton</tabstop>
-  <tabstop>ItemChangeButton</tabstop>
   <tabstop>ItemInfoButton</tabstop>
   <tabstop>EffectType0</tabstop>
   <tabstop>AmountStatic0</tabstop>

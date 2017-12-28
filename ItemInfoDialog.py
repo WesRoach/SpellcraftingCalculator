@@ -1,7 +1,7 @@
 # HEADER PLACE HOLDER
 
 from PyQt5 import uic
-from PyQt5.Qt import Qt, QFont, QFontMetrics
+from PyQt5.Qt import Qt, QFont, QFontMetrics, QSize
 from PyQt5.QtWidgets import QDialog, QListWidgetItem
 from Character import AllRealms, ClassList, ItemTypes, Realms
 from Constants import SlotList
@@ -22,6 +22,16 @@ class ItemInformationDialog(QDialog, Ui_ItemInfoDialog):
         self.initLayout(item)
         self.initItem(item)
         self.initControls()
+
+        self.ItemRealm.setFixedHeight(20)
+        self.ItemType.setFixedHeight(20)
+        self.ItemSource.setFixedHeight(20)
+        self.ItemBonus.setFixedHeight(20)
+        self.ItemAFDPS.setFixedHeight(20)
+        self.ItemSpeed.setFixedHeight(20)
+        self.ItemLeftHand.setFixedHeight(20)
+        self.ItemRequirement.setFixedHeight(20)
+        self.setFixedSize(QSize(335, 435))
 
     def initLayout(self, item):
         font = QFont(self.font())
@@ -150,8 +160,8 @@ class ItemInformationDialog(QDialog, Ui_ItemInfoDialog):
         self.ItemSpeedLabel.hide()
         self.ItemLeftHand.hide()
         self.setWidgetSpan(self.ItemBonus, 0, 3)
-        self.ItemBonus.setFixedHeight(22)
-        self.ItemBonusLabel.setFixedHeight(22)
+        self.ItemBonus.setFixedHeight(20)
+        self.ItemBonusLabel.setFixedHeight(20)
 
     def showArmorWidgets(self):
         self.ItemAFDPSLabel.setText('AF:')
