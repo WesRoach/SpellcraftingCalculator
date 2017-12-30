@@ -6,7 +6,8 @@ from PyQt5.QtCore import QSize
 from PyQt5.QtGui import QFont, QFontMetrics, QIcon, QIntValidator
 from PyQt5.QtWidgets import QLabel, QMainWindow, QMenu, QToolBar, QTreeWidgetItem, QTreeWidgetItemIterator, QStyle, QStyleOptionComboBox
 from Character import AllBonusList, ClassList, Races, Realms
-from Constants import Cap, CraftedEffectList, CraftedValuesList, DropEffectList, EffectTypeList, EnhancedEffectList, EnhancedValuesList, MythicalCap, SlotList
+from Constants import Cap,  CraftedTypeList, CraftedEffectList, CraftedValuesList, DropTypeList, DropEffectList
+from Constants import EnhancedTypeList, EnhancedEffectList, EnhancedValuesList, MythicalCap, SlotList
 from Item import Item
 from ItemInfoDialog import ItemInformationDialog
 
@@ -557,9 +558,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             maxWidth = max(maxWidth, style.sizeFromContents(QStyle.CT_ComboBox, option, size, self).width())
         return maxWidth
 
-    # TODO: FIX BUG
     def getSignalSlot(self):
-        index = self.sender().objectName()[-1:]
+        index = self.sender().objectName()[-2:]
+        if not index.isdigit(): index = index[-1:]
         return int(index)
 
 # =============================================== #
@@ -641,7 +642,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # DEBUGGING
         print('ItemStateChanged')
 
-    # TODO: SET AFDPS BASED ON 'item.ItemLevel'
     def ItemLevelChanged(self):
         item = self.ItemAttributeList[self.CurrentItemLabel]
         item.ItemLevel = self.ItemLevel.text()
@@ -651,11 +651,38 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         print('ItemLevelChanged')
 
     def EffectTypeChanged(self, value = None, index = -1):
+        if index == -1: index = self.getSignalSlot()
+        item = self.ItemAttributeList[self.CurrentItemLabel]
+        item.getSlot(index).setEffectType(value)
+        self.EffectType[index].clear()
+
+        if self.EffectType[index].currentIndex() == -1:
+            if item.getSlot(index).getSlotType() == 'Craftable':
+                self.EffectType[index].insertItems(0, CraftedTypeList)
+            elif item.getSlot(index).getSlotType() == 'Enhanced':
+                self.EffectType[index].insertItems(0, EnhancedTypeList)
+            elif item.getSlot(index).getSlotType() == 'Dropped':
+                self.EffectType[index].insertItems(0, DropTypeList)
+        self.EffectType[index].setCurrentText(value)
+
+        # CASCADE THE CHANGES ...
+        self.EffectChanged(item.getSlot(index).getEffect(), index)
 
         # DEBUGGING
         print('EffectTypeChanged, Value = ' + str(value))
 
     def EffectChanged(self, value = None, index = -1):
+        if index == -1: index = self.getSignalSlot()
+        item = self.ItemAttributeList[self.CurrentItemLabel]
+        item.getSlot(index).setEffect(value)
+        self.Effect[index].clear()
+
+        if item.getSlot(index).getSlotType() == 'Craftable':
+            pass
+        elif item.getSlot(index).getSlotType() == 'Enhanced':
+            pass
+        elif item.getSlot(index).getSlotType() == 'Dropped':
+            pass
 
         # DEBUGGING
         print('EffectChanged, Value = ' + str(value))
