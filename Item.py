@@ -31,25 +31,26 @@ class Item:
         self.setInitialItemProperties()
 
     def setInitialItemProperties(self):
-        self.ItemLevel = '51'
-        self.ItemQuality = '100'
-
         if self.ItemLocation in SlotList['Jewelery']:
+            self.ItemLevel = '50'
             for key, value in ItemTypes.items():
                 if self.ItemLocation == key:
                     self.ItemType = ItemTypes[key][0]
             self.ItemEquipped = 2
         elif self.ItemLocation in SlotList['Armor']:
+            self.ItemLevel = '51'
             for key, value in ItemTypes.items():
                 if self.ItemLocation == key:
                     self.ItemType = ItemTypes[key][self.ItemRealm][0]
             self.ItemEquipped = 2
         elif self.ItemLocation in SlotList['Weapons']:
+            self.ItemLevel = '51'
             for key, value in ItemTypes.items():
                 if self.ItemLocation == key:
                     self.ItemType = ItemTypes[key][self.ItemRealm][0]
             self.ItemEquipped = 0
         elif self.ItemLocation in SlotList['Mythical']:
+            self.ItemLevel = '50'
             for key, value in ItemTypes.items():
                 if self.ItemLocation in SlotList['Mythical'] == value:
                     self.ItemType = ItemTypes[key][0]
