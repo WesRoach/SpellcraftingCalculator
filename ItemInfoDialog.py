@@ -45,7 +45,6 @@ class ItemInformationDialog(QDialog, Ui_ItemInfoDialog):
         # VALUES BASED ON THE FONT BEING USED ...
         testFont = QFontMetrics(self.font())
 
-        # TODO: NEED TO SET SOME SIZES FOR THE DIALOG
         width = testFont.size(Qt.TextSingleLine, "Type:", tabArray = None).width()
         self.ItemInfoGroup.layout().setColumnMinimumWidth(0, width)
 
