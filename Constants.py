@@ -4,7 +4,19 @@ from Character import *
 from TupleTwo import *
 from DictionaryTwo import *
 
-__all__ = []
+__all__ = [
+    'Cap',
+    'CraftedTypeList',
+    'CraftedEffectList',
+    'CraftedValuesList',
+    'DropTypeList',
+    'DropEffectList',
+    'EnhancedTypeList',
+    'EnhancedEffectList',
+    'EnhancedValuesList',
+    'MythicalCap',
+    'SlotList'
+]
 
 UnusedList = t2()
 UnusedTable = d2({})
@@ -229,9 +241,9 @@ StatTable = dict(StatTableOrdered)
 for (key, value) in list(StatTable.items()):
     StatTable[key] = (value, suffix, GemDusts[suffix], GemLiquids[value],)
 
-CraftStatList = t2([x[0] for x in StatTableOrdered])
-CraftStatTable = d2(StatTable)
-DropStatList = t2(CraftStatList + ('Acuity',))
+CraftedStatList = t2([x[0] for x in StatTableOrdered])
+CraftedStatTable = d2(StatTable)
+DropStatList = t2(CraftedStatList + ('Acuity',))
 DropStatTable = dict().fromkeys(DropStatList)
 
 del StatTableOrdered
@@ -298,9 +310,9 @@ ResistTable = dict(ResistTableOrdered)
 for (key, value) in list(ResistTable.items()):
     ResistTable[key] = (value, suffix, GemDusts[suffix], GemLiquids[value])
 
-CraftResistTable = d2(ResistTable)
-CraftResistList = t2([x[0] for x in ResistTableOrdered])
-DropResistList = t2(CraftResistList + ('Essence',))
+CraftedResistTable = d2(ResistTable)
+CraftedResistList = t2([x[0] for x in ResistTableOrdered])
+DropResistList = t2(CraftedResistList + ('Essence',))
 DropResistTable = dict().fromkeys(DropResistList)
 
 del ResistTableOrdered
@@ -707,79 +719,59 @@ PVEBonusList = t2((
 ))
 
 # =============================================== #
-#             EFFECT RELATED CONSTANTS            #
+#          EFFECT TYPE RELATED CONSTANTS          #
 # =============================================== #
 
-EffectTypeList = {
+CraftedTypeList = t2((
+    'Unused',
+    'Stat',
+    'Resist',
+    'Focus',
+    'Skill',
+))
 
-    'Craftable': (
-        'Unused',
-        'Stat',
-        'Resist',
-        'Focus',
-        'Skill',
-    ),
+EnhancedTypeList = t2((
+    'Unused',
+    'Focus',
+    'Skill',
+    'Stat',
+    'Cap Increase',
+    'PvE Bonus',
+    'Other Bonus',
+))
 
-    'Enhanced': (
-        'Unused',
-        'Focus',
-        'Skill',
-        'Stat',
-        'Cap Increase',
-        'PvE Bonus',
-        'Other Bonus',
-    ),
+DropTypeList = t2((
+    'Unused',
+    'Stat',
+    'Resist',
+    'Focus',
+    'Skill',
+    'Cap Increase',
+    'Mythical Cap Increase',
+    'Mythical Bonus',
+    'PvE Bonus',
+    'Other Bonus',
+))
 
-    'Dropped': (
-        'Unused',
-        'Stat',
-        'Resist',
-        'Focus',
-        'Skill',
-        'Cap Increase',
-        'Mythical Cap Increase',
-        'Mythical Bonus',
-        'PvE Bonus',
-        'Other Bonus',
-    )}
+# =============================================== #
+#             EFFECT RELATED CONSTANTS            #
+# =============================================== #
 
 CraftedEffectTable = {
 
     'All': {
         'Unused': UnusedTable,
-        'Stat': CraftStatTable,
-        'Resist': CraftResistTable,
+        'Stat': CraftedStatTable,
+        'Resist': CraftedResistTable,
     }, }
 
 CraftedEffectList = {
 
     'All': {
         'Unused': UnusedList,
-        'Stat': CraftStatList,
-        'Resist': CraftResistList,
+        'Stat': CraftedStatList,
+        'Resist': CraftedResistList,
     }, }
-
-CraftedValuesList = d2({
-
-        'Unused': UnusedValues,
-
-        'Stat': d2({
-            'Strength': StatValues,
-            'Constitution': StatValues,
-            'Dexterity': StatValues,
-            'Quickness': StatValues,
-            'Intelligence': StatValues,
-            'Piety': StatValues,
-            'Empathy': StatValues,
-            'Charisma': StatValues,
-            'Hits': HitsValues,
-            'Power': PowerValues,
-        }),
-
-        'Resist': ResistValues,
-        'Focus': FocusValues,
-        'Skill': SkillValues,
-    })
 
 EnhancedEffectList = {
 
@@ -837,6 +829,68 @@ EnhancedEffectList = {
         ),
     }}
 
+DropEffectList = {
+
+    'All': {
+        'Unused': UnusedList,
+        'Resist': DropResistList,
+        'Stat': DropStatList,
+        'Cap Increase': CapList,
+        'Mythical Cap Increase': MythicalCapList,
+        'Mythical Bonus': MythicalBonusList,
+        'PvE Bonus': PVEBonusList,
+        'Other Bonus': OtherBonusList,
+    }}
+
+for realm in Realms:
+    CraftedEffectTable[realm] = {}
+    CraftedEffectTable[realm].update(CraftedEffectTable['All'])
+    CraftedEffectList[realm] = {}
+    CraftedEffectList[realm].update(CraftedEffectList['All'])
+    DropEffectList[realm] = {}
+    DropEffectList[realm].update(DropEffectList['All'])
+
+for realm in list(CraftedEffectTable.keys()):
+    CraftedEffectTable[realm]['Focus'] = FocusTable[realm]
+    CraftedEffectTable[realm]['Skill'] = SkillTable[realm]
+    CraftedEffectTable[realm] = d2(CraftedEffectTable[realm])
+    CraftedEffectList[realm]['Focus'] = FocusList[realm]
+    CraftedEffectList[realm]['Skill'] = CraftSkillList[realm]
+    CraftedEffectList[realm] = d2(CraftedEffectList[realm])
+    DropEffectList[realm]['Focus'] = FocusList[realm]
+    DropEffectList[realm]['Skill'] = DropSkillList[realm]
+    DropEffectList[realm] = d2(DropEffectList[realm])
+
+CraftedEffectTable = d2(CraftedEffectTable)
+CraftedEffectList = d2(CraftedEffectList)
+DropEffectList = d2(DropEffectList)
+
+# =============================================== #
+#          EFFECT VALUE RELATED CONSTANTS         #
+# =============================================== #
+
+CraftedValuesList = d2({
+
+        'Unused': UnusedValues,
+
+        'Stat': d2({
+            'Strength': StatValues,
+            'Constitution': StatValues,
+            'Dexterity': StatValues,
+            'Quickness': StatValues,
+            'Intelligence': StatValues,
+            'Piety': StatValues,
+            'Empathy': StatValues,
+            'Charisma': StatValues,
+            'Hits': HitsValues,
+            'Power': PowerValues,
+        }),
+
+        'Resist': ResistValues,
+        'Focus': FocusValues,
+        'Skill': SkillValues,
+    })
+
 EnhancedValuesList = {
 
     'Unused': UnusedValues,
@@ -879,42 +933,6 @@ EnhancedValuesList = {
         'Healing Effectiveness': ('5',),
         'Stat Buff Effectiveness': ('5',),
     }}
-
-DropEffectList = {
-
-    'All': {
-        'Unused': UnusedList,
-        'Resist': DropResistList,
-        'Stat': DropStatList,
-        'Cap Increase': CapList,
-        'Mythical Cap Increase': MythicalCapList,
-        'Mythical Bonus': MythicalBonusList,
-        'PvE Bonus': PVEBonusList,
-        'Other Bonus': OtherBonusList,
-    }}
-
-for realm in Realms:
-    CraftedEffectTable[realm] = {}
-    CraftedEffectTable[realm].update(CraftedEffectTable['All'])
-    CraftedEffectList[realm] = {}
-    CraftedEffectList[realm].update(CraftedEffectList['All'])
-    DropEffectList[realm] = {}
-    DropEffectList[realm].update(DropEffectList['All'])
-
-for realm in list(CraftedEffectTable.keys()):
-    CraftedEffectTable[realm]['Focus'] = FocusTable[realm]
-    CraftedEffectTable[realm]['Skill'] = SkillTable[realm]
-    CraftedEffectTable[realm] = d2(CraftedEffectTable[realm])
-    CraftedEffectList[realm]['Focus'] = FocusList[realm]
-    CraftedEffectList[realm]['Skill'] = CraftSkillList[realm]
-    CraftedEffectList[realm] = d2(CraftedEffectList[realm])
-    DropEffectList[realm]['Focus'] = FocusList[realm]
-    DropEffectList[realm]['Skill'] = DropSkillList[realm]
-    DropEffectList[realm] = d2(DropEffectList[realm])
-
-CraftedEffectTable = d2(CraftedEffectTable)
-CraftedEffectList = d2(CraftedEffectList)
-DropEffectList = d2(DropEffectList)
 
 # =============================================== #
 #             GAME RELATED CONSTANTS              #
