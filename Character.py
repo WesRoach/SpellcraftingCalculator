@@ -745,6 +745,8 @@ rangedTypes = d2({
     ),
 })
 
+
+# TODO: ELIMINATE SPARE
 spareTypes = (
     'Belt',
     'Cloak',

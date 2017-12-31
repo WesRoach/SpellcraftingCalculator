@@ -28,7 +28,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ToolBar = QToolBar("Crafting")
 
         self.DistanceToCap = QAction()
-        self.NonClassSkills = QAction()
+        self.UnusableSkills = QAction()
 
         self.EffectList = list()
         self.EffectTypeList = list()
@@ -88,10 +88,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.DistanceToCap.setChecked(True)
         self.ViewMenu.addAction(self.DistanceToCap)
 
-        self.NonClassSkills = QAction('Show Non-Class Skills', self)
-        self.NonClassSkills.setCheckable(True)
-        self.NonClassSkills.setChecked(False)
-        self.ViewMenu.addAction(self.NonClassSkills)
+        self.UnuseableSkills = QAction('Show Unusable Skills', self)
+        self.UnuseableSkills.setCheckable(True)
+        self.UnuseableSkills.setChecked(False)
+        self.ViewMenu.addAction(self.UnuseableSkills)
 
         self.menuBar().addMenu(self.FileMenu)
         self.menuBar().addMenu(self.EditMenu)
@@ -288,6 +288,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def initControls(self):
         self.DistanceToCap.triggered.connect(self.setDistanceToCap)
+        self.UnusableSkills.triggered.connect(self.setUnusableSkills)
         self.ItemInfoButton.clicked.connect(self.showItemInfoDialog)
         self.SlotListTreeView.itemClicked.connect(self.ItemSelected)
         self.SlotListTreeView.itemChanged.connect(self.ItemStateChanged)
@@ -374,8 +375,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         for index in range(0, item.getSlotCount()):
             self.EffectTypeChanged(item.getSlot(index).getEffectType(), index)
-            self.EffectChanged(item.getSlot(index).getEffect(), index)
-            self.EffectAmountChanged(item.getSlot(index).getEffectAmount(), index)
+            # self.EffectChanged(item.getSlot(index).getEffect(), index)
+            # self.EffectAmountChanged(item.getSlot(index).getEffectAmount(), index)
 
 # =============================================== #
 #        SUMMARIZER AND CALCULATOR METHODS        #
@@ -587,6 +588,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # DEBUGGING
         print('setDistanceToCap')
 
+    def setUnusableSkills(self):
+        self.RestoreItem(self.ItemAttributeList[self.CurrentItemLabel])
+
+        # DEBUGGING
+        print('setNonClassSkills')
+
     def CharacterRealmChanged(self):
         Realm = self.CharacterRealm.currentText()
         self.CharacterClass.clear()
@@ -650,52 +657,95 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # DEBUGGING
         print('ItemLevelChanged')
 
-    def EffectTypeChanged(self, value = None, index = -1):
+    def EffectTypeChanged(self, etype = None, index = -1):
         if index == -1: index = self.getSignalSlot()
         item = self.ItemAttributeList[self.CurrentItemLabel]
-        item.getSlot(index).setEffectType(value)
+        item.getSlot(index).setEffectType(etype)
         self.EffectType[index].clear()
 
-        if self.EffectType[index].currentIndex() == -1:
-            if item.getSlot(index).getSlotType() == 'Craftable':
-                self.EffectType[index].insertItems(0, CraftedTypeList)
-            elif item.getSlot(index).getSlotType() == 'Enhanced':
-                self.EffectType[index].insertItems(0, EnhancedTypeList)
-            elif item.getSlot(index).getSlotType() == 'Dropped':
-                self.EffectType[index].insertItems(0, DropTypeList)
-        self.EffectType[index].setCurrentText(value)
+        if item.getSlot(index).getSlotType() == 'Craftable':
+            self.EffectType[index].insertItems(0, CraftedTypeList)
+        elif item.getSlot(index).getSlotType() == 'Enhanced':
+            self.EffectType[index].insertItems(0, EnhancedTypeList)
+        elif item.getSlot(index).getSlotType() == 'Dropped':
+            self.EffectType[index].insertItems(0, DropTypeList)
+
+        if item.ItemLocation not in ('Two-Handed', 'Spare'):
+            self.EffectType[index].removeItem(self.EffectType[index].findText('Focus'))
+
+        self.EffectType[index].setCurrentText(etype)
+        item.getSlot(index).setEffectType(etype)
 
         # CASCADE THE CHANGES ...
         self.EffectChanged(item.getSlot(index).getEffect(), index)
 
         # DEBUGGING
-        print('EffectTypeChanged, Value = ' + str(value))
+        print('EffectTypeChanged, EffectType = ' + str(etype))
 
-    def EffectChanged(self, value = None, index = -1):
+    def EffectChanged(self, effect = None, index = -1):
         if index == -1: index = self.getSignalSlot()
         item = self.ItemAttributeList[self.CurrentItemLabel]
-        item.getSlot(index).setEffect(value)
+        item.getSlot(index).setEffect(effect)
         self.Effect[index].clear()
 
+        effectType = item.getSlot(index).getEffectType()
         if item.getSlot(index).getSlotType() == 'Craftable':
-            pass
+            if effectType == 'Skill' and not self.UnusableSkills.isChecked():
+                self.Effect[index].insertItems(0, AllBonusList['All'][self.CurrentClass]['All Skills'])
+            else:
+                self.Effect[index].insertItems(0, CraftedEffectList[self.CurrentRealm][effectType])
         elif item.getSlot(index).getSlotType() == 'Enhanced':
-            pass
+            self.Effect[index].insertItems(0, EnhancedEffectList['All'][effectType])
         elif item.getSlot(index).getSlotType() == 'Dropped':
-            pass
+            self.Effect[index].insertItems(0, DropEffectList[self.CurrentRealm][effectType])
+
+        if self.Effect[index].findText(effect) == -1:
+            effect = self.Effect[index].currentText()
+        self.Effect[index].setCurrentText(effect)
+        item.getSlot(index).setEffect(effect)
+
+        # CASCADE THE CHANGES ...
+        self.EffectAmountChanged(item.getSlot(index).getEffectAmount(), index)
 
         # DEBUGGING
-        print('EffectChanged, Value = ' + str(value))
+        print('EffectChanged, Effect = ' + str(effect))
 
     def EffectAmountChanged(self, amount = None, index = -1):
+        if index == -1: index = self.getSignalSlot()
+        item = self.ItemAttributeList[self.CurrentItemLabel]
+        item.getSlot(index).setEffectAmount(amount)
+
+        valuesList = list()
+        if item.ActiveState == 'Crafted':
+            if item.getSlot(index).getEffect()[0:5] == 'All M':
+                valuesList = CraftedValuesList[item.getSlot(index).getEffectType()][:1]
+            elif item.getSlot(index).getSlotType() == 'Craftable':
+                valuesList = CraftedValuesList[item.getSlot(index).getEffectType()]
+            if item.getSlot(index).getSlotType() == 'Enhanced':
+                valuesList = EnhancedValuesList[item.getSlot(index).getEffectType()]
+            if isinstance(valuesList, dict):
+                valuesList = valuesList[item.getSlot(index).getEffect()]
+            self.AmountStatic[index].clear()
+            self.AmountStatic[index].insertItems(0, valuesList)
+
+            if self.AmountStatic[index].findText(amount) == -1:
+                amount = self.AmountStatic[index].currentText()
+            self.AmountStatic[index].setCurrentText(amount)
+            item.getSlot(index).setEffectAmount(amount)
+
+        elif item.ActiveState == 'Dropped':
+            if item.getSlot(index).getEffectType() == 'Unused':
+                self.AmountEdit[index].clear()
+                item.getSlot(index).setEffectAmount(amount)
+
+        # CASCADE THE CHANGES ...
+        self.EffectRequirementChanged(index)
 
         # DEBUGGING
         print('EffectAmountChanged, Amount = ' + str(amount))
 
     def EffectRequirementChanged(self, index = -1):
-        if index == -1:
-            index = self.getSignalSlot()
-
+        if index == -1: index = self.getSignalSlot()
         item = self.ItemAttributeList[self.CurrentItemLabel]
         if item.getSlot(index).getEffectType() == 'Unused':
             self.Requirement[index].setText('')
