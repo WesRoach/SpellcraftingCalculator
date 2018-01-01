@@ -660,7 +660,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def EffectTypeChanged(self, etype = None, index = -1):
         if index == -1: index = self.getSignalSlot()
         item = self.ItemAttributeList[self.CurrentItemLabel]
-        item.getSlot(index).setEffectType(etype)
         self.EffectType[index].clear()
 
         if item.getSlot(index).getSlotType() == 'Craftable':
@@ -685,7 +684,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def EffectChanged(self, effect = None, index = -1):
         if index == -1: index = self.getSignalSlot()
         item = self.ItemAttributeList[self.CurrentItemLabel]
-        item.getSlot(index).setEffect(effect)
         self.Effect[index].clear()
 
         effectType = item.getSlot(index).getEffectType()
@@ -713,7 +711,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def EffectAmountChanged(self, amount = None, index = -1):
         if index == -1: index = self.getSignalSlot()
         item = self.ItemAttributeList[self.CurrentItemLabel]
-        item.getSlot(index).setEffectAmount(amount)
 
         valuesList = list()
         if item.ActiveState == 'Crafted':
@@ -734,12 +731,16 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             item.getSlot(index).setEffectAmount(amount)
 
         elif item.ActiveState == 'Dropped':
+            amount = self.AmountEdit[index].text()
             if item.getSlot(index).getEffectType() == 'Unused':
-                self.AmountEdit[index].clear()
-                item.getSlot(index).setEffectAmount(amount)
+                amount = None
+            self.AmountEdit[index].setText(amount)
+            item.getSlot(index).setEffectAmount(amount)
+            self.AmountEdit[index].setModified(False)
 
         # CASCADE THE CHANGES ...
         self.EffectRequirementChanged(index)
+        self.calculate()
 
         # DEBUGGING
         print('EffectAmountChanged, Amount = ' + str(amount))
