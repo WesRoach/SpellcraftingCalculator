@@ -588,7 +588,7 @@ SkillValues = t2((
 #              CAP RELATED CONSTANTS              #
 # =============================================== #
 
-CapList = t2((
+StatCapList = t2((
     'Strength',
     'Constitution',
     'Dexterity',
@@ -601,16 +601,24 @@ CapList = t2((
     'Fatigue',
 ))
 
-MythicalCapList = t2((
+MythicalStatCapList = t2((
     'Strength',
     'Constitution',
     'Dexterity',
     'Quickness',
-    'Intelligence',
-    'Piety',
-    'Charisma',
-    'Empathy',
     'Acuity',
+))
+
+MythicalResistCapList = t2((
+    'Body',
+    'Cold',
+    'Heat',
+    'Energy',
+    'Matter',
+    'Spirit',
+    'Crush',
+    'Thrust',
+    'Slash',
 ))
 
 # CALCULATED AS % OF LEVEL + CONSTANT
@@ -747,7 +755,8 @@ DropTypeList = t2((
     'Focus',
     'Skill',
     'Cap Increase',
-    'Mythical Cap Increase',
+    'Mythical Stat Cap',
+    'Mythical Resist Cap',
     'Mythical Bonus',
     'PvE Bonus',
     'Other Bonus',
@@ -835,8 +844,9 @@ DropEffectList = {
         'Unused': UnusedList,
         'Resist': DropResistList,
         'Stat': DropStatList,
-        'Cap Increase': CapList,
-        'Mythical Cap Increase': MythicalCapList,
+        'Cap Increase': StatCapList,
+        'Mythical Stat Cap': MythicalStatCapList,
+        'Mythical Resist Cap': MythicalResistCapList,
         'Mythical Bonus': MythicalBonusList,
         'PvE Bonus': PVEBonusList,
         'Other Bonus': OtherBonusList,
