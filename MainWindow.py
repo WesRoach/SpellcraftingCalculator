@@ -10,6 +10,7 @@ from Constants import Cap,  CraftedTypeList, CraftedEffectList, CraftedValuesLis
 from Constants import EnhancedTypeList, EnhancedEffectList, EnhancedValuesList, MythicalCap, SlotList
 from Item import Item
 from ItemInfoDialog import ItemInformationDialog
+import re
 
 Ui_MainWindow = uic.loadUiType(r'interface/MainWindow.ui')[0]
 
@@ -431,13 +432,64 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             Total['Stats'][effect]['Base'] = int(Level * Base[0]) + Base[1]
             Total['Stats'][effect]['BaseCap'] = int(Level * BaseCap[0]) + BaseCap[1]
 
-            if effect in DropEffectList['All']['Mythical Cap Increase']:
+            if effect in DropEffectList['All']['Mythical Stat Cap']:
                 BaseMythicalCap = MythicalCap['Stat Cap']
                 Total['Stats'][effect]['BaseMythicalCap'] = int(Level * BaseMythicalCap[0]) + BaseMythicalCap[1]
 
             if effect in MythicalCap:
                 BaseMythicalCap = MythicalCap[effect]
                 Total['Stats'][effect]['BaseMythicalCap'] = int(Level * BaseMythicalCap[0]) + BaseMythicalCap[1]
+
+        for key, item in self.ItemAttributeList.items():
+
+            # DEBUGGING
+            amounts = ''
+
+            # TODO: DOES NOT CLEAR ON STATE CHANGE
+            if not item.ItemEquipped == 2:
+                continue
+
+            for index in range(0, item.getSlotCount()):
+                effectAmount = int('0' + re.sub('[^\d]', '', item.getSlot(index).getEffectAmount()))
+
+                if item.getSlot(index).getEffectType() == 'Stat':
+                    pass
+
+                elif item.getSlot(index).getEffectType() == 'Resist':
+                    amounts = Total['Resists'][item.getSlot(index).getEffect()]
+                    amounts['TotalBonus'] += effectAmount
+                    amounts['Bonus'] = min(amounts['TotalBonus'], amounts['Base'])
+
+                elif item.getSlot(index).getEffectType() == 'Focus':
+                    pass
+
+                elif item.getSlot(index).getEffectType() == 'Skill':
+                    pass
+
+                elif item.getSlot(index).getEffectType() == 'Cap Increase':
+                    pass
+
+                elif item.getSlot(index).getEffectType() == 'Mythical Stat Cap':
+                    pass
+
+                elif item.getSlot(index).getEffectType() == 'Mythical Resist Cap':
+                    pass
+
+                elif item.getSlot(index).getEffectType() == 'Mythical Bonus':
+                    pass
+
+                elif item.getSlot(index).getEffectType() == 'PVE Bonus':
+                    pass
+
+                elif item.getSlot(index).getEffectType() == 'Other Bonus':
+                    pass
+
+            # DEBUGGING
+            if not amounts == '':
+                print(amounts)
+
+        # DEBUGGING
+        print('summerize')
 
         return Total
 
@@ -533,6 +585,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
                 if BaseMythicalCap == 0:
                     self.StatMythicalCap[key].setText('--  ')
+
+        # DEBUGGING
+        print('calculate')
 
 # =============================================== #
 #       MISCELLANEOUS METHODS AND FUNCTIONS       #
@@ -731,11 +786,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             item.getSlot(index).setEffectAmount(amount)
 
         elif item.ActiveState == 'Dropped':
-            amount = self.AmountEdit[index].text()
             if item.getSlot(index).getEffectType() == 'Unused':
-                amount = None
-            self.AmountEdit[index].setText(amount)
-            item.getSlot(index).setEffectAmount(amount)
+                self.AmountEdit[index].setText('')
+                item.getSlot(index).setEffectAmount('')
+            item.getSlot(index).setEffectAmount(self.AmountEdit[index].text())
+            self.AmountEdit[index].setText(self.AmountEdit[index].text())
             self.AmountEdit[index].setModified(False)
 
         # CASCADE THE CHANGES ...
@@ -750,6 +805,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         item = self.ItemAttributeList[self.CurrentItemLabel]
         if item.getSlot(index).getEffectType() == 'Unused':
             self.Requirement[index].setText('')
+            item.getSlot(index).setEffectRequirement('')
         item.getSlot(index).setEffectRequirement(self.Requirement[index].text())
         self.Requirement[index].setText(self.Requirement[index].text())
         self.Requirement[index].setModified(False)
