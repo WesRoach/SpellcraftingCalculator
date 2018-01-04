@@ -206,6 +206,13 @@ class ItemInformationDialog(QDialog, Ui_ItemInfoDialog):
 #              SLOT/SIGNAL METHODS                #
 # =============================================== #
 
+    def mousePressEvent(self, event):
+        focusedWidget = self.focusWidget()
+        try:  # NOT ALL WIDGETS HAVE 'clearFocus()'
+            focusedWidget.clearFocus()
+        except AttributeError:
+            pass
+
     def ItemRealmChanged(self):
         item = self.CurrentItem
         item.ItemRealm = self.ItemRealm.currentText()
