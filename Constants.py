@@ -598,6 +598,8 @@ StatCapList = t2((
     'Charisma',
     'Empathy',
     'Power',
+    'Hits',
+    'Acuity',
     'Fatigue',
 ))
 
