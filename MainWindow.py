@@ -4,7 +4,7 @@ from PyQt5 import uic
 from PyQt5.Qt import QAction, Qt, QKeySequence
 from PyQt5.QtCore import QSize
 from PyQt5.QtGui import QFont, QFontMetrics, QIcon, QIntValidator
-from PyQt5.QtWidgets import QLabel, QMainWindow, QMenu, QToolBar, QTreeWidgetItem, QTreeWidgetItemIterator, QStyle, QStyleOptionComboBox
+from PyQt5.QtWidgets import QApplication, QLabel, QMainWindow, QMenu, QToolBar, QTreeWidgetItem, QTreeWidgetItemIterator, QStyle, QStyleOptionComboBox
 from Character import AllBonusList, ClassList, Races, Realms
 from Constants import Cap,  CraftedTypeList, CraftedEffectList, CraftedValuesList, DropTypeList, DropEffectList
 from Constants import EnhancedTypeList, EnhancedEffectList, EnhancedValuesList, MythicalCap, SlotList
@@ -64,7 +64,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.CurrentRealm = ''
         self.CurrentClass = ''
         self.CurrentRace = ''
-        self.CurrentItemLabel = {}
+        self.CurrentItemLabel = ''
 
         self.initMenuBar()
         self.initToolBar()
@@ -127,7 +127,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         effectTypeWidth = self.setMinimumWidth(['Mythical Cap Increase'])
         amountEditWidth = self.setMinimumWidth(['100'])
         amountStaticWidth = self.setMinimumWidth(['100'])
-        treeViewWidth = self.ConfigurationGroup.sizeHint().width()
+        # treeViewWidth = self.ConfigurationGroup.sizeHint().width()
 
         self.CharacterName.setFixedSize(QSize(defaultFixedWidth, defaultFixedHeight))
         self.CharacterRealm.setFixedSize(QSize(defaultFixedWidth, defaultFixedHeight))
@@ -153,7 +153,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.StatsGroup.layout().setColumnMinimumWidth(1, width)
         width = testFont.size(Qt.TextSingleLine, "(400)", tabArray = None).width()
         self.StatsGroup.layout().setColumnMinimumWidth(2, width)
-        width = testFont.size(Qt.TextSingleLine, "(26)", tabArray = None).width()
+        width = testFont.size(Qt.TextSingleLine, "(-26)", tabArray = None).width()
         self.StatsGroup.layout().setColumnMinimumWidth(3, width)
 
         for resist in (DropEffectList['All']['Resist']):
@@ -170,7 +170,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ResistGroup.layout().setColumnMinimumWidth(0, width)
         width = testFont.size(Qt.TextSingleLine, "26", tabArray = None).width()
         self.ResistGroup.layout().setColumnMinimumWidth(1, width)
-        width = testFont.size(Qt.TextSingleLine, "(15)", tabArray = None).width()
+        width = testFont.size(Qt.TextSingleLine, "(-15)", tabArray = None).width()
         self.ResistGroup.layout().setColumnMinimumWidth(2, width)
         width = testFont.size(Qt.TextSingleLine, "+5", tabArray = None).width()
         self.ResistGroup.layout().setColumnMinimumWidth(3, width)
@@ -436,6 +436,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 BaseMythicalCap = MythicalCap['Stat Cap']
                 Total['Stats'][effect]['BaseMythicalCap'] = int(Level * BaseMythicalCap[0]) + BaseMythicalCap[1]
 
+            if effect == 'Acuity':
+                BaseMythicalCap = MythicalCap['Stat Cap']
+                for value in AllBonusList[self.CurrentRealm][self.CurrentClass][effect]:
+                    Total['Stats'][value]['BaseMythicalCap'] = int(Level * BaseMythicalCap[0]) + BaseMythicalCap[1]
+
             if effect in MythicalCap:
                 BaseMythicalCap = MythicalCap[effect]
                 Total['Stats'][effect]['BaseMythicalCap'] = int(Level * BaseMythicalCap[0]) + BaseMythicalCap[1]
@@ -443,22 +448,30 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         for key, item in self.ItemAttributeList.items():
 
             # DEBUGGING
-            amounts = ''
+            amts = ''
 
-            # TODO: DOES NOT CLEAR ON STATE CHANGE
             if not item.ItemEquipped == 2:
                 continue
 
             for index in range(0, item.getSlotCount()):
-                effectAmount = int('0' + re.sub('[^\d]', '', item.getSlot(index).getEffectAmount()))
+                effect = item.getSlot(index).getEffect()
+                amount = int('0' + re.sub('[^\d]', '', item.getSlot(index).getEffectAmount()))
 
                 if item.getSlot(index).getEffectType() == 'Stat':
-                    pass
+                    effects = [effect, ]
+
+                    if effect == 'Acuity':
+                        effects.extend(AllBonusList[self.CurrentRealm][self.CurrentClass][effect])
+
+                    for effect in effects:
+                        amts = Total['Stats'][effect]
+                        amts['TotalBonus'] += amount
+                        amts['Bonus'] = min(amts['TotalBonus'], amts['Base'] + amts['CapBonus'])
 
                 elif item.getSlot(index).getEffectType() == 'Resist':
-                    amounts = Total['Resists'][item.getSlot(index).getEffect()]
-                    amounts['TotalBonus'] += effectAmount
-                    amounts['Bonus'] = min(amounts['TotalBonus'], amounts['Base'])
+                    amts = Total['Resists'][item.getSlot(index).getEffect()]
+                    amts['TotalBonus'] += amount
+                    amts['Bonus'] = min(amts['TotalBonus'], amts['Base'] + amts['MythicalCapBonus'])
 
                 elif item.getSlot(index).getEffectType() == 'Focus':
                     pass
@@ -467,13 +480,42 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     pass
 
                 elif item.getSlot(index).getEffectType() == 'Cap Increase':
-                    pass
+                    effects = [effect, ]
+
+                    if effect == 'Power':
+                        effects.append('% Power Pool')
+
+                    elif effect == 'Acuity':
+                        effects.extend(AllBonusList[self.CurrentRealm][self.CurrentClass][effect])
+
+                    for effect in effects:
+                        amts = Total['Stats'][effect]
+                        amts['TotalCapBonus'] += amount
+                        amts['CapBonus'] = min(amts['TotalCapBonus'], amts['BaseCap'])
 
                 elif item.getSlot(index).getEffectType() == 'Mythical Stat Cap':
-                    pass
+                    effects = [effect, ]
+
+                    if effect == 'Acuity':
+                        effects.extend(AllBonusList[self.CurrentRealm][self.CurrentClass][effect])
+
+                    for effect in effects:
+                        amts = Total['Stats'][effect]
+                        if amts['TotalCapBonus'] < amts['BaseCap']:
+                            amts['TotalCapBonus'] += amount
+                            if amts['TotalCapBonus'] > amts['BaseCap']:
+                                amountOverCapLimit = amts['TotalCapBonus'] - amts['BaseCap']
+                                amts['TotalMythicalCapBonus'] += amountOverCapLimit
+                                amts['TotalCapBonus'] = amts['TotalCapBonus'] - amountOverCapLimit
+                                print('Amount Over Cap Limit = ' + str(amountOverCapLimit))
+                        else:
+                            amts['TotalMythicalCapBonus'] += amount
+                        amts['MythicalCapBonus'] = min(amts['TotalMythicalCapBonus'], amts['BaseMythicalCap'])
 
                 elif item.getSlot(index).getEffectType() == 'Mythical Resist Cap':
-                    pass
+                    amts = Total['Resists'][item.getSlot(index).getEffect()]
+                    amts['TotalMythicalCapBonus'] += amount
+                    amts['MythicalCapBonus'] = min(amts['TotalMythicalCapBonus'], amts['BaseMythicalCap'])
 
                 elif item.getSlot(index).getEffectType() == 'Mythical Bonus':
                     pass
@@ -485,8 +527,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     pass
 
             # DEBUGGING
-            if not amounts == '':
-                print(amounts)
+            if not amts == '':
+                print(amts)
 
         # DEBUGGING
         print('summerize')
@@ -498,15 +540,15 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         Class = str(self.CharacterClass.currentText())
         Total = self.summarize()
 
-        for key, amounts in list(Total['Resists'].items()):
-            Base = amounts['Base']
-            TotalBonus = amounts['TotalBonus']
-            BaseMythicalCap = amounts['BaseMythicalCap']
-            TotalMythicalCapBonus = amounts['TotalMythicalCapBonus']
+        for key, amts in list(Total['Resists'].items()):
+            Base = amts['Base'] + amts['MythicalCapBonus']
+            TotalBonus = amts['TotalBonus']
+            BaseMythicalCap = amts['BaseMythicalCap']
+            TotalMythicalCapBonus = amts['TotalMythicalCapBonus']
 
             if not self.DistanceToCap.isChecked():
-                self.StatValue[key].setText(str(amounts['TotalBonus']))
-                self.StatMythicalCap[key].setText('(' + str(amounts['TotalMythicalCapBonus']) + ')')
+                self.StatValue[key].setText(str(amts['TotalBonus']))
+                self.StatMythicalCap[key].setText('(' + str(amts['TotalMythicalCapBonus']) + ')')
 
             elif self.DistanceToCap.isChecked():
                 self.StatValue[key].setText(str(int(Base - TotalBonus)))
@@ -555,7 +597,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
             elif self.DistanceToCap.isChecked():
 
-                Base = datum['Base']
+                Base = datum['Base'] + datum['CapBonus'] + datum['MythicalCapBonus']
                 BaseCap = datum['BaseCap']
 
                 try:  # NOT ALL STATS HAVE MYTHICAL CAP ...
@@ -563,23 +605,16 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 except KeyError:
                     BaseMythicalCap = 0
 
-                if datum['TotalCapBonus'] > 0:
-                    TotalCapBonus = datum['TotalCapBonus']
+                TotalCapBonus = datum['TotalCapBonus']
+                TotalMythicalCapBonus = datum['TotalMythicalCapBonus']
 
-                if datum['TotalMythicalCapBonus'] > 0:
-                    TotalMythicalCapBonus = datum['TotalMythicalCapBonus']
+                # if TotalCapBonus > BaseCap:
+                #     TotalCapBonus = BaseCap
 
-                else:
-                    TotalCapBonus = 0
-                    TotalMythicalCapBonus = 0
+                # if TotalMythicalCapBonus > BaseMythicalCap:
+                #    TotalMythicalCapBonus = BaseMythicalCap
 
-                if TotalCapBonus > BaseCap:
-                    TotalCapBonus = BaseCap
-
-                if TotalMythicalCapBonus > BaseMythicalCap:
-                    TotalMythicalCapBonus = BaseMythicalCap
-
-                self.StatValue[key].setText(str(int(Base + TotalCapBonus) - TotalBonus))
+                self.StatValue[key].setText(str(int(Base - TotalBonus)))
                 self.StatCap[key].setText('(' + str(int(BaseCap - TotalCapBonus)) + ')')
                 self.StatMythicalCap[key].setText('(' + str(int(BaseMythicalCap - TotalMythicalCapBonus)) + ')')
 
@@ -637,6 +672,16 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 #              SLOT/SIGNAL METHODS                #
 # =============================================== #
 
+    def mousePressEvent(self, event):
+        focusedWidget = self.focusWidget()
+        try:  # NOT ALL WIDGETS HAVE 'clearFocus()'
+            focusedWidget.clearFocus()
+        except AttributeError:
+            pass
+
+        # DEBUGGING
+        print('mousePressEvent')
+
     def setDistanceToCap(self):
         self.calculate()
 
@@ -653,8 +698,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         Realm = self.CharacterRealm.currentText()
         self.CharacterClass.clear()
         self.CharacterClass.insertItems(0, ClassList[Realm])
-        self.CharacterClassChanged()
         self.CurrentRealm = Realm
+        self.CharacterClassChanged()
 
         # DEBUGGING
         print('CharacterRealmChanged')
@@ -666,6 +711,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.CharacterRace.insertItems(0, AllBonusList[Realm][Class]['Races'])
         self.CharacterRaceChanged()
         self.CurrentClass = Class
+
+        if self.CurrentItemLabel != '':
+            print(self.CurrentItemLabel)
+            self.RestoreItem(self.ItemAttributeList[self.CurrentItemLabel])
         self.calculate()
 
         # DEBUGGING
@@ -696,10 +745,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         print('ItemSelected')
 
     def ItemStateChanged(self, selection, column):
-        for key, value in SlotList.items():
-            for val in value:
-                if selection.text(column) == val:
-                    self.ItemAttributeList[selection.text(column)].ItemEquipped = selection.checkState(column)
+        self.ItemAttributeList[selection.text(column)].ItemEquipped = selection.checkState(column)
+        self.RestoreItem(self.ItemAttributeList[selection.text(column)])
 
         # DEBUGGING
         print('ItemStateChanged')

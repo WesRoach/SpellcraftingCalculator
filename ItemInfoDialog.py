@@ -201,6 +201,8 @@ class ItemInformationDialog(QDialog, Ui_ItemInfoDialog):
                     self.ItemRestrictionList.item(index).setCheckState(Qt.Checked)
                 if self.ItemRestrictionList.item(index).text() not in ClassList[item.ItemRealm]:
                     self.ItemRestrictionList.item(index).setCheckState(Qt.Unchecked)
+                if self.ItemRestrictionList.item(index).text() == 'All':
+                    self.ItemRestrictionList.item(index).setCheckState(Qt.Checked)
 
 # =============================================== #
 #              SLOT/SIGNAL METHODS                #
