@@ -540,20 +540,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         Class = str(self.CharacterClass.currentText())
         Total = self.summarize()
 
-        for key, amts in list(Total['Resists'].items()):
-            Base = amts['Base'] + amts['MythicalCapBonus']
-            TotalBonus = amts['TotalBonus']
-            BaseMythicalCap = amts['BaseMythicalCap']
-            TotalMythicalCapBonus = amts['TotalMythicalCapBonus']
-
-            if not self.DistanceToCap.isChecked():
-                self.StatValue[key].setText(str(amts['TotalBonus']))
-                self.StatMythicalCap[key].setText('(' + str(amts['TotalMythicalCapBonus']) + ')')
-
-            elif self.DistanceToCap.isChecked():
-                self.StatValue[key].setText(str(int(Base - TotalBonus)))
-                self.StatMythicalCap[key].setText('(' + str(int(BaseMythicalCap - TotalMythicalCapBonus)) + ')')
-
         for (key, datum) in list(Total['Stats'].items()):
             Acuity = AllBonusList[Realm][Class]["Acuity"]
             TotalBonus = datum['TotalBonus']
@@ -621,6 +607,22 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 if BaseMythicalCap == 0:
                     self.StatMythicalCap[key].setText('--  ')
 
+        for key, amts in list(Total['Resists'].items()):
+            Base = amts['Base'] + amts['MythicalCapBonus']
+            TotalBonus = amts['TotalBonus']
+            BaseMythicalCap = amts['BaseMythicalCap']
+            TotalMythicalCapBonus = amts['TotalMythicalCapBonus']
+
+            if not self.DistanceToCap.isChecked():
+                self.StatValue[key].setText(str(amts['TotalBonus']))
+                self.StatMythicalCap[key].setText('(' + str(amts['TotalMythicalCapBonus']) + ')')
+
+            elif self.DistanceToCap.isChecked():
+                self.StatValue[key].setText(str(int(Base - TotalBonus)))
+                self.StatMythicalCap[key].setText('(' + str(int(BaseMythicalCap - TotalMythicalCapBonus)) + ')')
+
+        self.SkillsView.model().removeRows(0, self.SkillsView.model().rowCount())
+
         # DEBUGGING
         print('calculate')
 
@@ -654,6 +656,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if not index.isdigit(): index = index[-1:]
         return int(index)
 
+    def insertSkill(self, amount, bonus, group):
+        self.SkillsView.model().insertRows(self.SkillsView.model(), 1)
+
+        # DEBUGGING
+        print('insertSkill')
+
 # =============================================== #
 #       CONFIGURATION AND MATERIAL REPORTS        #
 # =============================================== #
@@ -673,9 +681,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 # =============================================== #
 
     def mousePressEvent(self, event):
-        focusedWidget = self.focusWidget()
-        try:  # NOT ALL WIDGETS HAVE 'clearFocus()'
-            focusedWidget.clearFocus()
+        try:  # NOT ALL WIDGETS HAVE 'clearFocus()' ...
+            self.focusWidget().clearFocus()
         except AttributeError:
             pass
 
