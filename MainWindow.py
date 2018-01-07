@@ -202,7 +202,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             'Dropped': [self.RequirementLabel]}
 
         self.ItemLevel.setFixedSize(QSize(amountEditWidth, defaultFixedHeight))
-        self.ItemNewButton.setFixedSize(QSize(buttonFixedWidth, buttonFixedHeight))
         self.ItemAddButton.setFixedSize(QSize(buttonFixedWidth, buttonFixedHeight))
         self.ItemChangeButton.setFixedSize(QSize(buttonFixedWidth, buttonFixedHeight))
         self.ItemDeleteButton.setFixedSize(QSize(buttonFixedWidth, buttonFixedHeight))

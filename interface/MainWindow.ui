@@ -1598,25 +1598,6 @@
                 </widget>
                </item>
                <item>
-                <widget class="QToolButton" name="ItemNewButton">
-                 <property name="enabled">
-                  <bool>true</bool>
-                 </property>
-                 <property name="sizePolicy">
-                  <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
-                 </property>
-                 <property name="text">
-                  <string>N</string>
-                 </property>
-                 <property name="popupMode">
-                  <enum>QToolButton::MenuButtonPopup</enum>
-                 </property>
-                </widget>
-               </item>
-               <item>
                 <widget class="QToolButton" name="ItemAddButton">
                  <property name="sizePolicy">
                   <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
@@ -2480,7 +2461,6 @@
   <tabstop>SlotListTreeView</tabstop>
   <tabstop>ItemLevel</tabstop>
   <tabstop>ItemName</tabstop>
-  <tabstop>ItemNewButton</tabstop>
   <tabstop>ItemAddButton</tabstop>
   <tabstop>ItemDeleteButton</tabstop>
   <tabstop>ItemInfoButton</tabstop>
