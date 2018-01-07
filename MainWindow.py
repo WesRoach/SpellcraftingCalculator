@@ -1024,3 +1024,18 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         # DEBUGGING
         print('EffectRequirementChanged')
+
+    def newItem(self):
+
+        # DEBUGGING
+        print('newItem')
+
+    def clearCurrentItem(self):
+
+        # DEBUGGING
+        print('clearCurrentItem')
+
+    def deleteCurrentItem(self):
+
+        # DEBUGGING
+        print('deleteCurrentItem')
