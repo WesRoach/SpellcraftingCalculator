@@ -636,12 +636,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         return Total
 
     def calculate(self):
-        Realm = str(self.CharacterRealm.currentText())
-        Class = str(self.CharacterClass.currentText())
         Total = self.summarize()
 
         for (key, datum) in list(Total['Stats'].items()):
-            Acuity = AllBonusList[Realm][Class]["Acuity"]
+            Acuity = AllBonusList[self.CurrentRealm][self.CurrentClass]["Acuity"]
             TotalBonus = datum['TotalBonus']
 
             if key == "Armor Factor":
@@ -651,14 +649,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 key = "PowerPool"
 
             if key[:5] == "Power":
-                Skills = AllBonusList[Realm][Class]["All Magic Skills"]
+                Skills = AllBonusList[self.CurrentRealm][self.CurrentClass]["All Magic Skills"]
                 self.showCharacterStat(key, (datum['TotalCapBonus'] > 0)
                               or (datum['TotalMythicalCapBonus'] > 0)
                               or (TotalBonus > 0)
                               or (len(Skills) > 0))
 
             elif key == "Fatigue":
-                Skills = AllBonusList[Realm][Class]["All Melee Weapon Skills"]
+                Skills = AllBonusList[self.CurrentRealm][self.CurrentClass]["All Melee Weapon Skills"]
                 self.showCharacterStat(key, (datum['TotalCapBonus'] > 0)
                               or (datum['TotalMythicalCapBonus'] > 0)
                               or (TotalBonus > 0)
@@ -889,7 +887,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     self.RestoreItem(self.ItemAttributeList[self.CurrentItemLabel])
 
         # DEBUGGING
-        print('ItemSelected')
+        print('ItemSelected' + ', Selection = ' + str(selection))
 
     def ItemStateChanged(self, selection, column):
         self.ItemAttributeList[selection.text(column)].ItemEquipped = selection.checkState(column)
@@ -993,7 +991,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.calculate()
 
         # DEBUGGING
-        print('EffectAmountChanged, Amount = ' + str(amount))
+        print('EffectAmountChanged, Amount = ' + str(amount) + ', Location = ' + str(self.CurrentItemLabel))
 
     def EffectRequirementChanged(self, index = -1):
         if index == -1: index = self.getSignalSlot()
