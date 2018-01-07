@@ -979,6 +979,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.AmountStatic[index].setCurrentText(amount)
             item.getSlot(index).setEffectAmount(amount)
 
+        # TODO: DOES NOT TRACK CORRECTLY
         elif item.ActiveState == 'Dropped':
             if item.getSlot(index).getEffectType() == 'Unused':
                 self.AmountEdit[index].setText('')
