@@ -127,7 +127,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         effectTypeWidth = self.setMinimumWidth(['Mythical Cap Increase'])
         amountEditWidth = self.setMinimumWidth(['100'])
         amountStaticWidth = self.setMinimumWidth(['100'])
-        # treeViewWidth = self.ConfigurationGroup.sizeHint().width()
 
         self.CharacterName.setFixedSize(QSize(defaultFixedWidth, defaultFixedHeight))
         self.CharacterRealm.setFixedSize(QSize(defaultFixedWidth, defaultFixedHeight))
