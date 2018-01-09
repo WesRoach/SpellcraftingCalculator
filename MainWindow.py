@@ -395,9 +395,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         }
 
         for effect in DropEffectList['All']['Stat'] + ('Armor Factor', 'Fatigue', '% Power Pool'):
-            if effect in Total['Stats']:
-                continue
-
             Total['Stats'][effect] = {}
             Total['Stats'][effect]['Bonus'] = 0
             Total['Stats'][effect]['TotalBonus'] = 0
@@ -431,9 +428,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 Total['Stats'][effect]['BaseMythicalCap'] = int(Level * BaseMythicalCap[0]) + BaseMythicalCap[1]
 
         for effect in DropEffectList['All']['Resist']:
-            if effect in Total['Resists']:
-                continue
-
             Total['Resists'][effect] = {}
             Total['Resists'][effect]['Bonus'] = 0
             Total['Resists'][effect]['TotalBonus'] = 0
@@ -450,9 +444,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             Total['Resists'][effect]['BaseMythicalCap'] = int(Level * BaseMythicalCap[0]) + BaseMythicalCap[1]
 
         for effect in DropEffectList['All']['Focus']:
-            if effect in Total['Focus']:
-                continue
-
             Total['Focus'][effect] = {}
             Total['Focus'][effect]['Bonus'] = 0
             Total['Focus'][effect]['TotalBonus'] = 0
@@ -461,9 +452,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             Total['Focus'][effect]['Base'] = int(Level * Base[0]) + Base[1]
 
         for effect in DropEffectList['All']['Skill']:
-            if effect in Total['Skills']:
-                continue
-
             Total['Skills'][effect] = {}
             Total['Skills'][effect]['Bonus'] = 0
             Total['Skills'][effect]['TotalBonus'] = 0
@@ -472,9 +460,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             Total['Skills'][effect]['Base'] = int(Level * Base[0]) + Base[1]
 
         for effect in DropEffectList['All']['Mythical Bonus']:
-            if effect in Total['MythicalBonuses']:
-                continue
-
             Total['MythicalBonuses'][effect] = {}
             Total['MythicalBonuses'][effect]['Bonus'] = 0
             Total['MythicalBonuses'][effect]['TotalBonus'] = 0
@@ -487,9 +472,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             Total['MythicalBonuses'][effect]['Base'] = int(Level * Base[0]) + Base[1]
 
         for effect in DropEffectList['All']['PvE Bonus']:
-            if effect in Total['PvEBonuses']:
-                continue
-
             Total['PvEBonuses'][effect] = {}
             Total['PvEBonuses'][effect]['Bonus'] = 0
             Total['PvEBonuses'][effect]['TotalBonus'] = 0
@@ -502,9 +484,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             Total['PvEBonuses'][effect]['Base'] = int(Level * Base[0]) + Base[1]
 
         for effect in DropEffectList['All']['Other Bonus']:
-            if effect in Total['OtherBonuses']:
-                continue
-
             try:  # NOT ALL BONUSES HAVE A CAP ...
                 Base = Cap[effect]
             except KeyError:
@@ -649,12 +628,24 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 print(amts)
 
         # DEBUGGING
-        print('summerize')
+        print('summarize')
 
         return Total
 
     def calculate(self):
-        Total = self.summarize()
+        Total = self.summarize()  # TODO: CHANGE TO LOWER / CAMEL CASE
+
+        item = self.ItemAttributeList[self.CurrentItemLabel]
+        if item.ActiveState == 'Crafted':
+            slotImbueValues = item.getSlotImbueValues()
+            itemImbuePoints = item.getItemImbueValue()
+
+            print(slotImbueValues)
+            print(str(sum(slotImbueValues)) + ' / ' + str(itemImbuePoints))
+
+            for index in range(0, item.getSlotCount()):
+                if index < len(slotImbueValues):
+                    self.ImbuePoints[index].setText('%3.1f' % slotImbueValues[index])
 
         for (key, datum) in list(Total['Stats'].items()):
             Acuity = AllBonusList[self.CurrentRealm][self.CurrentClass]["Acuity"]
@@ -876,9 +867,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.CurrentClass = Class
 
         if self.CurrentItemLabel != '':
-            print(self.CurrentItemLabel)
             self.RestoreItem(self.ItemAttributeList[self.CurrentItemLabel])
-        self.calculate()
+            self.calculate()
 
         # DEBUGGING
         print('CharacterClassChanged')
@@ -918,6 +908,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         item = self.ItemAttributeList[self.CurrentItemLabel]
         item.ItemLevel = self.ItemLevel.text()
         self.ItemLevel.setModified(False)
+        self.RestoreItem(self.ItemAttributeList[self.CurrentItemLabel])
 
         # DEBUGGING
         print('ItemLevelChanged')

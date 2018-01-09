@@ -14,6 +14,7 @@ __all__ = [
     'EnhancedTypeList',
     'EnhancedEffectList',
     'EnhancedValuesList',
+    'ImbuePoints',
     'MythicalCap',
     'SlotList'
 ]

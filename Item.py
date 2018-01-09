@@ -1,7 +1,7 @@
 # HEADER PLACE HOLDER
 
-from Character import armorTypes, ItemTypes
-from Constants import SlotList
+from Character import ItemTypes
+from Constants import ImbuePoints, SlotList
 
 
 class Item:
@@ -64,7 +64,7 @@ class Item:
             ItemSlots.append(ItemSlot('Enhanced'))
         elif self.ActiveState == 'Dropped':
             for slot in range(0, 12):
-                ItemSlots.append(ItemSlot(self.ActiveState))
+                ItemSlots.append(ItemSlot('Dropped'))
         return ItemSlots
 
     def getSlot(self, index):
@@ -75,6 +75,28 @@ class Item:
 
     def getSlotList(self):
         return list(self.ItemSlotList)
+
+    def getSlotImbueValues(self):
+        if self.ActiveState != 'Crafted':
+            return 0.0, 0.0, 0.0, 0.0
+
+        values = []
+        for index in range(0, self.getSlotCount() - 1):
+            values.append(self.getSlot(index).getImbueValue())
+
+        maxValue = max(values)
+        for index in range(0, self.getSlotCount() - 1):
+            if index == values.index(maxValue): continue
+            values[index] /= 2.0
+
+        return values
+
+    def getItemImbueValue(self):
+        if self.ActiveState != 'Crafted':
+            return 0.0
+        if int(self.ItemLevel) < 1 or int(self.ItemLevel) > 51:
+            return 0.0
+        return ImbuePoints[int(self.ItemLevel) - 1]
 
 
 class ItemSlot:
@@ -93,6 +115,10 @@ class ItemSlot:
         self.EffectAmount = amount
         self.Requirement = requirement
         self.Craftable = False
+
+    def isCrafted(self):
+        if self.getSlotType() == 'Craftable':
+            return True if (self.getEffectType() != 'Unused') else False
 
     def setEffectType(self, etype):
         self.EffectType = etype
@@ -120,3 +146,21 @@ class ItemSlot:
 
     def getSlotType(self):
         return self.SlotType
+
+    def getImbueValue(self, value = 0):
+        if not self.isCrafted(): return 0.0
+        if self.getEffectType() == 'Stat':
+            if self.getEffect() not in ('Hits', 'Power'):
+                value = round((int(self.getEffectAmount()) - 1) / 1.7)
+            elif self.getEffect() == 'Hits':
+                value = int(self.getEffectAmount()) / 4.0
+            elif self.getEffect() == 'Power':
+                value = (int(self.getEffectAmount()) - 1) * 2.0
+        elif self.getEffectType() == 'Resist':
+            value = (int(self.getEffectAmount()) - 1) * 2.0
+        elif self.getEffectType() == 'Skill':
+            value = (int(self.getEffectAmount()) - 1) * 5.0
+        return 1.0 if value < 1.0 else value
+
+    def getGemName(self):
+        pass
