@@ -646,6 +646,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             for index in range(0, item.getSlotCount()):
                 if index < len(slotImbueValues):
                     self.ImbuePoints[index].setText('%3.1f' % slotImbueValues[index])
+                self.GemName[index].setText(item.getSlot(index).getGemName())
 
         for (key, datum) in list(Total['Stats'].items()):
             Acuity = AllBonusList[self.CurrentRealm][self.CurrentClass]["Acuity"]

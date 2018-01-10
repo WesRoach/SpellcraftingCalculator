@@ -163,4 +163,7 @@ class ItemSlot:
         return 1.0 if value < 1.0 else value
 
     def getGemName(self):
-        pass
+        if self.getSlotType() == 'Enhanced':
+            return '(Enhanced Slot Bonus)'
+        if not self.isCrafted():
+            return ''
