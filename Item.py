@@ -170,7 +170,9 @@ class ItemSlot:
 
     def getGemName(self, realm):
         if self.getSlotType() == 'Enhanced':
-            return '(Enhanced Slot Bonus)'
+            if self.getEffectType() == 'Unused':
+                return 'Unused'
+            return 'ARMOR NAME'
         if not self.isCrafted():
             return '--> SET THE COLUMN WIDTH'
         level = GemNames[self.getGemIndex()]
