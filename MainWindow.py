@@ -154,6 +154,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.StatsGroup.layout().setColumnMinimumWidth(2, width)
         width = testFont.size(Qt.TextSingleLine, "(-26)", tabArray = None).width()
         self.StatsGroup.layout().setColumnMinimumWidth(3, width)
+        width = testFont.size(Qt.TextSingleLine, "Imbue", tabArray=None).width()
+        self.ItemFrame.layout().setColumnMinimumWidth(4, width)
 
         for resist in (DropEffectList['All']['Resist']):
             self.StatLabel[resist] = getattr(self, resist + 'Label')
@@ -357,15 +359,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.showCraftWidgets(item)
         elif item.ActiveState == 'Dropped':
             self.showDropWidgets(item)
-
-        # DEBUGGING
-        testItem = self.ItemAttributeList['Chest']
-        testItem.getSlot(0).setEffectType('Stat')
-        testItem.getSlot(0).setEffect('Constitution')
-        testItem.getSlot(0).setEffectAmount('20')
-        testItem.getSlot(1).setEffectType('Skill')
-        testItem.getSlot(1).setEffect('Axe')
-        testItem.getSlot(1).setEffectAmount('3')
 
         self.ItemName.clear()
         self.ItemName.addItem(item.ItemName)
@@ -646,7 +639,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             for index in range(0, item.getSlotCount()):
                 if index < len(slotImbueValues):
                     self.ImbuePoints[index].setText('%3.1f' % slotImbueValues[index])
-                self.GemName[index].setText(item.getSlot(index).getGemName())
+                self.GemName[index].setText(item.getSlot(index).getGemName(self.CurrentRealm))
 
         for (key, datum) in list(Total['Stats'].items()):
             Acuity = AllBonusList[self.CurrentRealm][self.CurrentClass]["Acuity"]
@@ -938,7 +931,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # DEBUGGING
         print('EffectTypeChanged, EffectType = ' + str(etype))
 
-    # TODO: THIS IS UGLY, LETS CLEAN IT UP ...
     def EffectChanged(self, effect = None, index = -1):
         if index == -1: index = self.getSignalSlot()
         item = self.ItemAttributeList[self.CurrentItemLabel]
@@ -946,7 +938,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         effectType = item.getSlot(index).getEffectType()
         if item.getSlot(index).getSlotType() == 'Craftable':
-            if effectType == 'Skill' and self.UnusableSkills.isChecked():
+            if effectType == 'Skill' and not self.UnusableSkills.isChecked():
                 self.Effect[index].insertItems(0, AllBonusList['All'][self.CurrentClass]['All Skills'])
             else:
                 self.Effect[index].insertItems(0, CraftedEffectList[self.CurrentRealm][effectType])
@@ -966,7 +958,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # DEBUGGING
         print('EffectChanged, Effect = ' + str(effect))
 
-    # TODO: THIS IS UGLY, LETS CLEAN IT UP ...
     def EffectAmountChanged(self, amount = None, index = -1):
         if index == -1: index = self.getSignalSlot()
         item = self.ItemAttributeList[self.CurrentItemLabel]

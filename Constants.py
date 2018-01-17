@@ -8,12 +8,14 @@ __all__ = [
     'Cap',
     'CraftedTypeList',
     'CraftedEffectList',
+    'CraftedEffectTable',
     'CraftedValuesList',
     'DropTypeList',
     'DropEffectList',
     'EnhancedTypeList',
     'EnhancedEffectList',
     'EnhancedValuesList',
+    'GemNames',
     'ImbuePoints',
     'MythicalCap',
     'SlotList'
@@ -560,18 +562,18 @@ for realm in Realms:
 SkillTable['All'] = d2(SkillTable['All'])
 SkillTable = d2(SkillTable)
 
-CraftSkillList = {}
+CraftedSkillList = {}
 DropSkillList = {}
 for realm in list(SkillTable.keys()):
     skills = list(SkillTable[realm].keys())
     skills.sort()
-    CraftSkillList[realm] = t2(skills)
+    CraftedSkillList[realm] = t2(skills)
     skills.insert(2, 'All Archery Skills')
     skills.insert(3, 'All Dual Wield Skills')
     if realm == 'Midgard':  # ADD NON-CRAFTABLE 'Witchcraft' SKILL
         skills.append('Witchcraft')
     DropSkillList[realm] = t2(skills)
-CraftSkillList = d2(CraftSkillList)
+CraftedSkillList = d2(CraftedSkillList)
 DropSkillList = d2(DropSkillList)
 
 SkillValues = t2((
@@ -868,7 +870,7 @@ for realm in list(CraftedEffectTable.keys()):
     CraftedEffectTable[realm]['Skill'] = SkillTable[realm]
     CraftedEffectTable[realm] = d2(CraftedEffectTable[realm])
     CraftedEffectList[realm]['Focus'] = FocusList[realm]
-    CraftedEffectList[realm]['Skill'] = CraftSkillList[realm]
+    CraftedEffectList[realm]['Skill'] = CraftedSkillList[realm]
     CraftedEffectList[realm] = d2(CraftedEffectList[realm])
     DropEffectList[realm]['Focus'] = FocusList[realm]
     DropEffectList[realm]['Skill'] = DropSkillList[realm]

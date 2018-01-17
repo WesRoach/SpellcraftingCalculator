@@ -1,7 +1,7 @@
 # HEADER PLACE HOLDER
 
 from Character import ItemTypes
-from Constants import ImbuePoints, SlotList
+from Constants import CraftedEffectTable, CraftedValuesList, GemNames, ImbuePoints, SlotList
 
 
 class Item:
@@ -162,8 +162,18 @@ class ItemSlot:
             value = (int(self.getEffectAmount()) - 1) * 5.0
         return 1.0 if value < 1.0 else value
 
-    def getGemName(self):
+    def getGemIndex(self):
+        if self.getEffect() in CraftedValuesList[self.getEffectType()]:
+            return CraftedValuesList[self.getEffectType()][self.getEffect()].index(self.getEffectAmount())
+        elif self.getEffectType() in CraftedValuesList:
+            return CraftedValuesList[self.getEffectType()].index(self.getEffectAmount())
+
+    def getGemName(self, realm):
         if self.getSlotType() == 'Enhanced':
             return '(Enhanced Slot Bonus)'
         if not self.isCrafted():
-            return ''
+            return '--> SET THE COLUMN WIDTH'
+        level = GemNames[self.getGemIndex()]
+        prefix = CraftedEffectTable[realm][self.EffectType][self.Effect][0]
+        suffix = CraftedEffectTable[realm][self.EffectType][self.Effect][1]
+        return level + ' ' + prefix + ' ' + suffix
