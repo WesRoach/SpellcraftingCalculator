@@ -113,14 +113,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def initItemToolBar(self):
         self.ItemNewButton.setMenu(self.ItemNewMenu)
         self.ItemNewButton.setToolTip('New Item')
-        self.ItemNewMenu.addAction('New Craftable Item')
-        self.ItemNewMenu.addAction('New Dropped Item')
+        self.ItemNewMenu.addAction('Crafted Item')
+        self.ItemNewMenu.addAction('Dropped Item')
         self.ItemNewButton.clicked.connect(self.ItemNewButton.showMenu)
 
         self.ItemTypeButton.setMenu(self.ItemTypeMenu)
         self.ItemTypeButton.setToolTip('Change Item Type')
-        self.ItemTypeMenu.addAction('Change to Craftable Item')
-        self.ItemTypeMenu.addAction('Change to Dropped Item')
+        self.ItemTypeMenu.addAction('Crafted Item')
+        self.ItemTypeMenu.addAction('Dropped Item')
         self.ItemTypeButton.clicked.connect(self.ItemTypeButton.showMenu)
 
         self.ItemLoadButton.setToolTip('Load Item')
@@ -1043,12 +1043,32 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # DEBUGGING
         print('changeItem')
 
-    def clearCurrentItem(self):
+    def clearItem(self):
 
         # DEBUGGING
-        print('clearCurrentItem')
+        print('clearItem')
 
-    def deleteCurrentItem(self):
+    def deleteItem(self):
 
         # DEBUGGING
-        print('deleteCurrentItem')
+        print('deleteItem')
+
+    def newOutfit(self):
+
+        # DEBUGGING
+        print('newOutfit')
+
+    def appendOutfit(self):
+
+        # DEBUGGING
+        print('appendOutfit')
+
+    def renameOutfit(self):
+
+        # DEBUGGING
+        print('renameOutfit')
+
+    def deleteOutfit(self):
+
+        # DEBUGGING
+        print('deleteOutfit')
