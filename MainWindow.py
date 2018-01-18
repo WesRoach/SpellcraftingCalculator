@@ -27,6 +27,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ErrorMenu = QMenu('&Errors', self)
         self.HelpMenu = QMenu('&Help', self)
         self.ToolBar = QToolBar("Crafting")
+        self.ItemNewMenu = QMenu()
+        self.ItemTypeMenu = QMenu()
 
         self.DistanceToCap = QAction()
         self.UnusableSkills = QAction()
@@ -68,6 +70,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         self.initMenuBar()
         self.initToolBar()
+        self.initItemToolBar()
         self.initLayout()
         self.initialize()
         self.initControls()
@@ -106,6 +109,24 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ToolBar.addAction('New')
 
         self.addToolBar(self.ToolBar)
+
+    def initItemToolBar(self):
+        self.ItemNewButton.setMenu(self.ItemNewMenu)
+        self.ItemNewButton.setToolTip('New Item')
+        self.ItemNewMenu.addAction('New Craftable Item')
+        self.ItemNewMenu.addAction('New Dropped Item')
+        self.ItemNewButton.clicked.connect(self.ItemNewButton.showMenu)
+
+        self.ItemTypeButton.setMenu(self.ItemTypeMenu)
+        self.ItemTypeButton.setToolTip('Change Item Type')
+        self.ItemTypeMenu.addAction('Change to Craftable Item')
+        self.ItemTypeMenu.addAction('Change to Dropped Item')
+        self.ItemTypeButton.clicked.connect(self.ItemTypeButton.showMenu)
+
+        self.ItemLoadButton.setToolTip('Load Item')
+        self.ItemDeleteButton.setToolTip('Delete Item')
+        self.ItemSaveButton.setToolTip('Save Item')
+        self.ItemInfoButton.setToolTip('Item Info')
 
     def initLayout(self):
         font = QFont(self.font())
@@ -203,9 +224,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             'Dropped': [self.RequirementLabel]}
 
         self.ItemLevel.setFixedSize(QSize(amountEditWidth, defaultFixedHeight))
-        self.ItemAddButton.setFixedSize(QSize(buttonFixedWidth, buttonFixedHeight))
-        self.ItemChangeButton.setFixedSize(QSize(buttonFixedWidth, buttonFixedHeight))
+        self.ItemNewButton.setFixedSize(QSize(buttonFixedWidth, buttonFixedHeight))
+        self.ItemTypeButton.setFixedSize(QSize(buttonFixedWidth, buttonFixedHeight))
+        self.ItemLoadButton.setFixedSize(QSize(buttonFixedWidth, buttonFixedHeight))
         self.ItemDeleteButton.setFixedSize(QSize(buttonFixedWidth, buttonFixedHeight))
+        self.ItemSaveButton.setFixedSize(QSize(buttonFixedWidth, buttonFixedHeight))
         self.ItemInfoButton.setFixedSize(QSize(buttonFixedWidth, buttonFixedHeight))
         self.ItemName.setFixedHeight(defaultFixedHeight)
 
@@ -297,6 +320,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.CharacterClass.activated[int].connect(self.CharacterClassChanged)
         self.CharacterRace.activated[int].connect(self.CharacterRaceChanged)
         self.ItemLevel.editingFinished.connect(self.ItemLevelChanged)
+        self.ItemNewButton.triggered.connect(self.newItem)
+        self.ItemTypeButton.triggered.connect(self.changeItem)
 
     def LoadOptions(self):
         pass
@@ -1008,10 +1033,15 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # DEBUGGING
         print('EffectRequirementChanged')
 
-    def newItem(self):
+    def newItem(self, action):
 
         # DEBUGGING
         print('newItem')
+
+    def changeItem(self, action):
+
+        # DEBUGGING
+        print('changeItem')
 
     def clearCurrentItem(self):
 
