@@ -113,14 +113,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def initItemToolBar(self):
         self.ItemNewButton.setMenu(self.ItemNewMenu)
         self.ItemNewButton.setToolTip('New Item')
-        self.ItemNewMenu.addAction('Crafted Item')
-        self.ItemNewMenu.addAction('Dropped Item')
+        self.ItemNewMenu.addAction('New Crafted Item')
+        self.ItemNewMenu.addAction('New Dropped Item')
         self.ItemNewButton.clicked.connect(self.ItemNewButton.showMenu)
 
         self.ItemTypeButton.setMenu(self.ItemTypeMenu)
         self.ItemTypeButton.setToolTip('Change Item Type')
-        self.ItemTypeMenu.addAction('Crafted Item')
-        self.ItemTypeMenu.addAction('Dropped Item')
+        self.ItemTypeMenu.addAction('Change to Crafted Item')
+        self.ItemTypeMenu.addAction('Change to Dropped Item')
         self.ItemTypeButton.clicked.connect(self.ItemTypeButton.showMenu)
 
         self.ItemLoadButton.setToolTip('Load Item')
@@ -321,7 +321,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.CharacterRace.activated[int].connect(self.CharacterRaceChanged)
         self.ItemLevel.editingFinished.connect(self.ItemLevelChanged)
         self.ItemNewButton.triggered.connect(self.newItem)
-        self.ItemTypeButton.triggered.connect(self.changeItem)
+        self.ItemTypeButton.triggered.connect(self.changeItemType)
 
     def LoadOptions(self):
         pass
@@ -386,7 +386,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.showDropWidgets(item)
 
         self.ItemName.clear()
-        self.ItemName.addItem(item.ItemName)
+        itemNameList = item
+        while itemNameList is not None:
+            self.ItemName.addItem(itemNameList.ItemName)
+            itemNameList = itemNameList.NextItem
         self.ItemName.setCurrentIndex(0)
         self.ItemLevel.setText(item.ItemLevel)
 
@@ -1034,6 +1037,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         print('EffectRequirementChanged')
 
     def newItem(self, action):
+        newItemType = action.text()[4:11]
+        item = Item(newItemType, self.CurrentItemLabel, self.CurrentRealm, self.ItemIndex)
+        item.ItemName = 'New ' + newItemType + ' Item'
+        item.NextItem = self.ItemAttributeList[self.CurrentItemLabel]
+        self.ItemAttributeList[self.CurrentItemLabel] = item
+        self.RestoreItem(item)
+        self.ItemIndex += 1
 
         # DEBUGGING
         print('newItem')
@@ -1042,6 +1052,16 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         # DEBUGGING
         print('changeItem')
+
+    def changeItemType(self):
+
+        # DEBUGGING
+        print('changeItemSelection')
+
+    def changeItemName(self):
+
+        # DEBUGGING
+        print('changeItemName')
 
     def clearItem(self):
 
@@ -1052,23 +1072,3 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         # DEBUGGING
         print('deleteItem')
-
-    def newOutfit(self):
-
-        # DEBUGGING
-        print('newOutfit')
-
-    def appendOutfit(self):
-
-        # DEBUGGING
-        print('appendOutfit')
-
-    def renameOutfit(self):
-
-        # DEBUGGING
-        print('renameOutfit')
-
-    def deleteOutfit(self):
-
-        # DEBUGGING
-        print('deleteOutfit')

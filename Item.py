@@ -6,7 +6,7 @@ from Constants import CraftedEffectTable, CraftedValuesList, GemNames, ImbuePoin
 
 class Item:
 
-    def __init__(self, state = '', location = '', realm = 'All', index = 0):
+    def __init__(self, state = '', location = '', realm = 'All', index = -1):
         self.ActiveState = state
         self.ItemEquipped = int
         self.ItemLocation = location
@@ -26,6 +26,7 @@ class Item:
         self.ItemRequirement = ''
         self.TemplateIndex = index
         self.ItemSlotList = self.makeItemSlots()
+        self.NextItem = None
 
         # SET THE INITIAL ITEM PROPERTIES
         self.setInitialItemProperties()
@@ -76,6 +77,10 @@ class Item:
     def getSlotList(self):
         return list(self.ItemSlotList)
 
+    # TODO: REMOVE AT FINAL CLEANUP
+    def __repr__(self):
+        return str(self.ItemSlotList)
+
     def getSlotImbueValues(self):
         if self.ActiveState != 'Crafted':
             return 0.0, 0.0, 0.0, 0.0
@@ -109,12 +114,12 @@ class ItemSlot:
         self.Requirement = requirement
         self.Craftable = False
 
-    def setAll(self, etype='Unused', effect='', amount='0', requirement=''):
-        self.EffectType = etype
-        self.Effect = effect
-        self.EffectAmount = amount
-        self.Requirement = requirement
-        self.Craftable = False
+    # def setAll(self, etype='Unused', effect='', amount='0', requirement=''):
+    #     self.EffectType = etype
+    #     self.Effect = effect
+    #     self.EffectAmount = amount
+    #     self.Requirement = requirement
+    #     self.Craftable = False
 
     def isCrafted(self):
         if self.getSlotType() == 'Craftable':
