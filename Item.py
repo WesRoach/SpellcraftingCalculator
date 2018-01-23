@@ -26,7 +26,6 @@ class Item:
         self.ItemRequirement = ''
         self.TemplateIndex = index
         self.ItemSlotList = self.makeItemSlots()
-        self.NextItem = None
 
         # SET THE INITIAL ITEM PROPERTIES
         self.setInitialItemProperties()
@@ -80,6 +79,9 @@ class Item:
     # TODO: REMOVE AT FINAL CLEANUP
     def __repr__(self):
         return str(self.ItemSlotList)
+
+    def clearSlots(self):
+        self.ItemSlotList = self.makeItemSlots()
 
     def getSlotImbueValues(self):
         if self.ActiveState != 'Crafted':

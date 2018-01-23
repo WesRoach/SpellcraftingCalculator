@@ -1459,14 +1459,23 @@
            <property name="autoScrollMargin">
             <number>15</number>
            </property>
+           <property name="editTriggers">
+            <set>QAbstractItemView::NoEditTriggers</set>
+           </property>
            <property name="tabKeyNavigation">
             <bool>true</bool>
            </property>
            <property name="showDropIndicator" stdset="0">
             <bool>false</bool>
            </property>
+           <property name="selectionMode">
+            <enum>QAbstractItemView::SingleSelection</enum>
+           </property>
            <property name="selectionBehavior">
             <enum>QAbstractItemView::SelectItems</enum>
+           </property>
+           <property name="textElideMode">
+            <enum>Qt::ElideNone</enum>
            </property>
            <property name="verticalScrollMode">
             <enum>QAbstractItemView::ScrollPerPixel</enum>
@@ -2396,6 +2405,7 @@
                 </widget>
                </item>
               </layout>
+              <zorder>GemName5</zorder>
               <zorder>RequirementLabel</zorder>
               <zorder>Requirement0</zorder>
               <zorder>Effect4</zorder>
@@ -2476,7 +2486,6 @@
               <zorder>ImbuePoints2</zorder>
               <zorder>ImbuePoints1</zorder>
               <zorder>GemName4</zorder>
-              <zorder>GemName5</zorder>
              </widget>
             </item>
            </layout>

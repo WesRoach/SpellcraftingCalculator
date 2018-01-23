@@ -26,9 +26,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ViewMenu = QMenu('&View', self)
         self.ErrorMenu = QMenu('&Errors', self)
         self.HelpMenu = QMenu('&Help', self)
+        self.ItemNewMenu = QMenu('&New Item', self)
+        self.ItemTypeMenu = QMenu('Item &Type', self)
+        self.ItemSwapMenu = QMenu('S&wap Gems with',self)
+        self.ItemMoveMenu = QMenu('&Move Item to', self)
         self.ToolBar = QToolBar("Crafting")
-        self.ItemNewMenu = QMenu()
-        self.ItemTypeMenu = QMenu()
 
         self.DistanceToCap = QAction()
         self.UnusableSkills = QAction()
@@ -45,6 +47,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         self.ItemIndex = 0
         self.ItemAttributeList = {}
+        self.ItemDictionary = {}
 
         self.SlotLabel = []
         self.Effect = []
@@ -80,7 +83,16 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 # =============================================== #
 
     def initMenuBar(self):
-        self.FileMenu.addAction('E&xit', self.close)
+        self.FileMenu.addAction('E&xit', self.close, QKeySequence(Qt.CTRL + Qt.Key_X))
+
+        self.EditMenu.addMenu(self.ItemTypeMenu)
+        self.EditMenu.addMenu(self.ItemSwapMenu)
+        self.EditMenu.addSeparator()
+        self.EditMenu.addMenu(self.ItemNewMenu)
+        self.EditMenu.addMenu(self.ItemMoveMenu)
+        self.EditMenu.addAction('Delete Item', self.deleteItem)
+        self.EditMenu.addAction('Clear Item', self.clearItem)
+        self.EditMenu.addAction('Clear Slots', self.clearItemSlots)
 
         self.ViewMenu.addAction('&Materials Report', self.showMaterialsReport, QKeySequence(Qt.ALT + Qt.Key_M))
         self.ViewMenu.addAction('&Configuration Report', self.showConfigurationReport, QKeySequence(Qt.ALT + Qt.Key_C))
@@ -112,15 +124,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def initItemToolBar(self):
         self.ItemNewButton.setMenu(self.ItemNewMenu)
-        self.ItemNewButton.setToolTip('New Item')
-        self.ItemNewMenu.addAction('New Crafted Item')
-        self.ItemNewMenu.addAction('New Dropped Item')
+        self.ItemNewButton.setToolTip('Create New Item')
         self.ItemNewButton.clicked.connect(self.ItemNewButton.showMenu)
 
         self.ItemTypeButton.setMenu(self.ItemTypeMenu)
         self.ItemTypeButton.setToolTip('Change Item Type')
-        self.ItemTypeMenu.addAction('Change to Crafted Item')
-        self.ItemTypeMenu.addAction('Change to Dropped Item')
         self.ItemTypeButton.clicked.connect(self.ItemTypeButton.showMenu)
 
         self.ItemLoadButton.setToolTip('Load Item')
@@ -287,14 +295,16 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             for val in value:
                 if key == 'Armor':
                     item = Item('Crafted', val, self.CurrentRealm, self.ItemIndex)
-                    item.ItemName = 'Crafted Item'
+                    item.ItemName = item.ActiveState + ' Item'
                     self.ItemIndex += 1
                     self.ItemAttributeList[val] = item
+                    self.ItemDictionary[val] = [item]
                 else:
                     item = Item('Dropped', val, self.CurrentRealm, self.ItemIndex)
-                    item.ItemName = 'Dropped Item'
+                    item.ItemName = item.ActiveState + ' Item'
                     self.ItemIndex += 1
                     self.ItemAttributeList[val] = item
+                    self.ItemDictionary[val] = [item]
 
         # SET THE INITIAL SLOT
         self.ItemSelected('Neck')
@@ -311,6 +321,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             iterator += 1
 
     def initControls(self):
+        self.ItemNewMenu.triggered.connect(self.newItem)
+        self.ItemTypeMenu.triggered.connect(self.changeItemType)
         self.DistanceToCap.triggered.connect(self.setDistanceToCap)
         self.UnusableSkills.triggered.connect(self.setUnusableSkills)
         self.ItemInfoButton.clicked.connect(self.showItemInfoDialog)
@@ -320,8 +332,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.CharacterClass.activated[int].connect(self.CharacterClassChanged)
         self.CharacterRace.activated[int].connect(self.CharacterRaceChanged)
         self.ItemLevel.editingFinished.connect(self.ItemLevelChanged)
-        self.ItemNewButton.triggered.connect(self.newItem)
-        self.ItemTypeButton.triggered.connect(self.changeItemType)
+        self.ItemName.activated[int].connect(self.changeItem)
+        self.ItemName.editTextChanged[str].connect(self.ItemNameChanged)
+        self.ItemLoadButton.clicked.connect(self.loadItem)
+        self.ItemDeleteButton.clicked.connect(self.deleteItem)
+        self.ItemSaveButton.clicked.connect(self.saveItem)
 
     def LoadOptions(self):
         pass
@@ -386,10 +401,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.showDropWidgets(item)
 
         self.ItemName.clear()
-        itemNameList = item
-        while itemNameList is not None:
-            self.ItemName.addItem(itemNameList.ItemName)
-            itemNameList = itemNameList.NextItem
+        for value in self.ItemDictionary[item.ItemLocation]:
+            self.ItemName.addItem(value.ItemName)
+
+        # itemNameList = item
+        # while itemNameList is not None:
+        #     self.ItemName.addItem(itemNameList.ItemName)
+        #     itemNameList = itemNameList.NextItem
+
         self.ItemName.setCurrentIndex(0)
         self.ItemLevel.setText(item.ItemLevel)
 
@@ -397,6 +416,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.EffectTypeChanged(item.getSlot(index).getEffectType(), index)
             # self.EffectChanged(item.getSlot(index).getEffect(), index)
             # self.EffectAmountChanged(item.getSlot(index).getEffectAmount(), index)
+
+        self.UpdateMenus(item)
 
 # =============================================== #
 #        SUMMARIZER AND CALCULATOR METHODS        #
@@ -831,6 +852,25 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # DEBUGGING
         print('insertSkill')
 
+    def UpdateMenus(self, item):
+        self.ItemNewMenu.clear()
+        self.ItemTypeMenu.clear()
+
+        itemTypesList = [
+            'Crafted Item',
+            'Dropped Item',
+            'Legendary Bow',
+            'Legendary Staff',
+            'Legendary Weapon',
+        ]
+
+        for value in itemTypesList:
+            self.ItemNewMenu.addAction(value)
+            self.ItemTypeMenu.addAction(value)
+
+        # DEBUGGING
+        print('UpdateMenus')
+
 # =============================================== #
 #       CONFIGURATION AND MATERIAL REPORTS        #
 # =============================================== #
@@ -868,7 +908,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.RestoreItem(self.ItemAttributeList[self.CurrentItemLabel])
 
         # DEBUGGING
-        print('setNonClassSkills')
+        print('setUnusableSkills')
 
     def CharacterRealmChanged(self):
         Realm = self.CharacterRealm.currentText()
@@ -919,9 +959,21 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # DEBUGGING
         print('ItemSelected' + ', Selection = ' + str(selection))
 
+    def ItemNameChanged(self, name):
+        if self.ItemName.currentIndex() != 0: return
+        item = self.ItemAttributeList[self.CurrentItemLabel]
+        item.ItemName = str(self.ItemName.lineEdit().text())
+        cursorPosition = self.ItemName.lineEdit().cursorPosition()
+        self.ItemName.setItemText(0, item.ItemName)
+        self.ItemName.lineEdit().setCursorPosition(cursorPosition)
+
+        # DEBUGGING
+        print('ItemNameChanged')
+
     def ItemStateChanged(self, selection, column):
         self.ItemAttributeList[selection.text(column)].ItemEquipped = selection.checkState(column)
-        self.RestoreItem(self.ItemAttributeList[selection.text(column)])
+        if selection.text(column) == self.SlotListTreeView.selectedIndexes():
+            self.RestoreItem(self.ItemAttributeList[selection.text(column)])
 
         # DEBUGGING
         print('ItemStateChanged')
@@ -1036,39 +1088,87 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # DEBUGGING
         print('EffectRequirementChanged')
 
+    # TODO: IMPLEMENT 'Legendary' ITEMS
     def newItem(self, action):
-        newItemType = action.text()[4:11]
-        item = Item(newItemType, self.CurrentItemLabel, self.CurrentRealm, self.ItemIndex)
-        item.ItemName = 'New ' + newItemType + ' Item'
-        item.NextItem = self.ItemAttributeList[self.CurrentItemLabel]
+        item = Item(action.text()[0:7], self.CurrentItemLabel, self.CurrentRealm, self.ItemIndex)
+        item.ItemName = item.ActiveState + ' Item'
         self.ItemAttributeList[self.CurrentItemLabel] = item
-        self.RestoreItem(item)
+        self.ItemDictionary[self.CurrentItemLabel].insert(0, item)
+        self.RestoreItem(self.ItemAttributeList[self.CurrentItemLabel])
         self.ItemIndex += 1
+
+        # CASCADE LEGENDARY ITEMS
+        self.changeItemType(action)
 
         # DEBUGGING
         print('newItem')
 
-    def changeItem(self, action):
+    def changeItem(self, index):
+        item = self.ItemAttributeList[self.CurrentItemLabel]
+        itemState = item.ItemEquipped
+        item.ItemEquipped = 0
+
+        try:  # FIXES BUG IN 'QComboBox' WHEN PRESSING ENTER ...
+            item = self.ItemDictionary[self.CurrentItemLabel][index]
+        except IndexError:
+            item = self.ItemDictionary[self.CurrentItemLabel][0]
+
+        self.ItemDictionary[item.ItemLocation].remove(item)
+        self.ItemDictionary[item.ItemLocation].insert(0, item)
+        self.ItemAttributeList[self.CurrentItemLabel] = item
+        self.ItemAttributeList[self.CurrentItemLabel].ItemEquipped = itemState
+        self.RestoreItem(self.ItemAttributeList[self.CurrentItemLabel])
 
         # DEBUGGING
-        print('changeItem')
+        print('changeItem, Selected Item = %s' % item.ItemName)
 
-    def changeItemType(self):
+    # TODO: IMPLEMENT 'addSlot' AND 'removeSlot'
+    def changeItemType(self, action):
 
         # DEBUGGING
         print('changeItemSelection')
 
-    def changeItemName(self):
-
-        # DEBUGGING
-        print('changeItemName')
-
     def clearItem(self):
+        item = self.ItemAttributeList[self.CurrentItemLabel]
+        self.ItemDictionary[item.ItemLocation].remove(item)
+        item = Item(item.ActiveState, item.ItemLocation, self.CurrentRealm, item.TemplateIndex)
+        item.ItemName = item.ActiveState + ' Item'
+        self.ItemDictionary[item.ItemLocation].insert(0, item)
+        self.ItemAttributeList[self.CurrentItemLabel] = item
+        self.RestoreItem(self.ItemAttributeList[self.CurrentItemLabel])
 
         # DEBUGGING
         print('clearItem')
 
+    def clearItemSlots(self):
+        self.ItemAttributeList[self.CurrentItemLabel].clearSlots()
+        self.RestoreItem(self.ItemAttributeList[self.CurrentItemLabel])
+
+        # DEBUGGING
+        print('clearItemSlots')
+
+    def loadItem(self):
+
+        # DEBUGGING
+        print('loadItem')
+
+    def saveItem(self):
+
+        # DEBUGGING
+        print('saveItem')
+
     def deleteItem(self):
+        if len(self.ItemDictionary[self.CurrentItemLabel]) == 1:
+            self.clearItem()
+            return
+        item = self.ItemAttributeList[self.CurrentItemLabel]
+        itemState = item.ItemEquipped
+        item.ItemEquipped = 0
+        self.ItemDictionary[self.CurrentItemLabel].remove(item)
+        item = self.ItemDictionary[self.CurrentItemLabel][0]
+        self.ItemAttributeList[self.CurrentItemLabel] = item
+        self.ItemAttributeList[self.CurrentItemLabel].ItemEquipped = itemState
+        self.RestoreItem(self.ItemAttributeList[self.CurrentItemLabel])
 
         # DEBUGGING
         print('deleteItem')
