@@ -67,6 +67,12 @@ class Item:
                 ItemSlots.append(ItemSlot('Dropped'))
         return ItemSlots
 
+    def addSlot(self, itype):
+        self.ItemSlotList.append(ItemSlot(itype))
+
+    def removeSlot(self, index):
+        del self.ItemSlotList[index]
+
     def getSlot(self, index):
         return self.ItemSlotList[index]
 
@@ -75,10 +81,6 @@ class Item:
 
     def getSlotList(self):
         return list(self.ItemSlotList)
-
-    # TODO: REMOVE AT FINAL CLEANUP
-    def __repr__(self):
-        return str(self.ItemSlotList)
 
     def clearSlots(self):
         self.ItemSlotList = self.makeItemSlots()
@@ -116,13 +118,6 @@ class ItemSlot:
         self.Requirement = requirement
         self.Craftable = False
 
-    # def setAll(self, etype='Unused', effect='', amount='0', requirement=''):
-    #     self.EffectType = etype
-    #     self.Effect = effect
-    #     self.EffectAmount = amount
-    #     self.Requirement = requirement
-    #     self.Craftable = False
-
     def isCrafted(self):
         if self.getSlotType() == 'Craftable':
             return True if (self.getEffectType() != 'Unused') else False
@@ -139,6 +134,9 @@ class ItemSlot:
     def setEffectRequirement(self, value):
         self.Requirement = value
 
+    def getSlotType(self):
+        return self.SlotType
+
     def getEffectType(self):
         return self.EffectType
 
@@ -150,9 +148,6 @@ class ItemSlot:
 
     def getEffectRequirement(self):
         return self.Requirement
-
-    def getSlotType(self):
-        return self.SlotType
 
     def getImbueValue(self, value = 0):
         if not self.isCrafted(): return 0.0
@@ -175,6 +170,7 @@ class ItemSlot:
         elif self.getEffectType() in CraftedValuesList:
             return CraftedValuesList[self.getEffectType()].index(self.getEffectAmount())
 
+    # TODO: CHANGE 'level' TO SOMETHING ELSE, IMPLEMENT ENHANCED ITEMS
     def getGemName(self, realm):
         if self.getSlotType() == 'Enhanced':
             if self.getEffectType() == 'Unused':
