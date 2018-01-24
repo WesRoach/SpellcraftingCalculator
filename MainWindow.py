@@ -30,6 +30,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ItemTypeMenu = QMenu('Item &Type', self)
         self.ItemSwapMenu = QMenu('S&wap Gems with',self)
         self.ItemMoveMenu = QMenu('&Move Item to', self)
+        self.ToolBarMenu = QMenu('&Toolbar', self)
         self.ToolBar = QToolBar("Crafting")
 
         self.DistanceToCap = QAction()
@@ -82,6 +83,16 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 #       INTERFACE SETUP AND INITIALIZATION        #
 # =============================================== #
 
+    def getIcon(self, name):
+        icon = QIcon()
+
+        for size in (32, 24, 16):
+            icon.addFile(r'images/normal/' + name + str(size) + '.png', QSize(size, size), QIcon.Normal, QIcon.Off)
+            icon.addFile(r'images/active/' + name + str(size) + '.png', QSize(size, size), QIcon.Active, QIcon.Off)
+            icon.addFile(r'images/disabled/' + name + str(size) + '.png', QSize(size, size), QIcon.Disabled, QIcon.Off)
+
+        return icon
+
     def initMenuBar(self):
         self.FileMenu.addAction('E&xit', self.close, QKeySequence(Qt.CTRL + Qt.Key_X))
 
@@ -99,12 +110,25 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         self.ViewMenu.addSeparator()
 
-        self.DistanceToCap = QAction('Show Distance to Cap', self)
+        for (title, res) in (("Large", 32,), ("Normal", 24,), ("Small", 16,), ("Hide", 0,),):
+            action = QAction(title, self)
+            action.setData(QVariant(res))
+            action.setCheckable(True)
+            self.ToolBarMenu.addAction(action)
+
+        self.ToolBarMenu.actions()[1].setChecked(True)
+        self.ViewMenu.addMenu(self.ToolBarMenu)
+
+        self.ViewMenu.addSeparator()
+
+        self.DistanceToCap = QAction('&Distance to Cap', self)
+        self.DistanceToCap.setShortcut(QKeySequence(Qt.ALT + Qt.Key_D))
         self.DistanceToCap.setCheckable(True)
         self.DistanceToCap.setChecked(True)
         self.ViewMenu.addAction(self.DistanceToCap)
 
-        self.UnusableSkills = QAction('Show Unusable Skills', self)
+        self.UnusableSkills = QAction('&Unusable Skills', self)
+        self.UnusableSkills.setShortcut(QKeySequence(Qt.ALT + Qt.Key_U))
         self.UnusableSkills.setCheckable(True)
         self.UnusableSkills.setChecked(False)
         self.ViewMenu.addAction(self.UnusableSkills)
@@ -118,8 +142,15 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def initToolBar(self):
         self.ToolBar.setObjectName("Crafting")
         self.ToolBar.setFloatable(False)
-        self.ToolBar.addAction('New')
-
+        self.ToolBar.addAction('New Template')
+        self.ToolBar.addAction('Open Template')
+        self.ToolBar.addAction('Save Template')
+        self.ToolBar.addAction('Save Template As')
+        self.ToolBar.addSeparator()
+        self.ToolBar.addAction('Export Gems')
+        self.ToolBar.addSeparator()
+        self.ToolBar.addAction('Material Report', self.showMaterialsReport)
+        self.ToolBar.addAction('Configuration Report', self.showConfigurationReport)
         self.addToolBar(self.ToolBar)
 
     def initItemToolBar(self):
@@ -134,14 +165,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ItemLoadButton.setToolTip('Load Item')
         self.ItemDeleteButton.setToolTip('Delete Item')
         self.ItemSaveButton.setToolTip('Save Item')
-        self.ItemInfoButton.setToolTip('Item Info')
+        self.ItemInfoButton.setToolTip('Item Information')
 
     def initLayout(self):
-        font = QFont(self.font())
-        font.setFamily("Trebuchet MS")
-        font.setPointSize(8)
-        self.setFont(font)
-
         self.setWindowTitle('Spellcrafting Calculator')
 
         # MAKE SURE WE ARE TESTING WIDTH AND HEIGHT
@@ -323,6 +349,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def initControls(self):
         self.ItemNewMenu.triggered.connect(self.newItem)
         self.ItemTypeMenu.triggered.connect(self.changeItemType)
+        self.ToolBarMenu.triggered.connect(self.viewToolBar)
         self.DistanceToCap.triggered.connect(self.setDistanceToCap)
         self.UnusableSkills.triggered.connect(self.setUnusableSkills)
         self.ItemInfoButton.clicked.connect(self.showItemInfoDialog)
@@ -898,6 +925,19 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         # DEBUGGING
         print('mousePressEvent')
+
+    def viewToolBar(self, action):
+        for act in self.ToolBarMenu.actions():
+            if act.data() == action.data() and not act.isChecked():
+                act.setChecked(True)
+            elif act.data() != action.data() and act.isChecked():
+                act.setChecked(False)
+        if action.data() == 0:
+            self.ToolBar.hide()
+        else:
+            self.setIconSize(QSize(action.data(), action.data()))
+            self.ToolBar.show()
+
 
     def setDistanceToCap(self):
         self.calculate()
