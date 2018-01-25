@@ -86,7 +86,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def getIcon(self, name):
         icon = QIcon()
 
-        for size in (32, 24, 16):
+        for size in (16, 24, 32):
             icon.addFile(r'images/normal/' + name + str(size) + '.png', QSize(size, size), QIcon.Normal, QIcon.Off)
             icon.addFile(r'images/active/' + name + str(size) + '.png', QSize(size, size), QIcon.Active, QIcon.Off)
             icon.addFile(r'images/disabled/' + name + str(size) + '.png', QSize(size, size), QIcon.Disabled, QIcon.Off)
@@ -1139,7 +1139,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # DEBUGGING
         print('EffectChanged, Effect = ' + str(effect))
 
-    # TODO: CRASH HERE BECAUSE WE ARE NOT ACCOUNTING FOR LEGENDARIES
+    # TODO: CRASH HERE BECAUSE WE DIDN'T ACCOUNT FOR LEGENDARIES ...
     def EffectAmountChanged(self, amount = None, index = -1):
         if index == -1: index = self.getSignalSlot()
         item = self.ItemAttributeList[self.CurrentItemLabel]
