@@ -159,7 +159,7 @@ class ItemSlot:
     def getEffectRequirement(self):
         return self.Requirement
 
-    # TODO: MOVE AWAY FROM 'isCrafted'
+    # TODO: POSSIBLY MOVE AWAY FROM 'isCrafted'
     def getImbueValue(self, value = 0):
         if not self.isCraftable(): return 0.0
         if self.getEffectType() == 'Stat':
