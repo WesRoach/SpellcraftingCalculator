@@ -2352,6 +2352,19 @@
                  <property name="text">
                   <string/>
                  </property>
+                 <property name="indent">
+                  <number>8</number>
+                 </property>
+                </widget>
+               </item>
+               <item row="7" column="4" colspan="3">
+                <widget class="QLabel" name="GemName6">
+                 <property name="text">
+                  <string/>
+                 </property>
+                 <property name="indent">
+                  <number>8</number>
+                 </property>
                 </widget>
                </item>
                <item row="4" column="3">
@@ -2405,6 +2418,7 @@
                 </widget>
                </item>
               </layout>
+              <zorder>GemName6</zorder>
               <zorder>GemName5</zorder>
               <zorder>RequirementLabel</zorder>
               <zorder>Requirement0</zorder>

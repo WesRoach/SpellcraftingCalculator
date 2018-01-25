@@ -56,12 +56,19 @@ class Item:
                     self.ItemType = ItemTypes[key][0]
             self.ItemEquipped = 2
 
+    # TODO: THIS NEEDS TO BE CLEANED UP ...
     def makeItemSlots(self):
         ItemSlots = []
         if self.ActiveState == 'Crafted':
             for slot in range(0, 4):
                 ItemSlots.append(ItemSlot('Craftable'))
             ItemSlots.append(ItemSlot('Enhanced'))
+        elif self.ActiveState == 'Legendary':
+            for slot in range(0, 4):
+                ItemSlots.append(ItemSlot('Craftable'))
+            ItemSlots.append(ItemSlot('Dropped'))
+            ItemSlots.append(ItemSlot('Dropped'))
+            ItemSlots.append(ItemSlot('Dropped'))
         elif self.ActiveState == 'Dropped':
             for slot in range(0, 12):
                 ItemSlots.append(ItemSlot('Dropped'))
@@ -85,21 +92,25 @@ class Item:
     def clearSlots(self):
         self.ItemSlotList = self.makeItemSlots()
 
+    # TODO: ADJUST FOR LEGENDARY ...
     def getSlotImbueValues(self):
-        if self.ActiveState != 'Crafted':
+        if self.ActiveState not in ('Crafted', 'Legendary'):
             return 0.0, 0.0, 0.0, 0.0
 
         values = []
         for index in range(0, self.getSlotCount() - 1):
-            values.append(self.getSlot(index).getImbueValue())
+            if self.getSlot(index).getSlotType() == 'Craftable':
+                values.append(self.getSlot(index).getImbueValue())
 
         maxValue = max(values)
         for index in range(0, self.getSlotCount() - 1):
-            if index == values.index(maxValue): continue
-            values[index] /= 2.0
+            if self.getSlot(index).getSlotType() == 'Craftable':
+                if index == values.index(maxValue): continue
+                values[index] /= 2.0
 
         return values
 
+    # TODO: ADJUST FOR LEGENDARY (USE SLOT TYPE) ...
     def getItemImbueValue(self):
         if self.ActiveState != 'Crafted':
             return 0.0
@@ -116,9 +127,8 @@ class ItemSlot:
         self.Effect = effect
         self.EffectAmount = amount
         self.Requirement = requirement
-        self.Craftable = False
 
-    def isCrafted(self):
+    def isCraftable(self):
         if self.getSlotType() == 'Craftable':
             return True if (self.getEffectType() != 'Unused') else False
 
@@ -149,11 +159,13 @@ class ItemSlot:
     def getEffectRequirement(self):
         return self.Requirement
 
+    # TODO: MOVE AWAY FROM 'isCrafted'
     def getImbueValue(self, value = 0):
-        if not self.isCrafted(): return 0.0
+        if not self.isCraftable(): return 0.0
         if self.getEffectType() == 'Stat':
             if self.getEffect() not in ('Hits', 'Power'):
                 value = round((int(self.getEffectAmount()) - 1) / 1.7)
+                print(str(value))
             elif self.getEffect() == 'Hits':
                 value = int(self.getEffectAmount()) / 4.0
             elif self.getEffect() == 'Power':
@@ -176,7 +188,9 @@ class ItemSlot:
             if self.getEffectType() == 'Unused':
                 return 'Unused'
             return 'ARMOR NAME'
-        if not self.isCrafted():
+        if self.getSlotType() == 'Dropped':
+            return 'Non-Craftable Bonus'
+        if not self.isCraftable():
             return '--> SET THE COLUMN WIDTH'
         level = GemNames[self.getGemIndex()]
         prefix = CraftedEffectTable[realm][self.EffectType][self.Effect][0]

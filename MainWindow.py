@@ -255,6 +255,16 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 # self.ItemOverchargeLabel,
             ],
 
+            'Legendary': [
+                self.GemNameLabel,
+                self.ImbuePointsLabel,
+                # self.ItemImbuePoints,
+                # self.ItemImbuePointsTotal,
+                # self.ItemImbuePointsLabel,
+                # self.ItemOvercharge,
+                # self.ItemOverchargeLabel,
+            ],
+
             'Dropped': [self.RequirementLabel]}
 
         self.ItemLevel.setFixedSize(QSize(amountEditWidth, defaultFixedHeight))
@@ -266,43 +276,68 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ItemInfoButton.setFixedSize(QSize(buttonFixedWidth, buttonFixedHeight))
         self.ItemName.setFixedHeight(defaultFixedHeight)
 
-        for i in range(0, 12):
-            self.SlotLabel.append(getattr(self, 'SlotLabel%d' % i))
-            self.Effect.append(getattr(self, 'Effect%d' % i))
-            self.Effect[i].setFixedSize(QSize(effectWidth, defaultFixedHeight))
-            self.Effect[i].activated[str].connect(self.EffectChanged)
+        for index in range(0, 12):
+            self.SlotLabel.append(getattr(self, 'SlotLabel%d' % index))
+            self.Effect.append(getattr(self, 'Effect%d' % index))
+            self.Effect[index].setFixedSize(QSize(effectWidth, defaultFixedHeight))
+            self.Effect[index].activated[str].connect(self.EffectChanged)
 
-            self.EffectType.append(getattr(self, 'EffectType%d' % i))
-            self.EffectType[i].setFixedSize(QSize(effectTypeWidth, defaultFixedHeight))
-            self.EffectType[i].activated[str].connect(self.EffectTypeChanged)
+            self.AmountEdit.append(getattr(self, 'AmountEdit%d' % index))
+            self.AmountEdit[index].setFixedSize(QSize(amountEditWidth, defaultFixedHeight))
+            self.AmountEdit[index].setValidator(QIntValidator(-999, +999, self))
+            self.AmountEdit[index].textEdited[str].connect(self.EffectAmountChanged)
 
-            self.AmountEdit.append(getattr(self, 'AmountEdit%d' % i))
-            self.AmountEdit[i].setFixedSize(QSize(amountEditWidth, defaultFixedHeight))
-            self.AmountEdit[i].setValidator(QIntValidator(-999, +999, self))
-            self.AmountEdit[i].textEdited[str].connect(self.EffectAmountChanged)
-            self.SwitchOnType['Dropped'].append(self.AmountEdit[i])
+            self.EffectType.append(getattr(self, 'EffectType%d' % index))
+            self.EffectType[index].setFixedSize(QSize(effectTypeWidth, defaultFixedHeight))
+            self.EffectType[index].activated[str].connect(self.EffectTypeChanged)
 
-            self.Requirement.append(getattr(self, 'Requirement%d' % i))
-            self.Requirement[i].setFixedSize(QSize(defaultFixedWidth, defaultFixedHeight))
-            self.Requirement[i].editingFinished.connect(self.EffectRequirementChanged)
-            self.SwitchOnType['Dropped'].append(self.Requirement[i])
+            self.Requirement.append(getattr(self, 'Requirement%d' % index))
+            self.Requirement[index].setFixedSize(QSize(defaultFixedWidth, defaultFixedHeight))
+            self.Requirement[index].editingFinished.connect(self.EffectRequirementChanged)
 
-        for i in range(0, 5):
-            self.AmountStatic.append(getattr(self, 'AmountStatic%d' % i))
-            self.AmountStatic[i].setFixedSize(QSize(amountStaticWidth, defaultFixedHeight))
-            self.AmountStatic[i].activated[str].connect(self.EffectAmountChanged)
-            self.SwitchOnType['Crafted'].append(self.AmountStatic[i])
-            self.GemName.append(getattr(self, 'GemName%d' % i))
-            self.SwitchOnType['Crafted'].append(self.GemName[i])
+        for index in range(0, 7):
+            self.GemName.append(getattr(self, 'GemName%d' % index))
 
-        for i in range(0, 4):
-            self.ImbuePoints.append(getattr(self, 'ImbuePoints%d' % i))
-            self.SwitchOnType['Crafted'].append(self.ImbuePoints[i])
+        for index in range(0, 5):
+            self.AmountStatic.append(getattr(self, 'AmountStatic%d' % index))
+            self.AmountStatic[index].setFixedSize(QSize(amountStaticWidth, defaultFixedHeight))
+            self.AmountStatic[index].activated[str].connect(self.EffectAmountChanged)
 
-        for i in range(5, 12):
-            self.SwitchOnType['Dropped'].append(self.SlotLabel[i])
-            self.SwitchOnType['Dropped'].append(self.EffectType[i])
-            self.SwitchOnType['Dropped'].append(self.Effect[i])
+        for index in range(0, 4):
+            self.ImbuePoints.append(getattr(self, 'ImbuePoints%d' % index))
+
+        testItem = Item('Crafted', 'None')
+        for index in range(0, testItem.getSlotCount()):
+            self.SwitchOnType['Crafted'].append(self.SlotLabel[index])
+            self.SwitchOnType['Crafted'].append(self.EffectType[index])
+            self.SwitchOnType['Crafted'].append(self.AmountStatic[index])
+            self.SwitchOnType['Crafted'].append(self.Effect[index])
+            self.SwitchOnType['Crafted'].append(self.GemName[index])
+            if index < 4:
+                self.SwitchOnType['Crafted'].append(self.ImbuePoints[index])
+
+        testItem = Item('Legendary', 'None')
+        for index in range(0, testItem.getSlotCount()):
+            self.SwitchOnType['Legendary'].append(self.SlotLabel[index])
+            self.SwitchOnType['Legendary'].append(self.EffectType[index])
+            self.SwitchOnType['Legendary'].append(self.Effect[index])
+            self.SwitchOnType['Legendary'].append(self.GemName[index])
+            if index < 4:
+                self.SwitchOnType['Legendary'].append(self.AmountStatic[index])
+                self.SwitchOnType['Legendary'].append(self.ImbuePoints[index])
+            if index > 3:
+                self.SwitchOnType['Legendary'].append(self.AmountEdit[index])
+
+        testItem = Item('Dropped', 'None')
+        for index in range(0, testItem.getSlotCount()):
+            self.SwitchOnType['Dropped'].append(self.SlotLabel[index])
+            self.SwitchOnType['Dropped'].append(self.EffectType[index])
+            self.SwitchOnType['Dropped'].append(self.AmountEdit[index])
+            self.SwitchOnType['Dropped'].append(self.Effect[index])
+            self.SwitchOnType['Dropped'].append(self.Requirement[index])
+
+        # COLLECTING GARBAGE
+        del testItem
 
     def initialize(self):
         self.CharacterName.setText('')
@@ -349,7 +384,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def initControls(self):
         self.ItemNewMenu.triggered.connect(self.newItem)
         self.ItemTypeMenu.triggered.connect(self.changeItemType)
-        self.ToolBarMenu.triggered.connect(self.viewToolBar)
+        self.ToolBarMenu.triggered.connect(self.setToolBarOptions)
         self.DistanceToCap.triggered.connect(self.setDistanceToCap)
         self.UnusableSkills.triggered.connect(self.setUnusableSkills)
         self.ItemInfoButton.clicked.connect(self.showItemInfoDialog)
@@ -398,6 +433,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             pass
 
     def showCraftWidgets(self, item):
+        for widget in self.SwitchOnType['Legendary']:
+            widget.hide()
         for widget in self.SwitchOnType['Dropped']:
             widget.hide()
         for widget in self.SwitchOnType['Crafted']:
@@ -409,8 +446,24 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # DEBUGGING
         print('showCraftWidgets')
 
+    def showLegendaryWidgets(self, item):
+        for widget in self.SwitchOnType['Crafted']:
+            widget.hide()
+        for widget in self.SwitchOnType['Dropped']:
+            widget.hide()
+        for widget in self.SwitchOnType['Legendary']:
+            widget.show()
+        for index in range(0, item.getSlotCount()):
+            if item.getSlot(index).getSlotType() == 'Craftable':
+                self.SlotLabel[index].setText('Gem &%d:' % (index + 1))
+
+        # DEBUGGING
+        print('showLegendaryWidgets')
+
     def showDropWidgets(self, item):
         for widget in self.SwitchOnType['Crafted']:
+            widget.hide()
+        for widget in self.SwitchOnType['Legendary']:
             widget.hide()
         for widget in self.SwitchOnType['Dropped']:
             widget.show()
@@ -424,6 +477,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def RestoreItem(self, item):
         if item.ActiveState == 'Crafted':
             self.showCraftWidgets(item)
+        elif item.ActiveState == 'Legendary':
+            self.showLegendaryWidgets(item)
         elif item.ActiveState == 'Dropped':
             self.showDropWidgets(item)
 
@@ -446,6 +501,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         self.UpdateMenus(item)
         print(item.__dict__)
+
+        # DEBUGGING
+        print('RestoreItem')
 
 # =============================================== #
 #        SUMMARIZER AND CALCULATOR METHODS        #
@@ -703,10 +761,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         return Total
 
     def calculate(self):
-        Total = self.summarize()  # TODO: CHANGE TO LOWER / CAMEL CASE
+        Total = self.summarize()  # TODO: CHANGE TO LOWER CASE (PEP8)
 
         item = self.ItemAttributeList[self.CurrentItemLabel]
-        if item.ActiveState == 'Crafted':
+        if item.ActiveState in ('Crafted', 'Legendary'):
             slotImbueValues = item.getSlotImbueValues()
             itemImbuePoints = item.getItemImbueValue()
 
@@ -854,8 +912,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 size = QSize(font.width(option.currentText), font.height())
                 maxWidth = max(maxWidth, style.sizeFromContents(QStyle.CT_ComboBox, option, size, self).width())
         elif maxWidth == 0 and self.count() > 0:
-            for i in range(0, self.count()):
-                option.currentText = self.itemText(i)
+            for index in range(0, self.count()):
+                option.currentText = self.itemText(index)
                 size = QSize(font.width(option.currentText), font.height())
                 maxWidth = max(maxWidth, style.sizeFromContents(QStyle.CT_ComboBox, option, size, self).width())
         elif maxWidth == 0:
@@ -926,7 +984,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # DEBUGGING
         print('mousePressEvent')
 
-    def viewToolBar(self, action):
+    def setToolBarOptions(self, action):
         for act in self.ToolBarMenu.actions():
             if act.data() == action.data() and not act.isChecked():
                 act.setChecked(True)
@@ -938,6 +996,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.setIconSize(QSize(action.data(), action.data()))
             self.ToolBar.show()
 
+        # DEBUGGING
+        print('setToolBarOptions')
 
     def setDistanceToCap(self):
         self.calculate()
@@ -1079,6 +1139,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # DEBUGGING
         print('EffectChanged, Effect = ' + str(effect))
 
+    # TODO: CRASH HERE BECAUSE WE ARE NOT ACCOUNTING FOR LEGENDARIES
     def EffectAmountChanged(self, amount = None, index = -1):
         if index == -1: index = self.getSignalSlot()
         item = self.ItemAttributeList[self.CurrentItemLabel]
@@ -1129,6 +1190,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # DEBUGGING
         print('EffectRequirementChanged')
 
+    # TODO: FINISH THIS SECTION
     def newItem(self, action):
         if action.text() in ('Crafted Item', 'Dropped Item'):
             itemState = self.ItemAttributeList[self.CurrentItemLabel].ItemEquipped
@@ -1140,7 +1202,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.RestoreItem(self.ItemAttributeList[self.CurrentItemLabel])
             self.ItemIndex += 1
         elif action.text()[0:9] == 'Legendary':
-            self.changeItemType(action)
+            pass
 
         # DEBUGGING
         print('newItem')
@@ -1163,18 +1225,23 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # DEBUGGING
         print('changeItem, Selected Item = %s' % item.ItemName)
 
+    # TODO: FINSIH THIS SECTION
     def changeItemType(self, action):
         if action.text() in ('Crafted Item', 'Dropped Item'):
             itemState = self.ItemAttributeList[self.CurrentItemLabel].ItemEquipped
-            item = Item(action.text()[0:7], self.CurrentItemLabel, self.CurrentRealm, self.ItemIndex)
+            itemIndex = self.ItemAttributeList[self.CurrentItemLabel].TemplateIndex
+            item = Item(action.text()[0:7], self.CurrentItemLabel, self.CurrentRealm, itemIndex)
             item.ItemName = item.ActiveState + ' Item'
             del self.ItemDictionary[self.CurrentItemLabel][0]
             self.ItemDictionary[self.CurrentItemLabel].insert(0, item)
             self.ItemAttributeList[self.CurrentItemLabel] = item
             self.ItemAttributeList[self.CurrentItemLabel].ItemEquipped = itemState
             self.RestoreItem(self.ItemAttributeList[self.CurrentItemLabel])
-        elif action.text() in ('Legendary Bow', 'Legendary Staff'):
-            pass  # TODO: COMPLETE SECTION
+        elif action.text() in ('Legendary Bow', 'Legendary Staff', 'Legendary Weapon'):
+            pass
+
+        # DEBUGGING
+        print('changeItemType')
 
     def clearItem(self):
         item = self.ItemAttributeList[self.CurrentItemLabel]
