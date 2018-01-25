@@ -938,6 +938,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # DEBUGGING
         print('insertSkill')
 
+    # TODO: NOT COMPLETE
     def UpdateMenus(self, item):
         self.ItemNewMenu.clear()
         self.ItemTypeMenu.clear()
@@ -1060,7 +1061,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # DEBUGGING
         print('ItemSelected' + ', Selection = ' + str(selection))
 
-    # TODO: USE 'name' INSTEAD ...
+    # TODO: MIGRATE TO 'name' INSTEAD ...
     def ItemNameChanged(self, name):
         if self.ItemName.currentIndex() != 0: return
         item = self.ItemAttributeList[self.CurrentItemLabel]
@@ -1140,13 +1141,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # DEBUGGING
         print('EffectChanged, Effect = ' + str(effect))
 
-    # TODO: CRASH HERE BECAUSE WE DIDN'T ACCOUNT FOR LEGENDARIES ...
+    # TODO: SIMPLIFY
     def EffectAmountChanged(self, amount = None, index = -1):
         if index == -1: index = self.getSignalSlot()
         item = self.ItemAttributeList[self.CurrentItemLabel]
 
         valuesList = list()
-        if item.ActiveState == 'Crafted':
+        if item.getSlot(index).getSlotType() in ('Craftable', 'Enhanced'):
             if item.getSlot(index).getEffect()[0:5] == 'All M':
                 valuesList = CraftedValuesList[item.getSlot(index).getEffectType()][:1]
             elif item.getSlot(index).getSlotType() == 'Craftable':
@@ -1163,7 +1164,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.AmountStatic[index].setCurrentText(amount)
             item.getSlot(index).setEffectAmount(amount)
 
-        elif item.ActiveState == 'Dropped':
+        elif item.getSlot(index).getSlotType() == 'Dropped':
             if item.getSlot(index).getEffectType() == 'Unused':
                 self.AmountEdit[index].clear()
                 item.getSlot(index).setEffectAmount('')
@@ -1191,7 +1192,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # DEBUGGING
         print('EffectRequirementChanged')
 
-    # TODO: REDO / FINISH THIS SECTION ...
+    # TODO: SIMPLIFY / ADD LEGENDARY WEAPONS ...
     def newItem(self, action):
         if action.text() in ('Crafted Item', 'Dropped Item'):
             itemState = self.ItemAttributeList[self.CurrentItemLabel].ItemEquipped
@@ -1202,8 +1203,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.ItemAttributeList[self.CurrentItemLabel].ItemEquipped = itemState
             self.RestoreItem(self.ItemAttributeList[self.CurrentItemLabel])
             self.ItemIndex += 1
-        elif action.text()[0:9] == 'Legendary':
-            pass
 
         # DEBUGGING
         print('newItem')
@@ -1226,7 +1225,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # DEBUGGING
         print('changeItem, Selected Item = %s' % item.ItemName)
 
-    # TODO: REDO / FINSIH THIS SECTION ...
+    # TODO: SIMPLIFY / ADD LEGENDARY WEAPONS ...
     def changeItemType(self, action):
         if action.text() in ('Crafted Item', 'Dropped Item'):
             itemState = self.ItemAttributeList[self.CurrentItemLabel].ItemEquipped
