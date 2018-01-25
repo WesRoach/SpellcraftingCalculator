@@ -1190,7 +1190,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # DEBUGGING
         print('EffectRequirementChanged')
 
-    # TODO: FINISH THIS SECTION
+    # TODO: REDO / FINISH THIS SECTION
     def newItem(self, action):
         if action.text() in ('Crafted Item', 'Dropped Item'):
             itemState = self.ItemAttributeList[self.CurrentItemLabel].ItemEquipped
@@ -1225,7 +1225,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # DEBUGGING
         print('changeItem, Selected Item = %s' % item.ItemName)
 
-    # TODO: FINSIH THIS SECTION
+    # TODO: REDO / FINSIH THIS SECTION
     def changeItemType(self, action):
         if action.text() in ('Crafted Item', 'Dropped Item'):
             itemState = self.ItemAttributeList[self.CurrentItemLabel].ItemEquipped
