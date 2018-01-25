@@ -447,9 +447,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         print('showCraftWidgets')
 
     def showLegendaryWidgets(self, item):
-        for widget in self.SwitchOnType['Crafted']:
-            widget.hide()
         for widget in self.SwitchOnType['Dropped']:
+            widget.hide()
+        for widget in self.SwitchOnType['Crafted']:
             widget.hide()
         for widget in self.SwitchOnType['Legendary']:
             widget.show()
