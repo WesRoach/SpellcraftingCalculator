@@ -1203,6 +1203,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.ItemAttributeList[self.CurrentItemLabel].ItemEquipped = itemState
             self.RestoreItem(self.ItemAttributeList[self.CurrentItemLabel])
             self.ItemIndex += 1
+        elif action.text() in ('Legendary Bow', 'Legendary Staff', 'Legendary Weapon'):
+            pass
 
         # DEBUGGING
         print('newItem')
