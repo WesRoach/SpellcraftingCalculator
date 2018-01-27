@@ -1198,6 +1198,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ItemDictionary[self.CurrentItemLabel].insert(0, item)
         self.ItemAttributeList[self.CurrentItemLabel] = item
         self.ItemAttributeList[self.CurrentItemLabel].ItemEquipped = itemState
+
+        # TODO: ADD LEGENDARY EFFECTS
+        if newItemType == 'Legendary':
+            pass
+
         self.RestoreItem(self.ItemAttributeList[self.CurrentItemLabel])
         self.ItemIndex += 1
 
@@ -1232,9 +1237,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ItemDictionary[self.CurrentItemLabel].insert(0, item)
         self.ItemAttributeList[self.CurrentItemLabel] = item
         self.ItemAttributeList[self.CurrentItemLabel].ItemEquipped = itemState
-        self.RestoreItem(self.ItemAttributeList[self.CurrentItemLabel])
 
         # TODO: ADD LEGENDARY EFFECTS
+        if newItemType == 'Legendary':
+            pass
+
+        self.RestoreItem(self.ItemAttributeList[self.CurrentItemLabel])
 
         # DEBUGGING
         print('changeItemType')
