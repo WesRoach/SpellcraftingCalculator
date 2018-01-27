@@ -182,7 +182,7 @@ class ItemSlot:
         elif self.getEffectType() in CraftedValuesList:
             return CraftedValuesList[self.getEffectType()].index(self.getEffectAmount())
 
-    # TODO: UPDATE VARIABLE NAMES, IMPLEMENT ENHANCED ITEMS
+    # TODO: UPDATE VARIABLE NAMES, IMPLEMENT ENHANCED AND LEGENDARY ITEMS
     def getGemName(self, realm):
         if self.getSlotType() == 'Enhanced':
             if self.getEffectType() == 'Unused':
@@ -192,7 +192,7 @@ class ItemSlot:
             return 'Non-Craftable Bonus'
         if not self.isCraftable():
             return '--> SET THE COLUMN WIDTH'
-        level = GemNames[self.getGemIndex()]
+        tier = GemNames[self.getGemIndex()]
         prefix = CraftedEffectTable[realm][self.EffectType][self.Effect][0]
         suffix = CraftedEffectTable[realm][self.EffectType][self.Effect][1]
-        return level + ' ' + prefix + ' ' + suffix
+        return tier + ' ' + prefix + ' ' + suffix
