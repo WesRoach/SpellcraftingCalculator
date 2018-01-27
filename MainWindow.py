@@ -511,7 +511,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def summarize(self):
         Level = int(self.CharacterLevel.text())
-        Total = {
+        total = {
             'Utility': 0.0,
             'Stats': {},
             'Resists': {},
@@ -523,13 +523,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         }
 
         for effect in DropEffectList['All']['Stat'] + ('Armor Factor', 'Fatigue', '% Power Pool'):
-            Total['Stats'][effect] = {}
-            Total['Stats'][effect]['Bonus'] = 0
-            Total['Stats'][effect]['TotalBonus'] = 0
-            Total['Stats'][effect]['CapBonus'] = 0
-            Total['Stats'][effect]['TotalCapBonus'] = 0
-            Total['Stats'][effect]['MythicalCapBonus'] = 0
-            Total['Stats'][effect]['TotalMythicalCapBonus'] = 0
+            total['Stats'][effect] = {}
+            total['Stats'][effect]['Bonus'] = 0
+            total['Stats'][effect]['TotalBonus'] = 0
+            total['Stats'][effect]['CapBonus'] = 0
+            total['Stats'][effect]['TotalCapBonus'] = 0
+            total['Stats'][effect]['MythicalCapBonus'] = 0
+            total['Stats'][effect]['TotalMythicalCapBonus'] = 0
 
             if effect in Cap:
                 Base = Cap[effect]
@@ -539,77 +539,77 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 Base = Cap['Stat']
                 BaseCap = Cap['Stat Cap']
 
-            Total['Stats'][effect]['Base'] = int(Level * Base[0]) + Base[1]
-            Total['Stats'][effect]['BaseCap'] = int(Level * BaseCap[0]) + BaseCap[1]
+            total['Stats'][effect]['Base'] = int(Level * Base[0]) + Base[1]
+            total['Stats'][effect]['BaseCap'] = int(Level * BaseCap[0]) + BaseCap[1]
 
             if effect in DropEffectList['All']['Mythical Stat Cap']:
                 BaseMythicalCap = MythicalCap['Stat Cap']
-                Total['Stats'][effect]['BaseMythicalCap'] = int(Level * BaseMythicalCap[0]) + BaseMythicalCap[1]
+                total['Stats'][effect]['BaseMythicalCap'] = int(Level * BaseMythicalCap[0]) + BaseMythicalCap[1]
 
             if effect == 'Acuity':
                 BaseMythicalCap = MythicalCap['Stat Cap']
                 for value in AllBonusList[self.CurrentRealm][self.CurrentClass][effect]:
-                    Total['Stats'][value]['BaseMythicalCap'] = int(Level * BaseMythicalCap[0]) + BaseMythicalCap[1]
+                    total['Stats'][value]['BaseMythicalCap'] = int(Level * BaseMythicalCap[0]) + BaseMythicalCap[1]
 
             if effect in MythicalCap:
                 BaseMythicalCap = MythicalCap[effect]
-                Total['Stats'][effect]['BaseMythicalCap'] = int(Level * BaseMythicalCap[0]) + BaseMythicalCap[1]
+                total['Stats'][effect]['BaseMythicalCap'] = int(Level * BaseMythicalCap[0]) + BaseMythicalCap[1]
 
         for effect in DropEffectList['All']['Resist']:
-            Total['Resists'][effect] = {}
-            Total['Resists'][effect]['Bonus'] = 0
-            Total['Resists'][effect]['TotalBonus'] = 0
-            Total['Resists'][effect]['MythicalCapBonus'] = 0
-            Total['Resists'][effect]['TotalMythicalCapBonus'] = 0
+            total['Resists'][effect] = {}
+            total['Resists'][effect]['Bonus'] = 0
+            total['Resists'][effect]['TotalBonus'] = 0
+            total['Resists'][effect]['MythicalCapBonus'] = 0
+            total['Resists'][effect]['TotalMythicalCapBonus'] = 0
             Race = str(self.CharacterRace.currentText())
 
             if effect in Races['All'][Race]['Resists']:
-                Total['Resists'][effect]['RacialBonus'] = Races['All'][Race]['Resists'][effect]
+                total['Resists'][effect]['RacialBonus'] = Races['All'][Race]['Resists'][effect]
 
             Base = Cap['Resist']
             BaseMythicalCap = MythicalCap['Resist Cap']
-            Total['Resists'][effect]['Base'] = int(Level * Base[0]) + Base[1]
-            Total['Resists'][effect]['BaseMythicalCap'] = int(Level * BaseMythicalCap[0]) + BaseMythicalCap[1]
+            total['Resists'][effect]['Base'] = int(Level * Base[0]) + Base[1]
+            total['Resists'][effect]['BaseMythicalCap'] = int(Level * BaseMythicalCap[0]) + BaseMythicalCap[1]
 
         for effect in DropEffectList['All']['Focus']:
-            Total['Focus'][effect] = {}
-            Total['Focus'][effect]['Bonus'] = 0
-            Total['Focus'][effect]['TotalBonus'] = 0
+            total['Focus'][effect] = {}
+            total['Focus'][effect]['Bonus'] = 0
+            total['Focus'][effect]['TotalBonus'] = 0
 
             Base = Cap['Focus']
-            Total['Focus'][effect]['Base'] = int(Level * Base[0]) + Base[1]
+            total['Focus'][effect]['Base'] = int(Level * Base[0]) + Base[1]
 
         for effect in DropEffectList['All']['Skill']:
-            Total['Skills'][effect] = {}
-            Total['Skills'][effect]['Bonus'] = 0
-            Total['Skills'][effect]['TotalBonus'] = 0
+            total['Skills'][effect] = {}
+            total['Skills'][effect]['Bonus'] = 0
+            total['Skills'][effect]['TotalBonus'] = 0
 
             Base = Cap['Skill']
-            Total['Skills'][effect]['Base'] = int(Level * Base[0]) + Base[1]
+            total['Skills'][effect]['Base'] = int(Level * Base[0]) + Base[1]
 
         for effect in DropEffectList['All']['Mythical Bonus']:
-            Total['MythicalBonuses'][effect] = {}
-            Total['MythicalBonuses'][effect]['Bonus'] = 0
-            Total['MythicalBonuses'][effect]['TotalBonus'] = 0
+            total['MythicalBonuses'][effect] = {}
+            total['MythicalBonuses'][effect]['Bonus'] = 0
+            total['MythicalBonuses'][effect]['TotalBonus'] = 0
 
             try:  # NOT ALL MYTHICAL BONUSES HAVE A CAP ...
                 Base = MythicalCap[effect]
             except KeyError:
                 Base = MythicalCap['Mythical Bonus']
 
-            Total['MythicalBonuses'][effect]['Base'] = int(Level * Base[0]) + Base[1]
+            total['MythicalBonuses'][effect]['Base'] = int(Level * Base[0]) + Base[1]
 
         for effect in DropEffectList['All']['PvE Bonus']:
-            Total['PvEBonuses'][effect] = {}
-            Total['PvEBonuses'][effect]['Bonus'] = 0
-            Total['PvEBonuses'][effect]['TotalBonus'] = 0
+            total['PvEBonuses'][effect] = {}
+            total['PvEBonuses'][effect]['Bonus'] = 0
+            total['PvEBonuses'][effect]['TotalBonus'] = 0
 
             try:  # NOT ALL PVE BONUSES HAVE A CAP ...
                 Base = Cap[effect]
             except KeyError:
                 Base = Cap['Other Bonus']
 
-            Total['PvEBonuses'][effect]['Base'] = int(Level * Base[0]) + Base[1]
+            total['PvEBonuses'][effect]['Base'] = int(Level * Base[0]) + Base[1]
 
         for effect in DropEffectList['All']['Other Bonus']:
             try:  # NOT ALL BONUSES HAVE A CAP ...
@@ -629,10 +629,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             if effect in ('Spell Range', 'Archery Range'):
                 effect = 'Archery and Spell Range'
 
-            Total['OtherBonuses'][effect] = {}
-            Total['OtherBonuses'][effect]['Bonus'] = 0
-            Total['OtherBonuses'][effect]['TotalBonus'] = 0
-            Total['OtherBonuses'][effect]['Base'] = int(Level * Base[0]) + Base[1]
+            total['OtherBonuses'][effect] = {}
+            total['OtherBonuses'][effect]['Bonus'] = 0
+            total['OtherBonuses'][effect]['TotalBonus'] = 0
+            total['OtherBonuses'][effect]['Base'] = int(Level * Base[0]) + Base[1]
 
         for key, item in self.ItemAttributeList.items():
 
@@ -653,12 +653,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                         effects.extend(AllBonusList[self.CurrentRealm][self.CurrentClass][effect])
 
                     for effect in effects:
-                        amts = Total['Stats'][effect]
+                        amts = total['Stats'][effect]
                         amts['TotalBonus'] += amount
                         amts['Bonus'] = min(amts['TotalBonus'], amts['Base'] + amts['CapBonus'])
 
                 elif item.getSlot(index).getEffectType() == 'Resist':
-                    amts = Total['Resists'][effect]
+                    amts = total['Resists'][effect]
                     amts['TotalBonus'] += amount
                     amts['Bonus'] = min(amts['TotalBonus'], amts['Base'] + amts['MythicalCapBonus'])
 
@@ -669,7 +669,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                         effects.extend(AllBonusList[self.CurrentRealm][self.CurrentClass][effect])
 
                     for effect in effects:
-                        amts = Total['Focus'][effect]
+                        amts = total['Focus'][effect]
                         amts['TotalBonus'] += amount
                         amts['Bonus'] = min(amts['TotalBonus'], amts['Base'])
 
@@ -680,7 +680,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                         effects.extend(AllBonusList[self.CurrentRealm][self.CurrentClass][effect])
 
                     for effect in effects:
-                        amts = Total['Skills'][effect]
+                        amts = total['Skills'][effect]
                         amts['TotalBonus'] += amount
                         amts['Bonus'] = min(amts['TotalBonus'], amts['Base'])
 
@@ -694,7 +694,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                         effects.extend(AllBonusList[self.CurrentRealm][self.CurrentClass][effect])
 
                     for effect in effects:
-                        amts = Total['Stats'][effect]
+                        amts = total['Stats'][effect]
                         amts['TotalCapBonus'] += amount
                         amts['CapBonus'] = min(amts['TotalCapBonus'], amts['BaseCap'])
 
@@ -705,7 +705,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                         effects.extend(AllBonusList[self.CurrentRealm][self.CurrentClass][effect])
 
                     for effect in effects:
-                        amts = Total['Stats'][effect]
+                        amts = total['Stats'][effect]
                         if amts['TotalCapBonus'] < amts['BaseCap']:
                             amts['TotalCapBonus'] += amount
                             if amts['TotalCapBonus'] > amts['BaseCap']:
@@ -717,23 +717,23 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                         amts['MythicalCapBonus'] = min(amts['TotalMythicalCapBonus'], amts['BaseMythicalCap'])
 
                 elif item.getSlot(index).getEffectType() == 'Mythical Resist Cap':
-                    amts = Total['Resists'][effect]
+                    amts = total['Resists'][effect]
                     amts['TotalMythicalCapBonus'] += amount
                     amts['MythicalCapBonus'] = min(amts['TotalMythicalCapBonus'], amts['BaseMythicalCap'])
 
                 elif item.getSlot(index).getEffectType() == 'Mythical Bonus':
-                    amts = Total['MythicalBonuses'][effect]
+                    amts = total['MythicalBonuses'][effect]
                     amts['TotalBonus'] += amount
                     amts['Bonus'] = min(amts['TotalBonus'], amts['Base'])
 
                 elif item.getSlot(index).getEffectType() == 'PvE Bonus':
-                    amts = Total['PvEBonuses'][effect]
+                    amts = total['PvEBonuses'][effect]
                     amts['TotalBonus'] += amount
                     amts['Bonus'] = min(amts['TotalBonus'], amts['Base'])
 
                 elif item.getSlot(index).getEffectType() == 'Other Bonus':
                     if effect in ('Armor Factor', 'Fatigue', '% Power Pool'):
-                        amts = Total['Stats'][effect]
+                        amts = total['Stats'][effect]
                         amts['TotalBonus'] += amount
                         amts['Bonus'] = min(amts['TotalBonus'], amts['Base'])
                         continue
@@ -747,7 +747,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     if effect in ('Spell Range', 'Archery Range'):
                         effect = 'Archery and Spell Range'
 
-                    amts = Total['OtherBonuses'][effect]
+                    amts = total['OtherBonuses'][effect]
                     amts['TotalBonus'] += amount
                     amts['Bonus'] = min(amts['TotalBonus'], amts['Base'])
 
@@ -758,10 +758,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # DEBUGGING
         print('summarize')
 
-        return Total
+        return total
 
     def calculate(self):
-        Total = self.summarize()  # TODO: CHANGE TO LOWER CASE (PEP8)
+        total = self.summarize()
 
         item = self.ItemAttributeList[self.CurrentItemLabel]
         if item.ActiveState in ('Crafted', 'Legendary'):
@@ -776,7 +776,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     self.ImbuePoints[index].setText('%3.1f' % slotImbueValues[index])
                 self.GemName[index].setText(item.getSlot(index).getGemName(self.CurrentRealm))
 
-        for (key, datum) in list(Total['Stats'].items()):
+        for (key, datum) in list(total['Stats'].items()):
             Acuity = AllBonusList[self.CurrentRealm][self.CurrentClass]["Acuity"]
             TotalBonus = datum['TotalBonus']
 
@@ -843,7 +843,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 if BaseMythicalCap == 0:
                     self.StatMythicalCap[key].setText('--  ')
 
-        for key, amts in list(Total['Resists'].items()):
+        for key, amts in list(total['Resists'].items()):
             Base = amts['Base'] + amts['MythicalCapBonus']
             TotalBonus = amts['TotalBonus']
             BaseMythicalCap = amts['BaseMythicalCap']
@@ -859,35 +859,35 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         self.SkillsView.model().removeRows(0, self.SkillsView.model().rowCount())
 
-        for skill, amts in list(Total['Skills'].items()):
+        for skill, amts in list(total['Skills'].items()):
             amount = amts['TotalBonus']
             if amts['Bonus'] > 0 and skill[0:4] != 'All ':
                 if self.DistanceToCap.isChecked():
                     amount = amts['Base'] - amts['TotalBonus']
                 self.insertSkill(amount, skill, 'Skill')
 
-        for focus, amts in list(Total['Focus'].items()):
+        for focus, amts in list(total['Focus'].items()):
             amount = amts['TotalBonus']
             if amts['Bonus'] > 0 and focus[0:4] != 'All ':
                 if self.DistanceToCap.isChecked():
                     amount = amts['Base'] - amts['TotalBonus']
                 self.insertSkill(amount, focus + ' Focus', 'Focus')
 
-        for bonus, amts in list(Total['MythicalBonuses'].items()):
+        for bonus, amts in list(total['MythicalBonuses'].items()):
             amount = amts['TotalBonus']
             if amts['Bonus'] > 0:
                 if self.DistanceToCap.isChecked():
                     amount = amts['Base'] - amts['TotalBonus']
                 self.insertSkill(amount, 'Mythical ' + bonus, 'Bonus')
 
-        for bonus, amts in list(Total['PvEBonuses'].items()):
+        for bonus, amts in list(total['PvEBonuses'].items()):
             amount = amts['TotalBonus']
             if amts['Bonus'] > 0:
                 if self.DistanceToCap.isChecked():
                     amount = amts['Base'] - amts['TotalBonus']
                 self.insertSkill(amount, bonus + ' (PvE)', 'Skill')
 
-        for bonus, amts in list(Total['OtherBonuses'].items()):
+        for bonus, amts in list(total['OtherBonuses'].items()):
             amount = amts['TotalBonus']
             if amts['Bonus'] > 0:
                 if self.DistanceToCap.isChecked():
