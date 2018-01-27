@@ -1649,6 +1649,13 @@
                 </widget>
                </item>
                <item>
+                <widget class="QPushButton" name="ItemSaveButton">
+                 <property name="text">
+                  <string>S</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
                 <widget class="QPushButton" name="ItemDeleteButton">
                  <property name="sizePolicy">
                   <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
@@ -1658,13 +1665,6 @@
                  </property>
                  <property name="text">
                   <string>D</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QPushButton" name="ItemSaveButton">
-                 <property name="text">
-                  <string>S</string>
                  </property>
                 </widget>
                </item>
@@ -2526,8 +2526,6 @@
   <tabstop>ItemLevel</tabstop>
   <tabstop>ItemName</tabstop>
   <tabstop>ItemNewButton</tabstop>
-  <tabstop>ItemDeleteButton</tabstop>
-  <tabstop>ItemInfoButton</tabstop>
   <tabstop>EffectType0</tabstop>
   <tabstop>AmountStatic0</tabstop>
   <tabstop>AmountEdit0</tabstop>

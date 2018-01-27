@@ -1061,8 +1061,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # DEBUGGING
         print('ItemSelected' + ', Selection = ' + str(selection))
 
-    # TODO: MIGRATE TO 'name' INSTEAD ...
-    def ItemNameChanged(self, name):
+    def ItemNameChanged(self):
         if self.ItemName.currentIndex() != 0: return
         item = self.ItemAttributeList[self.CurrentItemLabel]
         item.ItemName = str(self.ItemName.lineEdit().text())
@@ -1141,14 +1140,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # DEBUGGING
         print('EffectChanged, Effect = ' + str(effect))
 
-    # TODO: SIMPLIFY
     def EffectAmountChanged(self, amount = None, index = -1):
         if index == -1: index = self.getSignalSlot()
         item = self.ItemAttributeList[self.CurrentItemLabel]
 
         valuesList = list()
         if item.getSlot(index).getSlotType() in ('Craftable', 'Enhanced'):
-            if item.getSlot(index).getEffect()[0:5] == 'All M':
+            if item.getSlot(index).getEffect()[0:9] in ('All Melee', 'All Magic'):
                 valuesList = CraftedValuesList[item.getSlot(index).getEffectType()][:1]
             elif item.getSlot(index).getSlotType() == 'Craftable':
                 valuesList = CraftedValuesList[item.getSlot(index).getEffectType()]
@@ -1192,19 +1190,16 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # DEBUGGING
         print('EffectRequirementChanged')
 
-    # TODO: SIMPLIFY / ADD LEGENDARY WEAPONS ...
     def newItem(self, action):
-        if action.text() in ('Crafted Item', 'Dropped Item'):
-            itemState = self.ItemAttributeList[self.CurrentItemLabel].ItemEquipped
-            item = Item(action.text()[0:7], self.CurrentItemLabel, self.CurrentRealm, self.ItemIndex)
-            item.ItemName = item.ActiveState + ' Item'
-            self.ItemDictionary[self.CurrentItemLabel].insert(0, item)
-            self.ItemAttributeList[self.CurrentItemLabel] = item
-            self.ItemAttributeList[self.CurrentItemLabel].ItemEquipped = itemState
-            self.RestoreItem(self.ItemAttributeList[self.CurrentItemLabel])
-            self.ItemIndex += 1
-        elif action.text() in ('Legendary Bow', 'Legendary Staff', 'Legendary Weapon'):
-            pass
+        newItemType = action.text().split(None, 1)[0]
+        itemState = self.ItemAttributeList[self.CurrentItemLabel].ItemEquipped
+        item = Item(newItemType, self.CurrentItemLabel, self.CurrentRealm, self.ItemIndex)
+        item.ItemName = item.ActiveState + ' Item'
+        self.ItemDictionary[self.CurrentItemLabel].insert(0, item)
+        self.ItemAttributeList[self.CurrentItemLabel] = item
+        self.ItemAttributeList[self.CurrentItemLabel].ItemEquipped = itemState
+        self.RestoreItem(self.ItemAttributeList[self.CurrentItemLabel])
+        self.ItemIndex += 1
 
         # DEBUGGING
         print('newItem')
@@ -1227,20 +1222,19 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # DEBUGGING
         print('changeItem, Selected Item = %s' % item.ItemName)
 
-    # TODO: SIMPLIFY / ADD LEGENDARY WEAPONS ...
     def changeItemType(self, action):
-        if action.text() in ('Crafted Item', 'Dropped Item'):
-            itemState = self.ItemAttributeList[self.CurrentItemLabel].ItemEquipped
-            itemIndex = self.ItemAttributeList[self.CurrentItemLabel].TemplateIndex
-            item = Item(action.text()[0:7], self.CurrentItemLabel, self.CurrentRealm, itemIndex)
-            item.ItemName = item.ActiveState + ' Item'
-            del self.ItemDictionary[self.CurrentItemLabel][0]
-            self.ItemDictionary[self.CurrentItemLabel].insert(0, item)
-            self.ItemAttributeList[self.CurrentItemLabel] = item
-            self.ItemAttributeList[self.CurrentItemLabel].ItemEquipped = itemState
-            self.RestoreItem(self.ItemAttributeList[self.CurrentItemLabel])
-        elif action.text() in ('Legendary Bow', 'Legendary Staff', 'Legendary Weapon'):
-            pass
+        newItemType = action.text().split(None, 1)[0]
+        itemState = self.ItemAttributeList[self.CurrentItemLabel].ItemEquipped
+        itemIndex = self.ItemAttributeList[self.CurrentItemLabel].TemplateIndex
+        item = Item(newItemType, self.CurrentItemLabel, self.CurrentRealm, itemIndex)
+        item.ItemName = item.ActiveState + ' Item'
+        del self.ItemDictionary[self.CurrentItemLabel][0]
+        self.ItemDictionary[self.CurrentItemLabel].insert(0, item)
+        self.ItemAttributeList[self.CurrentItemLabel] = item
+        self.ItemAttributeList[self.CurrentItemLabel].ItemEquipped = itemState
+        self.RestoreItem(self.ItemAttributeList[self.CurrentItemLabel])
+
+        # TODO: ADD LEGENDARY EFFECTS
 
         # DEBUGGING
         print('changeItemType')
