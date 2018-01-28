@@ -96,11 +96,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def initMenuBar(self):
         self.FileMenu.addAction('E&xit', self.close, QKeySequence(Qt.CTRL + Qt.Key_X))
 
+        self.EditMenu.addAction('Load Item ...', self.loadItem)
+        self.EditMenu.addAction('Save Item ...', self.saveItem)
+        self.EditMenu.addSeparator()
         self.EditMenu.addMenu(self.ItemTypeMenu)
+        self.EditMenu.addMenu(self.ItemMoveMenu)
         self.EditMenu.addMenu(self.ItemSwapMenu)
         self.EditMenu.addSeparator()
         self.EditMenu.addMenu(self.ItemNewMenu)
-        self.EditMenu.addMenu(self.ItemMoveMenu)
         self.EditMenu.addAction('Delete Item', self.deleteItem)
         self.EditMenu.addAction('Clear Item', self.clearItem)
         self.EditMenu.addAction('Clear Slots', self.clearItemSlots)
@@ -397,8 +400,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ItemName.activated[int].connect(self.changeItem)
         self.ItemName.editTextChanged[str].connect(self.ItemNameChanged)
         self.ItemLoadButton.clicked.connect(self.loadItem)
-        self.ItemDeleteButton.clicked.connect(self.deleteItem)
         self.ItemSaveButton.clicked.connect(self.saveItem)
+        self.ItemDeleteButton.clicked.connect(self.deleteItem)
 
     def LoadOptions(self):
         pass
@@ -442,6 +445,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         for index in range(0, item.getSlotCount()):
             if item.getSlot(index).getSlotType() == 'Craftable':
                 self.SlotLabel[index].setText('Gem &%d:' % (index + 1))
+            if item.getSlot(index).getSlotType() == 'Dropped':
+                self.EffectType[index].setDisabled(False)
+                self.Effect[index].setDisabled(False)
+                self.AmountEdit[index].setDisabled(False)
 
         # DEBUGGING
         print('showCraftWidgets')
@@ -456,6 +463,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         for index in range(0, item.getSlotCount()):
             if item.getSlot(index).getSlotType() == 'Craftable':
                 self.SlotLabel[index].setText('Gem &%d:' % (index + 1))
+            if item.getSlot(index).getSlotType() == 'Dropped':
+                self.EffectType[index].setDisabled(True)
+                self.Effect[index].setDisabled(True)
+                self.AmountEdit[index].setDisabled(True)
 
         # DEBUGGING
         print('showLegendaryWidgets')
@@ -470,6 +481,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         for index in range(0, item.getSlotCount()):
             if item.getSlot(index).getSlotType() == 'Dropped':
                 self.SlotLabel[index].setText('Slot &%d:' % (index + 1))
+                self.EffectType[index].setDisabled(False)
+                self.Effect[index].setDisabled(False)
+                self.AmountEdit[index].setDisabled(False)
 
         # DEBUGGING
         print('showDropWidgets')
@@ -1164,6 +1178,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         elif item.getSlot(index).getSlotType() == 'Dropped':
             if item.getSlot(index).getEffectType() == 'Unused':
+                print('slot is unused')
                 self.AmountEdit[index].clear()
                 item.getSlot(index).setEffectAmount('')
             item.getSlot(index).setEffectAmount(amount)
@@ -1194,14 +1209,24 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         newItemType = action.text().split(None, 1)[0]
         itemState = self.ItemAttributeList[self.CurrentItemLabel].ItemEquipped
         item = Item(newItemType, self.CurrentItemLabel, self.CurrentRealm, self.ItemIndex)
-        item.ItemName = item.ActiveState + ' Item'
+        item.ItemName = action.text()
         self.ItemDictionary[self.CurrentItemLabel].insert(0, item)
         self.ItemAttributeList[self.CurrentItemLabel] = item
         self.ItemAttributeList[self.CurrentItemLabel].ItemEquipped = itemState
 
-        # TODO: ADD LEGENDARY EFFECTS
         if newItemType == 'Legendary':
-            pass
+            if action.text().split(None, 1)[1] == 'Staff':
+                item.getSlot(4).setAll('Focus', 'All Spell Lines', '50')
+                item.getSlot(5).setAll('Other Bonus', 'Casting Speed', '3')
+                item.getSlot(6).setAll('Other Bonus', 'Spell Damage', '3')
+            elif action.text().split(None, 1)[1] == 'Bow':
+                item.getSlot(4).setAll('Other Bonus', 'Armor Factor', '10')
+                item.getSlot(5).setAll('Other Bonus', 'Archery Speed', '3')
+                item.getSlot(6).setAll('Other Bonus', 'Archery Damage', '3')
+            elif action.text().split(None, 1)[1] == 'Weapon':
+                item.getSlot(4).setAll('Other Bonus', 'Armor Factor', '10')
+                item.getSlot(5).setAll('Other Bonus', 'Melee Damage', '3')
+                item.getSlot(6).setAll('Other Bonus', 'Style Damage', '3')
 
         self.RestoreItem(self.ItemAttributeList[self.CurrentItemLabel])
         self.ItemIndex += 1
@@ -1232,15 +1257,25 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         itemState = self.ItemAttributeList[self.CurrentItemLabel].ItemEquipped
         itemIndex = self.ItemAttributeList[self.CurrentItemLabel].TemplateIndex
         item = Item(newItemType, self.CurrentItemLabel, self.CurrentRealm, itemIndex)
-        item.ItemName = item.ActiveState + ' Item'
+        item.ItemName = action.text()
         del self.ItemDictionary[self.CurrentItemLabel][0]
         self.ItemDictionary[self.CurrentItemLabel].insert(0, item)
         self.ItemAttributeList[self.CurrentItemLabel] = item
         self.ItemAttributeList[self.CurrentItemLabel].ItemEquipped = itemState
 
-        # TODO: ADD LEGENDARY EFFECTS
         if newItemType == 'Legendary':
-            pass
+            if action.text().split(None, 1)[1] == 'Staff':
+                item.getSlot(4).setAll('Focus', 'All Spell Lines', '50')
+                item.getSlot(5).setAll('Other Bonus', 'Casting Speed', '3')
+                item.getSlot(6).setAll('Other Bonus', 'Spell Damage', '3')
+            elif action.text().split(None, 1)[1] == 'Bow':
+                item.getSlot(4).setAll('Other Bonus', 'Armor Factor', '10')
+                item.getSlot(5).setAll('Other Bonus', 'Archery Speed', '3')
+                item.getSlot(6).setAll('Other Bonus', 'Archery Damage', '3')
+            elif action.text().split(None, 1)[1] == 'Weapon':
+                item.getSlot(4).setAll('Other Bonus', 'Armor Factor', '10')
+                item.getSlot(5).setAll('Other Bonus', 'Melee Damage', '3')
+                item.getSlot(6).setAll('Other Bonus', 'Style Damage', '3')
 
         self.RestoreItem(self.ItemAttributeList[self.CurrentItemLabel])
 
