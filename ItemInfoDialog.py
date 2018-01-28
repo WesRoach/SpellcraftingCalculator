@@ -51,7 +51,11 @@ class ItemInformationDialog(QDialog, Ui_ItemInfoDialog):
         if item.ActiveState == 'Crafted':
             self.RealmList = Realms
             self.SourceTypes.extend(('Crafted',))
-            self.DamageTypes.extend(('Slash', 'Thrust', 'Crush', 'Elemental',))
+            self.DamageTypes.extend(('Slash', 'Thrust', 'Crush', ))
+        elif item.ActiveState == 'Legendary':
+            self.RealmList = Realms
+            self.SourceTypes.extend(('Crafted',))
+            self.DamageTypes.extend(('Elemental',))
         elif item.ActiveState == 'Dropped':
             self.RealmList = AllRealms
             self.SourceTypes.extend(('Drop', 'Quest', 'Artifact', 'Merchant',))
