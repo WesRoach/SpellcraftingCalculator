@@ -1,7 +1,10 @@
 # HEADER PLACE HOLDER
 
+from PyQt5.QtWidgets import QMessageBox
 from Character import ItemTypes
 from Constants import CraftedEffectTable, CraftedValuesList, GemNames, ImbuePoints, SlotList
+from xml.dom.minidom import *
+import re
 
 
 class Item:
@@ -118,6 +121,28 @@ class Item:
             return 0.0
         return ImbuePoints[int(self.ItemLevel) - 1]
 
+    def importFromFile(self, filename, hint = ''):
+        file = open(filename)
+        document = file.read()
+        if re.compile('^<\?xml').match(document) is not None:
+            xmldoc = parseString(document)
+            items = xmldoc.getElementsByTagName('SCItem')  # TRY-EXCEPT ('SCItem') ('Item')
+            self.loadFromXML(items[0], hint)
+        file.close()
+
+        # DEBUGGING
+        print('importFromFile')
+
+    def exportToFile(self, filename):
+
+        # DEBUGGING
+        print('exportToFile')
+
+    def loadFromXML(self, item, hint = '', convert = False):
+
+        # DEBUGGING
+        print('loadFromXML')
+
 
 class ItemSlot:
 
@@ -131,6 +156,11 @@ class ItemSlot:
     def isCraftable(self):
         if self.getSlotType() == 'Craftable':
             return True if (self.getEffectType() != 'Unused') else False
+
+    def setAll(self, etype, effect, amount,):
+        self.EffectType = etype
+        self.Effect = effect
+        self.EffectAmount = amount
 
     def setEffectType(self, etype):
         self.EffectType = etype
@@ -187,9 +217,9 @@ class ItemSlot:
         if self.getSlotType() == 'Enhanced':
             if self.getEffectType() == 'Unused':
                 return 'Unused'
-            return 'ARMOR NAME'
+            return 'Craftable Item Bonus'
         if self.getSlotType() == 'Dropped':
-            return 'Non-Craftable Bonus'
+            return 'Non-Craftable Item Bonus'
         if not self.isCraftable():
             return '--> SET THE COLUMN WIDTH'
         tier = GemNames[self.getGemIndex()]
