@@ -118,6 +118,7 @@ class Item:
             return 0.0
         return ImbuePoints[int(self.ItemLevel) - 1]
 
+    # TODO: SWITCH TO LXML!
     def importFromXML(self, filename, hint = ''):
 
         # DEBUGGING
