@@ -3,8 +3,8 @@
 from PyQt5 import uic
 from PyQt5.Qt import QAction, Qt, QKeySequence
 from PyQt5.QtCore import QSize, QModelIndex, QVariant
-from PyQt5.QtGui import QFont, QFontMetrics, QIcon, QIntValidator
-from PyQt5.QtWidgets import QLabel, QMainWindow, QMenu, QToolBar, QTreeWidgetItem, QTreeWidgetItemIterator, QStyle, QStyleOptionComboBox
+from PyQt5.QtGui import QFontMetrics, QIcon, QIntValidator
+from PyQt5.QtWidgets import QFileDialog, QLabel, QMainWindow, QMenu, QToolBar, QTreeWidgetItem, QTreeWidgetItemIterator, QStyle, QStyleOptionComboBox
 from Character import AllBonusList, ClassList, Races, Realms
 from Constants import Cap,  CraftedTypeList, CraftedEffectList, CraftedValuesList, DropTypeList, DropEffectList
 from Constants import EnhancedTypeList, EnhancedEffectList, EnhancedValuesList, MythicalCap, SlotList
@@ -1178,7 +1178,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         elif item.getSlot(index).getSlotType() == 'Dropped':
             if item.getSlot(index).getEffectType() == 'Unused':
-                print('slot is unused')
                 self.AmountEdit[index].clear()
                 item.getSlot(index).setEffectAmount('')
             item.getSlot(index).setEffectAmount(amount)
@@ -1304,6 +1303,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         print('clearItemSlots')
 
     def loadItem(self):
+        options = QFileDialog.Options()
+        filename, filters = QFileDialog.getOpenFileName(
+            self, 'Load Item:', '', 'Items (*.xml);; All Files (*.*)', options = options,)
+        item = Item('Dropped', self.CurrentItemLabel, self.CurrentRealm, self.ItemIndex)
+        item.importFromXML(filename, )
 
         # DEBUGGING
         print('loadItem')

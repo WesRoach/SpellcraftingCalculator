@@ -1,10 +1,7 @@
 # HEADER PLACE HOLDER
 
-from PyQt5.QtWidgets import QMessageBox
 from Character import ItemTypes
 from Constants import CraftedEffectTable, CraftedValuesList, GemNames, ImbuePoints, SlotList
-from xml.dom.minidom import *
-import re
 
 
 class Item:
@@ -121,27 +118,15 @@ class Item:
             return 0.0
         return ImbuePoints[int(self.ItemLevel) - 1]
 
-    def importFromFile(self, filename, hint = ''):
-        file = open(filename)
-        document = file.read()
-        if re.compile('^<\?xml').match(document) is not None:
-            xmldoc = parseString(document)
-            items = xmldoc.getElementsByTagName('SCItem')  # TRY-EXCEPT ('SCItem') ('Item')
-            self.loadFromXML(items[0], hint)
-        file.close()
+    def importFromXML(self, filename, hint = ''):
 
         # DEBUGGING
         print('importFromFile')
 
-    def exportToFile(self, filename):
+    def exportAsXML(self, filename):
 
         # DEBUGGING
         print('exportToFile')
-
-    def loadFromXML(self, item, hint = '', convert = False):
-
-        # DEBUGGING
-        print('loadFromXML')
 
 
 class ItemSlot:
