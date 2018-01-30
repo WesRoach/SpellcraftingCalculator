@@ -2,6 +2,8 @@
 
 from Character import ItemTypes
 from Constants import CraftedEffectTable, CraftedValuesList, GemNames, ImbuePoints, SlotList
+from xml.dom.minidom import parseString
+import re
 
 
 class Item:
@@ -96,18 +98,15 @@ class Item:
     def getSlotImbueValues(self):
         if self.ActiveState not in ('Crafted', 'Legendary'):
             return 0.0, 0.0, 0.0, 0.0
-
         values = []
         for index in range(0, self.getSlotCount() - 1):
             if self.getSlot(index).getSlotType() == 'Craftable':
                 values.append(self.getSlot(index).getImbueValue())
-
         maxValue = max(values)
         for index in range(0, self.getSlotCount() - 1):
             if self.getSlot(index).getSlotType() == 'Craftable':
                 if index == values.index(maxValue): continue
                 values[index] /= 2.0
-
         return values
 
     # TODO: ADJUST FOR LEGENDARY (USE SLOT TYPE) ...
@@ -118,8 +117,14 @@ class Item:
             return 0.0
         return ImbuePoints[int(self.ItemLevel) - 1]
 
-    # TODO: SWITCH TO LXML!
+    # TODO: FINISH SECTION
     def importFromXML(self, filename, hint = ''):
+        file = open(filename)
+        document = file.read()
+        if re.compile('^<\?xml').match(document):
+            xml = parseString(document)
+            elements = xml.getElementsByTagName('Item')
+        file.close()
 
         # DEBUGGING
         print('importFromFile')
@@ -181,7 +186,6 @@ class ItemSlot:
         if self.getEffectType() == 'Stat':
             if self.getEffect() not in ('Hits', 'Power'):
                 value = round((int(self.getEffectAmount()) - 1) / 1.7)
-                print(str(value))
             elif self.getEffect() == 'Hits':
                 value = int(self.getEffectAmount()) / 4.0
             elif self.getEffect() == 'Power':
@@ -198,7 +202,7 @@ class ItemSlot:
         elif self.getEffectType() in CraftedValuesList:
             return CraftedValuesList[self.getEffectType()].index(self.getEffectAmount())
 
-    # TODO: UPDATE VARIABLE NAMES, IMPLEMENT ENHANCED ITEMS
+    # TODO: IMPLEMENT ENHANCED ITEMS
     def getGemName(self, realm):
         if self.getSlotType() == 'Enhanced':
             if self.getEffectType() == 'Unused':
