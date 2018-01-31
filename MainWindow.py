@@ -1307,7 +1307,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         filename, filters = QFileDialog.getOpenFileName(
             self, 'Load Item:', '', 'Items (*.xml);; All Files (*.*)', options = options,)
         item = Item('Dropped', self.CurrentItemLabel, self.CurrentRealm, self.ItemIndex)
-        item.importFromXML(filename, )
+        item.importFromXML(filename)
 
         # DEBUGGING
         print('loadItem')
