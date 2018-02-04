@@ -2,13 +2,15 @@
 
 from Character import ItemTypes
 from Constants import CraftedEffectTable, CraftedValuesList, GemNames, ImbuePoints, SlotList
-from xml.dom.minidom import parseString
-import re
+from lxml import etree
 
 
 class Item:
 
     def __init__(self, state = '', location = '', realm = 'All', index = -1):
+
+        # TODO: UPDATE VARIABLE NAMES ...
+
         self.ActiveState = state
         self.ItemEquipped = int
         self.ItemLocation = location
@@ -58,7 +60,6 @@ class Item:
                     self.ItemType = ItemTypes[key][0]
             self.ItemEquipped = 2
 
-    # TODO: THIS NEEDS TO BE CLEANED UP ...
     def makeItemSlots(self):
         ItemSlots = []
         if self.ActiveState == 'Crafted':
@@ -117,14 +118,15 @@ class Item:
             return 0.0
         return ImbuePoints[int(self.ItemLevel) - 1]
 
-    # TODO: FINISH SECTION
+    # TODO: REMOVE SUPPORT FOR OLD ITEMS ...
     def importFromXML(self, filename, hint = ''):
-        file = open(filename)
-        document = file.read()
-        if re.compile('^<\?xml').match(document):
-            xml = parseString(document)
-            elements = xml.getElementsByTagName('Item')
-        file.close()
+        tree = etree.parse(filename)
+        item = tree.iter()
+        item_slots = []
+
+        for element in item:
+            if element.tag == 'ItemSlot':
+                item_slots.append(element)
 
         # DEBUGGING
         print('importFromFile')
