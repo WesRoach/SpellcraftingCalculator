@@ -1,5 +1,6 @@
 # HEADER PLACE HOLDER
 
+from PyQt5.QtWidgets import QMessageBox
 from Character import ItemTypes
 from Constants import CraftedEffectTable, CraftedValuesList, GemNames, ImbuePoints, SlotList
 from lxml import etree
@@ -115,15 +116,25 @@ class Item:
             return 0.0
         return ImbuePoints[int(self.Level) - 1]
 
-    # TODO: REMOVE SUPPORT FOR OLD ITEMS ...
-    def importFromXML(self, filename, hint = ''):
+    def importFromXML(self, filename, label):
         tree = etree.parse(filename)
         item = tree.iter()
-        item_slots = []
-
         for element in item:
-            if element.tag == 'ItemSlot':
-                item_slots.append(element)
+            if element.tag in ('Gem', 'Slot'):
+                index = int(element.attrib['Number'])
+                for attribute in element:
+                    if attribute.tag == 'EffectType':
+                        self.getSlot(index).setEffectType(attribute.text)
+                    elif attribute.tag == 'Effect':
+                        self.getSlot(index).setEffect(attribute.text)
+                    elif attribute.tag == 'Amount':
+                        self.getSlot(index).setEffectAmount(attribute.text)
+            elif element.tag in self.__dict__:
+                setattr(self, element.tag, element.text)
+            if element.tag == 'ActiveState':
+                self.SlotList = self.makeItemSlots()
+            if element.tag == 'Equipped':
+                self.Equipped = int(element.text)
 
         # DEBUGGING
         print('importFromFile')

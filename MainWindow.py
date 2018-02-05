@@ -1309,12 +1309,17 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # DEBUGGING
         print('clearItemSlots')
 
+    # TODO: TEST FOR VALID XML FILE BEFORE PROCEEDING ...
     def loadItem(self):
         options = QFileDialog.Options()
         filename, filters = QFileDialog.getOpenFileName(
             self, 'Load Item:', '', 'Items (*.xml);; All Files (*.*)', options = options,)
         item = Item('Imported', self.CurrentItemLabel, self.CurrentRealm, self.ItemIndex)
-        item.importFromXML(filename)
+        item.importFromXML(filename, self.CurrentItemLabel)
+        self.ItemDictionary[self.CurrentItemLabel].insert(0, item)
+        self.ItemAttributeList[self.CurrentItemLabel] = item
+        self.ItemAttributeList[self.CurrentItemLabel].Equipped = item.Equipped
+        self.RestoreItem(self.ItemAttributeList[self.CurrentItemLabel])
 
         # DEBUGGING
         print('loadItem')
