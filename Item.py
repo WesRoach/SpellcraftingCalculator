@@ -1,6 +1,5 @@
 # HEADER PLACE HOLDER
 
-from PyQt5.QtWidgets import QMessageBox
 from Character import ItemTypes
 from Constants import CraftedEffectTable, CraftedValuesList, GemNames, ImbuePoints, SlotList
 from lxml import etree
