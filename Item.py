@@ -8,57 +8,54 @@ from lxml import etree
 class Item:
 
     def __init__(self, state = '', location = '', realm = 'All', index = -1):
-
-        # TODO: UPDATE VARIABLE NAMES ...
-
         self.ActiveState = state
-        self.ItemEquipped = int
-        self.ItemLocation = location
-        self.ItemRealm = realm
-        self.ItemLevel = ''
-        self.ItemQuality = ''
-        self.ItemType = ''
-        self.ItemName = ''
-        self.ItemAFDPS = ''
-        self.ItemSpeed = ''
-        self.ItemBonus = ''
-        self.ItemSource = ''
+        self.Equipped = int
+        self.Location = location
+        self.Realm = realm
+        self.Level = ''
+        self.Quality = ''
+        self.Type = ''
+        self.Name = ''
+        self.AFDPS = ''
+        self.Speed = ''
+        self.Bonus = ''
+        self.Origin = ''
         self.LeftHand = ''
-        self.ItemDamageType = ''
-        self.ItemRestrictions = list()
-        self.ItemNotes = ''
-        self.ItemRequirement = ''
+        self.DamageType = ''
+        self.Restrictions = list()
+        self.Notes = ''
+        self.Requirement = ''
         self.TemplateIndex = index
-        self.ItemSlotList = self.makeItemSlots()
+        self.SlotList = self.makeItemSlots()
 
         # SET THE INITIAL ITEM PROPERTIES
         self.setInitialItemProperties()
 
     def setInitialItemProperties(self):
-        if self.ItemLocation in SlotList['Jewelery']:
-            self.ItemLevel = '50'
+        if self.Location in SlotList['Jewelery']:
+            self.Level = '50'
             for key, value in ItemTypes.items():
-                if self.ItemLocation == key:
-                    self.ItemType = ItemTypes[key][0]
-            self.ItemEquipped = 2
-        elif self.ItemLocation in SlotList['Armor']:
-            self.ItemLevel = '51'
+                if self.Location == key:
+                    self.Type = ItemTypes[key][0]
+            self.Equipped = 2
+        elif self.Location in SlotList['Armor']:
+            self.Level = '51'
             for key, value in ItemTypes.items():
-                if self.ItemLocation == key:
-                    self.ItemType = ItemTypes[key][self.ItemRealm][0]
-            self.ItemEquipped = 2
-        elif self.ItemLocation in SlotList['Weapons']:
-            self.ItemLevel = '51'
+                if self.Location == key:
+                    self.Type = ItemTypes[key][self.Realm][0]
+            self.Equipped = 2
+        elif self.Location in SlotList['Weapons']:
+            self.Level = '51'
             for key, value in ItemTypes.items():
-                if self.ItemLocation == key:
-                    self.ItemType = ItemTypes[key][self.ItemRealm][0]
-            self.ItemEquipped = 0
-        elif self.ItemLocation in SlotList['Mythical']:
-            self.ItemLevel = '50'
+                if self.Location == key:
+                    self.Type = ItemTypes[key][self.Realm][0]
+            self.Equipped = 0
+        elif self.Location in SlotList['Mythical']:
+            self.Level = '50'
             for key, value in ItemTypes.items():
-                if self.ItemLocation in SlotList['Mythical'] == value:
-                    self.ItemType = ItemTypes[key][0]
-            self.ItemEquipped = 2
+                if self.Location in SlotList['Mythical'] == value:
+                    self.Type = ItemTypes[key][0]
+            self.Equipped = 2
 
     def makeItemSlots(self):
         ItemSlots = []
@@ -78,22 +75,22 @@ class Item:
         return ItemSlots
 
     def addSlot(self, itype):
-        self.ItemSlotList.append(ItemSlot(itype))
+        self.SlotList.append(ItemSlot(itype))
 
     def removeSlot(self, index):
-        del self.ItemSlotList[index]
+        del self.SlotList[index]
 
     def getSlot(self, index):
-        return self.ItemSlotList[index]
+        return self.SlotList[index]
 
     def getSlotCount(self):
-        return len(self.ItemSlotList)
+        return len(self.SlotList)
 
     def getSlotList(self):
-        return list(self.ItemSlotList)
+        return list(self.SlotList)
 
     def clearSlots(self):
-        self.ItemSlotList = self.makeItemSlots()
+        self.SlotList = self.makeItemSlots()
 
     # TODO: ADJUST FOR LEGENDARY ...
     def getSlotImbueValues(self):
@@ -114,9 +111,9 @@ class Item:
     def getItemImbueValue(self):
         if self.ActiveState != 'Crafted':
             return 0.0
-        if int(self.ItemLevel) < 1 or int(self.ItemLevel) > 51:
+        if int(self.Level) < 1 or int(self.Level) > 51:
             return 0.0
-        return ImbuePoints[int(self.ItemLevel) - 1]
+        return ImbuePoints[int(self.Level) - 1]
 
     # TODO: REMOVE SUPPORT FOR OLD ITEMS ...
     def importFromXML(self, filename, hint = ''):

@@ -271,6 +271,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             'Dropped': [self.RequirementLabel]}
 
         self.ItemLevel.setFixedSize(QSize(amountEditWidth, defaultFixedHeight))
+        self.ItemQuality.setFixedSize(QSize(amountEditWidth, defaultFixedHeight))
         self.ItemNewButton.setFixedSize(QSize(buttonFixedWidth, buttonFixedHeight))
         self.ItemTypeButton.setFixedSize(QSize(buttonFixedWidth, buttonFixedHeight))
         self.ItemLoadButton.setFixedSize(QSize(buttonFixedWidth, buttonFixedHeight))
@@ -359,13 +360,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             for val in value:
                 if key == 'Armor':
                     item = Item('Crafted', val, self.CurrentRealm, self.ItemIndex)
-                    item.ItemName = item.ActiveState + ' Item'
+                    item.Name = item.ActiveState + ' Item'
                     self.ItemIndex += 1
                     self.ItemAttributeList[val] = item
                     self.ItemDictionary[val] = [item]
                 else:
                     item = Item('Dropped', val, self.CurrentRealm, self.ItemIndex)
-                    item.ItemName = item.ActiveState + ' Item'
+                    item.Name = item.ActiveState + ' Item'
                     self.ItemIndex += 1
                     self.ItemAttributeList[val] = item
                     self.ItemDictionary[val] = [item]
@@ -377,7 +378,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         while iterator.value():
             selection = iterator.value()
             if selection.flags() & Qt.ItemIsUserCheckable:
-                currentState = self.ItemAttributeList[selection.text(0)].ItemEquipped
+                currentState = self.ItemAttributeList[selection.text(0)].Equipped
                 if currentState == 2:
                     selection.setCheckState(0, Qt.Checked)
                 elif currentState == 0:
@@ -397,6 +398,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.CharacterClass.activated[int].connect(self.CharacterClassChanged)
         self.CharacterRace.activated[int].connect(self.CharacterRaceChanged)
         self.ItemLevel.editingFinished.connect(self.ItemLevelChanged)
+        self.ItemQuality.editingFinished.connect(self.ItemQualityChanged)
         self.ItemName.activated[int].connect(self.changeItem)
         self.ItemName.editTextChanged[str].connect(self.ItemNameChanged)
         self.ItemLoadButton.clicked.connect(self.loadItem)
@@ -497,8 +499,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.showDropWidgets(item)
 
         self.ItemName.clear()
-        for value in self.ItemDictionary[item.ItemLocation]:
-            self.ItemName.addItem(value.ItemName)
+        for value in self.ItemDictionary[item.Location]:
+            self.ItemName.addItem(value.Name)
 
         # itemNameList = item
         # while itemNameList is not None:
@@ -506,7 +508,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         #     itemNameList = itemNameList.NextItem
 
         self.ItemName.setCurrentIndex(0)
-        self.ItemLevel.setText(item.ItemLevel)
+        self.ItemLevel.setText(item.Level)
 
         for index in range(0, item.getSlotCount()):
             self.EffectTypeChanged(item.getSlot(index).getEffectType(), index)
@@ -653,7 +655,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             # DEBUGGING
             amts = ''
 
-            if not item.ItemEquipped == 2:
+            if not item.Equipped == 2:
                 continue
 
             for index in range(0, item.getSlotCount()):
@@ -1078,16 +1080,16 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def ItemNameChanged(self):
         if self.ItemName.currentIndex() != 0: return
         item = self.ItemAttributeList[self.CurrentItemLabel]
-        item.ItemName = str(self.ItemName.lineEdit().text())
+        item.Name = str(self.ItemName.lineEdit().text())
         cursorPosition = self.ItemName.lineEdit().cursorPosition()
-        self.ItemName.setItemText(0, item.ItemName)
+        self.ItemName.setItemText(0, item.Name)
         self.ItemName.lineEdit().setCursorPosition(cursorPosition)
 
         # DEBUGGING
         print('ItemNameChanged')
 
     def ItemStateChanged(self, selection, column):
-        self.ItemAttributeList[selection.text(column)].ItemEquipped = selection.checkState(column)
+        self.ItemAttributeList[selection.text(column)].Equipped = selection.checkState(column)
         if selection.text(column) == self.SlotListTreeView.selectedIndexes():
             self.RestoreItem(self.ItemAttributeList[selection.text(column)])
 
@@ -1096,12 +1098,17 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def ItemLevelChanged(self):
         item = self.ItemAttributeList[self.CurrentItemLabel]
-        item.ItemLevel = self.ItemLevel.text()
+        item.Level = self.ItemLevel.text()
         self.ItemLevel.setModified(False)
         self.RestoreItem(self.ItemAttributeList[self.CurrentItemLabel])
 
         # DEBUGGING
         print('ItemLevelChanged')
+
+    def ItemQualityChanged(self):
+
+        # DEBUGGING
+        print('ItemQualityChanged')
 
     def EffectTypeChanged(self, etype = None, index = -1):
         if index == -1: index = self.getSignalSlot()
@@ -1115,7 +1122,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         elif item.getSlot(index).getSlotType() == 'Dropped':
             self.EffectType[index].insertItems(0, DropTypeList)
 
-        if item.ItemLocation not in ('Two-Handed', 'Spare'):
+        if item.Location not in ('Two-Handed', 'Spare'):
             self.EffectType[index].removeItem(self.EffectType[index].findText('Focus'))
 
         self.EffectType[index].setCurrentText(etype)
@@ -1206,12 +1213,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def newItem(self, action):
         newItemType = action.text().split(None, 1)[0]
-        itemState = self.ItemAttributeList[self.CurrentItemLabel].ItemEquipped
+        itemState = self.ItemAttributeList[self.CurrentItemLabel].Equipped
         item = Item(newItemType, self.CurrentItemLabel, self.CurrentRealm, self.ItemIndex)
-        item.ItemName = action.text()
+        item.Name = action.text()
         self.ItemDictionary[self.CurrentItemLabel].insert(0, item)
         self.ItemAttributeList[self.CurrentItemLabel] = item
-        self.ItemAttributeList[self.CurrentItemLabel].ItemEquipped = itemState
+        self.ItemAttributeList[self.CurrentItemLabel].Equipped = itemState
 
         if newItemType == 'Legendary':
             if action.text().split(None, 1)[1] == 'Staff':
@@ -1234,8 +1241,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         print('newItem')
 
     def changeItem(self, index):
-        itemState = self.ItemAttributeList[self.CurrentItemLabel].ItemEquipped
-        self.ItemAttributeList[self.CurrentItemLabel].ItemEquipped = 0
+        itemState = self.ItemAttributeList[self.CurrentItemLabel].Equipped
+        self.ItemAttributeList[self.CurrentItemLabel].Equipped = 0
 
         try:  # FIXES BUG IN 'QComboBox' WHEN PRESSING ENTER ...
             item = self.ItemDictionary[self.CurrentItemLabel][index]
@@ -1245,22 +1252,22 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ItemDictionary[self.CurrentItemLabel].remove(item)
         self.ItemDictionary[self.CurrentItemLabel].insert(0, item)
         self.ItemAttributeList[self.CurrentItemLabel] = item
-        self.ItemAttributeList[self.CurrentItemLabel].ItemEquipped = itemState
+        self.ItemAttributeList[self.CurrentItemLabel].Equipped = itemState
         self.RestoreItem(self.ItemAttributeList[self.CurrentItemLabel])
 
         # DEBUGGING
-        print('changeItem, Selected Item = %s' % item.ItemName)
+        print('changeItem, Selected Item = %s' % item.Name)
 
     def changeItemType(self, action):
         newItemType = action.text().split(None, 1)[0]
-        itemState = self.ItemAttributeList[self.CurrentItemLabel].ItemEquipped
+        itemState = self.ItemAttributeList[self.CurrentItemLabel].Equipped
         itemIndex = self.ItemAttributeList[self.CurrentItemLabel].TemplateIndex
         item = Item(newItemType, self.CurrentItemLabel, self.CurrentRealm, itemIndex)
-        item.ItemName = action.text()
+        item.Name = action.text()
         del self.ItemDictionary[self.CurrentItemLabel][0]
         self.ItemDictionary[self.CurrentItemLabel].insert(0, item)
         self.ItemAttributeList[self.CurrentItemLabel] = item
-        self.ItemAttributeList[self.CurrentItemLabel].ItemEquipped = itemState
+        self.ItemAttributeList[self.CurrentItemLabel].Equipped = itemState
 
         if newItemType == 'Legendary':
             if action.text().split(None, 1)[1] == 'Staff':
@@ -1283,13 +1290,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def clearItem(self):
         item = self.ItemAttributeList[self.CurrentItemLabel]
-        itemState = self.ItemAttributeList[self.CurrentItemLabel].ItemEquipped
+        itemState = self.ItemAttributeList[self.CurrentItemLabel].Equipped
         self.ItemDictionary[self.CurrentItemLabel].remove(item)
         item = Item(item.ActiveState, self.CurrentItemLabel, self.CurrentRealm, item.TemplateIndex)
-        item.ItemName = item.ActiveState + ' Item'
+        item.Name = item.ActiveState + ' Item'
         self.ItemDictionary[self.CurrentItemLabel].insert(0, item)
         self.ItemAttributeList[self.CurrentItemLabel] = item
-        self.ItemAttributeList[self.CurrentItemLabel].ItemEquipped = itemState
+        self.ItemAttributeList[self.CurrentItemLabel].Equipped = itemState
         self.RestoreItem(self.ItemAttributeList[self.CurrentItemLabel])
 
         # DEBUGGING
@@ -1321,11 +1328,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if len(self.ItemDictionary[self.CurrentItemLabel]) == 1:
             self.clearItem()
             return
-        itemState = self.ItemAttributeList[self.CurrentItemLabel].ItemEquipped
+        itemState = self.ItemAttributeList[self.CurrentItemLabel].Equipped
         del self.ItemDictionary[self.CurrentItemLabel][0]
         item = self.ItemDictionary[self.CurrentItemLabel][0]
         self.ItemAttributeList[self.CurrentItemLabel] = item
-        self.ItemAttributeList[self.CurrentItemLabel].ItemEquipped = itemState
+        self.ItemAttributeList[self.CurrentItemLabel].Equipped = itemState
         self.RestoreItem(self.ItemAttributeList[self.CurrentItemLabel])
 
         # DEBUGGING

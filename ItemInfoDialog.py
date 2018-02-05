@@ -61,13 +61,13 @@ class ItemInformationDialog(QDialog, Ui_ItemInfoDialog):
             self.SourceTypes.extend(('Drop', 'Quest', 'Artifact', 'Merchant',))
             self.DamageTypes.extend(('Slash', 'Thrust', 'Crush',))
 
-        if item.ItemLocation in SlotList['Jewelery']:
+        if item.Location in SlotList['Jewelery']:
             self.showJeweleryWidgets()
-        elif item.ItemLocation in SlotList['Armor']:
+        elif item.Location in SlotList['Armor']:
             self.showArmorWidgets()
-        elif item.ItemLocation in SlotList['Weapons']:
+        elif item.Location in SlotList['Weapons']:
             self.showWeaponWidgets()
-        elif item.ItemLocation in SlotList['Mythical']:
+        elif item.Location in SlotList['Mythical']:
             self.showMythicalWidgets()
 
         tableEntry = QListWidgetItem('All')
@@ -107,48 +107,48 @@ class ItemInformationDialog(QDialog, Ui_ItemInfoDialog):
     def initItem(self, item):
         self.ItemRealm.clear()
         self.ItemRealm.insertItems(0, self.RealmList)
-        self.ItemRealm.setCurrentIndex(self.RealmList.index(item.ItemRealm))
+        self.ItemRealm.setCurrentIndex(self.RealmList.index(item.Realm))
 
-        if item.ItemLocation in SlotList['Jewelery']:
+        if item.Location in SlotList['Jewelery']:
             for key, value in ItemTypes.items():
-                if item.ItemLocation == key:
+                if item.Location == key:
                     self.ItemType.clear()
                     self.ItemType.insertItems(0, value)
-        elif item.ItemLocation in SlotList['Armor']:
+        elif item.Location in SlotList['Armor']:
             for key, value in ItemTypes.items():
-                if item.ItemLocation == key:
+                if item.Location == key:
                     self.ItemType.clear()
-                    self.ItemType.insertItems(0, ItemTypes[key][item.ItemRealm])
-        elif item.ItemLocation in SlotList['Weapons']:
+                    self.ItemType.insertItems(0, ItemTypes[key][item.Realm])
+        elif item.Location in SlotList['Weapons']:
             for key, value in ItemTypes.items():
-                if item.ItemLocation == key:
+                if item.Location == key:
                     self.ItemType.clear()
-                    self.ItemType.insertItems(0, ItemTypes[key][item.ItemRealm])
-        elif item.ItemLocation in SlotList['Mythical']:
+                    self.ItemType.insertItems(0, ItemTypes[key][item.Realm])
+        elif item.Location in SlotList['Mythical']:
             for key, value in ItemTypes.items():
-                if item.ItemLocation in SlotList['Mythical'] == value:
+                if item.Location in SlotList['Mythical'] == value:
                     self.ItemType.clear()
                     self.ItemType.insertItems(0, ItemTypes[key])
 
         self.ItemSource.clear()
         self.ItemSource.insertItems(0, self.SourceTypes)
-        self.ItemSource.setCurrentIndex(self.SourceTypes.index(item.ItemSource))
+        self.ItemSource.setCurrentIndex(self.SourceTypes.index(item.Origin))
 
         self.ItemDamageType.clear()
         self.ItemDamageType.insertItems(0, self.DamageTypes)
-        self.ItemDamageType.setCurrentIndex(self.DamageTypes.index(item.ItemDamageType))
+        self.ItemDamageType.setCurrentIndex(self.DamageTypes.index(item.DamageType))
 
-        self.ItemBonus.setText(item.ItemBonus)
-        self.ItemAFDPS.setText(item.ItemAFDPS)
-        self.ItemSpeed.setText(item.ItemSpeed)
+        self.ItemBonus.setText(item.Bonus)
+        self.ItemAFDPS.setText(item.AFDPS)
+        self.ItemSpeed.setText(item.Speed)
 
         if item.LeftHand == 2:
             self.ItemLeftHand.setCheckState(Qt.Checked)
         elif item.LeftHand == 0:
             self.ItemLeftHand.setCheckState(Qt.Unchecked)
 
-        self.ItemRequirement.setText(item.ItemRequirement)
-        self.ItemNotes.setPlainText(item.ItemNotes)
+        self.ItemRequirement.setText(item.Requirement)
+        self.ItemNotes.setPlainText(item.Notes)
 
 # =============================================== #
 #          LAYOUT CHANGE/UPDATE METHODS           #
@@ -197,13 +197,13 @@ class ItemInformationDialog(QDialog, Ui_ItemInfoDialog):
             self.ItemRestrictionList.item(index).setHidden(True)
             if self.ItemRestrictionList.item(index).text() == 'All':
                 self.ItemRestrictionList.item(index).setHidden(False)
-            if self.ItemRestrictionList.item(index).text() in ClassList[item.ItemRealm]:
+            if self.ItemRestrictionList.item(index).text() in ClassList[item.Realm]:
                 self.ItemRestrictionList.item(index).setHidden(False)
         for index in range(self.ItemRestrictionList.count()):
-            if self.ItemRestrictionList.item(index).text() in item.ItemRestrictions:
-                if self.ItemRestrictionList.item(index).text() in ClassList[item.ItemRealm]:
+            if self.ItemRestrictionList.item(index).text() in item.Restrictions:
+                if self.ItemRestrictionList.item(index).text() in ClassList[item.Realm]:
                     self.ItemRestrictionList.item(index).setCheckState(Qt.Checked)
-                if self.ItemRestrictionList.item(index).text() not in ClassList[item.ItemRealm]:
+                if self.ItemRestrictionList.item(index).text() not in ClassList[item.Realm]:
                     self.ItemRestrictionList.item(index).setCheckState(Qt.Unchecked)
                 if self.ItemRestrictionList.item(index).text() == 'All':
                     self.ItemRestrictionList.item(index).setCheckState(Qt.Checked)
@@ -221,38 +221,38 @@ class ItemInformationDialog(QDialog, Ui_ItemInfoDialog):
 
     def ItemRealmChanged(self):
         item = self.CurrentItem
-        item.ItemRealm = self.ItemRealm.currentText()
+        item.Realm = self.ItemRealm.currentText()
         self.showItemRestrictions(item)
         print('ItemRealmChanged')
 
     def ItemTypeChanged(self):
         item = self.CurrentItem
-        item.ItemType = self.ItemType.currentText()
+        item.Type = self.ItemType.currentText()
         print('ItemTypechanged')
 
     def ItemSourceChanged(self):
         item = self.CurrentItem
-        item.ItemSource = self.ItemSource.currentText()
+        item.Origin = self.ItemSource.currentText()
         print('ItemSourceChanged')
 
     def ItemDamageTypeChanged(self):
         item = self.CurrentItem
-        item.ItemDamageType = self.ItemDamageType.currentText()
+        item.DamageType = self.ItemDamageType.currentText()
         print('ItemDamageTypeChanged')
 
     def ItemBonusChanged(self):
         item = self.CurrentItem
-        item.ItemBonus = self.ItemBonus.text()
+        item.Bonus = self.ItemBonus.text()
         print('ItemBonusChanged')
 
     def ItemAFDPSChanged(self):
         item = self.CurrentItem
-        item.ItemAFDPS = self.ItemAFDPS.text()
+        item.AFDPS = self.ItemAFDPS.text()
         print('ItemAFDPSChanged')
 
     def ItemSpeedChanged(self):
         item = self.CurrentItem
-        item.ItemSpeed = self.ItemSpeed.text()
+        item.Speed = self.ItemSpeed.text()
         self.ItemSpeed.setModified(False)
         print('ItemSpeedChanged')
 
@@ -263,13 +263,13 @@ class ItemInformationDialog(QDialog, Ui_ItemInfoDialog):
 
     def ItemRequirementChanged(self):
         item = self.CurrentItem
-        item.ItemRequirement = self.ItemRequirement.text()
+        item.Requirement = self.ItemRequirement.text()
         self.ItemRequirement.setModified(False)
         print('ItemRequirementChanged')
 
     def ItemNotesChanged(self):
         item = self.CurrentItem
-        item.ItemNotes = self.ItemNotes.toPlainText()
+        item.Notes = self.ItemNotes.toPlainText()
         print('ItemNotesChanged')
 
     def ItemRestrictionsChanged(self, selection = None):
@@ -277,12 +277,12 @@ class ItemInformationDialog(QDialog, Ui_ItemInfoDialog):
         if selection.text() == 'All' and selection.checkState() == Qt.Checked:
             for count in range(1, self.ItemRestrictionList.count()):
                 self.ItemRestrictionList.item(count).setCheckState(Qt.Unchecked)
-            item.ItemRestrictions.clear()
-            item.ItemRestrictions.append(selection.text())
+            item.Restrictions.clear()
+            item.Restrictions.append(selection.text())
         elif selection.checkState() == Qt.Checked:
-            if selection.text() != 'All' and 'All' in item.ItemRestrictions:
+            if selection.text() != 'All' and 'All' in item.Restrictions:
                 self.ItemRestrictionList.item(0).setCheckState(Qt.Unchecked)
-            item.ItemRestrictions.append(selection.text())
+            item.Restrictions.append(selection.text())
         elif selection.checkState() == Qt.Unchecked:
-            item.ItemRestrictions.remove(selection.text())
+            item.Restrictions.remove(selection.text())
         print('ItemRestrictionsChanged')
