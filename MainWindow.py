@@ -1322,6 +1322,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         options = QFileDialog.Options()
         filename, filters = QFileDialog.getOpenFileName(
             self, 'Load Item:', '', 'Items (*.xml);; All Files (*.*)', options = options,)
+
+        # FIXES BUG IN 'QFileDialog' WHEN CLICKING CANCEL ...
+        if filename == '': return
+
         item = Item('Imported', self.CurrentItemLabel, self.CurrentRealm, self.ItemIndex)
         if item.importFromXML(filename) != -1:
             self.ItemDictionary[self.CurrentItemLabel].insert(0, item)
