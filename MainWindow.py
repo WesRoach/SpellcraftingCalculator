@@ -4,9 +4,9 @@ from PyQt5 import uic
 from PyQt5.Qt import QAction, Qt, QKeySequence
 from PyQt5.QtCore import QSize, QModelIndex, QVariant
 from PyQt5.QtGui import QFontMetrics, QIcon, QIntValidator
-from PyQt5.QtWidgets import QFileDialog, QLabel, QMainWindow, QMenu, QToolBar, QTreeWidgetItem, QTreeWidgetItemIterator, QStyle, QStyleOptionComboBox
+from PyQt5.QtWidgets import QFileDialog, QLabel, QMainWindow, QMenu, QMessageBox, QToolBar, QTreeWidgetItem, QTreeWidgetItemIterator, QStyle, QStyleOptionComboBox
 from Character import AllBonusList, ClassList, Races, Realms
-from Constants import Cap,  CraftedTypeList, CraftedEffectList, CraftedValuesList, DropTypeList, DropEffectList
+from Constants import Cap, CraftedTypeList, CraftedEffectList, CraftedValuesList, DropTypeList, DropEffectList
 from Constants import EnhancedTypeList, EnhancedEffectList, EnhancedValuesList, MythicalCap, SlotList
 from Item import Item
 from ItemInfoDialog import ItemInformationDialog
@@ -98,6 +98,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         self.EditMenu.addAction('Load Item ...', self.loadItem)
         self.EditMenu.addAction('Save Item ...', self.saveItem)
+        self.EditMenu.addAction('Convert Item ...', self.convertItem)
         self.EditMenu.addSeparator()
         self.EditMenu.addMenu(self.ItemTypeMenu)
         self.EditMenu.addMenu(self.ItemMoveMenu)
@@ -1309,17 +1310,21 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # DEBUGGING
         print('clearItemSlots')
 
-    # TODO: TEST FOR VALID XML FILE BEFORE PROCEEDING ...
     def loadItem(self):
         options = QFileDialog.Options()
         filename, filters = QFileDialog.getOpenFileName(
             self, 'Load Item:', '', 'Items (*.xml);; All Files (*.*)', options = options,)
         item = Item('Imported', self.CurrentItemLabel, self.CurrentRealm, self.ItemIndex)
-        item.importFromXML(filename, self.CurrentItemLabel)
-        self.ItemDictionary[self.CurrentItemLabel].insert(0, item)
-        self.ItemAttributeList[self.CurrentItemLabel] = item
-        self.ItemAttributeList[self.CurrentItemLabel].Equipped = item.Equipped
-        self.RestoreItem(self.ItemAttributeList[self.CurrentItemLabel])
+        if item.importFromXML(filename) != -1:
+            self.ItemDictionary[self.CurrentItemLabel].insert(0, item)
+            self.ItemAttributeList[self.CurrentItemLabel] = item
+            self.ItemAttributeList[self.CurrentItemLabel].Equipped = item.Equipped
+            self.RestoreItem(self.ItemAttributeList[self.CurrentItemLabel])
+            self.ItemIndex += 1
+        else:
+            QMessageBox.warning(
+                None, 'Error!', 'The item you are attempting to import \n is using an unsupported XML format.')
+            return
 
         # DEBUGGING
         print('loadItem')
@@ -1328,6 +1333,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         # DEBUGGING
         print('saveItem')
+
+    def convertItem(self):
+
+        # DEBUGGING
+        print('convertItem')
 
     def deleteItem(self):
         if len(self.ItemDictionary[self.CurrentItemLabel]) == 1:
@@ -1342,3 +1352,18 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         # DEBUGGING
         print('deleteItem')
+
+    def loadTemplate(self):
+
+        # DEBUGGING
+        print('loadTemplate')
+
+    def saveTemplate(self):
+
+        # DEBUGGING
+        print('saveTemplate')
+
+    def saveTemplateAs(self):
+
+        # DEBUGGING
+        print('saveTemplateAs')
