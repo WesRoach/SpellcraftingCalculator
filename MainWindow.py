@@ -156,12 +156,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def initToolBar(self):
         self.ToolBar.setObjectName("Crafting")
         self.ToolBar.setFloatable(False)
-        self.ToolBar.addAction('New Template')
-        self.ToolBar.addAction('Open Template')
-        self.ToolBar.addAction('Save Template')
-        self.ToolBar.addAction('Save Template As')
+        self.ToolBar.addAction('New Template', self.newTemplate)
+        self.ToolBar.addAction('Open Template', self.openTemplate)
+        self.ToolBar.addAction('Save Template', self.saveTemplate)
+        self.ToolBar.addAction('Save Template As', self.saveTemplateAs)
         self.ToolBar.addSeparator()
-        self.ToolBar.addAction('Export Gems')
+        self.ToolBar.addAction('Export Gems', self.exportGemsToQuickbar)
         self.ToolBar.addSeparator()
         self.ToolBar.addAction('Material Report', self.showMaterialsReport)
         self.ToolBar.addAction('Configuration Report', self.showConfigurationReport)
@@ -512,19 +512,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ItemName.clear()
         for value in self.ItemDictionary[item.Location]:
             self.ItemName.addItem(value.Name)
-
-        # itemNameList = item
-        # while itemNameList is not None:
-        #     self.ItemName.addItem(itemNameList.ItemName)
-        #     itemNameList = itemNameList.NextItem
-
         self.ItemName.setCurrentIndex(0)
         self.ItemLevel.setText(item.Level)
 
+        # CHANGES TO THE 'EffectType' ARE CASCADED ...
         for index in range(0, item.getSlotCount()):
             self.EffectTypeChanged(item.getSlot(index).getEffectType(), index)
-            # self.EffectChanged(item.getSlot(index).getEffect(), index)
-            # self.EffectAmountChanged(item.getSlot(index).getEffectAmount(), index)
 
         self.UpdateMenus(item)
         print(item.__dict__)
