@@ -28,8 +28,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.HelpMenu = QMenu('&Help', self)
         self.ItemNewMenu = QMenu('&New Item', self)
         self.ItemTypeMenu = QMenu('Item &Type', self)
-        self.ItemSwapMenu = QMenu('S&wap Gems with',self)
+        self.ItemSwapMenu = QMenu('S&wap Gems with', self)
         self.ItemMoveMenu = QMenu('&Move Item to', self)
+        self.RecentMenu = QMenu('Recent Templates', self)
         self.ToolBarMenu = QMenu('&Toolbar', self)
         self.ToolBar = QToolBar("Crafting")
 
@@ -94,11 +95,20 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         return icon
 
     def initMenuBar(self):
+        self.FileMenu.addAction('New Template', self.newTemplate)
+        self.FileMenu.addAction('Open Template ...', self.openTemplate)
+        self.FileMenu.addAction('Save Template', self.saveTemplate)
+        self.FileMenu.addAction('Save Template As ...', self.saveTemplateAs)
+        self.FileMenu.addSeparator()
+        self.FileMenu.addAction('Import Loki Template ...', self.importLokiTemplate)
+        self.FileMenu.addAction('Export Gem\'s to Quickbar ...', self.exportGemsToQuickbar)
+        self.FileMenu.addSeparator()
+        self.FileMenu.addMenu(self.RecentMenu)
+        self.FileMenu.addSeparator()
         self.FileMenu.addAction('E&xit', self.close, QKeySequence(Qt.CTRL + Qt.Key_X))
 
         self.EditMenu.addAction('Load Item ...', self.loadItem)
         self.EditMenu.addAction('Save Item ...', self.saveItem)
-        self.EditMenu.addAction('Convert Item ...', self.convertItem)
         self.EditMenu.addSeparator()
         self.EditMenu.addMenu(self.ItemTypeMenu)
         self.EditMenu.addMenu(self.ItemMoveMenu)
@@ -1334,11 +1344,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # DEBUGGING
         print('saveItem')
 
-    def convertItem(self):
-
-        # DEBUGGING
-        print('convertItem')
-
     def deleteItem(self):
         if len(self.ItemDictionary[self.CurrentItemLabel]) == 1:
             self.clearItem()
@@ -1353,7 +1358,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # DEBUGGING
         print('deleteItem')
 
-    def loadTemplate(self):
+    def newTemplate(self):
+
+        # DEBUGGING
+        print('newTemplate')
+
+    def openTemplate(self):
 
         # DEBUGGING
         print('loadTemplate')
@@ -1367,3 +1377,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         # DEBUGGING
         print('saveTemplateAs')
+
+    def importLokiTemplate(self):
+
+        # DEBUGGING
+        print('importLokiTemplate')
+
+    def exportGemsToQuickbar(self):
+
+        # DEBUGGING
+        print('exportGemsToQuickbar')
