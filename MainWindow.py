@@ -514,6 +514,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.ItemName.addItem(value.Name)
         self.ItemName.setCurrentIndex(0)
         self.ItemLevel.setText(item.Level)
+        self.ItemQuality.setText(item.Quality)
 
         # CHANGES TO THE 'EffectType' ARE CASCADED ...
         for index in range(0, item.getSlotCount()):
@@ -1110,6 +1111,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         print('ItemLevelChanged')
 
     def ItemQualityChanged(self):
+        item = self.ItemAttributeList[self.CurrentItemLabel]
+        item.Quality = self.ItemQuality.text()
+        self.ItemQuality.setModified(False)
+        self.RestoreItem(self.ItemAttributeList[self.CurrentItemLabel])
 
         # DEBUGGING
         print('ItemQualityChanged')
