@@ -225,6 +225,7 @@ class ItemInformationDialog(QDialog, Ui_ItemInfoDialog):
         self.showItemRestrictions(item)
         print('ItemRealmChanged')
 
+    # TODO: ACCOUNT FOR MIS-LABELED ITEMS
     def ItemTypeChanged(self):
         item = self.CurrentItem
         item.Type = self.ItemType.currentText()

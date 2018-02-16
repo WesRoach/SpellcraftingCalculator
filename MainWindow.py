@@ -458,7 +458,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         for index in range(0, item.getSlotCount()):
             if item.getSlot(index).getSlotType() == 'Craftable':
                 self.SlotLabel[index].setText('Gem &%d:' % (index + 1))
-            if item.getSlot(index).getSlotType() == 'Dropped':
+            if item.getSlot(index).getSlotType() == 'Enhanced':
                 self.EffectType[index].setDisabled(False)
                 self.Effect[index].setDisabled(False)
                 self.AmountEdit[index].setDisabled(False)
@@ -1130,10 +1130,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.EffectType[index].insertItems(0, EnhancedTypeList)
         elif item.getSlot(index).getSlotType() == 'Dropped':
             self.EffectType[index].insertItems(0, DropTypeList)
-
         if item.Location not in ('Two-Handed', 'Spare'):
             self.EffectType[index].removeItem(self.EffectType[index].findText('Focus'))
-
         self.EffectType[index].setCurrentText(etype)
         item.getSlot(index).setEffectType(etype)
 
@@ -1143,6 +1141,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # DEBUGGING
         print('EffectTypeChanged, EffectType = ' + str(etype))
 
+    # TODO: CLEAN THIS UP -> IF -1 & 'setEffect()'
     def EffectChanged(self, effect = None, index = -1):
         if index == -1: index = self.getSignalSlot()
         item = self.ItemAttributeList[self.CurrentItemLabel]
@@ -1170,6 +1169,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # DEBUGGING
         print('EffectChanged, Effect = ' + str(effect))
 
+    # TODO: CLEAN THIS UP -> IF -1 & 'setEffectAmount()'
     def EffectAmountChanged(self, amount = None, index = -1):
         if index == -1: index = self.getSignalSlot()
         item = self.ItemAttributeList[self.CurrentItemLabel]
@@ -1186,7 +1186,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 valuesList = valuesList[item.getSlot(index).getEffect()]
             self.AmountStatic[index].clear()
             self.AmountStatic[index].insertItems(0, valuesList)
-
             if self.AmountStatic[index].findText(amount) == -1:
                 amount = self.AmountStatic[index].currentText()
             self.AmountStatic[index].setCurrentText(amount)
@@ -1194,27 +1193,33 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         elif item.getSlot(index).getSlotType() == 'Dropped':
             if item.getSlot(index).getEffectType() == 'Unused':
-                self.AmountEdit[index].clear()
                 item.getSlot(index).setEffectAmount('')
-            item.getSlot(index).setEffectAmount(amount)
-            self.AmountEdit[index].setText(item.getSlot(index).getEffectAmount())
+                self.AmountEdit[index].clear()
+            else:
+                item.getSlot(index).setEffectAmount(amount)
+                self.AmountEdit[index].setText(item.getSlot(index).getEffectAmount())
             self.AmountEdit[index].setModified(False)
 
         # CASCADE THE CHANGES ...
-        self.EffectRequirementChanged(index)
+        self.EffectRequirementChanged(item.getSlot(index).getEffectRequirement(), index)
         self.calculate()
 
         # DEBUGGING
         print('EffectAmountChanged')
 
-    def EffectRequirementChanged(self, index = -1):
+    # TODO: CLEAN THIS UP -> IF NONE
+    def EffectRequirementChanged(self, requirement = None, index = -1):
         if index == -1: index = self.getSignalSlot()
         item = self.ItemAttributeList[self.CurrentItemLabel]
+
         if item.getSlot(index).getEffectType() == 'Unused':
-            self.Requirement[index].setText('')
             item.getSlot(index).setEffectRequirement('')
-        item.getSlot(index).setEffectRequirement(self.Requirement[index].text())
-        self.Requirement[index].setText(self.Requirement[index].text())
+            self.Requirement[index].clear()
+        else:
+            if requirement is None:
+                requirement = self.Requirement[index].text()
+            item.getSlot(index).setEffectRequirement(requirement)
+            self.Requirement[index].setText(item.getSlot(index).getEffectRequirement())
         self.Requirement[index].setModified(False)
 
         # DEBUGGING
@@ -1318,6 +1323,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # DEBUGGING
         print('clearItemSlots')
 
+    # TODO: NEED TO SET A DEFAULT PATH
     def loadItem(self):
         options = QFileDialog.Options()
         filename, filters = QFileDialog.getOpenFileName(
@@ -1341,7 +1347,17 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # DEBUGGING
         print('loadItem')
 
+    # TODO: NEED TO SET A DEFAULT PATH
     def saveItem(self):
+        if not self.ItemName.currentText():
+            QMessageBox.warning(
+                None, 'Error!', 'You must specify a name before saving the item!')
+            return
+        options = QFileDialog.Options()
+        filename, filters = QFileDialog.getSaveFileName(
+            self, 'Save Item', self.ItemName.currentText(), 'Items (*.xml);; All Files (*.*)', options = options)
+        item = self.ItemAttributeList[self.CurrentItemLabel]
+        if filename: item.exportAsXML(filename)
 
         # DEBUGGING
         print('saveItem')

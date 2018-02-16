@@ -116,33 +116,73 @@ class Item:
     def importFromXML(self, filename):
         tree = etree.parse(filename)
         if tree.getroot().tag == 'Item':
-            item = tree.iter()
-            for element in item:
-                if element.tag in ('Gem', 'Slot'):
+            elements = tree.getroot().getchildren()
+            for element in elements:
+                if element.tag not in ('Restrictions', 'Slot'):
+                    if element.tag in self.__dict__:
+                        setattr(self, element.tag, element.text)
+                    if element.tag == 'ActiveState':
+                        self.SlotList = self.makeItemSlots()
+                elif element.tag == 'Restrictions':
+                    for restriction in element:
+                        self.Restrictions.append(restriction.text)
+                elif element.tag == 'Slot':
                     index = int(element.attrib['Number'])
                     for attribute in element:
-                        if attribute.tag == 'EffectType':
+                        if attribute.tag == 'Type':
                             self.getSlot(index).setEffectType(attribute.text)
                         elif attribute.tag == 'Effect':
                             self.getSlot(index).setEffect(attribute.text)
                         elif attribute.tag == 'Amount':
                             self.getSlot(index).setEffectAmount(attribute.text)
-                elif element.tag in self.__dict__:
-                    setattr(self, element.tag, element.text)
-                if element.tag == 'ActiveState':
-                    self.SlotList = self.makeItemSlots()
-                if element.tag == 'Equipped':
-                    self.Equipped = int(element.text)
+                        elif attribute.tag == 'Requirement':
+                            self.getSlot(index).setEffectRequirement(attribute.text)
         else:
             return -1
 
-        # DEBUGGING
-        print('importFromFile')
+        if 'All' in self.Restrictions:
+            self.Restrictions = ['All']
 
     def exportAsXML(self, filename):
+        fields = [
+            ('Realm', self.Realm),
+            ('ActiveState', self.ActiveState),
+            ('Name', self.Name),
+            ('Type', self.Type),
+            ('Level', self.Level),
+            ('Quality', self.Quality),
+            ('Bonus', self.Bonus),
+            ('AFDPS', self.AFDPS),
+            ('Speed', self.Speed),
+            ('Origin', self.Origin),
+            ('DamageType', self.DamageType),
+            ('LeftHand', self.LeftHand),
+            ('Requirement', self.Requirement),
+            ('Restrictions', self.Restrictions),
+            ('Notes', self.Notes,)
+        ]
 
-        # DEBUGGING
-        print('exportToFile')
+        root = etree.Element('Item')
+        for key, value in fields:
+            if key != 'Restrictions' and value != '':
+                etree.SubElement(root, key).text = str(value)
+            elif key == 'Restrictions':
+                restrictions = etree.SubElement(root, 'Restrictions')
+                for restriction in self.Restrictions:
+                    etree.SubElement(restrictions, 'Class').text = restriction
+
+        for index in range(0, self.getSlotCount()):
+            if self.getSlot(index).getEffectType() != 'Unused':
+                slot = etree.SubElement(root, 'Slot', Number = str(index))
+                etree.SubElement(slot, 'Type').text = self.getSlot(index).getEffectType()
+                etree.SubElement(slot, 'Effect').text = self.getSlot(index).getEffect()
+                etree.SubElement(slot, 'Amount').text = self.getSlot(index).getEffectAmount()
+                if self.getSlot(index).getEffectRequirement() != '':
+                    etree.SubElement(slot, 'Requirement').text = self.getSlot(index).getEffectRequirement()
+
+        with open(filename, 'wb') as document:
+            document.write(etree.tostring(root, encoding = 'UTF-8', pretty_print = True, xml_declaration = True))
+            document.close()
 
 
 class ItemSlot:
