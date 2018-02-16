@@ -26,6 +26,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ViewMenu = QMenu('&View', self)
         self.ErrorMenu = QMenu('&Errors', self)
         self.HelpMenu = QMenu('&Help', self)
+        self.ItemLoadMenu = QMenu('Load Item', self)
         self.ItemNewMenu = QMenu('&New Item', self)
         self.ItemTypeMenu = QMenu('Item &Type', self)
         self.ItemSwapMenu = QMenu('S&wap Gems with', self)
@@ -107,7 +108,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.FileMenu.addSeparator()
         self.FileMenu.addAction('E&xit', self.close, QKeySequence(Qt.CTRL + Qt.Key_X))
 
-        self.EditMenu.addAction('Load Item ...', self.loadItem)
+        self.ItemLoadMenu.addAction('Item File ...', self.loadItem)
+        self.ItemLoadMenu.addAction('Item Database ...')
+
+        self.EditMenu.addMenu(self.ItemLoadMenu)
         self.EditMenu.addAction('Save Item ...', self.saveItem)
         self.EditMenu.addSeparator()
         self.EditMenu.addMenu(self.ItemTypeMenu)
@@ -119,9 +123,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.EditMenu.addAction('Clear Item', self.clearItem)
         self.EditMenu.addAction('Clear Slots', self.clearItemSlots)
 
-        self.ViewMenu.addAction('&Materials Report', self.showMaterialsReport, QKeySequence(Qt.ALT + Qt.Key_M))
-        self.ViewMenu.addAction('&Configuration Report', self.showConfigurationReport, QKeySequence(Qt.ALT + Qt.Key_C))
-
+        self.ViewMenu.addAction('&Material Report ...', self.showMaterialsReport)
+        self.ViewMenu.addAction('&Template Report ...', self.showConfigurationReport)
         self.ViewMenu.addSeparator()
 
         for (title, res) in (("Large", 32,), ("Normal", 24,), ("Small", 16,), ("Hide", 0,),):
@@ -129,10 +132,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             action.setData(QVariant(res))
             action.setCheckable(True)
             self.ToolBarMenu.addAction(action)
-
         self.ToolBarMenu.actions()[1].setChecked(True)
         self.ViewMenu.addMenu(self.ToolBarMenu)
-
         self.ViewMenu.addSeparator()
 
         self.DistanceToCap = QAction('&Distance to Cap', self)
@@ -169,14 +170,16 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def initItemToolBar(self):
         self.ItemNewButton.setMenu(self.ItemNewMenu)
-        self.ItemNewButton.setToolTip('Create New Item')
+        self.ItemNewButton.setToolTip('Add New Item')
         self.ItemNewButton.clicked.connect(self.ItemNewButton.showMenu)
 
         self.ItemTypeButton.setMenu(self.ItemTypeMenu)
         self.ItemTypeButton.setToolTip('Change Item Type')
         self.ItemTypeButton.clicked.connect(self.ItemTypeButton.showMenu)
 
+        self.ItemLoadButton.setMenu(self.ItemLoadMenu)
         self.ItemLoadButton.setToolTip('Load Item')
+        self.ItemLoadButton.clicked.connect(self.ItemLoadButton.showMenu)
         self.ItemDeleteButton.setToolTip('Delete Item')
         self.ItemSaveButton.setToolTip('Save Item')
         self.ItemInfoButton.setToolTip('Item Information')
@@ -412,7 +415,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ItemQuality.editingFinished.connect(self.ItemQualityChanged)
         self.ItemName.activated[int].connect(self.changeItem)
         self.ItemName.editTextChanged[str].connect(self.ItemNameChanged)
-        self.ItemLoadButton.clicked.connect(self.loadItem)
         self.ItemSaveButton.clicked.connect(self.saveItem)
         self.ItemDeleteButton.clicked.connect(self.deleteItem)
 

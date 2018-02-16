@@ -1633,7 +1633,7 @@
                 </widget>
                </item>
                <item>
-                <widget class="QToolButton" name="ItemNewButton">
+                <widget class="QPushButton" name="ItemNewButton">
                  <property name="sizePolicy">
                   <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                    <horstretch>0</horstretch>
@@ -1643,16 +1643,10 @@
                  <property name="text">
                   <string>N</string>
                  </property>
-                 <property name="popupMode">
-                  <enum>QToolButton::MenuButtonPopup</enum>
-                 </property>
-                 <property name="arrowType">
-                  <enum>Qt::NoArrow</enum>
-                 </property>
                 </widget>
                </item>
                <item>
-                <widget class="QToolButton" name="ItemTypeButton">
+                <widget class="QPushButton" name="ItemTypeButton">
                  <property name="sizePolicy">
                   <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                    <horstretch>0</horstretch>
@@ -1661,9 +1655,6 @@
                  </property>
                  <property name="text">
                   <string>T</string>
-                 </property>
-                 <property name="popupMode">
-                  <enum>QToolButton::MenuButtonPopup</enum>
                  </property>
                 </widget>
                </item>
