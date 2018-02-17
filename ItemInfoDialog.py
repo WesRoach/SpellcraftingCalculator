@@ -1,7 +1,7 @@
 # HEADER PLACE HOLDER
 
 from PyQt5 import uic
-from PyQt5.Qt import Qt, QFont, QFontMetrics, QSize
+from PyQt5.Qt import Qt, QFont, QFontMetrics, QIcon, QSize
 from PyQt5.QtWidgets import QDialog, QListWidgetItem
 from Character import AllRealms, ClassList, ItemTypes, Realms
 from Constants import SlotList
@@ -34,12 +34,8 @@ class ItemInformationDialog(QDialog, Ui_ItemInfoDialog):
         self.setFixedSize(QSize(335, 435))
 
     def initLayout(self, item):
-        font = QFont(self.font())
-        font.setFamily("Trebuchet MS")
-        font.setPointSize(8)
-        self.setFont(font)
-
         self.setWindowTitle('Item Information')
+        self.setWindowIcon(QIcon(None))
 
         # MAKE SURE WE ARE TESTING WIDTH AND HEIGHT
         # VALUES BASED ON THE FONT BEING USED ...

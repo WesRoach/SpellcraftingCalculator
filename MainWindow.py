@@ -73,6 +73,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.CurrentClass = ''
         self.CurrentRace = ''
         self.CurrentItemLabel = ''
+        self.TemplateModified = True
 
         self.initMenuBar()
         self.initToolBar()
@@ -109,7 +110,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.FileMenu.addAction('E&xit', self.close, QKeySequence(Qt.CTRL + Qt.Key_X))
 
         self.ItemLoadMenu.addAction('Item File ...', self.loadItem)
-        self.ItemLoadMenu.addAction('Item Database ...')
+        self.ItemLoadMenu.addAction('Item Database ...', self.showItemDatabase)
 
         self.EditMenu.addMenu(self.ItemLoadMenu)
         self.EditMenu.addAction('Save Item ...', self.saveItem)
@@ -425,17 +426,45 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         pass
 
 # =============================================== #
+#              XML IMPORT AND EXPORT              #
+# =============================================== #
+
+    def importFromXML(self):
+
+        # DEBUGGING
+        print('importFromXML')
+
+    def exportAsXML(self):
+
+        # DEBUGGING
+        print('exportAsXML')
+
+# =============================================== #
 #             DIALOG & WINDOW METHODS             #
 # =============================================== #
 
     def showItemInfoDialog(self):
         currentItem = self.ItemAttributeList[self.CurrentItemLabel]
         self.ItemInfoDialog = ItemInformationDialog(self, Qt.WindowCloseButtonHint, item = currentItem)
-        self.ItemInfoDialog.setWindowIcon(QIcon(None))
         self.ItemInfoDialog.exec_()
 
+    def showItemDatabase(self):
+
+        # DEBUGGING
+        print('showItemDatabase')
+
+    def showMaterialsReport(self):
+
+        # DEBUGGING
+        print('showMaterialsReport')
+
+    def showConfigurationReport(self):
+
+        # DEBUGGING
+        print('showConfigurationReport')
+
 # =============================================== #
-#          LAYOUT CHANGE/UPDATE METHODS           #
+#   LAYOUT CHANGE/UPDATE METHODS AND FUNCTIONS    #
 # =============================================== #
 
     def showCharacterStat(self, stat, state):
@@ -945,7 +974,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             maxWidth = max(maxWidth, style.sizeFromContents(QStyle.CT_ComboBox, option, size, self).width())
         return maxWidth
 
-    def getSignalSlot(self):
+    def getSlotIndex(self):
         index = self.sender().objectName()[-2:]
         if not index.isdigit(): index = index[-1:]
         return int(index)
@@ -982,21 +1011,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         print('UpdateMenus')
 
 # =============================================== #
-#       CONFIGURATION AND MATERIAL REPORTS        #
-# =============================================== #
-
-    def showMaterialsReport(self):
-
-        # DEBUGGING
-        print('showMaterialsReport')
-
-    def showConfigurationReport(self):
-
-        # DEBUGGING
-        print('showConfigurationReport')
-
-# =============================================== #
-#              SLOT/SIGNAL METHODS                #
+#        SLOT/SIGNAL METHODS AND FUNCTIONS        #
 # =============================================== #
 
     def mousePressEvent(self, event):
@@ -1122,7 +1137,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         print('ItemQualityChanged')
 
     def EffectTypeChanged(self, etype = None, index = -1):
-        if index == -1: index = self.getSignalSlot()
+        if index == -1: index = self.getSlotIndex()
         item = self.ItemAttributeList[self.CurrentItemLabel]
         self.EffectType[index].clear()
 
@@ -1143,9 +1158,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # DEBUGGING
         print('EffectTypeChanged, EffectType = ' + str(etype))
 
-    # TODO: CLEAN THIS UP -> IF -1 & 'setEffect()'
     def EffectChanged(self, effect = None, index = -1):
-        if index == -1: index = self.getSignalSlot()
+        if index == -1: index = self.getSlotIndex()
         item = self.ItemAttributeList[self.CurrentItemLabel]
         self.Effect[index].clear()
 
@@ -1162,8 +1176,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         if self.Effect[index].findText(effect) == -1:
             effect = self.Effect[index].currentText()
-        self.Effect[index].setCurrentText(effect)
         item.getSlot(index).setEffect(effect)
+        self.Effect[index].setCurrentText(item.getSlot(index).getEffect())
 
         # CASCADE THE CHANGES ...
         self.EffectAmountChanged(item.getSlot(index).getEffectAmount(), index)
@@ -1171,9 +1185,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # DEBUGGING
         print('EffectChanged, Effect = ' + str(effect))
 
-    # TODO: CLEAN THIS UP -> IF -1 & 'setEffectAmount()'
     def EffectAmountChanged(self, amount = None, index = -1):
-        if index == -1: index = self.getSignalSlot()
+        if index == -1: index = self.getSlotIndex()
         item = self.ItemAttributeList[self.CurrentItemLabel]
 
         valuesList = list()
@@ -1190,8 +1203,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.AmountStatic[index].insertItems(0, valuesList)
             if self.AmountStatic[index].findText(amount) == -1:
                 amount = self.AmountStatic[index].currentText()
-            self.AmountStatic[index].setCurrentText(amount)
             item.getSlot(index).setEffectAmount(amount)
+            self.AmountStatic[index].setCurrentText(item.getSlot(index).getEffectAmount())
 
         elif item.getSlot(index).getSlotType() == 'Dropped':
             if item.getSlot(index).getEffectType() == 'Unused':
@@ -1209,9 +1222,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # DEBUGGING
         print('EffectAmountChanged')
 
-    # TODO: CLEAN THIS UP -> IF NONE
     def EffectRequirementChanged(self, requirement = None, index = -1):
-        if index == -1: index = self.getSignalSlot()
+        if index == -1: index = self.getSlotIndex()
         item = self.ItemAttributeList[self.CurrentItemLabel]
 
         if item.getSlot(index).getEffectType() == 'Unused':
