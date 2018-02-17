@@ -1,7 +1,7 @@
 # HEADER PLACE HOLDER
 
 from PyQt5 import uic
-from PyQt5.Qt import Qt, QFont, QFontMetrics, QIcon, QSize
+from PyQt5.Qt import Qt, QFontMetrics, QIcon, QSize
 from PyQt5.QtWidgets import QDialog, QListWidgetItem
 from Character import AllRealms, ClassList, ItemTypes, Realms
 from Constants import SlotList

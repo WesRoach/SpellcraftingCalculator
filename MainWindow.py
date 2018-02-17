@@ -426,20 +426,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         pass
 
 # =============================================== #
-#              XML IMPORT AND EXPORT              #
-# =============================================== #
-
-    def importFromXML(self):
-
-        # DEBUGGING
-        print('importFromXML')
-
-    def exportAsXML(self):
-
-        # DEBUGGING
-        print('exportAsXML')
-
-# =============================================== #
 #             DIALOG & WINDOW METHODS             #
 # =============================================== #
 
@@ -462,6 +448,20 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         # DEBUGGING
         print('showConfigurationReport')
+
+# =============================================== #
+#              XML IMPORT AND EXPORT              #
+# =============================================== #
+
+    def importFromXML(self):
+
+        # DEBUGGING
+        print('importFromXML')
+
+    def exportAsXML(self):
+
+        # DEBUGGING
+        print('exportAsXML')
 
 # =============================================== #
 #   LAYOUT CHANGE/UPDATE METHODS AND FUNCTIONS    #
