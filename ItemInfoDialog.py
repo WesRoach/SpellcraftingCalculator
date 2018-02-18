@@ -225,7 +225,7 @@ class ItemInformationDialog(QDialog, Ui_ItemInfoDialog):
     def ItemTypeChanged(self):
         item = self.CurrentItem
         item.Type = self.ItemType.currentText()
-        print('ItemTypechanged')
+        print('ItemTypeChanged')
 
     def ItemSourceChanged(self):
         item = self.CurrentItem
