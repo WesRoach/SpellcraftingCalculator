@@ -113,7 +113,6 @@ class Item:
             return 0.0
         return ImbuePoints[int(self.Level) - 1]
 
-    # TODO: ADD 'Index' IF LOADING TEMPLATE FILE
     def importFromXML(self, filename):
         tree = etree.parse(filename)
         if tree.getroot().tag == 'Item':
@@ -166,20 +165,20 @@ class Item:
             ('Index', self.Index)
         ]
 
-        root = etree.Element('Item')
+        item = etree.Element('Item')
         for key, value in fields:
             if key not in ('Location', 'Equipped', 'Restrictions', 'Index') and value != '':
-                etree.SubElement(root, key).text = str(value)
+                etree.SubElement(item, key).text = str(value)
             elif key == 'Restrictions' and value:
-                restrictions = etree.SubElement(root, 'Restrictions')
+                restrictions = etree.SubElement(item, 'Restrictions')
                 for restriction in self.Restrictions:
                     etree.SubElement(restrictions, 'Class').text = restriction
             elif key in ('Location', 'Equipped', 'Index') and export_to_function:
-                etree.SubElement(root, key).text = str(value)
+                etree.SubElement(item, key).text = str(value)
 
         for index in range(0, self.getSlotCount()):
             if self.getSlot(index).getEffectType() != 'Unused':
-                slot = etree.SubElement(root, 'Slot', Number = str(index))
+                slot = etree.SubElement(item, 'Slot', Number = str(index))
                 etree.SubElement(slot, 'Type').text = self.getSlot(index).getEffectType()
                 etree.SubElement(slot, 'Effect').text = self.getSlot(index).getEffect()
                 etree.SubElement(slot, 'Amount').text = self.getSlot(index).getEffectAmount()
@@ -188,10 +187,10 @@ class Item:
 
         if not export_to_function:
             with open(filename, 'wb') as document:
-                document.write(etree.tostring(root, encoding = 'UTF-8', pretty_print = True, xml_declaration = True))
+                document.write(etree.tostring(item, encoding = 'UTF-8', pretty_print = True, xml_declaration = True))
                 document.close()
         else:
-            return root
+            return item
 
 
 class ItemSlot:
