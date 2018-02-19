@@ -467,6 +467,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 elif element.tag == 'Race':
                     self.CharacterRace.setCurrentText(element.text)
                     self.CharacterRaceChanged()
+                elif element.tag == 'Level':
+                    self.CharacterLevel.setText(element.text)
+                elif element.tag == 'RealmRank':
+                    self.CharacterRealmRank.setText(element.text)
                 print(element.tag)
         else:
             return -1
@@ -474,7 +478,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # DEBUGGING
         print('importFromXML')
 
-    def exportAsXML(self, filename, export_to_function = False):
+    def exportAsXML(self, filename):
         root = etree.Element('Template')
         etree.SubElement(root, 'Name').text = self.CharacterName.text()
         etree.SubElement(root, 'Realm').text = self.CharacterRealm.currentText()
@@ -495,12 +499,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 Equipped = str(items[0].Equipped))
         root.append(equipped)
 
-        if not export_to_function:
-            with open(filename, 'wb') as document:
-                document.write(etree.tostring(root, encoding='UTF-8', pretty_print = True, xml_declaration = True))
-                document.close()
-        else:
-            return root
+        with open(filename, 'wb') as document:
+            document.write(etree.tostring(root, encoding='UTF-8', pretty_print = True, xml_declaration = True))
+            document.close()
 
         # DEBUGGING
         print('exportAsXML')
