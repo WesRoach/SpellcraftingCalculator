@@ -10,6 +10,7 @@ from Constants import Cap, CraftedTypeList, CraftedEffectList, CraftedValuesList
 from Constants import EnhancedTypeList, EnhancedEffectList, EnhancedValuesList, MythicalCap, SlotList
 from Item import Item
 from ItemInfoDialog import ItemInformationDialog
+from lxml import etree
 import re
 
 Ui_MainWindow = uic.loadUiType(r'interface/MainWindow.ui')[0]
@@ -363,13 +364,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.CharacterLevel.setText('50')
         self.CharacterRealmRank.setText('10')
 
-        # SETUP THE INITIAL CHARACTER ...
-        self.CharacterRealm.setCurrentIndex(2)
+        # SETUP THE INITIAL REALM ...
+        self.CharacterRealm.setCurrentText('Midgard')
         self.CharacterRealmChanged()
-        self.CharacterClass.setCurrentIndex(7)
-        self.CharacterClassChanged()
-        self.CharacterRace.setCurrentIndex(2)
-        self.CharacterRaceChanged()
 
         for key, value in SlotList.items():
             for val in value:
@@ -453,12 +450,57 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 #              XML IMPORT AND EXPORT              #
 # =============================================== #
 
-    def importFromXML(self):
+    def importFromXML(self, filename):
+        self.initialize()
+        tree = etree.parse(filename)
+        if tree.getroot().tag == 'Template':
+            elements = tree.getroot().getchildren()
+            for element in elements:
+                if element.tag == 'Name':
+                    self.CharacterName.setText(element.text)
+                elif element.tag == 'Realm':
+                    self.CharacterRealm.setCurrentText(element.text)
+                    self.CharacterRealmChanged()
+                elif element.tag == 'Class':
+                    self.CharacterClass.setCurrentText(element.text)
+                    self.CharacterClassChanged()
+                elif element.tag == 'Race':
+                    self.CharacterRace.setCurrentText(element.text)
+                    self.CharacterRaceChanged()
+                print(element.tag)
+        else:
+            return -1
 
         # DEBUGGING
         print('importFromXML')
 
-    def exportAsXML(self):
+    def exportAsXML(self, filename, export_to_function = False):
+        root = etree.Element('Template')
+        etree.SubElement(root, 'Name').text = self.CharacterName.text()
+        etree.SubElement(root, 'Realm').text = self.CharacterRealm.currentText()
+        etree.SubElement(root, 'Class').text = self.CharacterClass.currentText()
+        etree.SubElement(root, 'Race').text = self.CharacterRace.currentText()
+        etree.SubElement(root, 'Level').text = self.CharacterLevel.text()
+        etree.SubElement(root, 'RealmRank').text = self.CharacterRealmRank.text()
+
+        for slot, items in self.ItemDictionary.items():
+            for item in items:
+                root.append(item.exportAsXML(None, True))
+
+        equipped = etree.Element('CurrentItems')
+        for slot, items in self.ItemDictionary.items():
+            etree.SubElement(equipped, 'Item',
+                Location = items[0].Location,
+                Index = str(items[0].Index),
+                Equipped = str(items[0].Equipped))
+        root.append(equipped)
+
+        if not export_to_function:
+            with open(filename, 'wb') as document:
+                document.write(etree.tostring(root, encoding='UTF-8', pretty_print = True, xml_declaration = True))
+                document.close()
+        else:
+            return root
 
         # DEBUGGING
         print('exportAsXML')
@@ -1065,9 +1107,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         Class = self.CharacterClass.currentText()
         self.CharacterRace.clear()
         self.CharacterRace.insertItems(0, AllBonusList[Realm][Class]['Races'])
-        self.CharacterRaceChanged()
+        if self.CurrentRace in AllBonusList[Realm][Class]['Races']:
+            self.CharacterRace.setCurrentText(self.CurrentRace)
+        else:
+            self.CharacterRaceChanged()
         self.CurrentClass = Class
 
+        # FIXES A BUG THAT CAUSES THE APPLICATION TO CRASH ON LAUNCH
+        # BECAUSE 'self.CurrentItemLabel' HAS NOT BEEN INSTANTIATED ...
         if self.CurrentItemLabel != '':
             self.RestoreItem(self.ItemAttributeList[self.CurrentItemLabel])
             self.calculate()
@@ -1288,14 +1335,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def changeItemType(self, action):
         newItemType = action.text().split(None, 1)[0]
-        itemState = self.ItemAttributeList[self.CurrentItemLabel].Equipped
-        itemIndex = self.ItemAttributeList[self.CurrentItemLabel].TemplateIndex
-        item = Item(newItemType, self.CurrentItemLabel, self.CurrentRealm, itemIndex)
+        equipped = self.ItemAttributeList[self.CurrentItemLabel].Equipped
+        index = self.ItemAttributeList[self.CurrentItemLabel].Index
+        item = Item(newItemType, self.CurrentItemLabel, self.CurrentRealm, index)
         item.Name = action.text()
         del self.ItemDictionary[self.CurrentItemLabel][0]
         self.ItemDictionary[self.CurrentItemLabel].insert(0, item)
         self.ItemAttributeList[self.CurrentItemLabel] = item
-        self.ItemAttributeList[self.CurrentItemLabel].Equipped = itemState
+        self.ItemAttributeList[self.CurrentItemLabel].Equipped = equipped
 
         if newItemType == 'Legendary':
             if action.text().split(None, 1)[1] == 'Staff':
@@ -1320,7 +1367,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         item = self.ItemAttributeList[self.CurrentItemLabel]
         itemState = self.ItemAttributeList[self.CurrentItemLabel].Equipped
         self.ItemDictionary[self.CurrentItemLabel].remove(item)
-        item = Item(item.ActiveState, self.CurrentItemLabel, self.CurrentRealm, item.TemplateIndex)
+        item = Item(item.ActiveState, self.CurrentItemLabel, self.CurrentRealm, item.Index)
         item.Name = item.ActiveState + ' Item'
         self.ItemDictionary[self.CurrentItemLabel].insert(0, item)
         self.ItemAttributeList[self.CurrentItemLabel] = item
@@ -1371,6 +1418,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         filename, filters = QFileDialog.getSaveFileName(
             self, 'Save Item', self.ItemName.currentText(), 'Items (*.xml);; All Files (*.*)', options = options)
         item = self.ItemAttributeList[self.CurrentItemLabel]
+
+        # FIXES BUG IN 'QFileDialog' WHEN CLICKING CANCEL ...
         if filename: item.exportAsXML(filename)
 
         # DEBUGGING
@@ -1396,6 +1445,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         print('newTemplate')
 
     def openTemplate(self):
+        options = QFileDialog.Options()
+        filename, filters = QFileDialog.getOpenFileName(
+            self, "Open Template", '', 'Templates (*.ktf);; All Files (*.*)', options = options)
+
+        # FIXES BUG IN 'QFileDialog' WHEN CLICKING CANCEL ...
+        if filename: self.importFromXML(filename)
 
         # DEBUGGING
         print('loadTemplate')
@@ -1406,6 +1461,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         print('saveTemplate')
 
     def saveTemplateAs(self):
+        options = QFileDialog.Options()
+        filename, filters = QFileDialog.getSaveFileName(
+            self, 'Save Item', '', 'Templates (*.ktf);; All Files (*.*)', options = options)
+
+        # FIXES BUG IN 'QFileDialog' WHEN CLICKING CANCEL ...
+        if filename: self.exportAsXML(filename)
 
         # DEBUGGING
         print('saveTemplateAs')

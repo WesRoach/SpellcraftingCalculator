@@ -25,7 +25,7 @@ class Item:
         self.Restrictions = list()
         self.Notes = ''
         self.Requirement = ''
-        self.TemplateIndex = index
+        self.Index = index
         self.SlotList = self.makeItemSlots()
 
         # SET THE INITIAL ITEM PROPERTIES
@@ -113,6 +113,7 @@ class Item:
             return 0.0
         return ImbuePoints[int(self.Level) - 1]
 
+    # TODO: ADD 'Index' IF LOADING TEMPLATE FILE
     def importFromXML(self, filename):
         tree = etree.parse(filename)
         if tree.getroot().tag == 'Item':
@@ -143,12 +144,14 @@ class Item:
         if 'All' in self.Restrictions:
             self.Restrictions = ['All']
 
-    def exportAsXML(self, filename):
+    def exportAsXML(self, filename, export_to_function = False):
         fields = [
             ('Realm', self.Realm),
             ('ActiveState', self.ActiveState),
-            ('Name', self.Name),
             ('Type', self.Type),
+            ('Location', self.Location),
+            ('Equipped', self.Equipped),
+            ('Name', self.Name),
             ('Level', self.Level),
             ('Quality', self.Quality),
             ('Bonus', self.Bonus),
@@ -159,17 +162,20 @@ class Item:
             ('LeftHand', self.LeftHand),
             ('Requirement', self.Requirement),
             ('Restrictions', self.Restrictions),
-            ('Notes', self.Notes,)
+            ('Notes', self.Notes,),
+            ('Index', self.Index)
         ]
 
         root = etree.Element('Item')
         for key, value in fields:
-            if key != 'Restrictions' and value != '':
+            if key not in ('Location', 'Equipped', 'Restrictions', 'Index') and value != '':
                 etree.SubElement(root, key).text = str(value)
-            elif key == 'Restrictions':
+            elif key == 'Restrictions' and value:
                 restrictions = etree.SubElement(root, 'Restrictions')
                 for restriction in self.Restrictions:
                     etree.SubElement(restrictions, 'Class').text = restriction
+            elif key in ('Location', 'Equipped', 'Index') and export_to_function:
+                etree.SubElement(root, key).text = str(value)
 
         for index in range(0, self.getSlotCount()):
             if self.getSlot(index).getEffectType() != 'Unused':
@@ -180,9 +186,12 @@ class Item:
                 if self.getSlot(index).getEffectRequirement() != '':
                     etree.SubElement(slot, 'Requirement').text = self.getSlot(index).getEffectRequirement()
 
-        with open(filename, 'wb') as document:
-            document.write(etree.tostring(root, encoding = 'UTF-8', pretty_print = True, xml_declaration = True))
-            document.close()
+        if not export_to_function:
+            with open(filename, 'wb') as document:
+                document.write(etree.tostring(root, encoding = 'UTF-8', pretty_print = True, xml_declaration = True))
+                document.close()
+        else:
+            return root
 
 
 class ItemSlot:
@@ -230,7 +239,6 @@ class ItemSlot:
     def getEffectRequirement(self):
         return self.Requirement
 
-    # TODO: POSSIBLY MOVE AWAY FROM 'isCrafted'
     def getImbueValue(self, value = 0):
         if not self.isCraftable(): return 0.0
         if self.getEffectType() == 'Stat':
