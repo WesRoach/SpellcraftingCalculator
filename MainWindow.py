@@ -1159,10 +1159,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # DEBUGGING
         print('CharacterRaceChanged')
 
-    # TODO: HIGHLIGHT CURRENTLY SELECTED ITEM.
-    def ItemSelected(self, selection):
+    def ItemSelected(self, selection = None):
         for index in self.SlotListTreeView.selectedIndexes():
             selection = index.data()
+        if not self.SlotListTreeView.selectedIndexes():
+            for slot in self.SlotListTreeView.findItems(selection, Qt.MatchRecursive):
+                slot.setSelected(True)
         for key, slots in SlotList.items():
             for slot in slots:
                 if selection == slot:
