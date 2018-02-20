@@ -113,16 +113,18 @@ class Item:
             return 0.0
         return ImbuePoints[int(self.Level) - 1]
 
-    def importFromXML(self, filename):
-        tree = etree.parse(filename)
+    def importFromXML(self, filename, export = False):
+        tree = etree.parse(filename) if not export else etree.ElementTree(filename)
         if tree.getroot().tag == 'Item':
             elements = tree.getroot().getchildren()
             for element in elements:
-                if element.tag not in ('Restrictions', 'Slot'):
+                if element.tag not in ('Equipped', 'Restrictions', 'Slot'):
                     if element.tag in self.__dict__:
                         setattr(self, element.tag, element.text)
                     if element.tag == 'ActiveState':
                         self.SlotList = self.makeItemSlots()
+                elif element.tag == 'Equipped':
+                    self.Equipped = int(element.text)
                 elif element.tag == 'Restrictions':
                     for restriction in element:
                         self.Restrictions.append(restriction.text)
@@ -143,7 +145,7 @@ class Item:
         if 'All' in self.Restrictions:
             self.Restrictions = ['All']
 
-    def exportAsXML(self, filename, export_to_function = False):
+    def exportAsXML(self, filename, export = False):
         fields = [
             ('Realm', self.Realm),
             ('ActiveState', self.ActiveState),
@@ -161,19 +163,18 @@ class Item:
             ('LeftHand', self.LeftHand),
             ('Requirement', self.Requirement),
             ('Restrictions', self.Restrictions),
-            ('Notes', self.Notes,),
-            ('Index', self.Index)
+            ('Notes', self.Notes,)
         ]
 
         item = etree.Element('Item')
         for key, value in fields:
-            if key not in ('Location', 'Equipped', 'Restrictions', 'Index') and value != '':
+            if key not in ('Location', 'Restrictions', 'Equipped') and value != '':
                 etree.SubElement(item, key).text = str(value)
             elif key == 'Restrictions' and value:
                 restrictions = etree.SubElement(item, 'Restrictions')
                 for restriction in self.Restrictions:
                     etree.SubElement(restrictions, 'Class').text = restriction
-            elif key in ('Location', 'Equipped', 'Index') and export_to_function:
+            elif key in ('Location', 'Equipped') and export:
                 etree.SubElement(item, key).text = str(value)
 
         for index in range(0, self.getSlotCount()):
@@ -185,7 +186,7 @@ class Item:
                 if self.getSlot(index).getEffectRequirement() != '':
                     etree.SubElement(slot, 'Requirement').text = self.getSlot(index).getEffectRequirement()
 
-        if not export_to_function:
+        if not export:
             with open(filename, 'wb') as document:
                 document.write(etree.tostring(item, encoding = 'UTF-8', pretty_print = True, xml_declaration = True))
                 document.close()

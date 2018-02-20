@@ -250,15 +250,18 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         width = testFont.size(Qt.TextSingleLine, "+5", tabArray = None).width()
         self.ResistGroup.layout().setColumnMinimumWidth(3, width)
 
-        for key, value in SlotList.items():
+        for key, slots in SlotList.items():
             parent = QTreeWidgetItem(self.SlotListTreeView, [key])
             parent.setFlags(parent.flags() & ~Qt.ItemIsUserCheckable)
-            for val in value:
-                child = QTreeWidgetItem([val])
+            if key == 'Jewelery':
+                parent.setExpanded(True)
+            for slot in slots:
+                child = QTreeWidgetItem([slot])
                 child.setFlags(child.flags() | Qt.ItemIsUserCheckable)
                 child.setCheckState(0, Qt.Unchecked)
                 parent.addChild(child)
 
+        # TODO: REIMPLEMENT `QTreeView.sizeHint()`
         self.SlotListTreeView.setFixedWidth(155)
         self.CharacterRealm.insertItems(0, list(Realms))
 
@@ -368,20 +371,20 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.CharacterRealm.setCurrentText('Midgard')
         self.CharacterRealmChanged()
 
-        for key, value in SlotList.items():
-            for val in value:
+        for key, slots in SlotList.items():
+            for slot in slots:
                 if key == 'Armor':
-                    item = Item('Crafted', val, self.CurrentRealm, self.ItemIndex)
+                    item = Item('Crafted', slot, self.CurrentRealm, self.ItemIndex)
                     item.Name = item.ActiveState + ' Item'
                     self.ItemIndex += 1
-                    self.ItemAttributeList[val] = item
-                    self.ItemDictionary[val] = [item]
+                    self.ItemAttributeList[slot] = item
+                    self.ItemDictionary[slot] = [item]
                 else:
-                    item = Item('Dropped', val, self.CurrentRealm, self.ItemIndex)
+                    item = Item('Dropped', slot, self.CurrentRealm, self.ItemIndex)
                     item.Name = item.ActiveState + ' Item'
                     self.ItemIndex += 1
-                    self.ItemAttributeList[val] = item
-                    self.ItemDictionary[val] = [item]
+                    self.ItemAttributeList[slot] = item
+                    self.ItemDictionary[slot] = [item]
 
         # SET THE INITIAL SLOT
         self.ItemSelected('Neck')
@@ -452,6 +455,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def importFromXML(self, filename):
         self.initialize()
+        items = list()
         tree = etree.parse(filename)
         if tree.getroot().tag == 'Template':
             elements = tree.getroot().getchildren()
@@ -471,36 +475,56 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     self.CharacterLevel.setText(element.text)
                 elif element.tag == 'RealmRank':
                     self.CharacterRealmRank.setText(element.text)
-                print(element.tag)
+                elif element.tag == 'Item':
+                    items.append(element)
         else:
             return -1
+
+        self.ItemDictionary.clear()
+        self.ItemAttributeList.clear()
+        for key, slots in SlotList.items():
+            for slot in slots:
+                self.ItemDictionary[slot] = []
+
+        for item_xml in items:
+            item = Item('Imported')
+            item.importFromXML(item_xml, True)
+            if int(item_xml.attrib['Index']) == 0:
+                self.ItemAttributeList[item.Location] = item
+                self.ItemDictionary[item.Location].insert(int(item_xml.attrib['Index']), item)
+        self.RestoreItem(self.ItemAttributeList[self.CurrentItemLabel])
+
+        iterator = QTreeWidgetItemIterator(self.SlotListTreeView)
+        while iterator.value():
+            selection = iterator.value()
+            if selection.flags() & Qt.ItemIsUserCheckable:
+                currentState = self.ItemAttributeList[selection.text(0)].Equipped
+                if currentState == 2:
+                    selection.setCheckState(0, Qt.Checked)
+                elif currentState == 0:
+                    selection.setCheckState(0, Qt.Unchecked)
+            iterator += 1
 
         # DEBUGGING
         print('importFromXML')
 
     def exportAsXML(self, filename):
-        root = etree.Element('Template')
-        etree.SubElement(root, 'Name').text = self.CharacterName.text()
-        etree.SubElement(root, 'Realm').text = self.CharacterRealm.currentText()
-        etree.SubElement(root, 'Class').text = self.CharacterClass.currentText()
-        etree.SubElement(root, 'Race').text = self.CharacterRace.currentText()
-        etree.SubElement(root, 'Level').text = self.CharacterLevel.text()
-        etree.SubElement(root, 'RealmRank').text = self.CharacterRealmRank.text()
+        template = etree.Element('Template')
+        etree.SubElement(template, 'Name').text = self.CharacterName.text()
+        etree.SubElement(template, 'Realm').text = self.CharacterRealm.currentText()
+        etree.SubElement(template, 'Class').text = self.CharacterClass.currentText()
+        etree.SubElement(template, 'Race').text = self.CharacterRace.currentText()
+        etree.SubElement(template, 'Level').text = self.CharacterLevel.text()
+        etree.SubElement(template, 'RealmRank').text = self.CharacterRealmRank.text()
 
         for slot, items in self.ItemDictionary.items():
             for item in items:
-                root.append(item.exportAsXML(None, True))
-
-        equipped = etree.Element('CurrentItems')
-        for slot, items in self.ItemDictionary.items():
-            etree.SubElement(equipped, 'Item',
-                Location = items[0].Location,
-                Index = str(items[0].Index),
-                Equipped = str(items[0].Equipped))
-        root.append(equipped)
+                element = item.exportAsXML(None, True)
+                element.set('Index', str(items.index(item)))
+                template.append(element)
 
         with open(filename, 'wb') as document:
-            document.write(etree.tostring(root, encoding='UTF-8', pretty_print = True, xml_declaration = True))
+            document.write(etree.tostring(template, encoding='UTF-8', pretty_print = True, xml_declaration = True))
             document.close()
 
         # DEBUGGING
@@ -1135,13 +1159,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # DEBUGGING
         print('CharacterRaceChanged')
 
+    # TODO: HIGHLIGHT CURRENTLY SELECTED ITEM.
     def ItemSelected(self, selection):
         for index in self.SlotListTreeView.selectedIndexes():
             selection = index.data()
-        for key, value in SlotList.items():
-            for val in value:
-                if selection == val:
-                    self.CurrentItemLabel = val
+        for key, slots in SlotList.items():
+            for slot in slots:
+                if selection == slot:
+                    self.CurrentItemLabel = slot
                     self.RestoreItem(self.ItemAttributeList[self.CurrentItemLabel])
 
         # DEBUGGING
@@ -1160,6 +1185,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def ItemStateChanged(self, selection, column):
         self.ItemAttributeList[selection.text(column)].Equipped = selection.checkState(column)
+        for item in self.ItemDictionary[selection.text(column)]:
+            item.Equipped = selection.checkState(column)
         if selection.text(column) == self.SlotListTreeView.selectedIndexes():
             self.RestoreItem(self.ItemAttributeList[selection.text(column)])
 
@@ -1289,12 +1316,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def newItem(self, action):
         newItemType = action.text().split(None, 1)[0]
-        itemState = self.ItemAttributeList[self.CurrentItemLabel].Equipped
+        equipped = self.ItemAttributeList[self.CurrentItemLabel].Equipped
         item = Item(newItemType, self.CurrentItemLabel, self.CurrentRealm, self.ItemIndex)
         item.Name = action.text()
         self.ItemDictionary[self.CurrentItemLabel].insert(0, item)
         self.ItemAttributeList[self.CurrentItemLabel] = item
-        self.ItemAttributeList[self.CurrentItemLabel].Equipped = itemState
+        self.ItemAttributeList[self.CurrentItemLabel].Equipped = equipped
 
         if newItemType == 'Legendary':
             if action.text().split(None, 1)[1] == 'Staff':
@@ -1317,7 +1344,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         print('newItem')
 
     def changeItem(self, index):
-        itemState = self.ItemAttributeList[self.CurrentItemLabel].Equipped
+        equipped = self.ItemAttributeList[self.CurrentItemLabel].Equipped
         self.ItemAttributeList[self.CurrentItemLabel].Equipped = 0
 
         try:  # FIXES BUG IN 'QComboBox' WHEN PRESSING ENTER ...
@@ -1328,7 +1355,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ItemDictionary[self.CurrentItemLabel].remove(item)
         self.ItemDictionary[self.CurrentItemLabel].insert(0, item)
         self.ItemAttributeList[self.CurrentItemLabel] = item
-        self.ItemAttributeList[self.CurrentItemLabel].Equipped = itemState
+        self.ItemAttributeList[self.CurrentItemLabel].Equipped = equipped
         self.RestoreItem(self.ItemAttributeList[self.CurrentItemLabel])
 
         # DEBUGGING
@@ -1411,14 +1438,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     # TODO: NEED TO SET A DEFAULT PATH
     def saveItem(self):
-        if not self.ItemName.currentText():
+        item = self.ItemAttributeList[self.CurrentItemLabel]
+        if not item.Name:
             QMessageBox.warning(
-                None, 'Error!', 'You must specify a name before saving the item!')
+                None, 'Error!', 'You must specify a name before saving this item!')
             return
         options = QFileDialog.Options()
         filename, filters = QFileDialog.getSaveFileName(
-            self, 'Save Item', self.ItemName.currentText(), 'Items (*.xml);; All Files (*.*)', options = options)
-        item = self.ItemAttributeList[self.CurrentItemLabel]
+            self, 'Save Item', item.Name, 'Items (*.xml);; All Files (*.*)', options = options)
 
         # FIXES BUG IN 'QFileDialog' WHEN CLICKING CANCEL ...
         if filename: item.exportAsXML(filename)
@@ -1430,17 +1457,19 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if len(self.ItemDictionary[self.CurrentItemLabel]) == 1:
             self.clearItem()
             return
-        itemState = self.ItemAttributeList[self.CurrentItemLabel].Equipped
+        equipped = self.ItemAttributeList[self.CurrentItemLabel].Equipped
         del self.ItemDictionary[self.CurrentItemLabel][0]
         item = self.ItemDictionary[self.CurrentItemLabel][0]
         self.ItemAttributeList[self.CurrentItemLabel] = item
-        self.ItemAttributeList[self.CurrentItemLabel].Equipped = itemState
+        self.ItemAttributeList[self.CurrentItemLabel].Equipped = equipped
         self.RestoreItem(self.ItemAttributeList[self.CurrentItemLabel])
 
         # DEBUGGING
         print('deleteItem')
 
+    # TODO: ENSURE THAT ALL VARIABLE DECLARATIONS GET RESET ...
     def newTemplate(self):
+        self.initialize()
 
         # DEBUGGING
         print('newTemplate')
