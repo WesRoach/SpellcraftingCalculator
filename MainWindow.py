@@ -817,6 +817,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                         amts['TotalCapBonus'] += amount
                         amts['CapBonus'] = min(amts['TotalCapBonus'], amts['BaseCap'])
 
+                # TODO: LOGIC ERROR W/ CALCULATING NORMAL AND MYTHICAL CAP
                 elif item.getSlot(index).getEffectType() == 'Mythical Stat Cap':
                     effects = [effect, ]
 
