@@ -826,14 +826,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
                     for effect in effects:
                         amts = total['Stats'][effect]
-                        if amts['TotalCapBonus'] < amts['BaseCap']:
-                            amts['TotalCapBonus'] += amount
-                            if amts['TotalCapBonus'] > amts['BaseCap']:
-                                amountOverCapLimit = amts['TotalCapBonus'] - amts['BaseCap']
-                                amts['TotalMythicalCapBonus'] += amountOverCapLimit
-                                amts['TotalCapBonus'] = amts['TotalCapBonus'] - amountOverCapLimit
-                        else:
-                            amts['TotalMythicalCapBonus'] += amount
+                        amts['TotalMythicalCapBonus'] += amount
                         amts['MythicalCapBonus'] = min(amts['TotalMythicalCapBonus'], amts['BaseMythicalCap'])
 
                 elif item.getSlot(index).getEffectType() == 'Mythical Resist Cap':
@@ -949,12 +942,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
                 TotalCapBonus = datum['TotalCapBonus']
                 TotalMythicalCapBonus = datum['TotalMythicalCapBonus']
-
-                # if TotalCapBonus > BaseCap:
-                #     TotalCapBonus = BaseCap
-
-                # if TotalMythicalCapBonus > BaseMythicalCap:
-                #    TotalMythicalCapBonus = BaseMythicalCap
 
                 self.StatValue[key].setText(str(int(Base - TotalBonus)))
                 self.StatCap[key].setText('(' + str(int(BaseCap - TotalCapBonus)) + ')')
