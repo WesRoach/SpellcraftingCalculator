@@ -1,7 +1,7 @@
 # HEADER PLACE HOLDER
 
 from PyQt5 import uic
-from PyQt5.Qt import Qt, QIcon
+from PyQt5.Qt import Qt, QIcon, QSize
 from PyQt5.QtWidgets import QDialog
 
 Ui_ReportWindow = uic.loadUiType(r'interface/ReportWindow.ui')[0]
@@ -25,3 +25,9 @@ class ReportWindow(QDialog, Ui_ReportWindow):
 
     def initControls(self):
         self.CloseButton.clicked.connect(self.accept)
+
+    def materialsReport(self):
+        pass
+
+    def templateReport(self):
+        pass
