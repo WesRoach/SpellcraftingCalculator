@@ -10,7 +10,9 @@ from Constants import Cap, CraftedTypeList, CraftedEffectList, CraftedValuesList
 from Constants import EnhancedTypeList, EnhancedEffectList, EnhancedValuesList, MythicalCap, SlotList
 from Item import Item
 from ItemInfoDialog import ItemInformationDialog
+from ReportWindow import ReportWindow
 from lxml import etree
+import os
 import re
 
 Ui_MainWindow = uic.loadUiType(r'interface/MainWindow.ui')[0]
@@ -74,7 +76,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.CurrentClass = ''
         self.CurrentRace = ''
         self.CurrentItemLabel = ''
-        self.TemplateModified = True
+
+        self.TemplateName = None
+        self.TemplatePath = None
+        self.TemplateModified = False
 
         self.initMenuBar()
         self.initToolBar()
@@ -110,7 +115,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.FileMenu.addSeparator()
         self.FileMenu.addAction('E&xit', self.close, QKeySequence(Qt.CTRL + Qt.Key_X))
 
-        self.ItemLoadMenu.addAction('Item File ...', self.loadItem)
+        self.ItemLoadMenu.addAction('Item XML File ...', self.loadItem)
         self.ItemLoadMenu.addAction('Item Database ...', self.showItemDatabase)
 
         self.EditMenu.addMenu(self.ItemLoadMenu)
@@ -126,7 +131,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.EditMenu.addAction('Clear Slots', self.clearItemSlots)
 
         self.ViewMenu.addAction('&Material Report ...', self.showMaterialsReport)
-        self.ViewMenu.addAction('&Template Report ...', self.showConfigurationReport)
+        self.ViewMenu.addAction('&Template Report ...', self.showTemplateReport)
         self.ViewMenu.addSeparator()
 
         for (title, res) in (("Large", 32,), ("Normal", 24,), ("Small", 16,), ("Hide", 0,),):
@@ -166,8 +171,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ToolBar.addSeparator()
         self.ToolBar.addAction('Export Gems', self.exportGemsToQuickbar)
         self.ToolBar.addSeparator()
-        self.ToolBar.addAction('Material Report', self.showMaterialsReport)
-        self.ToolBar.addAction('Configuration Report', self.showConfigurationReport)
+        self.ToolBar.addAction('Materials Report', self.showMaterialsReport)
+        self.ToolBar.addAction('Template Report', self.showTemplateReport)
         self.addToolBar(self.ToolBar)
 
     def initItemToolBar(self):
@@ -363,6 +368,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         del testItem
 
     def initialize(self):
+        self.TemplateName = None
+        self.TemplatePath = None
         self.CharacterName.setText('')
         self.CharacterLevel.setText('50')
         self.CharacterRealmRank.setText('10')
@@ -440,14 +447,18 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         print('showItemDatabase')
 
     def showMaterialsReport(self):
+        self.MaterialsReport = ReportWindow(self, Qt.WindowCloseButtonHint)
+        self.MaterialsReport.exec_()
 
         # DEBUGGING
         print('showMaterialsReport')
 
-    def showConfigurationReport(self):
+    def showTemplateReport(self):
+        self.TemplateReport = ReportWindow(self, Qt.WindowCloseButtonHint)
+        self.TemplateReport.exec_()
 
         # DEBUGGING
-        print('showConfigurationReport')
+        print('showTemplateReport')
 
 # =============================================== #
 #              XML IMPORT AND EXPORT              #
@@ -649,6 +660,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             total['Stats'][effect]['TotalCapBonus'] = 0
             total['Stats'][effect]['MythicalCapBonus'] = 0
             total['Stats'][effect]['TotalMythicalCapBonus'] = 0
+            total['Stats'][effect]['Overflow'] = 0
 
             if effect in Cap:
                 Base = Cap[effect]
@@ -803,6 +815,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                         amts['TotalBonus'] += amount
                         amts['Bonus'] = min(amts['TotalBonus'], amts['Base'])
 
+                # TODO: ACCOUNT FOR MYTHICAL CAP OVERFLOW
                 elif item.getSlot(index).getEffectType() == 'Cap Increase':
                     effects = [effect, ]
 
@@ -817,7 +830,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                         amts['TotalCapBonus'] += amount
                         amts['CapBonus'] = min(amts['TotalCapBonus'], amts['BaseCap'])
 
-                # TODO: LOGIC ERROR W/ CALCULATING NORMAL AND MYTHICAL CAP
+                # TODO: ACCOUNT FOR MYTHICAL CAP OVERFLOW
                 elif item.getSlot(index).getEffectType() == 'Mythical Stat Cap':
                     effects = [effect, ]
 
@@ -1407,8 +1420,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         options = QFileDialog.Options()
         filename, filters = QFileDialog.getOpenFileName(
             self, 'Load Item:', '', 'Items (*.xml);; All Files (*.*)', options = options,)
-
-        # FIXES BUG IN 'QFileDialog' WHEN CLICKING CANCEL ...
         if filename == '': return
 
         item = Item('Imported', self.CurrentItemLabel, self.CurrentRealm, self.ItemIndex)
@@ -1436,8 +1447,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         options = QFileDialog.Options()
         filename, filters = QFileDialog.getSaveFileName(
             self, 'Save Item', item.Name, 'Items (*.xml);; All Files (*.*)', options = options)
-
-        # FIXES BUG IN 'QFileDialog' WHEN CLICKING CANCEL ...
         if filename: item.exportAsXML(filename)
 
         # DEBUGGING
@@ -1469,13 +1478,21 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         filename, filters = QFileDialog.getOpenFileName(
             self, "Open Template", '', 'Templates (*.ktf);; All Files (*.*)', options = options)
 
-        # FIXES BUG IN 'QFileDialog' WHEN CLICKING CANCEL ...
-        if filename: self.importFromXML(filename)
+        if filename:
+            self.importFromXML(filename)
+            self.TemplateName = os.path.basename(filename)
+            self.TemplatePath = os.path.dirname(filename)
+            self.TemplateModified = False
 
         # DEBUGGING
         print('loadTemplate')
 
     def saveTemplate(self):
+        if None in (self.TemplateName, self.TemplatePath):
+            self.saveTemplateAs()
+        else:
+            self.exportAsXML(os.path.join(self.TemplatePath, self.TemplateName))
+            self.TemplateModified = False
 
         # DEBUGGING
         print('saveTemplate')
@@ -1485,8 +1502,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         filename, filters = QFileDialog.getSaveFileName(
             self, 'Save Item', '', 'Templates (*.ktf);; All Files (*.*)', options = options)
 
-        # FIXES BUG IN 'QFileDialog' WHEN CLICKING CANCEL ...
-        if filename: self.exportAsXML(filename)
+        if filename:
+            self.exportAsXML(filename)
+            self.TemplateName = os.path.basename(filename)
+            self.TemplatePath = os.path.dirname(filename)
+            self.TemplateModified = False
 
         # DEBUGGING
         print('saveTemplateAs')
