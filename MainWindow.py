@@ -1273,7 +1273,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 valuesList = CraftedValuesList[item.getSlot(index).getEffectType()][:1]
             elif item.getSlot(index).getSlotType() == 'Craftable':
                 valuesList = CraftedValuesList[item.getSlot(index).getEffectType()]
-            elif item.getSlot(index).getSlotType() == 'Enhanced':
+            if item.getSlot(index).getSlotType() == 'Enhanced':
                 valuesList = EnhancedValuesList[item.getSlot(index).getEffectType()]
             if isinstance(valuesList, dict):
                 valuesList = valuesList[item.getSlot(index).getEffect()]
