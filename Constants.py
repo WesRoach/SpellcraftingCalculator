@@ -611,6 +611,10 @@ MythicalStatCapList = t2((
     'Constitution',
     'Dexterity',
     'Quickness',
+    'Intelligence',
+    'Piety',
+    'Charisma',
+    'Empathy',
     'Acuity',
 ))
 
