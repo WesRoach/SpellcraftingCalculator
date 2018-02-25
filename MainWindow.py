@@ -419,6 +419,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.CharacterRealm.activated[int].connect(self.CharacterRealmChanged)
         self.CharacterClass.activated[int].connect(self.CharacterClassChanged)
         self.CharacterRace.activated[int].connect(self.CharacterRaceChanged)
+        self.CharacterLevel.editingFinished.connect(self.calculate)
         self.ItemLevel.editingFinished.connect(self.ItemLevelChanged)
         self.ItemQuality.editingFinished.connect(self.ItemQualityChanged)
         self.ItemName.activated[int].connect(self.changeItem)
@@ -642,7 +643,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def summarize(self):
         Level = int(self.CharacterLevel.text())
         total = {
-            'Utility': 0.0,
             'Stats': {},
             'Resists': {},
             'Skills': {},
@@ -660,7 +660,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             total['Stats'][effect]['TotalCapBonus'] = 0
             total['Stats'][effect]['MythicalCapBonus'] = 0
             total['Stats'][effect]['TotalMythicalCapBonus'] = 0
-            total['Stats'][effect]['Overflow'] = 0
 
             if effect in Cap:
                 Base = Cap[effect]
@@ -677,10 +676,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 BaseMythicalCap = MythicalCap['Stat Cap']
                 total['Stats'][effect]['BaseMythicalCap'] = int(Level * BaseMythicalCap[0]) + BaseMythicalCap[1]
 
-            if effect == 'Acuity':
-                BaseMythicalCap = MythicalCap['Stat Cap']
-                for value in AllBonusList[self.CurrentRealm][self.CurrentClass][effect]:
-                    total['Stats'][value]['BaseMythicalCap'] = int(Level * BaseMythicalCap[0]) + BaseMythicalCap[1]
+            # if effect == 'Acuity':
+            #     BaseMythicalCap = MythicalCap['Stat Cap']
+            #     for value in AllBonusList[self.CurrentRealm][self.CurrentClass][effect]:
+            #         total['Stats'][value]['BaseMythicalCap'] = int(Level * BaseMythicalCap[0]) + BaseMythicalCap[1]
 
             if effect in MythicalCap:
                 BaseMythicalCap = MythicalCap[effect]
@@ -815,7 +814,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                         amts['TotalBonus'] += amount
                         amts['Bonus'] = min(amts['TotalBonus'], amts['Base'])
 
-                # TODO: ACCOUNT FOR MYTHICAL CAP OVERFLOW
                 elif item.getSlot(index).getEffectType() == 'Cap Increase':
                     effects = [effect, ]
 
@@ -828,9 +826,22 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     for effect in effects:
                         amts = total['Stats'][effect]
                         amts['TotalCapBonus'] += amount
+
+                        # TODO: ELIMINATE TRY-EXCEPT BLOCKS IN THIS AREA
+
+                        try:  # NOT ALL STAT CAPS HAVE A MYTHICAL CAP ...
+                            if amts['BaseCap'] < amts['BaseMythicalCap']:
+                                total['Stats'][effect]['BaseMythicalCap'] -= min(amts['TotalCapBonus'], amts['BaseCap'])
+                        except KeyError:
+                            pass
+
                         amts['CapBonus'] = min(amts['TotalCapBonus'], amts['BaseCap'])
 
-                # TODO: ACCOUNT FOR MYTHICAL CAP OVERFLOW
+                        try:  # NOT ALL STAT CAPS HAVE A MYTHICAL CAP ...
+                            amts['MythicalCapBonus'] = min(amts['TotalMythicalCapBonus'], amts['BaseMythicalCap'])
+                        except KeyError:
+                            pass
+
                 elif item.getSlot(index).getEffectType() == 'Mythical Stat Cap':
                     effects = [effect, ]
 
@@ -840,6 +851,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     for effect in effects:
                         amts = total['Stats'][effect]
                         amts['TotalMythicalCapBonus'] += amount
+
+                        if amts['BaseCap'] < amts['BaseMythicalCap']:
+                            total['Stats'][effect]['BaseMythicalCap'] -= min(amts['TotalCapBonus'], amts['BaseCap'])
+
+                        amts['CapBonus'] = min(amts['TotalCapBonus'], amts['BaseCap'])
                         amts['MythicalCapBonus'] = min(amts['TotalMythicalCapBonus'], amts['BaseMythicalCap'])
 
                 elif item.getSlot(index).getEffectType() == 'Mythical Resist Cap':
@@ -902,7 +918,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     self.ImbuePoints[index].setText('%3.1f' % slotImbueValues[index])
                 self.GemName[index].setText(item.getSlot(index).getGemName(self.CurrentRealm))
 
-        for (key, datum) in list(total['Stats'].items()):
+        for key, datum in list(total['Stats'].items()):
             Acuity = AllBonusList[self.CurrentRealm][self.CurrentClass]["Acuity"]
             TotalBonus = datum['TotalBonus']
 
@@ -944,7 +960,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 self.StatMythicalCap[key].setText('(' + str(datum['TotalMythicalCapBonus']) + ')')
 
             elif self.DistanceToCap.isChecked():
-
                 Base = datum['Base'] + datum['CapBonus'] + datum['MythicalCapBonus']
                 BaseCap = datum['BaseCap']
 
@@ -1013,6 +1028,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 if self.DistanceToCap.isChecked():
                     amount = amts['Base'] - amts['TotalBonus']
                 self.insertSkill(amount, bonus, 'Skill')
+
+        for key, amts in list(total['Stats'].items()):
+            if key in DropEffectList['All']['Mythical Stat Cap']:
+                pass
 
         # DEBUGGING
         print('calculate')
@@ -1269,11 +1288,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         valuesList = list()
         if item.getSlot(index).getSlotType() in ('Craftable', 'Enhanced'):
-            if item.getSlot(index).getEffect()[0:9] in ('All Melee', 'All Magic'):
-                valuesList = CraftedValuesList[item.getSlot(index).getEffectType()][:1]
-            elif item.getSlot(index).getSlotType() == 'Craftable':
-                valuesList = CraftedValuesList[item.getSlot(index).getEffectType()]
-            if item.getSlot(index).getSlotType() == 'Enhanced':
+            if item.getSlot(index).getSlotType() == 'Craftable':
+                if item.getSlot(index).getEffect()[0:9] in ('All Melee', 'All Magic'):
+                    valuesList = CraftedValuesList[item.getSlot(index).getEffectType()][:1]
+                else:
+                    valuesList = CraftedValuesList[item.getSlot(index).getEffectType()]
+            elif item.getSlot(index).getSlotType() == 'Enhanced':
                 valuesList = EnhancedValuesList[item.getSlot(index).getEffectType()]
             if isinstance(valuesList, dict):
                 valuesList = valuesList[item.getSlot(index).getEffect()]
