@@ -183,7 +183,7 @@
          </widget>
         </item>
         <item row="2" column="1" colspan="3">
-         <widget class="QComboBox" name="ItemSource">
+         <widget class="QComboBox" name="ItemOrigin">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
             <horstretch>0</horstretch>
@@ -225,7 +225,7 @@
          </widget>
         </item>
         <item row="2" column="0">
-         <widget class="QLabel" name="ItemSourceLabel">
+         <widget class="QLabel" name="ItemOriginLabel">
           <property name="text">
            <string>Origin: </string>
           </property>
@@ -233,7 +233,7 @@
            <enum>Qt::PlainText</enum>
           </property>
           <property name="buddy">
-           <cstring>ItemSource</cstring>
+           <cstring>ItemOrigin</cstring>
           </property>
          </widget>
         </item>
@@ -442,7 +442,7 @@
  <tabstops>
   <tabstop>ItemRealm</tabstop>
   <tabstop>ItemType</tabstop>
-  <tabstop>ItemSource</tabstop>
+  <tabstop>ItemOrigin</tabstop>
   <tabstop>ItemDamageType</tabstop>
   <tabstop>ItemBonus</tabstop>
   <tabstop>ItemAFDPS</tabstop>
