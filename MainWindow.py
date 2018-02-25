@@ -826,21 +826,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     for effect in effects:
                         amts = total['Stats'][effect]
                         amts['TotalCapBonus'] += amount
-
-                        # TODO: ELIMINATE TRY-EXCEPT BLOCKS IN THIS AREA
-
-                        try:  # NOT ALL STAT CAPS HAVE A MYTHICAL CAP ...
-                            if amts['BaseCap'] < amts['BaseMythicalCap']:
-                                total['Stats'][effect]['BaseMythicalCap'] -= min(amts['TotalCapBonus'], amts['BaseCap'])
-                        except KeyError:
-                            pass
-
                         amts['CapBonus'] = min(amts['TotalCapBonus'], amts['BaseCap'])
-
-                        try:  # NOT ALL STAT CAPS HAVE A MYTHICAL CAP ...
-                            amts['MythicalCapBonus'] = min(amts['TotalMythicalCapBonus'], amts['BaseMythicalCap'])
-                        except KeyError:
-                            pass
 
                 elif item.getSlot(index).getEffectType() == 'Mythical Stat Cap':
                     effects = [effect, ]
@@ -851,11 +837,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     for effect in effects:
                         amts = total['Stats'][effect]
                         amts['TotalMythicalCapBonus'] += amount
-
-                        if amts['BaseCap'] < amts['BaseMythicalCap']:
-                            total['Stats'][effect]['BaseMythicalCap'] -= min(amts['TotalCapBonus'], amts['BaseCap'])
-
-                        amts['CapBonus'] = min(amts['TotalCapBonus'], amts['BaseCap'])
                         amts['MythicalCapBonus'] = min(amts['TotalMythicalCapBonus'], amts['BaseMythicalCap'])
 
                 elif item.getSlot(index).getEffectType() == 'Mythical Resist Cap':
