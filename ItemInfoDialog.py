@@ -17,7 +17,7 @@ class ItemInformationDialog(QDialog, Ui_ItemInfoDialog):
         self.CurrentItem = item
         self.RealmList = ()
         self.DamageTypes = ['']
-        self.SourceTypes = ['']
+        self.OriginTypes = ['']
 
         self.initLayout(item)
         self.initItem(item)
@@ -25,7 +25,7 @@ class ItemInformationDialog(QDialog, Ui_ItemInfoDialog):
 
         self.ItemRealm.setFixedHeight(20)
         self.ItemType.setFixedHeight(20)
-        self.ItemSource.setFixedHeight(20)
+        self.ItemOrigin.setFixedHeight(20)
         self.ItemBonus.setFixedHeight(20)
         self.ItemAFDPS.setFixedHeight(20)
         self.ItemSpeed.setFixedHeight(20)
@@ -46,15 +46,15 @@ class ItemInformationDialog(QDialog, Ui_ItemInfoDialog):
 
         if item.ActiveState == 'Crafted':
             self.RealmList = Realms
-            self.SourceTypes.extend(('Crafted',))
+            self.OriginTypes.extend(('Crafted',))
             self.DamageTypes.extend(('Slash', 'Thrust', 'Crush', ))
         elif item.ActiveState == 'Legendary':
             self.RealmList = Realms
-            self.SourceTypes.extend(('Crafted',))
+            self.OriginTypes.extend(('Crafted',))
             self.DamageTypes.extend(('Elemental',))
         elif item.ActiveState == 'Dropped':
             self.RealmList = AllRealms
-            self.SourceTypes.extend(('Drop', 'Quest', 'Artifact', 'Merchant',))
+            self.OriginTypes.extend(('Drop', 'Quest', 'Artifact', 'Merchant',))
             self.DamageTypes.extend(('Slash', 'Thrust', 'Crush',))
 
         if item.Location in SlotList['Jewelery']:
@@ -90,7 +90,7 @@ class ItemInformationDialog(QDialog, Ui_ItemInfoDialog):
         self.CloseButton.clicked.connect(self.accept)
         self.ItemRealm.activated.connect(self.ItemRealmChanged)
         self.ItemType.activated.connect(self.ItemTypeChanged)
-        self.ItemSource.activated.connect(self.ItemSourceChanged)
+        self.ItemOrigin.activated.connect(self.ItemSourceChanged)
         self.ItemDamageType.activated.connect(self.ItemDamageTypeChanged)
         self.ItemBonus.editingFinished.connect(self.ItemBonusChanged)
         self.ItemAFDPS.editingFinished.connect(self.ItemAFDPSChanged)
@@ -125,10 +125,11 @@ class ItemInformationDialog(QDialog, Ui_ItemInfoDialog):
                 if item.Location in SlotList['Mythical'] == value:
                     self.ItemType.clear()
                     self.ItemType.insertItems(0, ItemTypes[key])
+        self.ItemType.setCurrentText(item.Type)
 
-        self.ItemSource.clear()
-        self.ItemSource.insertItems(0, self.SourceTypes)
-        self.ItemSource.setCurrentIndex(self.SourceTypes.index(item.Origin))
+        self.ItemOrigin.clear()
+        self.ItemOrigin.insertItems(0, self.OriginTypes)
+        self.ItemOrigin.setCurrentIndex(self.OriginTypes.index(item.Origin))
 
         self.ItemDamageType.clear()
         self.ItemDamageType.insertItems(0, self.DamageTypes)
@@ -229,7 +230,7 @@ class ItemInformationDialog(QDialog, Ui_ItemInfoDialog):
 
     def ItemSourceChanged(self):
         item = self.CurrentItem
-        item.Origin = self.ItemSource.currentText()
+        item.Origin = self.ItemOrigin.currentText()
         print('ItemSourceChanged')
 
     def ItemDamageTypeChanged(self):
