@@ -670,7 +670,7 @@ MythicalCap = {
     'Endurance Regen': (1.00, 0),
     'Health Regen': (1.00, 0),
     'Power Regen': (1.00, 0),
-    'Stat Cap': (.50, 1),
+    'Stat Cap': (1, 2),
     'Resist Cap': (0, 15),
     'Mythical Bonus': (1.00, 0),
 }
