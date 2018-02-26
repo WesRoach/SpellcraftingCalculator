@@ -32,6 +32,8 @@ class ReportWindow(QDialog, Ui_ReportWindow):
 
     def materialsReport(self):
         self.setWindowTitle('Materials Report')
+        self.ReportTextBrowser.setHtml('Materials Report')
 
     def templateReport(self):
         self.setWindowTitle('Template Report')
+        self.ReportTextBrowser.setHtml('Template Report')
