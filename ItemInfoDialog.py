@@ -23,14 +23,15 @@ class ItemInformationDialog(QDialog, Ui_ItemInfoDialog):
         self.initItem(item)
         self.initControls()
 
-        self.ItemRealm.setFixedHeight(20)
-        self.ItemType.setFixedHeight(20)
-        self.ItemOrigin.setFixedHeight(20)
-        self.ItemBonus.setFixedHeight(20)
-        self.ItemAFDPS.setFixedHeight(20)
-        self.ItemSpeed.setFixedHeight(20)
-        self.ItemLeftHand.setFixedHeight(20)
-        self.ItemRequirement.setFixedHeight(20)
+        defaultFixedHeight = 20
+        self.ItemRealm.setFixedHeight(defaultFixedHeight)
+        self.ItemType.setFixedHeight(defaultFixedHeight)
+        self.ItemOrigin.setFixedHeight(defaultFixedHeight)
+        self.ItemBonus.setFixedHeight(defaultFixedHeight)
+        self.ItemAFDPS.setFixedHeight(defaultFixedHeight)
+        self.ItemSpeed.setFixedHeight(defaultFixedHeight)
+        self.ItemLeftHand.setFixedHeight(defaultFixedHeight)
+        self.ItemRequirement.setFixedHeight(defaultFixedHeight)
         self.setFixedSize(QSize(335, 435))
 
     def initLayout(self, item):
