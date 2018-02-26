@@ -664,7 +664,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             if effect in Cap:
                 Base = Cap[effect]
                 BaseCap = Cap[effect + ' Cap']
-
             else:
                 Base = Cap['Stat']
                 BaseCap = Cap['Stat Cap']
@@ -765,10 +764,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             total['OtherBonuses'][effect]['Base'] = int(Level * Base[0]) + Base[1]
 
         for key, item in self.ItemAttributeList.items():
-
-            # DEBUGGING
-            amts = ''
-
             if not item.Equipped == 2:
                 continue
 
@@ -874,9 +869,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     amts['TotalBonus'] += amount
                     amts['Bonus'] = min(amts['TotalBonus'], amts['Base'])
 
-            # DEBUGGING
-            if not amts == '':
-                print(amts)
+        for stat, amts in total['Stats'].items():
+            if stat in DropEffectList['All']['Mythical Stat Cap']:
+                amts['BaseMythicalCap'] = amts['BaseMythicalCap'] - amts['CapBonus']
+                amts['MythicalCapBonus'] = min(amts['TotalMythicalCapBonus'], amts['BaseMythicalCap'])
 
         # DEBUGGING
         print('summarize')
@@ -899,7 +895,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     self.ImbuePoints[index].setText('%3.1f' % slotImbueValues[index])
                 self.GemName[index].setText(item.getSlot(index).getGemName(self.CurrentRealm))
 
-        for key, datum in list(total['Stats'].items()):
+        for key, datum in total['Stats'].items():
             Acuity = AllBonusList[self.CurrentRealm][self.CurrentClass]["Acuity"]
             TotalBonus = datum['TotalBonus']
 
@@ -959,7 +955,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 if BaseMythicalCap == 0:
                     self.StatMythicalCap[key].setText('--  ')
 
-        for key, amts in list(total['Resists'].items()):
+        for key, amts in total['Resists'].items():
             Base = amts['Base'] + amts['MythicalCapBonus']
             TotalBonus = amts['TotalBonus']
             BaseMythicalCap = amts['BaseMythicalCap']
@@ -975,44 +971,40 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         self.SkillsView.model().removeRows(0, self.SkillsView.model().rowCount())
 
-        for skill, amts in list(total['Skills'].items()):
+        for skill, amts in total['Skills'].items():
             amount = amts['TotalBonus']
             if amts['Bonus'] > 0 and skill[0:4] != 'All ':
                 if self.DistanceToCap.isChecked():
                     amount = amts['Base'] - amts['TotalBonus']
                 self.insertSkill(amount, skill, 'Skill')
 
-        for focus, amts in list(total['Focus'].items()):
+        for focus, amts in total['Focus'].items():
             amount = amts['TotalBonus']
             if amts['Bonus'] > 0 and focus[0:4] != 'All ':
                 if self.DistanceToCap.isChecked():
                     amount = amts['Base'] - amts['TotalBonus']
                 self.insertSkill(amount, focus + ' Focus', 'Focus')
 
-        for bonus, amts in list(total['MythicalBonuses'].items()):
+        for bonus, amts in total['MythicalBonuses'].items():
             amount = amts['TotalBonus']
             if amts['Bonus'] > 0:
                 if self.DistanceToCap.isChecked():
                     amount = amts['Base'] - amts['TotalBonus']
                 self.insertSkill(amount, 'Mythical ' + bonus, 'Bonus')
 
-        for bonus, amts in list(total['PvEBonuses'].items()):
+        for bonus, amts in total['PvEBonuses'].items():
             amount = amts['TotalBonus']
             if amts['Bonus'] > 0:
                 if self.DistanceToCap.isChecked():
                     amount = amts['Base'] - amts['TotalBonus']
                 self.insertSkill(amount, bonus + ' (PvE)', 'Skill')
 
-        for bonus, amts in list(total['OtherBonuses'].items()):
+        for bonus, amts in total['OtherBonuses'].items():
             amount = amts['TotalBonus']
             if amts['Bonus'] > 0:
                 if self.DistanceToCap.isChecked():
                     amount = amts['Base'] - amts['TotalBonus']
                 self.insertSkill(amount, bonus, 'Skill')
-
-        for key, amts in list(total['Stats'].items()):
-            if key in DropEffectList['All']['Mythical Stat Cap']:
-                pass
 
         # DEBUGGING
         print('calculate')
