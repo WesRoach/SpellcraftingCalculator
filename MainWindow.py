@@ -449,6 +449,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def showMaterialsReport(self):
         self.MaterialsReport = ReportWindow(self, Qt.WindowCloseButtonHint)
+        self.MaterialsReport.materialsReport()
         self.MaterialsReport.exec_()
 
         # DEBUGGING
@@ -456,6 +457,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def showTemplateReport(self):
         self.TemplateReport = ReportWindow(self, Qt.WindowCloseButtonHint)
+        self.TemplateReport.templateReport()
         self.TemplateReport.exec_()
 
         # DEBUGGING

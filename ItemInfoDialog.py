@@ -23,17 +23,6 @@ class ItemInformationDialog(QDialog, Ui_ItemInfoDialog):
         self.initItem(item)
         self.initControls()
 
-        defaultFixedHeight = 20
-        self.ItemRealm.setFixedHeight(defaultFixedHeight)
-        self.ItemType.setFixedHeight(defaultFixedHeight)
-        self.ItemOrigin.setFixedHeight(defaultFixedHeight)
-        self.ItemBonus.setFixedHeight(defaultFixedHeight)
-        self.ItemAFDPS.setFixedHeight(defaultFixedHeight)
-        self.ItemSpeed.setFixedHeight(defaultFixedHeight)
-        self.ItemLeftHand.setFixedHeight(defaultFixedHeight)
-        self.ItemRequirement.setFixedHeight(defaultFixedHeight)
-        self.setFixedSize(QSize(335, 435))
-
     def initLayout(self, item):
         self.setWindowTitle('Item Information')
         self.setWindowIcon(QIcon(None))
@@ -44,6 +33,17 @@ class ItemInformationDialog(QDialog, Ui_ItemInfoDialog):
 
         width = testFont.size(Qt.TextSingleLine, "Type:", tabArray = None).width()
         self.ItemInfoGroup.layout().setColumnMinimumWidth(0, width)
+
+        defaultFixedHeight = 20
+        self.ItemRealm.setFixedHeight(defaultFixedHeight)
+        self.ItemType.setFixedHeight(defaultFixedHeight)
+        self.ItemOrigin.setFixedHeight(defaultFixedHeight)
+        self.ItemBonus.setFixedHeight(defaultFixedHeight)
+        self.ItemAFDPS.setFixedHeight(defaultFixedHeight)
+        self.ItemSpeed.setFixedHeight(defaultFixedHeight)
+        self.ItemLeftHand.setFixedHeight(defaultFixedHeight)
+        self.ItemRequirement.setFixedHeight(defaultFixedHeight)
+        self.setFixedSize(QSize(335, 435))
 
         if item.ActiveState == 'Crafted':
             self.RealmList = Realms
