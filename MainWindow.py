@@ -869,6 +869,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     amts['TotalBonus'] += amount
                     amts['Bonus'] = min(amts['TotalBonus'], amts['Base'])
 
+        # THIS IS DIRTY ...
         for stat, amts in total['Stats'].items():
             if stat in DropEffectList['All']['Mythical Stat Cap']:
                 amts['BaseMythicalCap'] = amts['BaseMythicalCap'] - amts['CapBonus']
