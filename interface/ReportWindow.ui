@@ -74,12 +74,16 @@
       <number>0</number>
      </property>
      <item>
-      <widget class="QComboBox" name="ExportSelection"/>
+      <widget class="QPushButton" name="ExportReportHtml">
+       <property name="text">
+        <string>Export as HTML</string>
+       </property>
+      </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="ExportButton">
+      <widget class="QPushButton" name="ExportText">
        <property name="text">
-        <string>Export</string>
+        <string>Export as Text</string>
        </property>
        <property name="autoDefault">
         <bool>false</bool>
