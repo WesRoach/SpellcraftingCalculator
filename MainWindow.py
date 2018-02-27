@@ -505,7 +505,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             item.importFromXML(item_xml, True)
             if int(item_xml.attrib['Index']) == 0:
                 self.ItemAttributeList[item.Location] = item
-                self.ItemDictionary[item.Location].insert(int(item_xml.attrib['Index']), item)
+            self.ItemDictionary[item.Location].insert(int(item_xml.attrib['Index']), item)
         self.RestoreItem(self.ItemAttributeList[self.CurrentItemLabel])
 
         iterator = QTreeWidgetItemIterator(self.SlotListTreeView)
