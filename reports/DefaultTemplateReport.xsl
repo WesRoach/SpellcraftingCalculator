@@ -22,7 +22,7 @@
         <xsl:variable name="SlotNumber"><xsl:value-of select="number(@Number) + 1"/></xsl:variable>
         <xsl:if test="Type != 'Unused'">
             <xsl:choose>
-                <xsl:when test="@Type = 'player'">
+                <xsl:when test="@Type = 'Craftable'">
                     <tr>
                         <td>Gem <xsl:copy-of select="$SlotNumber"/>:&#160;</td>
                         <td align="right"><xsl:value-of select="Amount"/>&#160;</td>
@@ -63,13 +63,13 @@
     </xsl:template>
 
     <xsl:template match="Item">
-        <xsl:if test="count(Slot) &gt; 0 and Equipped = '1'">
+        <xsl:if test="count(Slot) &gt; 0 and Equipped = '2'">
             <dl>
                 <dt><b><xsl:value-of select="Location" /></b></dt>
-                <dt>Name: <xsl:value-of select="ItemName"/></dt>
+                <dt>Name: <xsl:value-of select="Name"/></dt>
                 <dt>
                     <xsl:text>Level: </xsl:text><xsl:value-of select="Level"/>
-                    <xsl:text> &#160; Quality: </xsl:text><xsl:value-of select="ItemQuality"/>
+                    <xsl:text> &#160; Quality: </xsl:text><xsl:value-of select="Quality"/>
                     <xsl:if test="AFDPS != '' and AFDPS != '0' and AFDPS != '-1'">
                         <xsl:text> &#160; AF/DPS: </xsl:text><xsl:value-of select="AFDPS"/>
                     </xsl:if>
@@ -80,7 +80,7 @@
                         <xsl:text> &#160; Bonus: </xsl:text><xsl:value-of select="Bonus"/>
                     </xsl:if>
                 </dt>
-                <xsl:if test="ActiveState = 'player'">
+                <xsl:if test="ActiveState = 'Crafted'">
                     <dt>
                         <xsl:text>Imbue Points: </xsl:text><xsl:value-of select="Imbue"/>
                         <xsl:text> of </xsl:text><xsl:value-of select="ItemImbue"/>
