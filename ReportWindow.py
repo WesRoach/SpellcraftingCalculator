@@ -3,6 +3,7 @@
 from PyQt5 import uic
 from PyQt5.Qt import Qt, QFontMetrics, QIcon, QSize
 from PyQt5.QtWidgets import QDialog, QStyle, QStyleOptionComboBox
+from lxml import etree
 
 Ui_ReportWindow = uic.loadUiType(r'interface/ReportWindow.ui')[0]
 
@@ -34,6 +35,11 @@ class ReportWindow(QDialog, Ui_ReportWindow):
         self.setWindowTitle('Materials Report')
         self.ReportTextBrowser.setHtml('Materials Report')
 
-    def templateReport(self):
+    def templateReport(self, report):
         self.setWindowTitle('Template Report')
-        self.ReportTextBrowser.setHtml('Template Report')
+
+        xslt = etree.parse(r'reports/DefaultTemplateReport.xsl')
+        transform = etree.XSLT(xslt)
+        report = transform(report)
+
+        self.ReportTextBrowser.setHtml(str(report))
