@@ -177,10 +177,9 @@ class Item:
             elif key in ('Location', 'Equipped') and export:
                 etree.SubElement(item, key).text = str(value)
 
-        # TODO: IMPLEMENT 'SlotType' FOR XSLT PARSING
         for index in range(0, self.getSlotCount()):
             if self.getSlot(index).getEffectType() != 'Unused':
-                slot = etree.SubElement(item, 'Slot', Number = str(index))
+                slot = etree.SubElement(item, 'Slot', Number = str(index), Type = self.getSlot(index).getSlotType())
                 etree.SubElement(slot, 'Type').text = self.getSlot(index).getEffectType()
                 etree.SubElement(slot, 'Effect').text = self.getSlot(index).getEffect()
                 etree.SubElement(slot, 'Amount').text = self.getSlot(index).getEffectAmount()
