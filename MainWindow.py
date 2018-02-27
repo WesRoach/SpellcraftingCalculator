@@ -457,7 +457,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def showTemplateReport(self):
         self.TemplateReport = ReportWindow(self, Qt.WindowCloseButtonHint)
-        self.TemplateReport.templateReport()
+        self.TemplateReport.templateReport(self.exportAsXML(None, True))
         self.TemplateReport.exec_()
 
         # DEBUGGING
@@ -522,7 +522,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # DEBUGGING
         print('importFromXML')
 
-    def exportAsXML(self, filename):
+    def exportAsXML(self, filename, export = False):
         template = etree.Element('Template')
         etree.SubElement(template, 'Name').text = self.CharacterName.text()
         etree.SubElement(template, 'Realm').text = self.CharacterRealm.currentText()
@@ -537,9 +537,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 element.set('Index', str(items.index(item)))
                 template.append(element)
 
-        with open(filename, 'wb') as document:
-            document.write(etree.tostring(template, encoding='UTF-8', pretty_print = True, xml_declaration = True))
-            document.close()
+        if not export:
+            with open(filename, 'wb') as document:
+                document.write(etree.tostring(template, encoding='UTF-8', pretty_print = True, xml_declaration = True))
+                document.close()
+        else:
+            return template
 
         # DEBUGGING
         print('exportAsXML')
