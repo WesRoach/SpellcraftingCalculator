@@ -522,6 +522,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # DEBUGGING
         print('importFromXML')
 
+    # TODO: NEED TO ADD MORE FOR REPORT ...
     def exportAsXML(self, filename, export = False):
         template = etree.Element('Template')
         etree.SubElement(template, 'Name').text = self.CharacterName.text()

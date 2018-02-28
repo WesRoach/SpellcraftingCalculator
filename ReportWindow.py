@@ -1,8 +1,8 @@
 # HEADER PLACE HOLDER
 
 from PyQt5 import uic
-from PyQt5.Qt import Qt, QFontMetrics, QIcon, QSize
-from PyQt5.QtWidgets import QDialog, QStyle, QStyleOptionComboBox
+from PyQt5.Qt import Qt, QIcon
+from PyQt5.QtWidgets import QDialog
 from lxml import etree
 
 Ui_ReportWindow = uic.loadUiType(r'interface/ReportWindow.ui')[0]
@@ -37,9 +37,7 @@ class ReportWindow(QDialog, Ui_ReportWindow):
 
     def templateReport(self, report):
         self.setWindowTitle('Template Report')
-
         xslt = etree.parse(r'reports/DefaultTemplateReport.xsl')
         transform = etree.XSLT(xslt)
         report = transform(report)
-
         self.ReportTextBrowser.setHtml(str(report))

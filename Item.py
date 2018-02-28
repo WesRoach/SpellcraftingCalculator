@@ -145,6 +145,7 @@ class Item:
         if 'All' in self.Restrictions:
             self.Restrictions = ['All']
 
+    # TODO: NEED TO ADD MORE FOR REPORT ...
     def exportAsXML(self, filename, export = False):
         fields = [
             ('Realm', self.Realm),
