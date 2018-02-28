@@ -891,7 +891,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         item = self.ItemAttributeList[self.CurrentItemLabel]
         if item.ActiveState in ('Crafted', 'Legendary'):
-            slotImbueValues = item.getSlotImbueValue()
+            slotImbueValues = item.getSlotImbueValues()
             itemImbuePoints = item.getItemImbueValue()
 
             print(slotImbueValues)
