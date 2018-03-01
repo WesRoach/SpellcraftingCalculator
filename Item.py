@@ -113,6 +113,15 @@ class Item:
             return 0.0
         return ImbuePoints[int(self.Level) - 1]
 
+    def getItemUtility(self):
+        utility = 0.0
+        for slot in self.getSlotList():
+            utility += slot.getGemUtility()
+        return utility
+
+    def getOverchargeSuccess(self):
+        pass
+
     def importFromXML(self, filename, export = False):
         tree = etree.parse(filename) if not export else etree.ElementTree(filename)
         if tree.getroot().tag == 'Item':
@@ -166,6 +175,11 @@ class Item:
             ('Restrictions', self.Restrictions),
             ('Notes', self.Notes,)
         ]
+
+        # SlotImbuePoints
+        # ItemImbuePoints
+        # OverChargeSuccess
+        # Utility
 
         item = etree.Element('Item')
         for key, value in fields:
@@ -254,6 +268,26 @@ class ItemSlot:
         elif self.getEffectType() == 'Skill':
             value = (int(self.getEffectAmount()) - 1) * 5.0
         return 1.0 if value < 1.0 else value
+
+    def getGemUtility(self):
+        if not self.getEffectAmount() or self.getEffectAmount() == '0':
+            return 0.0
+
+        if self.getEffectType() == 'Stat':
+            if self.getEffect() not in ('Hits', 'Power'):
+                return float((int(self.getEffectAmount()) * 2.0) / 3.0)
+            elif self.getEffect() == 'Hits':
+                return float(int(self.getEffectAmount()) * 4.0)
+            elif self.getEffect() == 'Power':
+                return float(int(self.getEffectAmount()) * 2.0)
+        elif self.getEffectType() == 'Resist':
+            return float(int(self.getEffectAmount()) * 2.0)
+        elif self.getEffectType() == 'Focus':
+            return float(int(self.getEffectAmount()) * 1.0)
+        elif self.getEffectType() == 'Skill':
+            return float(int(self.getEffectAmount()) * 5.0)
+        else:
+            return 0.0
 
     def getGemIndex(self):
         if self.getEffect() in CraftedValuesList[self.getEffectType()]:
