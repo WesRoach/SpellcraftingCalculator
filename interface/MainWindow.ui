@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>850</width>
-    <height>622</height>
+    <width>865</width>
+    <height>666</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -100,6 +100,22 @@
            <property name="spacing">
             <number>2</number>
            </property>
+           <item row="5" column="0">
+            <widget class="QLabel" name="CharacterLevelLabel">
+             <property name="text">
+              <string>Level:</string>
+             </property>
+             <property name="margin">
+              <number>0</number>
+             </property>
+             <property name="indent">
+              <number>-1</number>
+             </property>
+             <property name="buddy">
+              <cstring>CharacterLevel</cstring>
+             </property>
+            </widget>
+           </item>
            <item row="2" column="1">
             <widget class="QComboBox" name="CharacterClass">
              <property name="focusPolicy">
@@ -136,13 +152,19 @@
              </property>
             </widget>
            </item>
-           <item row="4" column="0">
-            <widget class="QLabel" name="OutfitNameLabel">
-             <property name="text">
-              <string>&amp;Outfit:</string>
+           <item row="3" column="1">
+            <widget class="QComboBox" name="CharacterRace">
+             <property name="focusPolicy">
+              <enum>Qt::StrongFocus</enum>
              </property>
-             <property name="buddy">
-              <cstring>OutfitName</cstring>
+             <property name="maxVisibleItems">
+              <number>20</number>
+             </property>
+             <property name="sizeAdjustPolicy">
+              <enum>QComboBox::AdjustToContents</enum>
+             </property>
+             <property name="minimumContentsLength">
+              <number>0</number>
              </property>
             </widget>
            </item>
@@ -158,6 +180,9 @@
            </item>
            <item row="0" column="1">
             <widget class="QLineEdit" name="CharacterName">
+             <property name="acceptDrops">
+              <bool>false</bool>
+             </property>
              <property name="inputMethodHints">
               <set>Qt::ImhNone</set>
              </property>
@@ -166,8 +191,8 @@
              </property>
             </widget>
            </item>
-           <item row="3" column="1">
-            <widget class="QComboBox" name="CharacterRace">
+           <item row="1" column="1">
+            <widget class="QComboBox" name="CharacterRealm">
              <property name="focusPolicy">
               <enum>Qt::StrongFocus</enum>
              </property>
@@ -192,19 +217,13 @@
              </property>
             </widget>
            </item>
-           <item row="1" column="1">
-            <widget class="QComboBox" name="CharacterRealm">
-             <property name="focusPolicy">
-              <enum>Qt::StrongFocus</enum>
+           <item row="6" column="1">
+            <widget class="QLineEdit" name="CharacterRealmRank">
+             <property name="acceptDrops">
+              <bool>false</bool>
              </property>
-             <property name="maxVisibleItems">
-              <number>20</number>
-             </property>
-             <property name="sizeAdjustPolicy">
-              <enum>QComboBox::AdjustToContents</enum>
-             </property>
-             <property name="minimumContentsLength">
-              <number>0</number>
+             <property name="placeholderText">
+              <string/>
              </property>
             </widget>
            </item>
@@ -218,14 +237,7 @@
              </property>
             </widget>
            </item>
-           <item row="6" column="1">
-            <widget class="QLineEdit" name="CharacterRealmRank">
-             <property name="placeholderText">
-              <string/>
-             </property>
-            </widget>
-           </item>
-           <item row="7" column="0" colspan="2">
+           <item row="8" column="0" colspan="2">
             <spacer>
              <property name="orientation">
               <enum>Qt::Vertical</enum>
@@ -243,46 +255,28 @@
            </item>
            <item row="5" column="1">
             <widget class="QLineEdit" name="CharacterLevel">
+             <property name="acceptDrops">
+              <bool>false</bool>
+             </property>
              <property name="placeholderText">
               <string/>
              </property>
             </widget>
            </item>
-           <item row="5" column="0">
-            <widget class="QLabel" name="CharacterLevelLabel">
+           <item row="7" column="0">
+            <widget class="QLabel" name="CharacterChampLevelLabel">
              <property name="text">
-              <string>Level:</string>
-             </property>
-             <property name="margin">
-              <number>0</number>
-             </property>
-             <property name="indent">
-              <number>-1</number>
-             </property>
-             <property name="buddy">
-              <cstring>CharacterLevel</cstring>
+              <string>Chmp:</string>
              </property>
             </widget>
            </item>
-           <item row="4" column="1">
-            <widget class="QComboBox" name="OutfitName">
-             <property name="focusPolicy">
-              <enum>Qt::StrongFocus</enum>
-             </property>
-             <property name="editable">
-              <bool>true</bool>
-             </property>
-             <property name="maxVisibleItems">
-              <number>20</number>
-             </property>
-             <property name="sizeAdjustPolicy">
-              <enum>QComboBox::AdjustToContents</enum>
-             </property>
-             <property name="minimumContentsLength">
-              <number>0</number>
-             </property>
-             <property name="duplicatesEnabled">
-              <bool>true</bool>
+           <item row="7" column="1">
+            <widget class="QLineEdit" name="CharacterChampLevel">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
              </property>
             </widget>
            </item>
@@ -1353,16 +1347,16 @@
             <number>5</number>
            </property>
            <property name="leftMargin">
-            <number>0</number>
+            <number>1</number>
            </property>
            <property name="topMargin">
             <number>5</number>
            </property>
            <property name="rightMargin">
-            <number>0</number>
+            <number>1</number>
            </property>
            <property name="bottomMargin">
-            <number>0</number>
+            <number>1</number>
            </property>
            <item>
             <widget class="QListWidget" name="SkillsView">
@@ -1371,6 +1365,43 @@
                <horstretch>1</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
+             </property>
+             <property name="palette">
+              <palette>
+               <active>
+                <colorrole role="Base">
+                 <brush brushstyle="SolidPattern">
+                  <color alpha="255">
+                   <red>240</red>
+                   <green>240</green>
+                   <blue>240</blue>
+                  </color>
+                 </brush>
+                </colorrole>
+               </active>
+               <inactive>
+                <colorrole role="Base">
+                 <brush brushstyle="SolidPattern">
+                  <color alpha="255">
+                   <red>240</red>
+                   <green>240</green>
+                   <blue>240</blue>
+                  </color>
+                 </brush>
+                </colorrole>
+               </inactive>
+               <disabled>
+                <colorrole role="Base">
+                 <brush brushstyle="SolidPattern">
+                  <color alpha="255">
+                   <red>240</red>
+                   <green>240</green>
+                   <blue>240</blue>
+                  </color>
+                 </brush>
+                </colorrole>
+               </disabled>
+              </palette>
              </property>
              <property name="focusPolicy">
               <enum>Qt::NoFocus</enum>
@@ -1414,6 +1445,9 @@
         <property name="sizeConstraint">
          <enum>QLayout::SetDefaultConstraint</enum>
         </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
         <item>
          <widget class="QSplitter" name="SlotItemSplitter">
           <property name="enabled">
@@ -1456,8 +1490,14 @@
            <property name="contextMenuPolicy">
             <enum>Qt::DefaultContextMenu</enum>
            </property>
+           <property name="frameShape">
+            <enum>QFrame::StyledPanel</enum>
+           </property>
            <property name="frameShadow">
             <enum>QFrame::Plain</enum>
+           </property>
+           <property name="lineWidth">
+            <number>0</number>
            </property>
            <property name="sizeAdjustPolicy">
             <enum>QAbstractScrollArea::AdjustIgnored</enum>
@@ -1547,6 +1587,9 @@
               <property name="frameShape">
                <enum>QFrame::StyledPanel</enum>
               </property>
+              <property name="lineWidth">
+               <number>0</number>
+              </property>
               <layout class="QHBoxLayout">
                <property name="spacing">
                 <number>2</number>
@@ -1564,46 +1607,6 @@
                 <number>5</number>
                </property>
                <item>
-                <widget class="QLabel" name="ItemLevelLabel">
-                 <property name="text">
-                  <string>&amp;Level: </string>
-                 </property>
-                 <property name="buddy">
-                  <cstring>ItemLevel</cstring>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QLineEdit" name="ItemLevel">
-                 <property name="sizePolicy">
-                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QLabel" name="ItemQualityLabel">
-                 <property name="text">
-                  <string>  Quality: </string>
-                 </property>
-                 <property name="buddy">
-                  <cstring>ItemQuality</cstring>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QLineEdit" name="ItemQuality">
-                 <property name="sizePolicy">
-                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
-                 </property>
-                </widget>
-               </item>
-               <item>
                 <widget class="QLabel" name="ItemNameLabel">
                  <property name="text">
                   <string>  &amp;Name: </string>
@@ -1620,6 +1623,9 @@
                    <horstretch>0</horstretch>
                    <verstretch>0</verstretch>
                   </sizepolicy>
+                 </property>
+                 <property name="acceptDrops">
+                  <bool>true</bool>
                  </property>
                  <property name="editable">
                   <bool>true</bool>
@@ -1702,822 +1708,1417 @@
              </widget>
             </item>
             <item>
-             <widget class="QFrame" name="ItemFrame">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
+             <layout class="QHBoxLayout">
+              <property name="spacing">
+               <number>5</number>
               </property>
-              <property name="frameShape">
-               <enum>QFrame::StyledPanel</enum>
+              <property name="leftMargin">
+               <number>0</number>
               </property>
-              <layout class="QGridLayout">
-               <property name="leftMargin">
-                <number>8</number>
-               </property>
-               <property name="topMargin">
-                <number>8</number>
-               </property>
-               <property name="rightMargin">
-                <number>8</number>
-               </property>
-               <property name="bottomMargin">
-                <number>8</number>
-               </property>
-               <property name="spacing">
-                <number>2</number>
-               </property>
-               <item row="12" column="1">
-                <widget class="QComboBox" name="EffectType11">
-                 <property name="maxVisibleItems">
-                  <number>20</number>
-                 </property>
-                </widget>
-               </item>
-               <item row="11" column="1">
-                <widget class="QComboBox" name="EffectType10">
-                 <property name="maxVisibleItems">
-                  <number>20</number>
-                 </property>
-                </widget>
-               </item>
-               <item row="10" column="0">
-                <widget class="QLabel" name="SlotLabel9">
-                 <property name="text">
-                  <string>Slot 1&amp;0:</string>
-                 </property>
-                 <property name="buddy">
-                  <cstring>EffectType9</cstring>
-                 </property>
-                </widget>
-               </item>
-               <item row="10" column="2">
-                <widget class="QLineEdit" name="AmountEdit9"/>
-               </item>
-               <item row="11" column="2">
-                <widget class="QLineEdit" name="AmountEdit10"/>
-               </item>
-               <item row="12" column="0">
-                <widget class="QLabel" name="SlotLabel11">
-                 <property name="text">
-                  <string>Slot 1&amp;2:</string>
-                 </property>
-                 <property name="buddy">
-                  <cstring>EffectType11</cstring>
-                 </property>
-                </widget>
-               </item>
-               <item row="8" column="2">
-                <widget class="QLineEdit" name="AmountEdit7"/>
-               </item>
-               <item row="9" column="3">
-                <widget class="QComboBox" name="Effect8">
-                 <property name="maxVisibleItems">
-                  <number>20</number>
-                 </property>
-                </widget>
-               </item>
-               <item row="4" column="4">
-                <widget class="QLabel" name="ImbuePoints3">
-                 <property name="text">
-                  <string>0.0</string>
-                 </property>
-                 <property name="alignment">
-                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                 </property>
-                </widget>
-               </item>
-               <item row="4" column="6">
-                <widget class="QLabel" name="GemName3">
-                 <property name="text">
-                  <string/>
-                 </property>
-                 <property name="margin">
-                  <number>0</number>
-                 </property>
-                 <property name="indent">
+              <property name="topMargin">
+               <number>0</number>
+              </property>
+              <property name="rightMargin">
+               <number>0</number>
+              </property>
+              <property name="bottomMargin">
+               <number>0</number>
+              </property>
+              <item>
+               <widget class="QGroupBox" name="ItemStatsGroup">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="title">
+                 <string>Item Stats</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignCenter</set>
+                </property>
+                <property name="flat">
+                 <bool>false</bool>
+                </property>
+                <layout class="QGridLayout">
+                 <property name="leftMargin">
                   <number>8</number>
                  </property>
-                </widget>
-               </item>
-               <item row="9" column="0">
-                <widget class="QLabel" name="SlotLabel8">
-                 <property name="text">
-                  <string>Slot &amp;9:</string>
-                 </property>
-                 <property name="buddy">
-                  <cstring>EffectType8</cstring>
-                 </property>
-                </widget>
-               </item>
-               <item row="10" column="1">
-                <widget class="QComboBox" name="EffectType9">
-                 <property name="maxVisibleItems">
-                  <number>20</number>
-                 </property>
-                </widget>
-               </item>
-               <item row="9" column="2">
-                <widget class="QLineEdit" name="AmountEdit8"/>
-               </item>
-               <item row="3" column="4">
-                <widget class="QLabel" name="ImbuePoints2">
-                 <property name="text">
-                  <string>0.0</string>
-                 </property>
-                 <property name="alignment">
-                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                 </property>
-                </widget>
-               </item>
-               <item row="13" column="0" colspan="8">
-                <spacer>
-                 <property name="orientation">
-                  <enum>Qt::Vertical</enum>
-                 </property>
-                 <property name="sizeHint" stdset="0">
-                  <size>
-                   <width>20</width>
-                   <height>40</height>
-                  </size>
-                 </property>
-                </spacer>
-               </item>
-               <item row="2" column="6">
-                <widget class="QLabel" name="GemName1">
-                 <property name="text">
-                  <string/>
-                 </property>
-                 <property name="margin">
-                  <number>0</number>
-                 </property>
-                 <property name="indent">
+                 <property name="topMargin">
                   <number>8</number>
                  </property>
-                </widget>
-               </item>
-               <item row="2" column="4">
-                <widget class="QLabel" name="ImbuePoints1">
-                 <property name="text">
-                  <string>0.0</string>
-                 </property>
-                 <property name="alignment">
-                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                 </property>
-                </widget>
-               </item>
-               <item row="3" column="6">
-                <widget class="QLabel" name="GemName2">
-                 <property name="text">
-                  <string/>
-                 </property>
-                 <property name="margin">
-                  <number>0</number>
-                 </property>
-                 <property name="indent">
+                 <property name="rightMargin">
                   <number>8</number>
                  </property>
-                </widget>
-               </item>
-               <item row="6" column="4" colspan="3">
-                <widget class="QLabel" name="GemName5">
-                 <property name="text">
-                  <string/>
+                 <property name="bottomMargin">
+                  <number>10</number>
                  </property>
-                 <property name="indent">
+                 <property name="spacing">
+                  <number>2</number>
+                 </property>
+                 <item row="12" column="1">
+                  <widget class="QComboBox" name="EffectType11">
+                   <property name="maxVisibleItems">
+                    <number>20</number>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="1" column="6">
+                  <widget class="QLabel" name="GemName0">
+                   <property name="text">
+                    <string/>
+                   </property>
+                   <property name="margin">
+                    <number>0</number>
+                   </property>
+                   <property name="indent">
+                    <number>8</number>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="2" column="3">
+                  <widget class="QComboBox" name="Effect1">
+                   <property name="maxVisibleItems">
+                    <number>20</number>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="3" column="2">
+                  <widget class="QComboBox" name="AmountStatic2">
+                   <property name="maxVisibleItems">
+                    <number>20</number>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="1" column="3">
+                  <widget class="QComboBox" name="Effect0">
+                   <property name="maxVisibleItems">
+                    <number>20</number>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="6" column="0">
+                  <widget class="QLabel" name="SlotLabel5">
+                   <property name="text">
+                    <string>Slot &amp;6:</string>
+                   </property>
+                   <property name="buddy">
+                    <cstring>EffectType5</cstring>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="4" column="1">
+                  <widget class="QComboBox" name="EffectType3">
+                   <property name="maxVisibleItems">
+                    <number>20</number>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="5" column="0">
+                  <widget class="QLabel" name="SlotLabel4">
+                   <property name="text">
+                    <string>Slot &amp;5:</string>
+                   </property>
+                   <property name="buddy">
+                    <cstring>EffectType4</cstring>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="2" column="2">
+                  <widget class="QComboBox" name="AmountStatic1">
+                   <property name="maxVisibleItems">
+                    <number>20</number>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="7" column="4" colspan="2">
+                  <widget class="QLineEdit" name="Requirement6">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="7" column="0">
+                  <widget class="QLabel" name="SlotLabel6">
+                   <property name="text">
+                    <string>Slot &amp;7:</string>
+                   </property>
+                   <property name="buddy">
+                    <cstring>EffectType6</cstring>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="3" column="3">
+                  <widget class="QComboBox" name="Effect2">
+                   <property name="maxVisibleItems">
+                    <number>20</number>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="7" column="1">
+                  <widget class="QComboBox" name="EffectType6">
+                   <property name="maxVisibleItems">
+                    <number>20</number>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="5" column="2">
+                  <widget class="QLineEdit" name="AmountEdit4">
+                   <property name="acceptDrops">
+                    <bool>false</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="2" column="1">
+                  <widget class="QComboBox" name="EffectType1">
+                   <property name="maxVisibleItems">
+                    <number>20</number>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="1" column="4">
+                  <widget class="QLabel" name="ImbuePoints0">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <property name="text">
+                    <string>0.0</string>
+                   </property>
+                   <property name="alignment">
+                    <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="4" column="0">
+                  <widget class="QLabel" name="SlotLabel3">
+                   <property name="text">
+                    <string>Slot &amp;4:</string>
+                   </property>
+                   <property name="buddy">
+                    <cstring>EffectType3</cstring>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="7" column="2">
+                  <widget class="QLineEdit" name="AmountEdit6">
+                   <property name="acceptDrops">
+                    <bool>false</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="1" column="4" colspan="2">
+                  <widget class="QLineEdit" name="Requirement0">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="3" column="2">
+                  <widget class="QLineEdit" name="AmountEdit2">
+                   <property name="acceptDrops">
+                    <bool>false</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="6" column="3">
+                  <widget class="QComboBox" name="Effect5">
+                   <property name="maxVisibleItems">
+                    <number>20</number>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="1" column="0">
+                  <widget class="QLabel" name="SlotLabel0">
+                   <property name="text">
+                    <string>Slot &amp;1:</string>
+                   </property>
+                   <property name="buddy">
+                    <cstring>EffectType0</cstring>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="1" column="2">
+                  <widget class="QLineEdit" name="AmountEdit0"/>
+                 </item>
+                 <item row="9" column="1">
+                  <widget class="QComboBox" name="EffectType8">
+                   <property name="maxVisibleItems">
+                    <number>20</number>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="1" column="2">
+                  <widget class="QComboBox" name="AmountStatic0">
+                   <property name="enabled">
+                    <bool>true</bool>
+                   </property>
+                   <property name="maxVisibleItems">
+                    <number>20</number>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="5" column="2">
+                  <widget class="QComboBox" name="AmountStatic4">
+                   <property name="maxVisibleItems">
+                    <number>20</number>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="6" column="1">
+                  <widget class="QComboBox" name="EffectType5">
+                   <property name="maxVisibleItems">
+                    <number>20</number>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="6" column="2">
+                  <widget class="QLineEdit" name="AmountEdit5">
+                   <property name="enabled">
+                    <bool>true</bool>
+                   </property>
+                   <property name="acceptDrops">
+                    <bool>false</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="4" column="2">
+                  <widget class="QLineEdit" name="AmountEdit3">
+                   <property name="acceptDrops">
+                    <bool>false</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="1" column="1" alignment="Qt::AlignLeft">
+                  <widget class="QComboBox" name="EffectType0">
+                   <property name="maxVisibleItems">
+                    <number>20</number>
+                   </property>
+                   <property name="modelColumn">
+                    <number>0</number>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="0" column="1">
+                  <widget class="QLabel" name="EffectTypeLabel">
+                   <property name="text">
+                    <string>Type</string>
+                   </property>
+                   <property name="alignment">
+                    <set>Qt::AlignCenter</set>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="0" column="6">
+                  <widget class="QLabel" name="GemNameLabel">
+                   <property name="text">
+                    <string>Gem</string>
+                   </property>
+                   <property name="alignment">
+                    <set>Qt::AlignCenter</set>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="4" column="2">
+                  <widget class="QComboBox" name="AmountStatic3">
+                   <property name="maxVisibleItems">
+                    <number>20</number>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="9" column="0">
+                  <widget class="QLabel" name="SlotLabel8">
+                   <property name="text">
+                    <string>Slot &amp;9:</string>
+                   </property>
+                   <property name="buddy">
+                    <cstring>EffectType8</cstring>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="9" column="2">
+                  <widget class="QLineEdit" name="AmountEdit8">
+                   <property name="acceptDrops">
+                    <bool>false</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="6" column="4" colspan="3">
+                  <widget class="QLabel" name="GemName5">
+                   <property name="text">
+                    <string/>
+                   </property>
+                   <property name="indent">
+                    <number>8</number>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="10" column="1">
+                  <widget class="QComboBox" name="EffectType9">
+                   <property name="maxVisibleItems">
+                    <number>20</number>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="3" column="6">
+                  <widget class="QLabel" name="GemName2">
+                   <property name="text">
+                    <string/>
+                   </property>
+                   <property name="margin">
+                    <number>0</number>
+                   </property>
+                   <property name="indent">
+                    <number>8</number>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="5" column="3">
+                  <widget class="QComboBox" name="Effect4">
+                   <property name="maxVisibleItems">
+                    <number>20</number>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="5" column="4" colspan="3">
+                  <widget class="QLabel" name="GemName4">
+                   <property name="margin">
+                    <number>0</number>
+                   </property>
+                   <property name="indent">
+                    <number>8</number>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="2" column="6">
+                  <widget class="QLabel" name="GemName1">
+                   <property name="text">
+                    <string/>
+                   </property>
+                   <property name="margin">
+                    <number>0</number>
+                   </property>
+                   <property name="indent">
+                    <number>8</number>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="0" column="7" rowspan="13">
+                  <spacer>
+                   <property name="orientation">
+                    <enum>Qt::Horizontal</enum>
+                   </property>
+                   <property name="sizeType">
+                    <enum>QSizePolicy::Expanding</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>0</width>
+                     <height>20</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                 <item row="7" column="4" colspan="3">
+                  <widget class="QLabel" name="GemName6">
+                   <property name="text">
+                    <string/>
+                   </property>
+                   <property name="indent">
+                    <number>8</number>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="2" column="4">
+                  <widget class="QLabel" name="ImbuePoints1">
+                   <property name="text">
+                    <string>0.0</string>
+                   </property>
+                   <property name="alignment">
+                    <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="4" column="3">
+                  <widget class="QComboBox" name="Effect3">
+                   <property name="maxVisibleItems">
+                    <number>20</number>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="10" column="2">
+                  <widget class="QLineEdit" name="AmountEdit9">
+                   <property name="acceptDrops">
+                    <bool>false</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="2" column="2">
+                  <widget class="QLineEdit" name="AmountEdit1"/>
+                 </item>
+                 <item row="10" column="0">
+                  <widget class="QLabel" name="SlotLabel9">
+                   <property name="text">
+                    <string>Slot 1&amp;0:</string>
+                   </property>
+                   <property name="buddy">
+                    <cstring>EffectType9</cstring>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="9" column="3">
+                  <widget class="QComboBox" name="Effect8">
+                   <property name="maxVisibleItems">
+                    <number>20</number>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="2" column="0">
+                  <widget class="QLabel" name="SlotLabel1">
+                   <property name="text">
+                    <string>Slot &amp;2:</string>
+                   </property>
+                   <property name="buddy">
+                    <cstring>EffectType1</cstring>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="8" column="2">
+                  <widget class="QLineEdit" name="AmountEdit7">
+                   <property name="acceptDrops">
+                    <bool>false</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="3" column="4">
+                  <widget class="QLabel" name="ImbuePoints2">
+                   <property name="text">
+                    <string>0.0</string>
+                   </property>
+                   <property name="alignment">
+                    <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="4" column="4">
+                  <widget class="QLabel" name="ImbuePoints3">
+                   <property name="text">
+                    <string>0.0</string>
+                   </property>
+                   <property name="alignment">
+                    <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="13" column="0" colspan="8">
+                  <spacer>
+                   <property name="orientation">
+                    <enum>Qt::Vertical</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>20</width>
+                     <height>40</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                 <item row="4" column="6">
+                  <widget class="QLabel" name="GemName3">
+                   <property name="text">
+                    <string/>
+                   </property>
+                   <property name="margin">
+                    <number>0</number>
+                   </property>
+                   <property name="indent">
+                    <number>8</number>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="0" column="4">
+                  <widget class="QLabel" name="ImbuePointsLabel">
+                   <property name="text">
+                    <string>Imbue</string>
+                   </property>
+                   <property name="alignment">
+                    <set>Qt::AlignCenter</set>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="7" column="3">
+                  <widget class="QComboBox" name="Effect6">
+                   <property name="maxVisibleItems">
+                    <number>20</number>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="8" column="3">
+                  <widget class="QComboBox" name="Effect7">
+                   <property name="maxVisibleItems">
+                    <number>20</number>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="0" column="3">
+                  <widget class="QLabel" name="EffectLabel">
+                   <property name="text">
+                    <string>Effect</string>
+                   </property>
+                   <property name="alignment">
+                    <set>Qt::AlignCenter</set>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="3" column="1">
+                  <widget class="QComboBox" name="EffectType2">
+                   <property name="maxVisibleItems">
+                    <number>20</number>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="8" column="0">
+                  <widget class="QLabel" name="SlotLabel7">
+                   <property name="text">
+                    <string>Slot &amp;8:</string>
+                   </property>
+                   <property name="buddy">
+                    <cstring>EffectType7</cstring>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="3" column="0">
+                  <widget class="QLabel" name="SlotLabel2">
+                   <property name="text">
+                    <string>Slot &amp;3:</string>
+                   </property>
+                   <property name="buddy">
+                    <cstring>EffectType2</cstring>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="8" column="4" colspan="2">
+                  <widget class="QLineEdit" name="Requirement7">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="10" column="3">
+                  <widget class="QComboBox" name="Effect9">
+                   <property name="maxVisibleItems">
+                    <number>20</number>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="10" column="4" colspan="2">
+                  <widget class="QLineEdit" name="Requirement9">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="2" column="4" colspan="2">
+                  <widget class="QLineEdit" name="Requirement1">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="5" column="1">
+                  <widget class="QComboBox" name="EffectType4">
+                   <property name="maxVisibleItems">
+                    <number>20</number>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="4" column="4" colspan="2">
+                  <widget class="QLineEdit" name="Requirement3">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="6" column="4" colspan="2">
+                  <widget class="QLineEdit" name="Requirement5">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="8" column="1">
+                  <widget class="QComboBox" name="EffectType7">
+                   <property name="maxVisibleItems">
+                    <number>20</number>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="9" column="4" colspan="2">
+                  <widget class="QLineEdit" name="Requirement8">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="3" column="4" colspan="2">
+                  <widget class="QLineEdit" name="Requirement2">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="0" column="2">
+                  <widget class="QLabel" name="AmountLabel">
+                   <property name="text">
+                    <string>Amount</string>
+                   </property>
+                   <property name="alignment">
+                    <set>Qt::AlignCenter</set>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="0" column="4" colspan="2">
+                  <widget class="QLabel" name="RequirementLabel">
+                   <property name="text">
+                    <string>Requirement</string>
+                   </property>
+                   <property name="alignment">
+                    <set>Qt::AlignCenter</set>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="5" column="4" colspan="2">
+                  <widget class="QLineEdit" name="Requirement4">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="11" column="3">
+                  <widget class="QComboBox" name="Effect10">
+                   <property name="maxVisibleItems">
+                    <number>20</number>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="11" column="2">
+                  <widget class="QLineEdit" name="AmountEdit10">
+                   <property name="acceptDrops">
+                    <bool>false</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="12" column="0">
+                  <widget class="QLabel" name="SlotLabel11">
+                   <property name="text">
+                    <string>Slot 1&amp;2:</string>
+                   </property>
+                   <property name="buddy">
+                    <cstring>EffectType11</cstring>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="12" column="2">
+                  <widget class="QLineEdit" name="AmountEdit11">
+                   <property name="acceptDrops">
+                    <bool>false</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="11" column="1">
+                  <widget class="QComboBox" name="EffectType10">
+                   <property name="maxVisibleItems">
+                    <number>20</number>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="12" column="4" colspan="2">
+                  <widget class="QLineEdit" name="Requirement11">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="11" column="0">
+                  <widget class="QLabel" name="SlotLabel10">
+                   <property name="text">
+                    <string>Slot 1&amp;1:</string>
+                   </property>
+                   <property name="buddy">
+                    <cstring>EffectType10</cstring>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="12" column="3">
+                  <widget class="QComboBox" name="Effect11">
+                   <property name="maxVisibleItems">
+                    <number>20</number>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="11" column="4" colspan="2">
+                  <widget class="QLineEdit" name="Requirement10">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="14" column="0" colspan="8">
+                  <layout class="QHBoxLayout">
+                   <property name="spacing">
+                    <number>5</number>
+                   </property>
+                   <property name="leftMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="topMargin">
+                    <number>8</number>
+                   </property>
+                   <property name="rightMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="bottomMargin">
+                    <number>0</number>
+                   </property>
+                   <item>
+                    <spacer>
+                     <property name="orientation">
+                      <enum>Qt::Horizontal</enum>
+                     </property>
+                     <property name="sizeHint" stdset="0">
+                      <size>
+                       <width>40</width>
+                       <height>20</height>
+                      </size>
+                     </property>
+                    </spacer>
+                   </item>
+                   <item>
+                    <widget class="QLabel" name="BuildUtilityLabel">
+                     <property name="text">
+                      <string>Build Utility:</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QLabel" name="BuildUtility">
+                     <property name="text">
+                      <string>0.0</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QLabel" name="SpacerLabel1">
+                     <property name="text">
+                      <string> - </string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QLabel" name="ItemUtilityLabel">
+                     <property name="text">
+                      <string>Item Utility:</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QLabel" name="ItemUtility">
+                     <property name="text">
+                      <string>0.0</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QLabel" name="SpacerLabel2">
+                     <property name="text">
+                      <string> - </string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QLabel" name="ItemImbuePointsLabel">
+                     <property name="text">
+                      <string>Imbue Points:</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QLabel" name="ItemImbuePointsTotal">
+                     <property name="text">
+                      <string>0.0</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QLabel" name="ItemImbuePoints">
+                     <property name="text">
+                      <string>/ 0.0</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QLabel" name="SpacerLabel3">
+                     <property name="text">
+                      <string> - </string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QLabel" name="OverchargeLabel">
+                     <property name="text">
+                      <string>Overcharge:</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QLabel" name="Overcharge">
+                     <property name="text">
+                      <string>0%</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <spacer>
+                     <property name="orientation">
+                      <enum>Qt::Horizontal</enum>
+                     </property>
+                     <property name="sizeHint" stdset="0">
+                      <size>
+                       <width>40</width>
+                       <height>20</height>
+                      </size>
+                     </property>
+                    </spacer>
+                   </item>
+                  </layout>
+                 </item>
+                </layout>
+                <zorder>GemName6</zorder>
+                <zorder>GemName5</zorder>
+                <zorder>RequirementLabel</zorder>
+                <zorder>Requirement0</zorder>
+                <zorder>Effect4</zorder>
+                <zorder>Effect5</zorder>
+                <zorder>Effect3</zorder>
+                <zorder>EffectType8</zorder>
+                <zorder>AmountEdit1</zorder>
+                <zorder>AmountEdit0</zorder>
+                <zorder>AmountEdit2</zorder>
+                <zorder>AmountEdit4</zorder>
+                <zorder>ImbuePoints0</zorder>
+                <zorder>EffectType0</zorder>
+                <zorder>AmountEdit3</zorder>
+                <zorder>AmountEdit5</zorder>
+                <zorder>AmountStatic0</zorder>
+                <zorder>AmountStatic4</zorder>
+                <zorder>SlotLabel0</zorder>
+                <zorder>GemName0</zorder>
+                <zorder>AmountStatic3</zorder>
+                <zorder>GemNameLabel</zorder>
+                <zorder>EffectTypeLabel</zorder>
+                <zorder>EffectType5</zorder>
+                <zorder>SlotLabel5</zorder>
+                <zorder>AmountStatic1</zorder>
+                <zorder>Requirement6</zorder>
+                <zorder>AmountStatic2</zorder>
+                <zorder>Effect0</zorder>
+                <zorder>AmountEdit6</zorder>
+                <zorder>Effect1</zorder>
+                <zorder>EffectType3</zorder>
+                <zorder>EffectType6</zorder>
+                <zorder>Effect2</zorder>
+                <zorder>SlotLabel4</zorder>
+                <zorder>SlotLabel6</zorder>
+                <zorder>SlotLabel3</zorder>
+                <zorder>EffectType2</zorder>
+                <zorder>EffectType4</zorder>
+                <zorder>EffectType1</zorder>
+                <zorder>SlotLabel2</zorder>
+                <zorder>Effect9</zorder>
+                <zorder>AmountEdit11</zorder>
+                <zorder>Requirement9</zorder>
+                <zorder>Effect11</zorder>
+                <zorder>Requirement7</zorder>
+                <zorder>Effect10</zorder>
+                <zorder>Requirement8</zorder>
+                <zorder>Requirement5</zorder>
+                <zorder>Requirement11</zorder>
+                <zorder>Requirement10</zorder>
+                <zorder>Requirement1</zorder>
+                <zorder>Requirement4</zorder>
+                <zorder>SlotLabel1</zorder>
+                <zorder>AmountLabel</zorder>
+                <zorder>Requirement3</zorder>
+                <zorder>Requirement2</zorder>
+                <zorder>ImbuePointsLabel</zorder>
+                <zorder>EffectLabel</zorder>
+                <zorder>EffectType7</zorder>
+                <zorder>Effect6</zorder>
+                <zorder>SlotLabel10</zorder>
+                <zorder>SlotLabel7</zorder>
+                <zorder>AmountEdit9</zorder>
+                <zorder>EffectType10</zorder>
+                <zorder>Effect7</zorder>
+                <zorder>AmountEdit10</zorder>
+                <zorder>SlotLabel9</zorder>
+                <zorder>SlotLabel8</zorder>
+                <zorder>SlotLabel11</zorder>
+                <zorder>AmountEdit7</zorder>
+                <zorder>EffectType11</zorder>
+                <zorder>Effect8</zorder>
+                <zorder>AmountEdit8</zorder>
+                <zorder>GemName3</zorder>
+                <zorder>ImbuePoints3</zorder>
+                <zorder>EffectType9</zorder>
+                <zorder>GemName1</zorder>
+                <zorder>GemName2</zorder>
+                <zorder>ImbuePoints2</zorder>
+                <zorder>ImbuePoints1</zorder>
+                <zorder>GemName4</zorder>
+               </widget>
+              </item>
+              <item>
+               <widget class="QGroupBox" name="ItemInfoGroup">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="title">
+                 <string>Item Information</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignCenter</set>
+                </property>
+                <property name="flat">
+                 <bool>false</bool>
+                </property>
+                <layout class="QGridLayout">
+                 <property name="sizeConstraint">
+                  <enum>QLayout::SetDefaultConstraint</enum>
+                 </property>
+                 <property name="leftMargin">
+                  <number>5</number>
+                 </property>
+                 <property name="topMargin">
+                  <number>6</number>
+                 </property>
+                 <property name="rightMargin">
+                  <number>5</number>
+                 </property>
+                 <property name="bottomMargin">
                   <number>8</number>
                  </property>
-                </widget>
-               </item>
-               <item row="7" column="4" colspan="3">
-                <widget class="QLabel" name="GemName6">
-                 <property name="text">
-                  <string/>
+                 <property name="horizontalSpacing">
+                  <number>5</number>
                  </property>
-                 <property name="indent">
+                 <property name="verticalSpacing">
+                  <number>2</number>
+                 </property>
+                 <item row="6" column="0">
+                  <widget class="QLabel" name="ItemBonusLabel">
+                   <property name="text">
+                    <string>Bonus: </string>
+                   </property>
+                   <property name="textFormat">
+                    <enum>Qt::PlainText</enum>
+                   </property>
+                   <property name="buddy">
+                    <cstring>ItemBonus</cstring>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="1" column="0">
+                  <widget class="QLabel" name="ItemTypeLabel">
+                   <property name="text">
+                    <string>Type: </string>
+                   </property>
+                   <property name="textFormat">
+                    <enum>Qt::PlainText</enum>
+                   </property>
+                   <property name="buddy">
+                    <cstring>ItemType</cstring>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="7" column="0">
+                  <widget class="QLabel" name="ItemSpeedLabel">
+                   <property name="text">
+                    <string>Speed: </string>
+                   </property>
+                   <property name="textFormat">
+                    <enum>Qt::PlainText</enum>
+                   </property>
+                   <property name="buddy">
+                    <cstring>ItemSpeed</cstring>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="3" column="0">
+                  <widget class="QLabel" name="ItemDamageTypeLabel">
+                   <property name="text">
+                    <string>Damage:</string>
+                   </property>
+                   <property name="buddy">
+                    <cstring>ItemDamageType</cstring>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="2" column="0">
+                  <widget class="QLabel" name="ItemOriginLabel">
+                   <property name="text">
+                    <string>Origin: </string>
+                   </property>
+                   <property name="textFormat">
+                    <enum>Qt::PlainText</enum>
+                   </property>
+                   <property name="buddy">
+                    <cstring>ItemOrigin</cstring>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="6" column="1">
+                  <widget class="QLineEdit" name="ItemBonus">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="7" column="1">
+                  <widget class="QLineEdit" name="ItemSpeed">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="4" column="1">
+                  <widget class="QLineEdit" name="ItemLevel">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="4" column="0">
+                  <widget class="QLabel" name="ItemLevelLabel">
+                   <property name="text">
+                    <string>&amp;Level:</string>
+                   </property>
+                   <property name="buddy">
+                    <cstring>ItemLevel</cstring>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="0" column="0">
+                  <widget class="QLabel" name="ItemRealmLabel">
+                   <property name="text">
+                    <string>Realm:</string>
+                   </property>
+                   <property name="buddy">
+                    <cstring>ItemRealm</cstring>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="4" column="2">
+                  <widget class="QLabel" name="ItemQualityLabel">
+                   <property name="text">
+                    <string>Quality:</string>
+                   </property>
+                   <property name="alignment">
+                    <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                   </property>
+                   <property name="buddy">
+                    <cstring>ItemQuality</cstring>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="6" column="2">
+                  <widget class="QLabel" name="ItemAFDPSLabel">
+                   <property name="text">
+                    <string>AF/DPS:</string>
+                   </property>
+                   <property name="alignment">
+                    <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                   </property>
+                   <property name="buddy">
+                    <cstring>ItemAFDPS</cstring>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="4" column="3">
+                  <widget class="QLineEdit" name="ItemQuality">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="6" column="3">
+                  <widget class="QLineEdit" name="ItemAFDPS">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="7" column="2" colspan="2">
+                  <layout class="QHBoxLayout">
+                   <property name="spacing">
+                    <number>5</number>
+                   </property>
+                   <property name="leftMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="topMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="rightMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="bottomMargin">
+                    <number>0</number>
+                   </property>
+                   <item>
+                    <spacer>
+                     <property name="orientation">
+                      <enum>Qt::Horizontal</enum>
+                     </property>
+                     <property name="sizeHint" stdset="0">
+                      <size>
+                       <width>40</width>
+                       <height>20</height>
+                      </size>
+                     </property>
+                    </spacer>
+                   </item>
+                   <item>
+                    <widget class="QCheckBox" name="ItemLeftHand">
+                     <property name="sizePolicy">
+                      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                       <horstretch>0</horstretch>
+                       <verstretch>0</verstretch>
+                      </sizepolicy>
+                     </property>
+                     <property name="tabletTracking">
+                      <bool>false</bool>
+                     </property>
+                     <property name="text">
+                      <string>Left Hand</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <spacer>
+                     <property name="orientation">
+                      <enum>Qt::Horizontal</enum>
+                     </property>
+                     <property name="sizeHint" stdset="0">
+                      <size>
+                       <width>40</width>
+                       <height>20</height>
+                      </size>
+                     </property>
+                    </spacer>
+                   </item>
+                  </layout>
+                 </item>
+                 <item row="3" column="1" colspan="3">
+                  <widget class="QComboBox" name="ItemDamageType">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="2" column="1" colspan="3">
+                  <widget class="QComboBox" name="ItemOrigin">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="1" column="1" colspan="3">
+                  <widget class="QComboBox" name="ItemType">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="0" column="1" colspan="3">
+                  <widget class="QComboBox" name="ItemRealm">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="8" column="0" colspan="4">
+                  <layout class="QVBoxLayout">
+                   <property name="spacing">
+                    <number>5</number>
+                   </property>
+                   <property name="leftMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="topMargin">
+                    <number>8</number>
+                   </property>
+                   <property name="rightMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="bottomMargin">
+                    <number>0</number>
+                   </property>
+                   <item>
+                    <widget class="QLabel" name="ItemRequirementLabel">
+                     <property name="text">
+                      <string>Item Requirements:</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QLineEdit" name="ItemRequirement"/>
+                   </item>
+                   <item>
+                    <widget class="QLabel" name="ItemNotesLabel">
+                     <property name="text">
+                      <string>Item Notes:</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QTextEdit" name="ItemNotes">
+                     <property name="acceptDrops">
+                      <bool>false</bool>
+                     </property>
+                     <property name="acceptRichText">
+                      <bool>false</bool>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item>
+               <widget class="QGroupBox" name="ItemRestrictionsGroup">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="title">
+                 <string>Class Restrictions</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignCenter</set>
+                </property>
+                <property name="flat">
+                 <bool>false</bool>
+                </property>
+                <layout class="QVBoxLayout">
+                 <property name="spacing">
+                  <number>5</number>
+                 </property>
+                 <property name="leftMargin">
+                  <number>5</number>
+                 </property>
+                 <property name="topMargin">
+                  <number>3</number>
+                 </property>
+                 <property name="rightMargin">
+                  <number>5</number>
+                 </property>
+                 <property name="bottomMargin">
                   <number>8</number>
                  </property>
-                </widget>
-               </item>
-               <item row="0" column="7" rowspan="13">
-                <spacer>
-                 <property name="orientation">
-                  <enum>Qt::Horizontal</enum>
-                 </property>
-                 <property name="sizeType">
-                  <enum>QSizePolicy::Expanding</enum>
-                 </property>
-                 <property name="sizeHint" stdset="0">
-                  <size>
-                   <width>0</width>
-                   <height>20</height>
-                  </size>
-                 </property>
-                </spacer>
-               </item>
-               <item row="1" column="2">
-                <widget class="QLineEdit" name="AmountEdit0"/>
-               </item>
-               <item row="5" column="4" colspan="3">
-                <widget class="QLabel" name="GemName4">
-                 <property name="margin">
-                  <number>0</number>
-                 </property>
-                 <property name="indent">
-                  <number>8</number>
-                 </property>
-                </widget>
-               </item>
-               <item row="5" column="3">
-                <widget class="QComboBox" name="Effect4">
-                 <property name="maxVisibleItems">
-                  <number>20</number>
-                 </property>
-                </widget>
-               </item>
-               <item row="4" column="3">
-                <widget class="QComboBox" name="Effect3">
-                 <property name="maxVisibleItems">
-                  <number>20</number>
-                 </property>
-                </widget>
-               </item>
-               <item row="2" column="2">
-                <widget class="QLineEdit" name="AmountEdit1"/>
-               </item>
-               <item row="6" column="3">
-                <widget class="QComboBox" name="Effect5">
-                 <property name="maxVisibleItems">
-                  <number>20</number>
-                 </property>
-                </widget>
-               </item>
-               <item row="3" column="2">
-                <widget class="QLineEdit" name="AmountEdit2"/>
-               </item>
-               <item row="5" column="2">
-                <widget class="QLineEdit" name="AmountEdit4"/>
-               </item>
-               <item row="9" column="1">
-                <widget class="QComboBox" name="EffectType8">
-                 <property name="maxVisibleItems">
-                  <number>20</number>
-                 </property>
-                </widget>
-               </item>
-               <item row="1" column="4">
-                <widget class="QLabel" name="ImbuePoints0">
-                 <property name="sizePolicy">
-                  <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
-                 </property>
-                 <property name="text">
-                  <string>0.0</string>
-                 </property>
-                 <property name="alignment">
-                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                 </property>
-                </widget>
-               </item>
-               <item row="4" column="2">
-                <widget class="QLineEdit" name="AmountEdit3"/>
-               </item>
-               <item row="1" column="4" colspan="2">
-                <widget class="QLineEdit" name="Requirement0">
-                 <property name="sizePolicy">
-                  <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
-                 </property>
-                </widget>
-               </item>
-               <item row="1" column="1" alignment="Qt::AlignLeft">
-                <widget class="QComboBox" name="EffectType0">
-                 <property name="maxVisibleItems">
-                  <number>20</number>
-                 </property>
-                 <property name="modelColumn">
-                  <number>0</number>
-                 </property>
-                </widget>
-               </item>
-               <item row="1" column="0">
-                <widget class="QLabel" name="SlotLabel0">
-                 <property name="text">
-                  <string>Slot &amp;1:</string>
-                 </property>
-                 <property name="buddy">
-                  <cstring>EffectType0</cstring>
-                 </property>
-                </widget>
-               </item>
-               <item row="1" column="2">
-                <widget class="QComboBox" name="AmountStatic0">
-                 <property name="enabled">
-                  <bool>true</bool>
-                 </property>
-                 <property name="maxVisibleItems">
-                  <number>20</number>
-                 </property>
-                </widget>
-               </item>
-               <item row="5" column="2">
-                <widget class="QComboBox" name="AmountStatic4">
-                 <property name="maxVisibleItems">
-                  <number>20</number>
-                 </property>
-                </widget>
-               </item>
-               <item row="6" column="1">
-                <widget class="QComboBox" name="EffectType5">
-                 <property name="maxVisibleItems">
-                  <number>20</number>
-                 </property>
-                </widget>
-               </item>
-               <item row="4" column="2">
-                <widget class="QComboBox" name="AmountStatic3">
-                 <property name="maxVisibleItems">
-                  <number>20</number>
-                 </property>
-                </widget>
-               </item>
-               <item row="6" column="2">
-                <widget class="QLineEdit" name="AmountEdit5">
-                 <property name="enabled">
-                  <bool>true</bool>
-                 </property>
-                </widget>
-               </item>
-               <item row="0" column="1">
-                <widget class="QLabel" name="EffectTypeLabel">
-                 <property name="text">
-                  <string>Type</string>
-                 </property>
-                 <property name="alignment">
-                  <set>Qt::AlignCenter</set>
-                 </property>
-                </widget>
-               </item>
-               <item row="0" column="6">
-                <widget class="QLabel" name="GemNameLabel">
-                 <property name="text">
-                  <string>Gem</string>
-                 </property>
-                 <property name="alignment">
-                  <set>Qt::AlignCenter</set>
-                 </property>
-                </widget>
-               </item>
-               <item row="6" column="0">
-                <widget class="QLabel" name="SlotLabel5">
-                 <property name="text">
-                  <string>Slot &amp;6:</string>
-                 </property>
-                 <property name="buddy">
-                  <cstring>EffectType5</cstring>
-                 </property>
-                </widget>
-               </item>
-               <item row="1" column="6">
-                <widget class="QLabel" name="GemName0">
-                 <property name="text">
-                  <string/>
-                 </property>
-                 <property name="margin">
-                  <number>0</number>
-                 </property>
-                 <property name="indent">
-                  <number>8</number>
-                 </property>
-                </widget>
-               </item>
-               <item row="1" column="3">
-                <widget class="QComboBox" name="Effect0">
-                 <property name="maxVisibleItems">
-                  <number>20</number>
-                 </property>
-                </widget>
-               </item>
-               <item row="4" column="1">
-                <widget class="QComboBox" name="EffectType3">
-                 <property name="maxVisibleItems">
-                  <number>20</number>
-                 </property>
-                </widget>
-               </item>
-               <item row="3" column="2">
-                <widget class="QComboBox" name="AmountStatic2">
-                 <property name="maxVisibleItems">
-                  <number>20</number>
-                 </property>
-                </widget>
-               </item>
-               <item row="2" column="3">
-                <widget class="QComboBox" name="Effect1">
-                 <property name="maxVisibleItems">
-                  <number>20</number>
-                 </property>
-                </widget>
-               </item>
-               <item row="2" column="2">
-                <widget class="QComboBox" name="AmountStatic1">
-                 <property name="maxVisibleItems">
-                  <number>20</number>
-                 </property>
-                </widget>
-               </item>
-               <item row="7" column="0">
-                <widget class="QLabel" name="SlotLabel6">
-                 <property name="text">
-                  <string>Slot &amp;7:</string>
-                 </property>
-                 <property name="buddy">
-                  <cstring>EffectType6</cstring>
-                 </property>
-                </widget>
-               </item>
-               <item row="3" column="3">
-                <widget class="QComboBox" name="Effect2">
-                 <property name="maxVisibleItems">
-                  <number>20</number>
-                 </property>
-                </widget>
-               </item>
-               <item row="7" column="2">
-                <widget class="QLineEdit" name="AmountEdit6"/>
-               </item>
-               <item row="7" column="1">
-                <widget class="QComboBox" name="EffectType6">
-                 <property name="maxVisibleItems">
-                  <number>20</number>
-                 </property>
-                </widget>
-               </item>
-               <item row="7" column="4" colspan="2">
-                <widget class="QLineEdit" name="Requirement6">
-                 <property name="sizePolicy">
-                  <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
-                 </property>
-                </widget>
-               </item>
-               <item row="3" column="0">
-                <widget class="QLabel" name="SlotLabel2">
-                 <property name="text">
-                  <string>Slot &amp;3:</string>
-                 </property>
-                 <property name="buddy">
-                  <cstring>EffectType2</cstring>
-                 </property>
-                </widget>
-               </item>
-               <item row="4" column="0">
-                <widget class="QLabel" name="SlotLabel3">
-                 <property name="text">
-                  <string>Slot &amp;4:</string>
-                 </property>
-                 <property name="buddy">
-                  <cstring>EffectType3</cstring>
-                 </property>
-                </widget>
-               </item>
-               <item row="5" column="0">
-                <widget class="QLabel" name="SlotLabel4">
-                 <property name="text">
-                  <string>Slot &amp;5:</string>
-                 </property>
-                 <property name="buddy">
-                  <cstring>EffectType4</cstring>
-                 </property>
-                </widget>
-               </item>
-               <item row="2" column="1">
-                <widget class="QComboBox" name="EffectType1">
-                 <property name="maxVisibleItems">
-                  <number>20</number>
-                 </property>
-                </widget>
-               </item>
-               <item row="10" column="3">
-                <widget class="QComboBox" name="Effect9">
-                 <property name="maxVisibleItems">
-                  <number>20</number>
-                 </property>
-                </widget>
-               </item>
-               <item row="8" column="4" colspan="2">
-                <widget class="QLineEdit" name="Requirement7">
-                 <property name="sizePolicy">
-                  <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
-                 </property>
-                </widget>
-               </item>
-               <item row="12" column="2">
-                <widget class="QLineEdit" name="AmountEdit11"/>
-               </item>
-               <item row="12" column="3">
-                <widget class="QComboBox" name="Effect11">
-                 <property name="maxVisibleItems">
-                  <number>20</number>
-                 </property>
-                </widget>
-               </item>
-               <item row="10" column="4" colspan="2">
-                <widget class="QLineEdit" name="Requirement9">
-                 <property name="sizePolicy">
-                  <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
-                 </property>
-                </widget>
-               </item>
-               <item row="3" column="1">
-                <widget class="QComboBox" name="EffectType2">
-                 <property name="maxVisibleItems">
-                  <number>20</number>
-                 </property>
-                </widget>
-               </item>
-               <item row="5" column="1">
-                <widget class="QComboBox" name="EffectType4">
-                 <property name="maxVisibleItems">
-                  <number>20</number>
-                 </property>
-                </widget>
-               </item>
-               <item row="6" column="4" colspan="2">
-                <widget class="QLineEdit" name="Requirement5">
-                 <property name="sizePolicy">
-                  <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
-                 </property>
-                </widget>
-               </item>
-               <item row="11" column="4" colspan="2">
-                <widget class="QLineEdit" name="Requirement10">
-                 <property name="sizePolicy">
-                  <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
-                 </property>
-                </widget>
-               </item>
-               <item row="12" column="4" colspan="2">
-                <widget class="QLineEdit" name="Requirement11">
-                 <property name="sizePolicy">
-                  <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
-                 </property>
-                </widget>
-               </item>
-               <item row="11" column="3">
-                <widget class="QComboBox" name="Effect10">
-                 <property name="maxVisibleItems">
-                  <number>20</number>
-                 </property>
-                </widget>
-               </item>
-               <item row="2" column="4" colspan="2">
-                <widget class="QLineEdit" name="Requirement1">
-                 <property name="sizePolicy">
-                  <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
-                 </property>
-                </widget>
-               </item>
-               <item row="0" column="2">
-                <widget class="QLabel" name="AmountLabel">
-                 <property name="text">
-                  <string>Amount</string>
-                 </property>
-                 <property name="alignment">
-                  <set>Qt::AlignCenter</set>
-                 </property>
-                </widget>
-               </item>
-               <item row="9" column="4" colspan="2">
-                <widget class="QLineEdit" name="Requirement8">
-                 <property name="sizePolicy">
-                  <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
-                 </property>
-                </widget>
-               </item>
-               <item row="4" column="4" colspan="2">
-                <widget class="QLineEdit" name="Requirement3">
-                 <property name="sizePolicy">
-                  <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
-                 </property>
-                </widget>
-               </item>
-               <item row="3" column="4" colspan="2">
-                <widget class="QLineEdit" name="Requirement2">
-                 <property name="sizePolicy">
-                  <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
-                 </property>
-                </widget>
-               </item>
-               <item row="2" column="0">
-                <widget class="QLabel" name="SlotLabel1">
-                 <property name="text">
-                  <string>Slot &amp;2:</string>
-                 </property>
-                 <property name="buddy">
-                  <cstring>EffectType1</cstring>
-                 </property>
-                </widget>
-               </item>
-               <item row="5" column="4" colspan="2">
-                <widget class="QLineEdit" name="Requirement4">
-                 <property name="sizePolicy">
-                  <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
-                 </property>
-                </widget>
-               </item>
-               <item row="8" column="1">
-                <widget class="QComboBox" name="EffectType7">
-                 <property name="maxVisibleItems">
-                  <number>20</number>
-                 </property>
-                </widget>
-               </item>
-               <item row="11" column="0">
-                <widget class="QLabel" name="SlotLabel10">
-                 <property name="text">
-                  <string>Slot 1&amp;1:</string>
-                 </property>
-                 <property name="buddy">
-                  <cstring>EffectType10</cstring>
-                 </property>
-                </widget>
-               </item>
-               <item row="0" column="4" colspan="2">
-                <widget class="QLabel" name="RequirementLabel">
-                 <property name="text">
-                  <string>Requirement</string>
-                 </property>
-                 <property name="alignment">
-                  <set>Qt::AlignCenter</set>
-                 </property>
-                </widget>
-               </item>
-               <item row="0" column="4">
-                <widget class="QLabel" name="ImbuePointsLabel">
-                 <property name="text">
-                  <string>Imbue</string>
-                 </property>
-                 <property name="alignment">
-                  <set>Qt::AlignCenter</set>
-                 </property>
-                </widget>
-               </item>
-               <item row="7" column="3">
-                <widget class="QComboBox" name="Effect6">
-                 <property name="maxVisibleItems">
-                  <number>20</number>
-                 </property>
-                </widget>
-               </item>
-               <item row="8" column="0">
-                <widget class="QLabel" name="SlotLabel7">
-                 <property name="text">
-                  <string>Slot &amp;8:</string>
-                 </property>
-                 <property name="buddy">
-                  <cstring>EffectType7</cstring>
-                 </property>
-                </widget>
-               </item>
-               <item row="8" column="3">
-                <widget class="QComboBox" name="Effect7">
-                 <property name="maxVisibleItems">
-                  <number>20</number>
-                 </property>
-                </widget>
-               </item>
-               <item row="0" column="3">
-                <widget class="QLabel" name="EffectLabel">
-                 <property name="text">
-                  <string>Effect</string>
-                 </property>
-                 <property name="alignment">
-                  <set>Qt::AlignCenter</set>
-                 </property>
-                </widget>
-               </item>
-              </layout>
-              <zorder>GemName6</zorder>
-              <zorder>GemName5</zorder>
-              <zorder>RequirementLabel</zorder>
-              <zorder>Requirement0</zorder>
-              <zorder>Effect4</zorder>
-              <zorder>Effect5</zorder>
-              <zorder>Effect3</zorder>
-              <zorder>EffectType8</zorder>
-              <zorder>AmountEdit1</zorder>
-              <zorder>AmountEdit0</zorder>
-              <zorder>AmountEdit2</zorder>
-              <zorder>AmountEdit4</zorder>
-              <zorder>ImbuePoints0</zorder>
-              <zorder>EffectType0</zorder>
-              <zorder>AmountEdit3</zorder>
-              <zorder>AmountEdit5</zorder>
-              <zorder>AmountStatic0</zorder>
-              <zorder>AmountStatic4</zorder>
-              <zorder>SlotLabel0</zorder>
-              <zorder>GemName0</zorder>
-              <zorder>AmountStatic3</zorder>
-              <zorder>GemNameLabel</zorder>
-              <zorder>EffectTypeLabel</zorder>
-              <zorder>EffectType5</zorder>
-              <zorder>SlotLabel5</zorder>
-              <zorder>AmountStatic1</zorder>
-              <zorder>Requirement6</zorder>
-              <zorder>AmountStatic2</zorder>
-              <zorder>Effect0</zorder>
-              <zorder>AmountEdit6</zorder>
-              <zorder>Effect1</zorder>
-              <zorder>EffectType3</zorder>
-              <zorder>EffectType6</zorder>
-              <zorder>Effect2</zorder>
-              <zorder>SlotLabel4</zorder>
-              <zorder>SlotLabel6</zorder>
-              <zorder>SlotLabel3</zorder>
-              <zorder>EffectType2</zorder>
-              <zorder>EffectType4</zorder>
-              <zorder>EffectType1</zorder>
-              <zorder>SlotLabel2</zorder>
-              <zorder>Effect9</zorder>
-              <zorder>AmountEdit11</zorder>
-              <zorder>Requirement9</zorder>
-              <zorder>Effect11</zorder>
-              <zorder>Requirement7</zorder>
-              <zorder>Effect10</zorder>
-              <zorder>Requirement8</zorder>
-              <zorder>Requirement5</zorder>
-              <zorder>Requirement11</zorder>
-              <zorder>Requirement10</zorder>
-              <zorder>Requirement1</zorder>
-              <zorder>Requirement4</zorder>
-              <zorder>SlotLabel1</zorder>
-              <zorder>AmountLabel</zorder>
-              <zorder>Requirement3</zorder>
-              <zorder>Requirement2</zorder>
-              <zorder>ImbuePointsLabel</zorder>
-              <zorder>EffectLabel</zorder>
-              <zorder>EffectType7</zorder>
-              <zorder>Effect6</zorder>
-              <zorder>SlotLabel10</zorder>
-              <zorder>SlotLabel7</zorder>
-              <zorder>AmountEdit9</zorder>
-              <zorder>EffectType10</zorder>
-              <zorder>Effect7</zorder>
-              <zorder>AmountEdit10</zorder>
-              <zorder>SlotLabel9</zorder>
-              <zorder>SlotLabel8</zorder>
-              <zorder>SlotLabel11</zorder>
-              <zorder>AmountEdit7</zorder>
-              <zorder>EffectType11</zorder>
-              <zorder>Effect8</zorder>
-              <zorder>AmountEdit8</zorder>
-              <zorder>GemName3</zorder>
-              <zorder>ImbuePoints3</zorder>
-              <zorder>EffectType9</zorder>
-              <zorder>GemName1</zorder>
-              <zorder>GemName2</zorder>
-              <zorder>ImbuePoints2</zorder>
-              <zorder>ImbuePoints1</zorder>
-              <zorder>GemName4</zorder>
-             </widget>
+                 <item>
+                  <widget class="QListWidget" name="ItemRestrictionsList">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <property name="mouseTracking">
+                    <bool>false</bool>
+                   </property>
+                   <property name="frameShape">
+                    <enum>QFrame::StyledPanel</enum>
+                   </property>
+                   <property name="frameShadow">
+                    <enum>QFrame::Plain</enum>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+             </layout>
             </item>
            </layout>
           </widget>
@@ -2536,11 +3137,9 @@
   <tabstop>CharacterRealm</tabstop>
   <tabstop>CharacterClass</tabstop>
   <tabstop>CharacterRace</tabstop>
-  <tabstop>OutfitName</tabstop>
   <tabstop>CharacterLevel</tabstop>
   <tabstop>CharacterRealmRank</tabstop>
   <tabstop>SlotListTreeView</tabstop>
-  <tabstop>ItemLevel</tabstop>
   <tabstop>EffectType0</tabstop>
   <tabstop>AmountStatic0</tabstop>
   <tabstop>AmountEdit0</tabstop>

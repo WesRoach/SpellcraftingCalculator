@@ -4,8 +4,8 @@ from PyQt5 import uic
 from PyQt5.Qt import QAction, Qt, QKeySequence
 from PyQt5.QtCore import QSize, QModelIndex, QVariant
 from PyQt5.QtGui import QFontMetrics, QIcon, QIntValidator
-from PyQt5.QtWidgets import QFileDialog, QLabel, QMainWindow, QMenu, QMessageBox, QToolBar, QTreeWidgetItem, QTreeWidgetItemIterator, QStyle, QStyleOptionComboBox
-from Character import AllBonusList, ClassList, Races, Realms
+from PyQt5.QtWidgets import QFileDialog, QLabel, QListWidgetItem, QMainWindow, QMenu, QMessageBox, QToolBar, QTreeWidgetItem, QTreeWidgetItemIterator, QStyle, QStyleOptionComboBox
+from Character import AllBonusList, AllRealms, ClassList, ItemTypes, Races, Realms
 from Constants import Cap, CraftedTypeList, CraftedEffectList, CraftedValuesList, DropTypeList, DropEffectList
 from Constants import EnhancedTypeList, EnhancedEffectList, EnhancedValuesList, MythicalCap, SlotList
 from Item import Item
@@ -40,6 +40,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         self.DistanceToCap = QAction()
         self.UnusableSkills = QAction()
+        self.ItemInformation = QAction()
 
         self.EffectList = list()
         self.EffectTypeList = list()
@@ -154,6 +155,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.UnusableSkills.setCheckable(True)
         self.UnusableSkills.setChecked(False)
         self.ViewMenu.addAction(self.UnusableSkills)
+        self.ViewMenu.addSeparator()
+
+        self.ItemInformation = QAction('Item &Information', self)
+        self.ItemInformation.setShortcut(QKeySequence(Qt.ALT + Qt.Key_I))
+        self.ItemInformation.setCheckable(True)
+        self.ItemInformation.setChecked(True)
+        self.ViewMenu.addAction(self.ItemInformation)
 
         self.menuBar().addMenu(self.FileMenu)
         self.menuBar().addMenu(self.EditMenu)
@@ -198,22 +206,18 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # VALUES BASED ON THE FONT BEING USED ...
         testFont = QFontMetrics(self.font())
 
-        defaultFixedWidth = 100
         defaultFixedHeight = 20
-        buttonFixedWidth = 35
         buttonFixedHeight = 22
-        effectWidth = self.setMinimumWidth(["Crowd Control Reduction"])
-        effectTypeWidth = self.setMinimumWidth(['Mythical Cap Increase'])
-        amountEditWidth = self.setMinimumWidth(['100'])
-        amountStaticWidth = self.setMinimumWidth(['100'])
+        buttonFixedWidth = 35
 
-        self.CharacterName.setFixedSize(QSize(defaultFixedWidth, defaultFixedHeight))
-        self.CharacterRealm.setFixedSize(QSize(defaultFixedWidth, defaultFixedHeight))
-        self.CharacterClass.setFixedSize(QSize(defaultFixedWidth, defaultFixedHeight))
-        self.CharacterRace.setFixedSize(QSize(defaultFixedWidth, defaultFixedHeight))
-        self.CharacterLevel.setFixedSize(QSize(defaultFixedWidth, defaultFixedHeight))
-        self.CharacterRealmRank.setFixedSize(QSize(defaultFixedWidth, defaultFixedHeight))
-        self.OutfitName.setFixedSize(QSize(defaultFixedWidth, defaultFixedHeight))
+        width = self.setMinimumWidth(['Necromancer'])
+        self.CharacterName.setFixedSize(QSize(width, defaultFixedHeight))
+        self.CharacterRealm.setFixedSize(QSize(width, defaultFixedHeight))
+        self.CharacterClass.setFixedSize(QSize(width, defaultFixedHeight))
+        self.CharacterRace.setFixedSize(QSize(width, defaultFixedHeight))
+        self.CharacterLevel.setFixedSize(QSize(width, defaultFixedHeight))
+        self.CharacterRealmRank.setFixedSize(QSize(width, defaultFixedHeight))
+        self.CharacterChampLevel.setFixedSize(QSize(width, defaultFixedHeight))
 
         for stat in (DropEffectList['All']['Stat'] + ('ArmorFactor', 'Fatigue', 'PowerPool',)):
             self.StatLabel[stat] = getattr(self, stat + 'Label')
@@ -234,7 +238,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         width = testFont.size(Qt.TextSingleLine, "(-26)", tabArray = None).width()
         self.StatsGroup.layout().setColumnMinimumWidth(3, width)
         width = testFont.size(Qt.TextSingleLine, "Imbue", tabArray=None).width()
-        self.ItemFrame.layout().setColumnMinimumWidth(4, width)
+        self.ItemStatsGroup.layout().setColumnMinimumWidth(4, width)
 
         for resist in (DropEffectList['All']['Resist']):
             self.StatLabel[resist] = getattr(self, resist + 'Label')
@@ -294,8 +298,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
             'Dropped': [self.RequirementLabel]}
 
-        self.ItemLevel.setFixedSize(QSize(amountEditWidth, defaultFixedHeight))
-        self.ItemQuality.setFixedSize(QSize(amountEditWidth, defaultFixedHeight))
         self.ItemNewButton.setFixedSize(QSize(buttonFixedWidth, buttonFixedHeight))
         self.ItemTypeButton.setFixedSize(QSize(buttonFixedWidth, buttonFixedHeight))
         self.ItemLoadButton.setFixedSize(QSize(buttonFixedWidth, buttonFixedHeight))
@@ -304,23 +306,30 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ItemInfoButton.setFixedSize(QSize(buttonFixedWidth, buttonFixedHeight))
         self.ItemName.setFixedHeight(defaultFixedHeight)
 
+        width = testFont.size(Qt.TextSingleLine, "Slot 12: ", tabArray=None).width()
+        self.ItemStatsGroup.layout().setColumnMinimumWidth(0, width)
+
         for index in range(0, 12):
             self.SlotLabel.append(getattr(self, 'SlotLabel%d' % index))
             self.Effect.append(getattr(self, 'Effect%d' % index))
-            self.Effect[index].setFixedSize(QSize(effectWidth, defaultFixedHeight))
+            width = self.setMinimumWidth(['Negative Effect Duration Reduction'])
+            self.Effect[index].setFixedSize(QSize(width, defaultFixedHeight))
             self.Effect[index].activated[str].connect(self.EffectChanged)
 
             self.AmountEdit.append(getattr(self, 'AmountEdit%d' % index))
-            self.AmountEdit[index].setFixedSize(QSize(amountEditWidth, defaultFixedHeight))
+            width = self.setMinimumWidth(['100'])
+            self.AmountEdit[index].setFixedSize(QSize(width, defaultFixedHeight))
             self.AmountEdit[index].setValidator(QIntValidator(-999, +999, self))
             self.AmountEdit[index].textEdited[str].connect(self.EffectAmountChanged)
 
             self.EffectType.append(getattr(self, 'EffectType%d' % index))
-            self.EffectType[index].setFixedSize(QSize(effectTypeWidth, defaultFixedHeight))
+            width = self.setMinimumWidth(['Mythical Resist & Cap Increase'])
+            self.EffectType[index].setFixedSize(QSize(width, defaultFixedHeight))
             self.EffectType[index].activated[str].connect(self.EffectTypeChanged)
 
             self.Requirement.append(getattr(self, 'Requirement%d' % index))
-            self.Requirement[index].setFixedSize(QSize(defaultFixedWidth, defaultFixedHeight))
+            width = self.setMinimumWidth(['vs. Enemy Players'])
+            self.Requirement[index].setFixedSize(QSize(width, defaultFixedHeight))
             self.Requirement[index].editingFinished.connect(self.EffectRequirementChanged)
 
         for index in range(0, 7):
@@ -328,7 +337,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         for index in range(0, 5):
             self.AmountStatic.append(getattr(self, 'AmountStatic%d' % index))
-            self.AmountStatic[index].setFixedSize(QSize(amountStaticWidth, defaultFixedHeight))
+            width = self.setMinimumWidth(['100'])
+            self.AmountStatic[index].setFixedSize(QSize(width, defaultFixedHeight))
             self.AmountStatic[index].activated[str].connect(self.EffectAmountChanged)
 
         for index in range(0, 4):
@@ -367,12 +377,29 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # COLLECTING GARBAGE
         del testItem
 
+        self.ItemRealm.setFixedHeight(defaultFixedHeight)
+        self.ItemType.setFixedHeight(defaultFixedHeight)
+        self.ItemOrigin.setFixedHeight(defaultFixedHeight)
+        self.ItemDamageType.setFixedHeight(defaultFixedHeight)
+
+        width = self.setMinimumWidth([' - '])
+        self.ItemLevel.setFixedSize(QSize(width, defaultFixedHeight))
+        self.ItemQuality.setFixedSize(QSize(width, defaultFixedHeight))
+        self.ItemBonus.setFixedSize(QSize(width, defaultFixedHeight))
+        self.ItemAFDPS.setFixedSize(QSize(width, defaultFixedHeight))
+        self.ItemSpeed.setFixedSize(QSize(width, defaultFixedHeight))
+
+        self.ItemInfoGroup.setFixedWidth(186)
+        self.ItemRestrictionsGroup.setFixedWidth(135)
+        self.setItemInformation()
+
     def initialize(self):
         self.TemplateName = None
         self.TemplatePath = None
         self.CharacterName.setText('')
         self.CharacterLevel.setText('50')
         self.CharacterRealmRank.setText('10')
+        self.CharacterChampLevel.setText('15')
 
         # SETUP THE INITIAL REALM ...
         self.CharacterRealm.setCurrentText('Midgard')
@@ -413,6 +440,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ToolBarMenu.triggered.connect(self.setToolBarOptions)
         self.DistanceToCap.triggered.connect(self.setDistanceToCap)
         self.UnusableSkills.triggered.connect(self.setUnusableSkills)
+        self.ItemInformation.triggered.connect(self.setItemInformation)
         self.ItemInfoButton.clicked.connect(self.showItemInfoDialog)
         self.SlotListTreeView.itemClicked.connect(self.ItemSelected)
         self.SlotListTreeView.itemChanged.connect(self.ItemStateChanged)
@@ -420,8 +448,31 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.CharacterClass.activated[int].connect(self.CharacterClassChanged)
         self.CharacterRace.activated[int].connect(self.CharacterRaceChanged)
         self.CharacterLevel.editingFinished.connect(self.calculate)
+
+# START 'ItemInfoDialog'
+
+        self.ItemRealm.activated.connect(self.ItemRealmChanged)
+        self.ItemType.activated.connect(self.ItemTypeChanged)
+        self.ItemOrigin.activated.connect(self.ItemOriginChanged)
+
+# END 'ItemInfoDialog'
+
         self.ItemLevel.editingFinished.connect(self.ItemLevelChanged)
         self.ItemQuality.editingFinished.connect(self.ItemQualityChanged)
+
+# START 'ItemInfoDialog'
+
+        self.ItemDamageType.activated.connect(self.ItemDamageTypeChanged)
+        self.ItemBonus.editingFinished.connect(self.ItemBonusChanged)
+        self.ItemAFDPS.editingFinished.connect(self.ItemAFDPSChanged)
+        self.ItemSpeed.editingFinished.connect(self.ItemSpeedChanged)
+        self.ItemLeftHand.stateChanged.connect(self.ItemLeftHandChanged)
+        self.ItemRequirement.editingFinished.connect(self.ItemRequirementChanged)
+        self.ItemNotes.textChanged.connect(self.ItemNotesChanged)
+        self.ItemRestrictionsList.itemChanged.connect(self.ItemRestrictionsChanged)
+
+# END 'ItemInfoDialog'
+
         self.ItemName.activated[int].connect(self.changeItem)
         self.ItemName.editTextChanged[str].connect(self.ItemNameChanged)
         self.ItemSaveButton.clicked.connect(self.saveItem)
@@ -617,6 +668,43 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # DEBUGGING
         print('showDropWidgets')
 
+# START 'ItemInfoDialog'
+
+    def showItemInfoWidgets(self, item):
+
+        # DEBUGGING
+        print('showItemInfoWidgets')
+
+    def setWidgetSpan(self, widget, rowspan, colspan):
+        layout = self.ItemInfoGroup.layout()
+        index = layout.indexOf(widget)
+        row, column = layout.getItemPosition(index)[:2]
+        layout.addWidget(widget, row, column, rowspan, colspan)
+
+        # DEBUGGING
+        print('setWidgetSpan')
+
+    def showItemRestrictions(self, item):
+        for index in range(self.ItemRestrictionsList.count()):
+            self.ItemRestrictionsList.item(index).setHidden(True)
+            if self.ItemRestrictionsList.item(index).text() == 'All':
+                self.ItemRestrictionsList.item(index).setHidden(False)
+            if self.ItemRestrictionsList.item(index).text() in ClassList[item.Realm]:
+                self.ItemRestrictionsList.item(index).setHidden(False)
+        for index in range(self.ItemRestrictionsList.count()):
+            if self.ItemRestrictionsList.item(index).text() in item.Restrictions:
+                if self.ItemRestrictionsList.item(index).text() in ClassList[item.Realm]:
+                    self.ItemRestrictionsList.item(index).setCheckState(Qt.Checked)
+                if self.ItemRestrictionsList.item(index).text() not in ClassList[item.Realm]:
+                    self.ItemRestrictionsList.item(index).setCheckState(Qt.Unchecked)
+                if self.ItemRestrictionsList.item(index).text() == 'All':
+                    self.ItemRestrictionsList.item(index).setCheckState(Qt.Checked)
+
+        # DEBUGGING
+        print('showItemRestrictions')
+
+# END 'ItemInfoDialog'
+
     def RestoreItem(self, item):
         if item.ActiveState == 'Crafted':
             self.showCraftWidgets(item)
@@ -636,7 +724,21 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         for index in range(0, item.getSlotCount()):
             self.EffectTypeChanged(item.getSlot(index).getEffectType(), index)
 
-        self.UpdateMenus(item)
+        tableEntry = QListWidgetItem('All')
+        tableEntry.setFlags(Qt.ItemIsUserCheckable | Qt.ItemIsEnabled)
+        tableEntry.setCheckState(Qt.Unchecked)
+
+        self.ItemRestrictionsList.clear()
+        self.ItemRestrictionsList.addItem(tableEntry)
+
+        for key in ClassList['All']:
+            tableEntry = QListWidgetItem(key)
+            tableEntry.setFlags(Qt.ItemIsUserCheckable | Qt.ItemIsEnabled)
+            tableEntry.setCheckState(Qt.Unchecked)
+            self.ItemRestrictionsList.addItem(tableEntry)
+        self.showItemRestrictions(item)
+
+        self.updateMenus(item)
         print(item.__dict__)
 
         # DEBUGGING
@@ -655,7 +757,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             'Focus': {},
             'MythicalBonuses': {},
             'OtherBonuses': {},
-            'PvEBonuses': {}
+            'PvEBonuses': {},
+            'Utility': 0.0
         }
 
         for effect in DropEffectList['All']['Stat'] + ('Armor Factor', 'Fatigue', '% Power Pool'):
@@ -773,6 +876,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             if not item.Equipped == 2:
                 continue
 
+            total['Utility'] += item.getItemUtility()
+
             for index in range(0, item.getSlotCount()):
                 effect = item.getSlot(index).getEffect()
                 amount = int('0' + re.sub('[^\d]', '', item.getSlot(index).getEffectAmount()))
@@ -888,6 +993,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def calculate(self):
         total = self.summarize()
+
+        print(str(total['Utility']))
 
         item = self.ItemAttributeList[self.CurrentItemLabel]
         if item.ActiveState in ('Crafted', 'Legendary'):
@@ -1058,7 +1165,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         print('insertSkill')
 
     # TODO: NOT COMPLETE
-    def UpdateMenus(self, item):
+    def updateMenus(self, item):
         self.ItemNewMenu.clear()
         self.ItemTypeMenu.clear()
 
@@ -1075,7 +1182,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.ItemTypeMenu.addAction(value)
 
         # DEBUGGING
-        print('UpdateMenus')
+        print('updateMenus')
 
 # =============================================== #
 #        SLOT/SIGNAL METHODS AND FUNCTIONS        #
@@ -1116,6 +1223,19 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         # DEBUGGING
         print('setUnusableSkills')
+
+    def setItemInformation(self):
+        if self.ItemInformation.isChecked():
+            self.ItemInfoGroup.show()
+            self.ItemRestrictionsGroup.hide()
+            self.ItemInfoButton.hide()
+        if not self.ItemInformation.isChecked():
+            self.ItemInfoGroup.hide()
+            self.ItemRestrictionsGroup.hide()
+            self.ItemInfoButton.show()
+
+        # DEBUGGING
+        print('setItemWidgetVisibility')
 
     def CharacterRealmChanged(self):
         Realm = self.CharacterRealm.currentText()
@@ -1195,6 +1315,34 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # DEBUGGING
         print('ItemStateChanged')
 
+# START 'ItemInfoDialog'
+
+    # TODO: UPDATE ITEM TYPE AND DAMAGE LIST WHEN REALM CHANGES
+    def ItemRealmChanged(self):
+        item = self.ItemAttributeList[self.CurrentItemLabel]
+        item.Realm = self.ItemRealm.currentText()
+        self.showItemRestrictions(item)
+
+        # DEBUGGING
+        print('ItemRealmChanged')
+
+    # TODO: ACCOUNT FOR MIS-LABELED ITEMS
+    def ItemTypeChanged(self):
+        item = self.ItemAttributeList[self.CurrentItemLabel]
+        item.Type = self.ItemType.currentText()
+
+        # DEBUGGING
+        print('ItemTypeChanged')
+
+    def ItemOriginChanged(self):
+        item = self.ItemAttributeList[self.CurrentItemLabel]
+        item.Origin = self.ItemOrigin.currentText()
+
+        # DEBUGGING
+        print('ItemOriginChanged')
+
+# END 'ItemInfoDialog'
+
     def ItemLevelChanged(self):
         item = self.ItemAttributeList[self.CurrentItemLabel]
         item.Level = self.ItemLevel.text()
@@ -1212,6 +1360,78 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         # DEBUGGING
         print('ItemQualityChanged')
+
+# START 'ItemInfoDialog'
+
+    def ItemDamageTypeChanged(self):
+        item = self.ItemAttributeList[self.CurrentItemLabel]
+        item.DamageType = self.ItemDamageType.currentText()
+
+        # DEBUGGING
+        print('ItemDamageTypeChanged')
+
+    def ItemBonusChanged(self):
+        item = self.ItemAttributeList[self.CurrentItemLabel]
+        item.Bonus = self.ItemBonus.text()
+
+        # DEBUGGING
+        print('ItemBonusChanged')
+
+    def ItemAFDPSChanged(self):
+        item = self.ItemAttributeList[self.CurrentItemLabel]
+        item.AFDPS = self.ItemAFDPS.text()
+
+        # DEBUGGING
+        print('ItemAFDPSChanged')
+
+    def ItemSpeedChanged(self):
+        item = self.ItemAttributeList[self.CurrentItemLabel]
+        item.Speed = self.ItemSpeed.text()
+        self.ItemSpeed.setModified(False)
+
+        # DEBUGGING
+        print('ItemSpeedChanged')
+
+    def ItemLeftHandChanged(self, state):
+        item = self.ItemAttributeList[self.CurrentItemLabel]
+        item.LeftHand = state
+
+        # DEBUGGING
+        print('ItemLeftHandChanged')
+
+    def ItemRequirementChanged(self):
+        item = self.ItemAttributeList[self.CurrentItemLabel]
+        item.Requirement = self.ItemRequirement.text()
+        self.ItemRequirement.setModified(False)
+
+        # DEBUGGING
+        print('ItemRequirementChanged')
+
+    def ItemNotesChanged(self):
+        item = self.ItemAttributeList[self.CurrentItemLabel]
+        item.Notes = self.ItemNotes.toPlainText()
+
+        # DEBUGGINg
+        print('ItemNotesChanged')
+
+    def ItemRestrictionsChanged(self, selection = None):
+        item = self.ItemAttributeList[self.CurrentItemLabel]
+        if selection.text() == 'All' and selection.checkState() == Qt.Checked:
+            for count in range(1, self.ItemRestrictionsList.count()):
+                self.ItemRestrictionsList.item(count).setCheckState(Qt.Unchecked)
+            item.Restrictions.clear()
+            item.Restrictions.append(selection.text())
+        elif selection.checkState() == Qt.Checked:
+            if selection.text() != 'All' and 'All' in item.Restrictions:
+                self.ItemRestrictionsList.item(0).setCheckState(Qt.Unchecked)
+            item.Restrictions.append(selection.text())
+        elif selection.checkState() == Qt.Unchecked:
+            item.Restrictions.remove(selection.text())
+
+        # DEBUGGING
+        print('ItemRestrictionsChanged')
+
+# END 'ItemInfoDialog'
 
     def EffectTypeChanged(self, etype = None, index = -1):
         if index == -1: index = self.getSlotIndex()
