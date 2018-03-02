@@ -412,7 +412,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 self.ItemSpeedLabel,
                 self.ItemLeftHand],
 
-            'Weapon': [],
+            'Weapons': [],
 
             'Mythical': [
 
@@ -695,26 +695,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         print('showDropWidgets')
 
     def setItemInfoWidgets(self, item):
-        itemOriginTypes = ['']
-        itemDamageTypes = ['']
-        itemRealmList = list()
+        for widget in (self.ItemRealm, self.ItemOrigin, self.ItemDamageType):
+            widget.clear()
 
-        if item.ActiveState == 'Crafted':
-            itemRealmList = Realms
-            itemOriginTypes.extend(('Crafted',))
-            if item.Location in SlotList['Weapons']:
-                itemDamageTypes.extend(('Slash', 'Thrust', 'Crush', ))
-        elif item.ActiveState == 'Legendary':
-            itemRealmList = Realms
-            itemOriginTypes.extend(('Crafted',))
-            if item.Location in SlotList['Weapons']:
-                itemDamageTypes.extend(('Elemental',))
-        elif item.ActiveState == 'Dropped':
-            itemRealmList = AllRealms
-            itemOriginTypes.extend(('Drop', 'Quest', 'Artifact', 'Merchant',))
-            if item.Location in SlotList['Weapons']:
-                itemDamageTypes.extend(('Slash', 'Thrust', 'Crush',))
-
+        # TODO: SIMPLIFY THIS ..
         if item.Location in SlotList['Jewelery']:
             for widget in self.ItemInfoWidgets['Jewelery']:
                 widget.setDisabled(True)
@@ -744,20 +728,21 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     self.ItemType.clear()
                     self.ItemType.insertItems(0, ItemTypes[key])
 
-        self.ItemRealm.clear()
-        self.ItemRealm.insertItems(0, itemRealmList)
-        self.ItemRealm.setCurrentIndex(itemRealmList.index(item.Realm))
+        if item.ActiveState == 'Dropped':
+            self.ItemRealm.insertItems(0, AllRealms)
+            self.ItemOrigin.insertItems(0, ['', 'Drop', 'Quest', 'Artifact', 'Merchant'])
+            if item.Location in SlotList['Weapons']:
+                self.ItemDamageType.insertItems(0, ['', 'Slash', 'Thrust', 'Crush'])
+        else:
+            self.ItemRealm.insertItems(0, Realms)
+            self.ItemOrigin.insertItems(0, ['', 'Crafted'])
+            if item.Location in SlotList['Weapons']:
+                self.ItemDamageType.insertItems(0, ['', 'Slash', 'Thrust', 'Crush', 'Elemental'])
 
+        self.ItemRealm.setCurrentText(item.Realm)
+        self.ItemOrigin.setCurrentText(item.Origin)
+        self.ItemDamageType.setCurrentText(item.DamageType)
         self.ItemType.setCurrentText(item.Type)
-
-        self.ItemOrigin.clear()
-        self.ItemOrigin.insertItems(0, itemOriginTypes)
-        self.ItemOrigin.setCurrentIndex(itemOriginTypes.index(item.Origin))
-
-        self.ItemDamageType.clear()
-        self.ItemDamageType.insertItems(0, itemDamageTypes)
-        self.ItemDamageType.setCurrentIndex(itemDamageTypes.index(item.DamageType))
-
         self.ItemBonus.setText(item.Bonus)
         self.ItemAFDPS.setText(item.AFDPS)
         self.ItemSpeed.setText(item.Speed)
