@@ -184,6 +184,9 @@ class ItemInformationDialog(QDialog, Ui_ItemInfoDialog):
         self.ItemSpeed.hide()
         self.ItemSpeedLabel.hide()
         self.ItemLeftHand.hide()
+        self.setWidgetSpan(self.ItemBonus, 0, 3)
+        self.ItemBonus.setFixedHeight(20)
+        self.ItemBonusLabel.setFixedHeight(20)
 
     def setWidgetSpan(self, widget, rowspan, colspan):
         layout = self.ItemInfoGroup.layout()
