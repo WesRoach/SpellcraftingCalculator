@@ -271,7 +271,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 parent.addChild(child)
 
         # TODO: REIMPLEMENT `QTreeView.sizeHint()`
-        self.SlotListTreeView.setFixedWidth(155)
+        self.SlotListTreeView.setFixedWidth(142)
         self.CharacterRealm.insertItems(0, list(Realms))
 
         self.SwitchOnType = {
@@ -323,7 +323,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.AmountEdit[index].textEdited[str].connect(self.EffectAmountChanged)
 
             self.EffectType.append(getattr(self, 'EffectType%d' % index))
-            width = self.setMinimumWidth(['Mythical Resist & Cap Increase'])
+            width = self.setMinimumWidth(['Mythical Resist & Cap'])
             self.EffectType[index].setFixedSize(QSize(width, defaultFixedHeight))
             self.EffectType[index].activated[str].connect(self.EffectTypeChanged)
 
