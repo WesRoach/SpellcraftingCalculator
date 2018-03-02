@@ -9,7 +9,6 @@ from Character import AllBonusList, AllRealms, ClassList, ItemTypes, Races, Real
 from Constants import Cap, CraftedTypeList, CraftedEffectList, CraftedValuesList, DropTypeList, DropEffectList
 from Constants import EnhancedTypeList, EnhancedEffectList, EnhancedValuesList, MythicalCap, SlotList
 from Item import Item
-from ItemInfoDialog import ItemInformationDialog
 from ReportWindow import ReportWindow
 from lxml import etree
 import os
@@ -40,7 +39,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         self.DistanceToCap = QAction()
         self.UnusableSkills = QAction()
-        self.ItemInformation = QAction()
 
         self.EffectList = list()
         self.EffectTypeList = list()
@@ -155,13 +153,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.UnusableSkills.setCheckable(True)
         self.UnusableSkills.setChecked(False)
         self.ViewMenu.addAction(self.UnusableSkills)
-        self.ViewMenu.addSeparator()
-
-        self.ItemInformation = QAction('Item &Information', self)
-        self.ItemInformation.setShortcut(QKeySequence(Qt.ALT + Qt.Key_I))
-        self.ItemInformation.setCheckable(True)
-        self.ItemInformation.setChecked(True)
-        self.ViewMenu.addAction(self.ItemInformation)
 
         self.menuBar().addMenu(self.FileMenu)
         self.menuBar().addMenu(self.EditMenu)
@@ -197,7 +188,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ItemLoadButton.clicked.connect(self.ItemLoadButton.showMenu)
         self.ItemDeleteButton.setToolTip('Delete Item')
         self.ItemSaveButton.setToolTip('Save Item')
-        self.ItemInfoButton.setToolTip('Item Information')
 
     def initLayout(self):
         self.setWindowTitle('Spellcrafting Calculator')
@@ -303,7 +293,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ItemLoadButton.setFixedSize(QSize(buttonFixedWidth, buttonFixedHeight))
         self.ItemDeleteButton.setFixedSize(QSize(buttonFixedWidth, buttonFixedHeight))
         self.ItemSaveButton.setFixedSize(QSize(buttonFixedWidth, buttonFixedHeight))
-        self.ItemInfoButton.setFixedSize(QSize(buttonFixedWidth, buttonFixedHeight))
         self.ItemName.setFixedHeight(defaultFixedHeight)
 
         width = testFont.size(Qt.TextSingleLine, "Slot 12: ", tabArray=None).width()
@@ -394,15 +383,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         self.ItemInfoGroup.setFixedWidth(186)
         self.ItemRestrictionsGroup.setFixedWidth(135)
-        self.setItemInformation()
 
     def initialize(self):
         self.TemplateName = None
         self.TemplatePath = None
         self.CharacterName.setText('')
         self.CharacterLevel.setText('50')
-        self.CharacterRealmRank.setText('10')
-        self.CharacterChampLevel.setText('15')
 
         # SETUP THE INITIAL REALM ...
         self.CharacterRealm.setCurrentText('Midgard')
@@ -443,28 +429,17 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ToolBarMenu.triggered.connect(self.setToolBarOptions)
         self.DistanceToCap.triggered.connect(self.setDistanceToCap)
         self.UnusableSkills.triggered.connect(self.setUnusableSkills)
-        self.ItemInformation.triggered.connect(self.setItemInformation)
-        self.ItemInfoButton.clicked.connect(self.showItemInfoDialog)
         self.SlotListTreeView.itemClicked.connect(self.ItemSelected)
         self.SlotListTreeView.itemChanged.connect(self.ItemStateChanged)
         self.CharacterRealm.activated[int].connect(self.CharacterRealmChanged)
         self.CharacterClass.activated[int].connect(self.CharacterClassChanged)
         self.CharacterRace.activated[int].connect(self.CharacterRaceChanged)
         self.CharacterLevel.editingFinished.connect(self.calculate)
-
-# START 'ItemInfoDialog'
-
         self.ItemRealm.activated.connect(self.ItemRealmChanged)
         self.ItemType.activated.connect(self.ItemTypeChanged)
         self.ItemOrigin.activated.connect(self.ItemOriginChanged)
-
-# END 'ItemInfoDialog'
-
         self.ItemLevel.editingFinished.connect(self.ItemLevelChanged)
         self.ItemQuality.editingFinished.connect(self.ItemQualityChanged)
-
-# START 'ItemInfoDialog'
-
         self.ItemDamageType.activated.connect(self.ItemDamageTypeChanged)
         self.ItemBonus.editingFinished.connect(self.ItemBonusChanged)
         self.ItemAFDPS.editingFinished.connect(self.ItemAFDPSChanged)
@@ -473,9 +448,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ItemRequirement.editingFinished.connect(self.ItemRequirementChanged)
         self.ItemNotes.textChanged.connect(self.ItemNotesChanged)
         self.ItemRestrictionsList.itemChanged.connect(self.ItemRestrictionsChanged)
-
-# END 'ItemInfoDialog'
-
         self.ItemName.activated[int].connect(self.changeItem)
         self.ItemName.editTextChanged[str].connect(self.ItemNameChanged)
         self.ItemSaveButton.clicked.connect(self.saveItem)
@@ -490,11 +462,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 # =============================================== #
 #             DIALOG & WINDOW METHODS             #
 # =============================================== #
-
-    def showItemInfoDialog(self):
-        currentItem = self.ItemAttributeList[self.CurrentItemLabel]
-        self.ItemInfoDialog = ItemInformationDialog(self, Qt.WindowCloseButtonHint, item = currentItem)
-        self.ItemInfoDialog.exec_()
 
     def showItemDatabase(self):
 
@@ -671,21 +638,107 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # DEBUGGING
         print('showDropWidgets')
 
-# START 'ItemInfoDialog'
+    def setItemInfoWidgets(self, item):
+        widgets = []
+        itemOriginTypes = ['']
+        itemDamageTypes = ['']
+        itemRealmList = list()
 
-    def showItemInfoWidgets(self, item):
+        if item.ActiveState == 'Crafted':
+            itemRealmList = Realms
+            itemOriginTypes.extend(('Crafted',))
+            if item.Location in SlotList['Weapons']:
+                itemDamageTypes.extend(('Slash', 'Thrust', 'Crush', ))
+        elif item.ActiveState == 'Legendary':
+            itemRealmList = Realms
+            itemOriginTypes.extend(('Crafted',))
+            if item.Location in SlotList['Weapons']:
+                itemDamageTypes.extend(('Elemental',))
+        elif item.ActiveState == 'Dropped':
+            itemRealmList = AllRealms
+            itemOriginTypes.extend(('Drop', 'Quest', 'Artifact', 'Merchant',))
+            if item.Location in SlotList['Weapons']:
+                itemDamageTypes.extend(('Slash', 'Thrust', 'Crush',))
+
+        if item.Location in SlotList['Jewelery']:
+            for key, value in ItemTypes.items():
+                if item.Location == key:
+                    self.ItemType.clear()
+                    self.ItemType.insertItems(0, value)
+            widgets.extend((
+                self.ItemDamageType,
+                self.ItemDamageTypeLabel,
+                self.ItemAFDPS,
+                self.ItemAFDPSLabel,
+                self.ItemSpeed,
+                self.ItemSpeedLabel,
+                self.ItemLeftHand,
+            ))
+        elif item.Location in SlotList['Armor']:
+            for key, value in ItemTypes.items():
+                if item.Location == key:
+                    self.ItemType.clear()
+                    self.ItemType.insertItems(0, ItemTypes[key][item.Realm])
+            widgets.extend((
+                self.ItemDamageType,
+                self.ItemDamageTypeLabel,
+                self.ItemSpeed,
+                self.ItemSpeedLabel,
+                self.ItemLeftHand,
+            ))
+        elif item.Location in SlotList['Weapons']:
+            for key, value in ItemTypes.items():
+                if item.Location == key:
+                    self.ItemType.clear()
+                    self.ItemType.insertItems(0, ItemTypes[key][item.Realm])
+        elif item.Location in SlotList['Mythical']:
+            for key, value in ItemTypes.items():
+                if item.Location in SlotList['Mythical'] == value:
+                    self.ItemType.clear()
+                    self.ItemType.insertItems(0, ItemTypes[key])
+            widgets.extend((
+                self.ItemDamageType,
+                self.ItemDamageTypeLabel,
+                self.ItemAFDPS,
+                self.ItemAFDPSLabel,
+                self.ItemSpeed,
+                self.ItemSpeedLabel,
+                self.ItemLeftHand,
+            ))
+
+        self.ItemRealm.clear()
+        self.ItemRealm.insertItems(0, itemRealmList)
+        self.ItemRealm.setCurrentIndex(itemRealmList.index(item.Realm))
+
+        self.ItemType.setCurrentText(item.Type)
+
+        self.ItemOrigin.clear()
+        self.ItemOrigin.insertItems(0, itemOriginTypes)
+        self.ItemOrigin.setCurrentIndex(itemOriginTypes.index(item.Origin))
+
+        self.ItemDamageType.clear()
+        self.ItemDamageType.insertItems(0, itemDamageTypes)
+        self.ItemDamageType.setCurrentIndex(itemDamageTypes.index(item.DamageType))
+
+        self.ItemBonus.setText(item.Bonus)
+        self.ItemAFDPS.setText(item.AFDPS)
+        self.ItemSpeed.setText(item.Speed)
+
+        if item.LeftHand == 2:
+            self.ItemLeftHand.setCheckState(Qt.Checked)
+        else:
+            self.ItemLeftHand.setCheckState(Qt.Unchecked)
+
+        self.ItemRequirement.setText(item.Requirement)
+        self.ItemNotes.setPlainText(item.Notes)
+
+        for widget in widgets:
+            widget.setDisabled(True)
+
+        self.showItemRestrictions(item)
 
         # DEBUGGING
-        print('showItemInfoWidgets')
-
-    def setWidgetSpan(self, widget, rowspan, colspan):
-        layout = self.ItemInfoGroup.layout()
-        index = layout.indexOf(widget)
-        row, column = layout.getItemPosition(index)[:2]
-        layout.addWidget(widget, row, column, rowspan, colspan)
-
-        # DEBUGGING
-        print('setWidgetSpan')
+        print('setItemInfoWidgets')
 
     def showItemRestrictions(self, item):
         for index in range(self.ItemRestrictionsList.count()):
@@ -705,8 +758,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         # DEBUGGING
         print('showItemRestrictions')
-
-# END 'ItemInfoDialog'
 
     def RestoreItem(self, item):
         if item.ActiveState == 'Crafted':
@@ -739,9 +790,35 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             tableEntry.setFlags(Qt.ItemIsUserCheckable | Qt.ItemIsEnabled)
             tableEntry.setCheckState(Qt.Unchecked)
             self.ItemRestrictionsList.addItem(tableEntry)
-        self.showItemRestrictions(item)
 
+        itemInfoWidgets = [
+            self.ItemRealm,
+            self.ItemRealmLabel,
+            self.ItemType,
+            self.ItemTypeLabel,
+            self.ItemOrigin,
+            self.ItemOriginLabel,
+            self.ItemDamageType,
+            self.ItemDamageTypeLabel,
+            self.ItemLevel,
+            self.ItemLevelLabel,
+            self.ItemQuality,
+            self.ItemQualityLabel,
+            self.ItemBonus,
+            self.ItemBonusLabel,
+            self.ItemAFDPS,
+            self.ItemAFDPSLabel,
+            self.ItemSpeed,
+            self.ItemSpeedLabel,
+            self.ItemLeftHand,
+        ]
+
+        for widget in itemInfoWidgets:
+            widget.setEnabled(True)
+
+        self.setItemInfoWidgets(item)
         self.updateMenus(item)
+
         print(item.__dict__)
 
         # DEBUGGING
@@ -1227,19 +1304,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # DEBUGGING
         print('setUnusableSkills')
 
-    def setItemInformation(self):
-        if self.ItemInformation.isChecked():
-            self.ItemInfoGroup.show()
-            self.ItemRestrictionsGroup.show()
-            self.ItemInfoButton.hide()
-        if not self.ItemInformation.isChecked():
-            self.ItemInfoGroup.hide()
-            self.ItemRestrictionsGroup.hide()
-            self.ItemInfoButton.show()
-
-        # DEBUGGING
-        print('setItemWidgetVisibility')
-
     def CharacterRealmChanged(self):
         Realm = self.CharacterRealm.currentText()
         self.CharacterClass.clear()
@@ -1318,13 +1382,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # DEBUGGING
         print('ItemStateChanged')
 
-# START 'ItemInfoDialog'
-
     # TODO: UPDATE ITEM TYPE AND DAMAGE LIST WHEN REALM CHANGES
     def ItemRealmChanged(self):
         item = self.ItemAttributeList[self.CurrentItemLabel]
         item.Realm = self.ItemRealm.currentText()
-        self.showItemRestrictions(item)
+        self.RestoreItem(self.ItemAttributeList[self.CurrentItemLabel])
 
         # DEBUGGING
         print('ItemRealmChanged')
@@ -1344,13 +1406,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # DEBUGGING
         print('ItemOriginChanged')
 
-# END 'ItemInfoDialog'
-
     def ItemLevelChanged(self):
         item = self.ItemAttributeList[self.CurrentItemLabel]
         item.Level = self.ItemLevel.text()
         self.ItemLevel.setModified(False)
-        self.RestoreItem(self.ItemAttributeList[self.CurrentItemLabel])
 
         # DEBUGGING
         print('ItemLevelChanged')
@@ -1359,12 +1418,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         item = self.ItemAttributeList[self.CurrentItemLabel]
         item.Quality = self.ItemQuality.text()
         self.ItemQuality.setModified(False)
-        self.RestoreItem(self.ItemAttributeList[self.CurrentItemLabel])
 
         # DEBUGGING
         print('ItemQualityChanged')
-
-# START 'ItemInfoDialog'
 
     def ItemDamageTypeChanged(self):
         item = self.ItemAttributeList[self.CurrentItemLabel]
@@ -1376,6 +1432,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def ItemBonusChanged(self):
         item = self.ItemAttributeList[self.CurrentItemLabel]
         item.Bonus = self.ItemBonus.text()
+        self.ItemBonus.setModified(False)
 
         # DEBUGGING
         print('ItemBonusChanged')
@@ -1383,6 +1440,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def ItemAFDPSChanged(self):
         item = self.ItemAttributeList[self.CurrentItemLabel]
         item.AFDPS = self.ItemAFDPS.text()
+        self.ItemAFDPS.setModified(False)
 
         # DEBUGGING
         print('ItemAFDPSChanged')
@@ -1433,8 +1491,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         # DEBUGGING
         print('ItemRestrictionsChanged')
-
-# END 'ItemInfoDialog'
 
     def EffectTypeChanged(self, etype = None, index = -1):
         if index == -1: index = self.getSlotIndex()

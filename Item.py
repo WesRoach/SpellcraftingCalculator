@@ -25,6 +25,7 @@ class Item:
         self.Restrictions = list()
         self.Notes = ''
         self.Requirement = ''
+        self.Database = False
         self.Index = index
         self.SlotList = self.makeItemSlots()
 
@@ -300,9 +301,9 @@ class ItemSlot:
         if self.getSlotType() == 'Enhanced':
             if self.getEffectType() == 'Unused':
                 return 'Unused'
-            return 'Craftable Item Bonus'
+            return 'Craftable Bonus'
         if self.getSlotType() == 'Dropped':
-            return 'Non-Craftable Item Bonus'
+            return 'Non-Craftable Bonus'
         if not self.isCraftable():
             return '--> SET THE COLUMN WIDTH'
         tier = GemNames[self.getGemIndex()]
