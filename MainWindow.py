@@ -53,6 +53,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ItemIndex = 0
         self.ItemAttributeList = {}
         self.ItemDictionary = {}
+        self.ItemInfoWidgets = {}
 
         self.SlotLabel = []
         self.Effect = []
@@ -369,6 +370,61 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # COLLECTING GARBAGE
         del testItem
 
+        self.ItemInfoWidgets = {
+
+            'All': [
+
+                self.ItemRealm,
+                self.ItemRealmLabel,
+                self.ItemType,
+                self.ItemTypeLabel,
+                self.ItemOrigin,
+                self.ItemOriginLabel,
+                self.ItemDamageType,
+                self.ItemDamageTypeLabel,
+                self.ItemLevel,
+                self.ItemLevelLabel,
+                self.ItemQuality,
+                self.ItemQualityLabel,
+                self.ItemBonus,
+                self.ItemBonusLabel,
+                self.ItemAFDPS,
+                self.ItemAFDPSLabel,
+                self.ItemSpeed,
+                self.ItemSpeedLabel,
+                self.ItemLeftHand],
+
+            'Jewelery': [
+
+                self.ItemDamageType,
+                self.ItemDamageTypeLabel,
+                self.ItemAFDPS,
+                self.ItemAFDPSLabel,
+                self.ItemSpeed,
+                self.ItemSpeedLabel,
+                self.ItemLeftHand],
+
+            'Armor': [
+
+                self.ItemDamageType,
+                self.ItemDamageTypeLabel,
+                self.ItemSpeed,
+                self.ItemSpeedLabel,
+                self.ItemLeftHand],
+
+            'Weapon': [],
+
+            'Mythical': [
+
+                self.ItemDamageType,
+                self.ItemDamageTypeLabel,
+                self.ItemAFDPS,
+                self.ItemAFDPSLabel,
+                self.ItemSpeed,
+                self.ItemSpeedLabel,
+                self.ItemLeftHand]
+        }
+
         self.ItemRealm.setFixedHeight(defaultFixedHeight)
         self.ItemType.setFixedHeight(defaultFixedHeight)
         self.ItemOrigin.setFixedHeight(defaultFixedHeight)
@@ -638,9 +694,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # DEBUGGING
         print('showDropWidgets')
 
-    # TODO: BREAK THIS UP ...
     def setItemInfoWidgets(self, item):
-        widgets = []
         itemOriginTypes = ['']
         itemDamageTypes = ['']
         itemRealmList = list()
@@ -662,50 +716,33 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 itemDamageTypes.extend(('Slash', 'Thrust', 'Crush',))
 
         if item.Location in SlotList['Jewelery']:
+            for widget in self.ItemInfoWidgets['Jewelery']:
+                widget.setDisabled(True)
             for key, value in ItemTypes.items():
                 if item.Location == key:
                     self.ItemType.clear()
                     self.ItemType.insertItems(0, value)
-            widgets.extend((
-                self.ItemDamageType,
-                self.ItemDamageTypeLabel,
-                self.ItemAFDPS,
-                self.ItemAFDPSLabel,
-                self.ItemSpeed,
-                self.ItemSpeedLabel,
-                self.ItemLeftHand,
-            ))
         elif item.Location in SlotList['Armor']:
+            for widget in self.ItemInfoWidgets['Armor']:
+                widget.setDisabled(True)
             for key, value in ItemTypes.items():
                 if item.Location == key:
                     self.ItemType.clear()
                     self.ItemType.insertItems(0, ItemTypes[key][item.Realm])
-            widgets.extend((
-                self.ItemDamageType,
-                self.ItemDamageTypeLabel,
-                self.ItemSpeed,
-                self.ItemSpeedLabel,
-                self.ItemLeftHand,
-            ))
         elif item.Location in SlotList['Weapons']:
+            for widget in self.ItemInfoWidgets['Weapons']:
+                widget.setDisabled(True)
             for key, value in ItemTypes.items():
                 if item.Location == key:
                     self.ItemType.clear()
                     self.ItemType.insertItems(0, ItemTypes[key][item.Realm])
         elif item.Location in SlotList['Mythical']:
+            for widget in self.ItemInfoWidgets['Mythical']:
+                widget.setDisabled(True)
             for key, value in ItemTypes.items():
                 if item.Location in SlotList['Mythical'] == value:
                     self.ItemType.clear()
                     self.ItemType.insertItems(0, ItemTypes[key])
-            widgets.extend((
-                self.ItemDamageType,
-                self.ItemDamageTypeLabel,
-                self.ItemAFDPS,
-                self.ItemAFDPSLabel,
-                self.ItemSpeed,
-                self.ItemSpeedLabel,
-                self.ItemLeftHand,
-            ))
 
         self.ItemRealm.clear()
         self.ItemRealm.insertItems(0, itemRealmList)
@@ -732,10 +769,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         self.ItemRequirement.setText(item.Requirement)
         self.ItemNotes.setPlainText(item.Notes)
-
-        for widget in widgets:
-            widget.setDisabled(True)
-
         self.showItemRestrictions(item)
 
         # DEBUGGING
@@ -779,6 +812,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         for index in range(0, item.getSlotCount()):
             self.EffectTypeChanged(item.getSlot(index).getEffectType(), index)
 
+        for widget in self.ItemInfoWidgets['All']:
+            widget.setEnabled(True)
+
         tableEntry = QListWidgetItem('All')
         tableEntry.setFlags(Qt.ItemIsUserCheckable | Qt.ItemIsEnabled)
         tableEntry.setCheckState(Qt.Unchecked)
@@ -791,31 +827,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             tableEntry.setFlags(Qt.ItemIsUserCheckable | Qt.ItemIsEnabled)
             tableEntry.setCheckState(Qt.Unchecked)
             self.ItemRestrictionsList.addItem(tableEntry)
-
-        itemInfoWidgets = [
-            self.ItemRealm,
-            self.ItemRealmLabel,
-            self.ItemType,
-            self.ItemTypeLabel,
-            self.ItemOrigin,
-            self.ItemOriginLabel,
-            self.ItemDamageType,
-            self.ItemDamageTypeLabel,
-            self.ItemLevel,
-            self.ItemLevelLabel,
-            self.ItemQuality,
-            self.ItemQualityLabel,
-            self.ItemBonus,
-            self.ItemBonusLabel,
-            self.ItemAFDPS,
-            self.ItemAFDPSLabel,
-            self.ItemSpeed,
-            self.ItemSpeedLabel,
-            self.ItemLeftHand,
-        ]
-
-        for widget in itemInfoWidgets:
-            widget.setEnabled(True)
 
         self.setItemInfoWidgets(item)
         self.updateMenus(item)
