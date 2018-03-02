@@ -638,6 +638,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # DEBUGGING
         print('showDropWidgets')
 
+    # TODO: BREAK THIS UP ...
     def setItemInfoWidgets(self, item):
         widgets = []
         itemOriginTypes = ['']
