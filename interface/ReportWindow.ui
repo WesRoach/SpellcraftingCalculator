@@ -78,6 +78,9 @@
        <property name="text">
         <string>Export as HTML</string>
        </property>
+       <property name="autoDefault">
+        <bool>false</bool>
+       </property>
       </widget>
      </item>
      <item>
