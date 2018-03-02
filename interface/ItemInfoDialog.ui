@@ -277,7 +277,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QGroupBox" name="ItemRestrictionGroup">
+      <widget class="QGroupBox" name="ItemRestrictionsGroup">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
          <horstretch>0</horstretch>
@@ -307,7 +307,7 @@
          <number>5</number>
         </property>
         <item>
-         <widget class="QListWidget" name="ItemRestrictionList">
+         <widget class="QListWidget" name="ItemRestrictionsList">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
             <horstretch>0</horstretch>
@@ -449,7 +449,7 @@
   <tabstop>ItemSpeed</tabstop>
   <tabstop>ItemLeftHand</tabstop>
   <tabstop>ItemRequirement</tabstop>
-  <tabstop>ItemRestrictionList</tabstop>
+  <tabstop>ItemRestrictionsList</tabstop>
   <tabstop>ItemNotes</tabstop>
   <tabstop>CloseButton</tabstop>
  </tabstops>
