@@ -309,12 +309,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         width = testFont.size(Qt.TextSingleLine, "Slot 12: ", tabArray=None).width()
         self.ItemStatsGroup.layout().setColumnMinimumWidth(0, width)
 
-        width = self.setMinimumWidth(['Negative Effect Duration Reduction'])
+        width = self.setMinimumWidth(['Mythical Resist & Cap'])
         for index in range(0, 12):
-            self.SlotLabel.append(getattr(self, 'SlotLabel%d' % index))
-            self.Effect.append(getattr(self, 'Effect%d' % index))
-            self.Effect[index].setFixedSize(QSize(width, defaultFixedHeight))
-            self.Effect[index].activated[str].connect(self.EffectChanged)
+            self.EffectType.append(getattr(self, 'EffectType%d' % index))
+            self.EffectType[index].setFixedSize(QSize(width, defaultFixedHeight))
+            self.EffectType[index].activated[str].connect(self.EffectTypeChanged)
 
         width = self.setMinimumWidth(['100'])
         for index in range(0, 12):
@@ -323,11 +322,18 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.AmountEdit[index].setValidator(QIntValidator(-999, +999, self))
             self.AmountEdit[index].textEdited[str].connect(self.EffectAmountChanged)
 
-        width = self.setMinimumWidth(['Mythical Resist & Cap'])
+        width = self.setMinimumWidth(['100'])
+        for index in range(0, 5):
+            self.AmountStatic.append(getattr(self, 'AmountStatic%d' % index))
+            self.AmountStatic[index].setFixedSize(QSize(width, defaultFixedHeight))
+            self.AmountStatic[index].activated[str].connect(self.EffectAmountChanged)
+
+        width = self.setMinimumWidth(['Negative Effect Duration Reduction'])
         for index in range(0, 12):
-            self.EffectType.append(getattr(self, 'EffectType%d' % index))
-            self.EffectType[index].setFixedSize(QSize(width, defaultFixedHeight))
-            self.EffectType[index].activated[str].connect(self.EffectTypeChanged)
+            self.SlotLabel.append(getattr(self, 'SlotLabel%d' % index))
+            self.Effect.append(getattr(self, 'Effect%d' % index))
+            self.Effect[index].setFixedSize(QSize(width, defaultFixedHeight))
+            self.Effect[index].activated[str].connect(self.EffectChanged)
 
         width = self.setMinimumWidth(['vs. Enemy Players'])
         for index in range(0, 12):
@@ -335,17 +341,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.Requirement[index].setFixedSize(QSize(width, defaultFixedHeight))
             self.Requirement[index].editingFinished.connect(self.EffectRequirementChanged)
 
-        for index in range(0, 7):
-            self.GemName.append(getattr(self, 'GemName%d' % index))
-
-        width = self.setMinimumWidth(['100'])
-        for index in range(0, 5):
-            self.AmountStatic.append(getattr(self, 'AmountStatic%d' % index))
-            self.AmountStatic[index].setFixedSize(QSize(width, defaultFixedHeight))
-            self.AmountStatic[index].activated[str].connect(self.EffectAmountChanged)
-
         for index in range(0, 4):
             self.ImbuePoints.append(getattr(self, 'ImbuePoints%d' % index))
+
+        for index in range(0, 7):
+            self.GemName.append(getattr(self, 'GemName%d' % index))
 
         testItem = Item('Crafted', 'None')
         for index in range(0, testItem.getSlotCount()):
