@@ -309,35 +309,38 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         width = testFont.size(Qt.TextSingleLine, "Slot 12: ", tabArray=None).width()
         self.ItemStatsGroup.layout().setColumnMinimumWidth(0, width)
 
+        width = self.setMinimumWidth(['Negative Effect Duration Reduction'])
         for index in range(0, 12):
             self.SlotLabel.append(getattr(self, 'SlotLabel%d' % index))
             self.Effect.append(getattr(self, 'Effect%d' % index))
-            width = self.setMinimumWidth(['Negative Effect Duration Reduction'])
             self.Effect[index].setFixedSize(QSize(width, defaultFixedHeight))
             self.Effect[index].activated[str].connect(self.EffectChanged)
 
+        width = self.setMinimumWidth(['100'])
+        for index in range(0, 12):
             self.AmountEdit.append(getattr(self, 'AmountEdit%d' % index))
-            width = self.setMinimumWidth(['100'])
             self.AmountEdit[index].setFixedSize(QSize(width, defaultFixedHeight))
             self.AmountEdit[index].setValidator(QIntValidator(-999, +999, self))
             self.AmountEdit[index].textEdited[str].connect(self.EffectAmountChanged)
 
+        width = self.setMinimumWidth(['Mythical Resist & Cap'])
+        for index in range(0, 12):
             self.EffectType.append(getattr(self, 'EffectType%d' % index))
-            width = self.setMinimumWidth(['Mythical Resist & Cap'])
             self.EffectType[index].setFixedSize(QSize(width, defaultFixedHeight))
             self.EffectType[index].activated[str].connect(self.EffectTypeChanged)
 
+        width = self.setMinimumWidth(['vs. Enemy Players'])
+        for index in range(0, 12):
             self.Requirement.append(getattr(self, 'Requirement%d' % index))
-            width = self.setMinimumWidth(['vs. Enemy Players'])
             self.Requirement[index].setFixedSize(QSize(width, defaultFixedHeight))
             self.Requirement[index].editingFinished.connect(self.EffectRequirementChanged)
 
         for index in range(0, 7):
             self.GemName.append(getattr(self, 'GemName%d' % index))
 
+        width = self.setMinimumWidth(['100'])
         for index in range(0, 5):
             self.AmountStatic.append(getattr(self, 'AmountStatic%d' % index))
-            width = self.setMinimumWidth(['100'])
             self.AmountStatic[index].setFixedSize(QSize(width, defaultFixedHeight))
             self.AmountStatic[index].activated[str].connect(self.EffectAmountChanged)
 
