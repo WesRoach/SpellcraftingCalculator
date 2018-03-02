@@ -1227,7 +1227,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def setItemInformation(self):
         if self.ItemInformation.isChecked():
             self.ItemInfoGroup.show()
-            self.ItemRestrictionsGroup.hide()
+            self.ItemRestrictionsGroup.show()
             self.ItemInfoButton.hide()
         if not self.ItemInformation.isChecked():
             self.ItemInfoGroup.hide()
