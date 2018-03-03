@@ -18,46 +18,11 @@ __all__ = [
     'GemNames',
     'ImbuePoints',
     'MythicalCap',
-    'SlotList'
 ]
 
 UnusedList = t2()
 UnusedTable = d2({})
 UnusedValues = t2()
-
-SlotList = {
-
-    'Jewelery': (
-        'Neck',
-        'Cloak',
-        'Jewel',
-        'Belt',
-        'Left Ring',
-        'Right Ring',
-        'Left Wrist',
-        'Right Wrist',
-    ),
-
-    'Armor': (
-        'Chest',
-        'Arms',
-        'Head',
-        'Legs',
-        'Hands',
-        'Feet',
-    ),
-
-    'Weapons': (
-        'Right Hand',
-        'Left Hand',
-        'Two-Handed',
-        'Ranged',
-        'Spare',
-    ),
-
-    'Mythical': (
-        'Mythirian',
-    )}
 
 # =============================================== #
 #            CRAFTING RELATED CONSTANTS           #

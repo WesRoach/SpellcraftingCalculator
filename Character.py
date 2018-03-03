@@ -575,31 +575,9 @@ RaceList = d2(RaceList)
 Races['All'] = d2(Races['All'])
 Races = d2(Races)
 
-armorTypes = d2({
+ArmorTypes = {
 
-    'Albion': t2((
-        'Cloth',
-        'Leather',
-        'Studded',
-        'Chain',
-        'Plate',
-    )),
-
-    'Hibernia': t2((
-        'Cloth',
-        'Leather',
-        'Reinforced',
-        'Scale',
-    )),
-
-    'Midgard': t2((
-        'Cloth',
-        'Leather',
-        'Studded',
-        'Chain',
-    )),
-
-    'All': t2((
+    'All': (
         'Cloth',
         'Leather',
         'Studded',
@@ -607,211 +585,285 @@ armorTypes = d2({
         'Chain',
         'Scale',
         'Plate',
-    )),
-})
+    ),
 
-rightHandTypes = d2({
+    'Albion': (
+        'Cloth',
+        'Leather',
+        'Studded',
+        'Chain',
+        'Plate',
+    ),
 
-    'Albion': t2((
-        'Slash',
-        'Crush',
-        'Thrust',
-        'Flex',
-        'Fist Wraps',
-    )),
+    'Hibernia': (
+        'Cloth',
+        'Leather',
+        'Reinforced',
+        'Scale',
+    ),
 
-    'Hibernia': t2((
-        'Blade',
-        'Blunt',
-        'Piercing',
-        'Fist Wraps',
-    )),
+    'Midgard': (
+        'Cloth',
+        'Leather',
+        'Studded',
+        'Chain',
+    ),
+}
 
-    'Midgard': t2((
-        'Axe',
-        'Hammer',
-        'Sword',
-        'Hand to Hand',
-        'Fist Wraps',
-    )),
+RightHandTypes = {
 
-    'All': t2((
-        'Slash',
-        'Blade',
-        'Sword',
-        'Axe',
+    'All': (
         'Crush',
         'Blunt',
         'Hammer',
         'Thrust',
-        'Piercing',
-        'Flex',
+        'Pierce'
+        'Slash',
+        'Blade',
+        'Axe',
+        'Sword',
+        'Flexible',
+        'Fist Wrap',
         'Hand to Hand',
-        'Fist Wraps',
-    )),
-})
-
-shieldTypes = (
-    'Small Shield',
-    'Medium Shield',
-    'Large Shield',
-)
-
-leftHandTypes = d2({
-
-    'Albion': t2(
-        rightHandTypes['Albion']
-        + shieldTypes
     ),
 
-    'Hibernia': t2(
-        rightHandTypes['Hibernia']
-        + shieldTypes
+    'Albion': (
+        'Crush',
+        'Thrust',
+        'Slash',
+        'Flexible',
+        'Fist Wrap',
     ),
 
-    'Midgard': t2(
-        rightHandTypes['Midgard']
-        + shieldTypes
+    'Hibernia': (
+        'Blunt',
+        'Pierce',
+        'Blade',
+        'Fist Wrap',
     ),
 
-    'All': t2(
-        rightHandTypes['All']
-        + shieldTypes
+    'Midgard': (
+        'Axe',
+        'Hammer',
+        'Sword',
+        'Fist Wrap',
+        'Hand to Hand',
     ),
-})
+}
 
-staveTypes = (
-    'Mauler Staff',
-    'Staff',
-)
+LeftHandTypes = {
 
-instrumentTypes = (
-    'Drum',
-    'Flute',
-    'Lute',
-    'Harp',
-)
-
-twoHandTypes = d2({
-
-    'Albion': t2(
-        rightHandTypes['Albion']
-        + ('Two-Handed', 'Polearm', 'Quarterstaff',)
-        + staveTypes
-        + instrumentTypes
-    ),
-
-    'Hibernia': t2(
-        rightHandTypes['Hibernia']
-        + ('Large Weapon', 'Celtic Spear', 'Scythe',)
-        + staveTypes
-        + instrumentTypes
+    'All': (
+        'Crush',
+        'Blunt',
+        'Hammer',
+        'Thrust',
+        'Pierce'
+        'Slash',
+        'Blade',
+        'Axe',
+        'Sword',
+        'Flexible',
+        'Fist Wrap',
+        'Hand to Hand',
+        'Small Shield',
+        'Medium Shield',
+        'Large Shield',
     ),
 
-    'Midgard': t2(
-        rightHandTypes['Midgard']
-        + ('Spear',)
-        + staveTypes
+    'Albion': (
+        'Crush',
+        'Thrust',
+        'Slash',
+        'Fist Wrap',
+        'Small Shield',
+        'Medium Shield',
+        'Large Shield',
     ),
 
-    'All': t2(
-        rightHandTypes['All']
-        + ('Two-Handed', 'Large Weapon', 'Polearm', 'Celtic Spear',)
-        + ('Axe', 'Hammer', 'Sword', 'Spear', 'Scythe', 'Quarterstaff',)
-        + staveTypes
-        + instrumentTypes
-    ),
-})
-
-rangedTypes = d2({
-
-    'Albion': t2(
-        ('Bow', 'Crossbow', 'Longbow',)
-        + instrumentTypes
+    'Hibernia': (
+        'Blunt',
+        'Pierce',
+        'Blade',
+        'Fist Wrap'
+        'Small Shield',
+        'Medium Shield',
+        'Large Shield',
     ),
 
-    'Hibernia': t2(
-        ('Bow', 'Recurve Bow',)
-        + instrumentTypes
+    'Midgard': (
+        'Axe',
+        'Fist Wrap',
+        'Hand to Hand',
+        'Small Shield',
+        'Medium Shield',
+        'Large Shield',
+    ),
+}
+
+TwoHandTypes = {
+
+    'All': (
+        'Two-Handed',
+        'Polearm'
+        'Large Weapon',
+        'Celtic Spear',
+        'Scythe',
+        'Axe',
+        'Hammer',
+        'Sword',
+        'Spear',
+        'Staff',
+        'Mauler Staff',
+        'Quarterstaff',
+        'Instrument',
     ),
 
-    'Midgard': t2(
-        ('Bow', 'Composite Bow',)
+    'Albion': (
+        'Two-Handed',
+        'Polearm',
+        'Staff'
+        'Quarterstaff'
+        'Mauler Staff'
+        'Instrument',
     ),
 
-    'All': t2(
-        ('Bow', 'Composite Bow', 'Crossbow', 'Longbow', 'Recurve Bow',)
-        + instrumentTypes
-    ),
-})
-
-
-# TODO: ELIMINATE SPARE
-spareTypes = (
-    'Belt',
-    'Cloak',
-    'Jewelry',
-    'Necklass',
-    'Ring',
-    'Wrist',
-    'Mythirian',
-)
-
-spareTypes = d2({
-
-    'Albion': t2(
-        twoHandTypes['Albion']
-        + rangedTypes['Albion'][:-4]
-        + shieldTypes
-        + spareTypes
+    'Hibernia': (
+        'Large Weapon',
+        'Celtic Spear',
+        'Scythe'
+        'Staff',
+        'Mauler Staff'
+        'Instrument',
     ),
 
-    'Hibernia': t2(
-        twoHandTypes['Hibernia']
-        + rangedTypes['Hibernia'][:-4]
-        + shieldTypes
-        + spareTypes
+    'Midgard': (
+        'Axe',
+        'Hammer',
+        'Sword',
+        'Spear',
+        'Staff',
+        'Mauler Staff',
+    ),
+}
+
+RangedTypes = {
+
+    'All': (
+        'Longbow',
+        'Crossbow',
+        'Recurve Bow',
+        'Composite Bow',
+        'Throwing Weapon'
+        'Instrument'
     ),
 
-    'Midgard': t2(
-        twoHandTypes['Midgard']
-        + rangedTypes['Midgard']
-        + shieldTypes
-        + spareTypes
+    'Albion': (
+        'Longbow',
+        'Crossbow',
+        'Instrument',
     ),
 
-    'All': t2(
-        twoHandTypes['All']
-        + rangedTypes['All'][:-4]
-        + shieldTypes
-        + spareTypes
+    'Hibernia': (
+        'Recurve Bow',
+        'Instrument'
     ),
-})
 
-ItemTypes = d2({
-    'Neck': t2(('Necklass',)),
-    'Cloak': t2(('Cloak',)),
-    'Jewel': t2(('Jewelry',)),
-    'Belt': t2(('Belt',)),
-    'Left Ring': t2(('Ring',)),
-    'Right Ring': t2(('Ring',)),
-    'Left Wrist': t2(('Wrist',)),
-    'Right Wrist': t2(('Wrist',)),
-    'Mythical': t2(('Mythirian',)),
+    'Midgard': (
+        'Composite Bow',
+        'Throwing Weapon',
+    ),
+}
 
-    'Chest': armorTypes,
-    'Arms': armorTypes,
-    'Head': armorTypes,
-    'Legs': armorTypes,
-    'Hands': armorTypes,
-    'Feet': armorTypes,
+ItemTypes = {
 
-    'Right Hand': rightHandTypes,
-    'Left Hand': leftHandTypes,
-    'Two-Handed': twoHandTypes,
-    'Ranged': rangedTypes,
-    'Spare': spareTypes,
-})
+    'Jewelery': {
+
+        'Neck': {
+            'All': 'Necklace',
+            'Albion': 'Necklace',
+            'Hibernia': 'Necklace',
+            'Midgard': 'Necklace',
+        },
+
+        'Cloak': {
+            'All': 'Cloak',
+            'Albion': 'Cloak',
+            'Hibernia': 'Cloak',
+            'Midgard': 'Cloak',
+        },
+
+        'Jewel': {
+            'All': 'Jewelry',
+            'Albion': 'Jewelry',
+            'Hibernia': 'Jewelry',
+            'Midgard': 'Jewelry',
+        },
+
+        'Belt': {
+            'All': 'Belt',
+            'Albion': 'Belt',
+            'Hibernia': 'Belt',
+            'Midgard': 'Belt',
+        },
+
+        'Left Ring': {
+            'All': 'Ring',
+            'Albion': 'Ring',
+            'Hibernia': 'Ring',
+            'Midgard': 'Ring'
+        },
+
+        'Right Ring': {
+            'All': 'Ring',
+            'Albion': 'Ring',
+            'Hibernia': 'Ring',
+            'Midgard': 'Ring'
+        },
+
+        'Left Wrist': {
+            'All': 'Wrist',
+            'Albion': 'Wrist',
+            'Hibernia': 'Wrist',
+            'Midgard': 'Wrist'
+        },
+
+        'Right Wrist': {
+            'All': 'Wrist',
+            'Albion': 'Wrist',
+            'Hibernia': 'Wrist',
+            'Midgard': 'Wrist'
+        },
+    },
+
+    'Armor': {
+
+        'Chest': ArmorTypes,
+        'Arms': ArmorTypes,
+        'Head': ArmorTypes,
+        'Legs': ArmorTypes,
+        'Hands': ArmorTypes,
+        'Feet': ArmorTypes,
+    },
+
+    'Weapons': {
+
+        'Right Hand': RightHandTypes,
+        'Left Hand': LeftHandTypes,
+        'Two-Handed': TwoHandTypes,
+        'Ranged': RangedTypes,
+    },
+
+    'Mythical': {
+
+        'Mythirian': {
+            'All': 'Mythirian',
+            'Albion': 'Mythirian',
+            'Hibernia': 'Mythirian',
+            'Midgard': 'Mythirian',
+        }
+    }
+}
 
 if __name__ == "__main__":
     pass
