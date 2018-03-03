@@ -5,9 +5,9 @@ from PyQt5.Qt import QAction, Qt, QKeySequence
 from PyQt5.QtCore import QSize, QModelIndex, QVariant
 from PyQt5.QtGui import QFontMetrics, QIcon, QIntValidator
 from PyQt5.QtWidgets import QFileDialog, QLabel, QListWidgetItem, QMainWindow, QMenu, QMessageBox, QToolBar, QTreeWidgetItem, QTreeWidgetItemIterator, QStyle, QStyleOptionComboBox
-from Character import AllBonusList, AllRealms, ClassList, ItemTypes, Races, Realms
+from Character import AllBonusList, AllRealms, ClassList, ItemDamageTypes, ItemOrigins, ItemTypes, Races, Realms
 from Constants import Cap, CraftedTypeList, CraftedEffectList, CraftedValuesList, DropTypeList, DropEffectList
-from Constants import EnhancedTypeList, EnhancedEffectList, EnhancedValuesList, MythicalCap, SlotList
+from Constants import EnhancedTypeList, EnhancedEffectList, EnhancedValuesList, MythicalCap
 from Item import Item
 from ReportWindow import ReportWindow
 from lxml import etree
@@ -250,7 +250,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         width = testFont.size(Qt.TextSingleLine, "+5", tabArray = None).width()
         self.ResistGroup.layout().setColumnMinimumWidth(3, width)
 
-        for key, slots in SlotList.items():
+        for key, slots in ItemTypes.items():
             parent = QTreeWidgetItem(self.SlotListTreeView, [key])
             parent.setFlags(parent.flags() & ~Qt.ItemIsUserCheckable)
             if key == 'Jewelery':
@@ -263,7 +263,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         # TODO: REIMPLEMENT `QTreeView.sizeHint()`
         self.SlotListTreeView.setFixedWidth(142)
-        self.CharacterRealm.insertItems(0, list(Realms))
+        self.CharacterRealm.insertItems(0, Realms)
 
         self.SwitchOnType = {
 
@@ -450,20 +450,18 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.CharacterRealm.setCurrentText('Midgard')
         self.CharacterRealmChanged()
 
-        for key, slots in SlotList.items():
-            for slot in slots:
-                if key == 'Armor':
-                    item = Item('Crafted', slot, self.CurrentRealm, self.ItemIndex)
+        for parent, slots in ItemTypes.items():
+            for location in slots:
+                if location == 'Armor':
+                    item = Item('Crafted', parent, location, self.CurrentRealm, self.ItemIndex)
                     item.Name = item.ActiveState + ' Item'
                     self.ItemIndex += 1
-                    self.ItemAttributeList[slot] = item
-                    self.ItemDictionary[slot] = [item]
                 else:
-                    item = Item('Dropped', slot, self.CurrentRealm, self.ItemIndex)
+                    item = Item('Dropped', parent, location, 'All', self.ItemIndex)
                     item.Name = item.ActiveState + ' Item'
                     self.ItemIndex += 1
-                    self.ItemAttributeList[slot] = item
-                    self.ItemDictionary[slot] = [item]
+                self.ItemAttributeList[location] = item
+                self.ItemDictionary[location] = [item]
 
         # SET THE INITIAL SLOT
         self.ItemSelected('Neck')
@@ -573,7 +571,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         self.ItemDictionary.clear()
         self.ItemAttributeList.clear()
-        for key, slots in SlotList.items():
+        for key, slots in ItemTypes.items():
             for slot in slots:
                 self.ItemDictionary[slot] = []
 
@@ -695,49 +693,28 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         print('showDropWidgets')
 
     def setItemInfoWidgets(self, item):
-        for widget in (self.ItemRealm, self.ItemOrigin, self.ItemDamageType):
-            widget.clear()
+        for widget in (
+                self.ItemRealm,
+                self.ItemType,
+                self.ItemOrigin,
+                self.ItemDamageType
+        ): widget.clear()
 
-        # TODO: SIMPLIFY THIS ..
-        if item.Location in SlotList['Jewelery']:
-            for widget in self.ItemInfoWidgets['Jewelery']:
-                widget.setDisabled(True)
-            for key, value in ItemTypes.items():
-                if item.Location == key:
-                    self.ItemType.clear()
-                    self.ItemType.insertItems(0, value)
-        elif item.Location in SlotList['Armor']:
-            for widget in self.ItemInfoWidgets['Armor']:
-                widget.setDisabled(True)
-            for key, value in ItemTypes.items():
-                if item.Location == key:
-                    self.ItemType.clear()
-                    self.ItemType.insertItems(0, ItemTypes[key][item.Realm])
-        elif item.Location in SlotList['Weapons']:
-            for widget in self.ItemInfoWidgets['Weapons']:
-                widget.setDisabled(True)
-            for key, value in ItemTypes.items():
-                if item.Location == key:
-                    self.ItemType.clear()
-                    self.ItemType.insertItems(0, ItemTypes[key][item.Realm])
-        elif item.Location in SlotList['Mythical']:
-            for widget in self.ItemInfoWidgets['Mythical']:
-                widget.setDisabled(True)
-            for key, value in ItemTypes.items():
-                if item.Location in SlotList['Mythical'] == value:
-                    self.ItemType.clear()
-                    self.ItemType.insertItems(0, ItemTypes[key])
+        for parent, location in ItemTypes.items():
+            if item.Location in location:
+                for widget in self.ItemInfoWidgets[parent]:
+                    widget.setDisabled(True)
 
         if item.ActiveState == 'Dropped':
             self.ItemRealm.insertItems(0, AllRealms)
-            self.ItemOrigin.insertItems(0, ['', 'Drop', 'Quest', 'Artifact', 'Merchant'])
-            if item.Location in SlotList['Weapons']:
-                self.ItemDamageType.insertItems(0, ['', 'Slash', 'Thrust', 'Crush'])
-        else:
+        elif item.ActiveState == 'Crafted':
             self.ItemRealm.insertItems(0, Realms)
-            self.ItemOrigin.insertItems(0, ['', 'Crafted'])
-            if item.Location in SlotList['Weapons']:
-                self.ItemDamageType.insertItems(0, ['', 'Slash', 'Thrust', 'Crush', 'Elemental'])
+
+        self.ItemType.insertItems(0, ItemTypes[item.Parent][item.Location][item.Realm])
+        self.ItemOrigin.insertItems(0, ItemOrigins[item.ActiveState])
+
+        if item.Location in ItemTypes['Weapons']:
+            self.ItemDamageType.insertItems(0, ItemDamageTypes[item.ActiveState])
 
         self.ItemRealm.setCurrentText(item.Realm)
         self.ItemOrigin.setCurrentText(item.Origin)
@@ -1349,7 +1326,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if not self.SlotListTreeView.selectedIndexes():
             for slot in self.SlotListTreeView.findItems(selection, Qt.MatchRecursive):
                 slot.setSelected(True)
-        for key, slots in SlotList.items():
+        for key, slots in ItemTypes.items():
             for slot in slots:
                 if selection == slot:
                     self.CurrentItemLabel = slot
@@ -1500,7 +1477,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.EffectType[index].insertItems(0, EnhancedTypeList)
         elif item.getSlot(index).getSlotType() == 'Dropped':
             self.EffectType[index].insertItems(0, DropTypeList)
-        if item.Location not in ('Two-Handed', 'Spare'):
+        if item.Location != 'Two-Handed':
             self.EffectType[index].removeItem(self.EffectType[index].findText('Focus'))
         self.EffectType[index].setCurrentText(etype)
         item.getSlot(index).setEffectType(etype)
