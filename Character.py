@@ -7,6 +7,8 @@ __all__ = [
     'AllBonusList',
     'AllRealms',
     'ClassList',
+    'ItemDamageTypes',
+    'ItemOrigins',
     'ItemTypes',
     'RaceList',
     'Races',
@@ -575,9 +577,13 @@ RaceList = d2(RaceList)
 Races['All'] = d2(Races['All'])
 Races = d2(Races)
 
+# =============================================== #
+#              ITEM RELATED CONSTANTS             #
+# =============================================== #
+
 ArmorTypes = {
 
-    'All': (
+    'All': [
         'Cloth',
         'Leather',
         'Studded',
@@ -585,34 +591,34 @@ ArmorTypes = {
         'Chain',
         'Scale',
         'Plate',
-    ),
+    ],
 
-    'Albion': (
+    'Albion': [
         'Cloth',
         'Leather',
         'Studded',
         'Chain',
         'Plate',
-    ),
+    ],
 
-    'Hibernia': (
+    'Hibernia': [
         'Cloth',
         'Leather',
         'Reinforced',
         'Scale',
-    ),
+    ],
 
-    'Midgard': (
+    'Midgard': [
         'Cloth',
         'Leather',
         'Studded',
         'Chain',
-    ),
+    ],
 }
 
 RightHandTypes = {
 
-    'All': (
+    'All': [
         'Crush',
         'Blunt',
         'Hammer',
@@ -625,35 +631,35 @@ RightHandTypes = {
         'Flexible',
         'Fist Wrap',
         'Hand to Hand',
-    ),
+    ],
 
-    'Albion': (
+    'Albion': [
         'Crush',
         'Thrust',
         'Slash',
         'Flexible',
         'Fist Wrap',
-    ),
+    ],
 
-    'Hibernia': (
+    'Hibernia': [
         'Blunt',
         'Pierce',
         'Blade',
         'Fist Wrap',
-    ),
+    ],
 
-    'Midgard': (
+    'Midgard': [
         'Axe',
         'Hammer',
         'Sword',
         'Fist Wrap',
         'Hand to Hand',
-    ),
+    ],
 }
 
 LeftHandTypes = {
 
-    'All': (
+    'All': [
         'Crush',
         'Blunt',
         'Hammer',
@@ -669,9 +675,9 @@ LeftHandTypes = {
         'Small Shield',
         'Medium Shield',
         'Large Shield',
-    ),
+    ],
 
-    'Albion': (
+    'Albion': [
         'Crush',
         'Thrust',
         'Slash',
@@ -679,9 +685,9 @@ LeftHandTypes = {
         'Small Shield',
         'Medium Shield',
         'Large Shield',
-    ),
+    ],
 
-    'Hibernia': (
+    'Hibernia': [
         'Blunt',
         'Pierce',
         'Blade',
@@ -689,21 +695,21 @@ LeftHandTypes = {
         'Small Shield',
         'Medium Shield',
         'Large Shield',
-    ),
+    ],
 
-    'Midgard': (
+    'Midgard': [
         'Axe',
         'Fist Wrap',
         'Hand to Hand',
         'Small Shield',
         'Medium Shield',
         'Large Shield',
-    ),
+    ],
 }
 
 TwoHandTypes = {
 
-    'All': (
+    'All': [
         'Two-Handed',
         'Polearm'
         'Large Weapon',
@@ -717,62 +723,62 @@ TwoHandTypes = {
         'Mauler Staff',
         'Quarterstaff',
         'Instrument',
-    ),
+    ],
 
-    'Albion': (
+    'Albion': [
         'Two-Handed',
         'Polearm',
         'Staff'
         'Quarterstaff'
         'Mauler Staff'
         'Instrument',
-    ),
+    ],
 
-    'Hibernia': (
+    'Hibernia': [
         'Large Weapon',
         'Celtic Spear',
         'Scythe'
         'Staff',
         'Mauler Staff'
         'Instrument',
-    ),
+    ],
 
-    'Midgard': (
+    'Midgard': [
         'Axe',
         'Hammer',
         'Sword',
         'Spear',
         'Staff',
         'Mauler Staff',
-    ),
+    ],
 }
 
 RangedTypes = {
 
-    'All': (
+    'All': [
         'Longbow',
         'Crossbow',
         'Recurve Bow',
         'Composite Bow',
         'Throwing Weapon'
         'Instrument'
-    ),
+    ],
 
-    'Albion': (
+    'Albion': [
         'Longbow',
         'Crossbow',
         'Instrument',
-    ),
+    ],
 
-    'Hibernia': (
+    'Hibernia': [
         'Recurve Bow',
         'Instrument'
-    ),
+    ],
 
-    'Midgard': (
+    'Midgard': [
         'Composite Bow',
         'Throwing Weapon',
-    ),
+    ],
 }
 
 ItemTypes = {
@@ -780,59 +786,59 @@ ItemTypes = {
     'Jewelery': {
 
         'Neck': {
-            'All': 'Necklace',
-            'Albion': 'Necklace',
-            'Hibernia': 'Necklace',
-            'Midgard': 'Necklace',
+            'All': ['Necklace'],
+            'Albion': ['Necklace'],
+            'Hibernia': ['Necklace'],
+            'Midgard': ['Necklace'],
         },
 
         'Cloak': {
-            'All': 'Cloak',
-            'Albion': 'Cloak',
-            'Hibernia': 'Cloak',
-            'Midgard': 'Cloak',
+            'All': ['Cloak'],
+            'Albion': ['Cloak'],
+            'Hibernia': ['Cloak'],
+            'Midgard': ['Cloak'],
         },
 
         'Jewel': {
-            'All': 'Jewelry',
-            'Albion': 'Jewelry',
-            'Hibernia': 'Jewelry',
-            'Midgard': 'Jewelry',
+            'All': ['Jewelry'],
+            'Albion': ['Jewelry'],
+            'Hibernia': ['Jewelry'],
+            'Midgard': ['Jewelry'],
         },
 
         'Belt': {
-            'All': 'Belt',
-            'Albion': 'Belt',
-            'Hibernia': 'Belt',
-            'Midgard': 'Belt',
+            'All': ['Belt'],
+            'Albion': ['Belt'],
+            'Hibernia': ['Belt'],
+            'Midgard': ['Belt'],
         },
 
         'Left Ring': {
-            'All': 'Ring',
-            'Albion': 'Ring',
-            'Hibernia': 'Ring',
-            'Midgard': 'Ring'
+            'All': ['Ring'],
+            'Albion': ['Ring'],
+            'Hibernia': ['Ring'],
+            'Midgard': ['Ring'],
         },
 
         'Right Ring': {
-            'All': 'Ring',
-            'Albion': 'Ring',
-            'Hibernia': 'Ring',
-            'Midgard': 'Ring'
+            'All': ['Ring'],
+            'Albion': ['Ring'],
+            'Hibernia': ['Ring'],
+            'Midgard': ['Ring'],
         },
 
         'Left Wrist': {
-            'All': 'Wrist',
-            'Albion': 'Wrist',
-            'Hibernia': 'Wrist',
-            'Midgard': 'Wrist'
+            'All': ['Wrist'],
+            'Albion': ['Wrist'],
+            'Hibernia': ['Wrist'],
+            'Midgard': ['Wrist'],
         },
 
         'Right Wrist': {
-            'All': 'Wrist',
-            'Albion': 'Wrist',
-            'Hibernia': 'Wrist',
-            'Midgard': 'Wrist'
+            'All': ['Wrist'],
+            'Albion': ['Wrist'],
+            'Hibernia': ['Wrist'],
+            'Midgard': ['Wrist'],
         },
     },
 
@@ -857,12 +863,42 @@ ItemTypes = {
     'Mythical': {
 
         'Mythirian': {
-            'All': 'Mythirian',
-            'Albion': 'Mythirian',
-            'Hibernia': 'Mythirian',
-            'Midgard': 'Mythirian',
-        }
+            'All': ['Mythirian'],
+            'Albion': ['Mythirian'],
+            'Hibernia': ['Mythirian'],
+            'Midgard': ['Mythirian'],
+        },
     }
+}
+
+ItemDamageTypes = {
+
+    'Dropped': [
+        'Slash',
+        'Thrust',
+        'Crush',
+    ],
+
+    'Crafted': [
+        'Slash',
+        'Thrust',
+        'Crush',
+        'Elemental',
+    ],
+}
+
+ItemOrigins = {
+
+    'Dropped': [
+        'Drop',
+        'Quest',
+        'Artifact',
+        'Merchant',
+    ],
+
+    'Crafted': [
+        'Crafted',
+    ],
 }
 
 if __name__ == "__main__":
