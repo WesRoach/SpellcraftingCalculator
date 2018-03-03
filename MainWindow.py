@@ -571,7 +571,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         self.ItemDictionary.clear()
         self.ItemAttributeList.clear()
-        for key, slots in ItemTypes.items():
+        for parent, slots in ItemTypes.items():
             for slot in slots:
                 self.ItemDictionary[slot] = []
 
@@ -1218,7 +1218,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # DEBUGGING
         print('insertSkill')
 
-    # TODO: NOT COMPLETE
+    # TODO: NOT COMPLETE, BAD VARIABLES ...
     def updateMenus(self, item):
         self.ItemNewMenu.clear()
         self.ItemTypeMenu.clear()
@@ -1326,10 +1326,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if not self.SlotListTreeView.selectedIndexes():
             for slot in self.SlotListTreeView.findItems(selection, Qt.MatchRecursive):
                 slot.setSelected(True)
-        for key, slots in ItemTypes.items():
-            for slot in slots:
-                if selection == slot:
-                    self.CurrentItemLabel = slot
+        for parent, slots in ItemTypes.items():
+            for location in slots:
+                if selection == location:
+                    self.CurrentItemLabel = location
                     self.RestoreItem(self.ItemAttributeList[self.CurrentItemLabel])
 
         # DEBUGGING
