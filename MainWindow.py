@@ -256,13 +256,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             parent.setFlags(parent.flags() & ~Qt.ItemIsUserCheckable)
             if key == 'Jewelery':
                 parent.setExpanded(True)
-            for slot in slots:
-                child = QTreeWidgetItem([slot])
+            for location in slots:
+                child = QTreeWidgetItem([location])
                 child.setFlags(child.flags() | Qt.ItemIsUserCheckable)
                 child.setCheckState(0, Qt.Unchecked)
                 parent.addChild(child)
 
-        # TODO: REIMPLEMENT `QTreeView.sizeHint()`
+        # TODO: REIMPLEMENT `QTreeView.sizeHint()` ...
         self.SlotListTreeView.setFixedWidth(142)
         self.CharacterRealm.insertItems(0, Realms)
 
@@ -1692,7 +1692,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # DEBUGGING
         print('loadItem')
 
-    # TODO: NEED TO SET A DEFAULT PATH
+    # TODO: NEED TO SET A DEFAULT PATH ...
     def saveItem(self):
         item = self.ItemAttributeList[self.CurrentItemLabel]
         if not item.Name:
