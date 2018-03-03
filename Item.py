@@ -1,7 +1,7 @@
 # HEADER PLACE HOLDER
 
 from Character import ItemTypes
-from Constants import CraftedEffectTable, CraftedValuesList, GemNames, ImbuePoints, SlotList
+from Constants import CraftedEffectTable, CraftedValuesList, GemNames, ImbuePoints
 from lxml import etree
 
 
@@ -29,34 +29,19 @@ class Item:
         self.Index = index
         self.SlotList = self.makeItemSlots()
 
-        # SET THE INITIAL ITEM PROPERTIES
-        self.setInitialItemProperties()
-
-    def setInitialItemProperties(self):
-        if self.Location in SlotList['Jewelery']:
+        # TODO: SET INITIAL ITEM TYPE ... MAYBE ...
+        if self.Location in ItemTypes['Jewelery']:
             self.Level = '50'
-            for key, value in ItemTypes.items():
-                if self.Location == key:
-                    self.Type = ItemTypes[key][0]
             self.Equipped = 2
-        elif self.Location in SlotList['Armor']:
+        elif self.Location in ItemTypes['Armor']:
             self.Level = '51'
-            for key, value in ItemTypes.items():
-                if self.Location == key:
-                    self.Type = ItemTypes[key][self.Realm][0]
             self.Equipped = 2
-        elif self.Location in SlotList['Weapons']:
+        elif self.Location in ItemTypes['Weapons']:
             self.Level = '51'
-            for key, value in ItemTypes.items():
-                if self.Location == key:
-                    self.Type = ItemTypes[key][self.Realm][0]
             self.Equipped = 0
-        elif self.Location in SlotList['Mythical']:
+        elif self.Location in ItemTypes['Mythical']:
             self.Level = '50'
-            for key, value in ItemTypes.items():
-                if self.Location in SlotList['Mythical'] == value:
-                    self.Type = ItemTypes[key][0]
-            self.Equipped = 2
+            self.Equipped = 0
 
     def makeItemSlots(self):
         ItemSlots = []
