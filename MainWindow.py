@@ -75,6 +75,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.CurrentRealm = ''
         self.CurrentClass = ''
         self.CurrentRace = ''
+        self.CurrentItemParent = ''
         self.CurrentItemLabel = ''
 
         self.TemplateName = None
@@ -337,7 +338,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         for index in range(0, 7):
             self.GemName.append(getattr(self, 'GemName%d' % index))
 
-        testItem = Item('Crafted', 'None')
+        testItem = Item('Crafted')
         for index in range(0, testItem.getSlotCount()):
             self.SwitchOnType['Crafted'].append(self.SlotLabel[index])
             self.SwitchOnType['Crafted'].append(self.EffectType[index])
@@ -347,7 +348,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             if index < 4:
                 self.SwitchOnType['Crafted'].append(self.ImbuePoints[index])
 
-        testItem = Item('Legendary', 'None')
+        testItem = Item('Legendary')
         for index in range(0, testItem.getSlotCount()):
             self.SwitchOnType['Legendary'].append(self.SlotLabel[index])
             self.SwitchOnType['Legendary'].append(self.EffectType[index])
@@ -359,7 +360,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             if index > 3:
                 self.SwitchOnType['Legendary'].append(self.AmountEdit[index])
 
-        testItem = Item('Dropped', 'None')
+        testItem = Item('Dropped')
         for index in range(0, testItem.getSlotCount()):
             self.SwitchOnType['Dropped'].append(self.SlotLabel[index])
             self.SwitchOnType['Dropped'].append(self.EffectType[index])
@@ -1329,6 +1330,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         for parent, slots in ItemTypes.items():
             for location in slots:
                 if selection == location:
+                    self.CurrentItemParent = parent
                     self.CurrentItemLabel = location
                     self.RestoreItem(self.ItemAttributeList[self.CurrentItemLabel])
 
@@ -1573,7 +1575,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def newItem(self, action):
         newItemType = action.text().split(None, 1)[0]
         equipped = self.ItemAttributeList[self.CurrentItemLabel].Equipped
-        item = Item(newItemType, self.CurrentItemLabel, self.CurrentRealm, self.ItemIndex)
+        item = Item(newItemType, self.CurrentItemParent, self.CurrentItemLabel, self.CurrentRealm, self.ItemIndex)
         item.Name = action.text()
         self.ItemDictionary[self.CurrentItemLabel].insert(0, item)
         self.ItemAttributeList[self.CurrentItemLabel] = item
@@ -1621,7 +1623,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         newItemType = action.text().split(None, 1)[0]
         equipped = self.ItemAttributeList[self.CurrentItemLabel].Equipped
         index = self.ItemAttributeList[self.CurrentItemLabel].Index
-        item = Item(newItemType, self.CurrentItemLabel, self.CurrentRealm, index)
+        item = Item(newItemType, self.CurrentItemParent, self.CurrentItemLabel, self.CurrentRealm, index)
         item.Name = action.text()
         del self.ItemDictionary[self.CurrentItemLabel][0]
         self.ItemDictionary[self.CurrentItemLabel].insert(0, item)
@@ -1651,7 +1653,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         item = self.ItemAttributeList[self.CurrentItemLabel]
         itemState = self.ItemAttributeList[self.CurrentItemLabel].Equipped
         self.ItemDictionary[self.CurrentItemLabel].remove(item)
-        item = Item(item.ActiveState, self.CurrentItemLabel, self.CurrentRealm, item.Index)
+        item = Item(item.ActiveState, self.CurrentItemParent, self.CurrentItemLabel, self.CurrentRealm, item.Index)
         item.Name = item.ActiveState + ' Item'
         self.ItemDictionary[self.CurrentItemLabel].insert(0, item)
         self.ItemAttributeList[self.CurrentItemLabel] = item
@@ -1668,14 +1670,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # DEBUGGING
         print('clearItemSlots')
 
-    # TODO: NEED TO SET A DEFAULT PATH
+    # TODO: NEED TO SET A DEFAULT PATH ...
     def loadItem(self):
         options = QFileDialog.Options()
         filename, filters = QFileDialog.getOpenFileName(
             self, 'Load Item:', '', 'Items (*.xml);; All Files (*.*)', options = options,)
         if filename == '': return
 
-        item = Item('Imported', self.CurrentItemLabel, self.CurrentRealm, self.ItemIndex)
+        item = Item('Imported', self.CurrentItemParent, self.CurrentItemLabel, self.CurrentRealm, self.ItemIndex)
         if item.importFromXML(filename) != -1:
             self.ItemDictionary[self.CurrentItemLabel].insert(0, item)
             self.ItemAttributeList[self.CurrentItemLabel] = item
