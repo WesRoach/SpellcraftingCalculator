@@ -781,6 +781,7 @@ RangedTypes = {
     ],
 }
 
+# TODO: THIS IS A MESS ... CLEAN IT UP!
 ItemTypes = {
 
     'Jewelery': {
