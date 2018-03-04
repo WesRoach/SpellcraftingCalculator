@@ -251,19 +251,19 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         width = testFont.size(Qt.TextSingleLine, "+5", tabArray = None).width()
         self.ResistGroup.layout().setColumnMinimumWidth(3, width)
 
-        for key, slots in ItemTypes.items():
+        for key, locations in ItemTypes.items():
             parent = QTreeWidgetItem(self.SlotListTreeView, [key])
             parent.setFlags(parent.flags() & ~Qt.ItemIsUserCheckable)
             if key == 'Jewelery':
                 parent.setExpanded(True)
-            for location in slots:
+            for location in locations:
                 child = QTreeWidgetItem([location])
                 child.setFlags(child.flags() | Qt.ItemIsUserCheckable)
                 child.setCheckState(0, Qt.Unchecked)
                 parent.addChild(child)
 
-        # TODO: REIMPLEMENT `QTreeView.sizeHint()` ...
-        self.SlotListTreeView.setFixedWidth(142)
+        # TODO: SET A SANE (DYNAMIC) MINIMAL WIDTH ...
+        self.SlotListTreeView.setMinimumWidth(142)
         self.CharacterRealm.insertItems(0, Realms)
 
         self.SwitchOnType = {
@@ -451,8 +451,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.CharacterRealm.setCurrentText('Midgard')
         self.CharacterRealmChanged()
 
-        for parent, slots in ItemTypes.items():
-            for location in slots:
+        for parent, locations in ItemTypes.items():
+            for location in locations:
                 if parent == 'Armor':
                     item = Item('Crafted', location, self.CurrentRealm, self.ItemIndex)
                     item.Name = item.ActiveState + ' Item'
@@ -574,9 +574,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         self.ItemDictionary.clear()
         self.ItemAttributeList.clear()
-        for parent, slots in ItemTypes.items():
-            for slot in slots:
-                self.ItemDictionary[slot] = []
+        for parent, locations in ItemTypes.items():
+            for location in locations:
+                self.ItemDictionary[location] = []
 
         for item_xml in items:
             item = Item('Imported')
@@ -703,18 +703,21 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 self.ItemDamageType
         ): widget.clear()
 
-        for parent, location in ItemTypes.items():
-            if item.Location in location:
+        for parent, locations in ItemTypes.items():
+            if item.Location in locations:
                 for widget in self.ItemInfoWidgets[parent]:
                     widget.setDisabled(True)
 
-        if item.ActiveState == 'Dropped':
-            self.ItemRealm.insertItems(0, AllRealms)
-        elif item.ActiveState in ('Crafted', 'Legendary'):
+        if item.ActiveState in ('Crafted', 'Legendary'):
             self.ItemRealm.insertItems(0, Realms)
+        else:
+            self.ItemRealm.insertItems(0, AllRealms)
 
-        # TODO: TEST IF 'item.Realm' EXISTS IN DICTIONARY ... IF NOT, USE 'All' ...
-        self.ItemType.insertItems(0, ItemTypes[self.CurrentItemRoot][item.Location][item.Realm])
+        if item.Realm in ItemTypes[self.CurrentItemRoot][item.Location]:
+            self.ItemType.insertItems(0, ItemTypes[self.CurrentItemRoot][item.Location][item.Realm])
+        else:
+            self.ItemType.insertItems(0, ItemTypes[self.CurrentItemRoot][item.Location]['All'])
+
         self.ItemOrigin.insertItems(0, ItemOrigins[item.ActiveState])
 
         if item.Location in ItemTypes['Weapons']:
@@ -736,6 +739,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ItemRequirement.setText(item.Requirement)
         self.ItemNotes.setPlainText(item.Notes)
         self.showItemRestrictions(item)
+
+        # for key, value in TestDict.items():
+        #     print('Key:', key, ', Value:', value)
+        #     if 'Legendary' in key:
+        #         print(True)
 
         # DEBUGGING
         print('setItemInfoWidgets')
@@ -1330,8 +1338,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if not self.SlotListTreeView.selectedIndexes():
             for slot in self.SlotListTreeView.findItems(selection, Qt.MatchRecursive):
                 slot.setSelected(True)
-        for parent, slots in ItemTypes.items():
-            for location in slots:
+        for parent, locations in ItemTypes.items():
+            for location in locations:
                 if selection == location:
                     self.CurrentItemRoot = parent
                     self.CurrentItemLabel = location
@@ -1578,7 +1586,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def newItem(self, action):
         newItemType = action.text().split(None, 1)[0]
         equipped = self.ItemAttributeList[self.CurrentItemLabel].Equipped
-        item = Item(newItemType, self.CurrentItemLabel, self.CurrentRealm, self.ItemIndex)
+        if newItemType in ('Crafted', 'Legendary'):
+            item = Item(newItemType, self.CurrentItemLabel, self.CurrentRealm, self.ItemIndex)
+        else:
+            item = Item(newItemType, self.CurrentItemLabel, 'All', self.ItemIndex)
         item.Name = action.text()
         self.ItemDictionary[self.CurrentItemLabel].insert(0, item)
         self.ItemAttributeList[self.CurrentItemLabel] = item
@@ -1626,7 +1637,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         newItemType = action.text().split(None, 1)[0]
         equipped = self.ItemAttributeList[self.CurrentItemLabel].Equipped
         index = self.ItemAttributeList[self.CurrentItemLabel].Index
-        item = Item(newItemType, self.CurrentItemLabel, self.CurrentRealm, index)
+        if newItemType in ('Crafted', 'Legendary'):
+            item = Item(newItemType, self.CurrentItemLabel, self.CurrentRealm, index)
+        else:
+            item = Item(newItemType, self.CurrentItemLabel, 'All', index)
         item.Name = action.text()
         del self.ItemDictionary[self.CurrentItemLabel][0]
         self.ItemDictionary[self.CurrentItemLabel].insert(0, item)
@@ -1656,7 +1670,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         item = self.ItemAttributeList[self.CurrentItemLabel]
         itemState = self.ItemAttributeList[self.CurrentItemLabel].Equipped
         self.ItemDictionary[self.CurrentItemLabel].remove(item)
-        item = Item(item.ActiveState, self.CurrentItemLabel, self.CurrentRealm, item.Index)
+        if item.ActiveState in ('Crafted', 'Legendary'):
+            item = Item(item.ActiveState, self.CurrentItemLabel, self.CurrentRealm, item.Index)
+        else:
+            item = Item(item.ActiveState, self.CurrentItemLabel, 'All', item.Index)
         item.Name = item.ActiveState + ' Item'
         self.ItemDictionary[self.CurrentItemLabel].insert(0, item)
         self.ItemAttributeList[self.CurrentItemLabel] = item
