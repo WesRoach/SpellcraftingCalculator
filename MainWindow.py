@@ -1371,7 +1371,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # DEBUGGING
         print('ItemStateChanged')
 
-    # TODO: UPDATE ITEM TYPE AND DAMAGE LIST WHEN REALM CHANGES ...
+    # TODO: UPDATE ITEM TYPE AND DAMAGE WHEN REALM
+    # CHANGES AS THE VALUES MIGHT NOT EXIST ...
     def ItemRealmChanged(self):
         item = self.ItemAttributeList[self.CurrentItemLabel]
         item.Realm = self.ItemRealm.currentText()
@@ -1380,7 +1381,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # DEBUGGING
         print('ItemRealmChanged')
 
-    # TODO: ACCOUNT FOR MIS-LABELED ITEMS
     def ItemTypeChanged(self):
         item = self.ItemAttributeList[self.CurrentItemLabel]
         item.Type = self.ItemType.currentText()
@@ -1743,7 +1743,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # DEBUGGING
         print('deleteItem')
 
-    # TODO: ENSURE THAT ALL VARIABLE DECLARATIONS GET RESET ...
+    # TODO: NEED TO ENSURE THAT ALL VARIABLE
+    # DECLARATIONS ARE GETTING RESET ...
     def newTemplate(self):
         self.initialize()
 
