@@ -623,7 +623,7 @@ RightHandTypes = {
         'Blunt',
         'Hammer',
         'Thrust',
-        'Pierce'
+        'Pierce',
         'Slash',
         'Blade',
         'Axe',
@@ -664,7 +664,7 @@ LeftHandTypes = {
         'Blunt',
         'Hammer',
         'Thrust',
-        'Pierce'
+        'Pierce',
         'Slash',
         'Blade',
         'Axe',
@@ -691,7 +691,7 @@ LeftHandTypes = {
         'Blunt',
         'Pierce',
         'Blade',
-        'Fist Wrap'
+        'Fist Wrap',
         'Small Shield',
         'Medium Shield',
         'Large Shield',
@@ -711,7 +711,7 @@ TwoHandTypes = {
 
     'All': [
         'Two-Handed',
-        'Polearm'
+        'Polearm',
         'Large Weapon',
         'Celtic Spear',
         'Scythe',
@@ -728,18 +728,18 @@ TwoHandTypes = {
     'Albion': [
         'Two-Handed',
         'Polearm',
-        'Staff'
-        'Quarterstaff'
-        'Mauler Staff'
+        'Staff',
+        'Quarterstaff',
+        'Mauler Staff',
         'Instrument',
     ],
 
     'Hibernia': [
         'Large Weapon',
         'Celtic Spear',
-        'Scythe'
+        'Scythe',
         'Staff',
-        'Mauler Staff'
+        'Mauler Staff',
         'Instrument',
     ],
 
