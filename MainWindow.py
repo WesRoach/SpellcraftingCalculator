@@ -461,6 +461,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     item = Item('Dropped', parent, location, 'All', self.ItemIndex)
                     item.Name = item.ActiveState + ' Item'
                     self.ItemIndex += 1
+
+                # TODO: SET 'item.Level', 'item.Equipped', & 'item.Type'
                 self.ItemAttributeList[location] = item
                 self.ItemDictionary[location] = [item]
 
@@ -708,9 +710,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         if item.ActiveState == 'Dropped':
             self.ItemRealm.insertItems(0, AllRealms)
-        elif item.ActiveState == 'Crafted':
+        elif item.ActiveState in ('Crafted', 'Legendary'):
             self.ItemRealm.insertItems(0, Realms)
 
+        # TODO: TEST IF 'item.Realm' EXISTS IN DICTIONARY ... IF NOT, USE 'All'
         self.ItemType.insertItems(0, ItemTypes[item.Parent][item.Location][item.Realm])
         self.ItemOrigin.insertItems(0, ItemOrigins[item.ActiveState])
 
