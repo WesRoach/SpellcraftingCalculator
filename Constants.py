@@ -427,7 +427,7 @@ SkillTable = {
         'Staff': ('Earthen', 'Battle Jewel',),
         'Stealth': ('Airy', 'Battle Jewel',),
         'Thrust': ('Dusty', 'War Sigil',),
-        'Two Handed': ('Heated', 'War Sigil',),
+        'Two-Handed': ('Heated', 'War Sigil',),
         'Wind Magic': ('Airy', 'Evocation Sigil',),
     },
 
