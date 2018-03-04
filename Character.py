@@ -958,36 +958,43 @@ ItemTypes = {
                 'Mythirian',
             ],
         },
-    }
+    },
 }
 
 ItemDamageTypes = {
+
+    'Crafted': [
+        'Slash',
+        'Thrust',
+        'Crush',
+    ],
+
+    'Legendary': [
+        'Elemental',
+    ],
 
     'Dropped': [
         'Slash',
         'Thrust',
         'Crush',
     ],
-
-    'Crafted': [
-        'Slash',
-        'Thrust',
-        'Crush',
-        'Elemental',
-    ],
 }
 
 ItemOrigins = {
+
+    'Crafted': [
+        'Crafted',
+    ],
+
+    'Legendary': [
+        'Crafted',
+    ],
 
     'Dropped': [
         'Drop',
         'Quest',
         'Artifact',
         'Merchant',
-    ],
-
-    'Crafted': [
-        'Crafted',
     ],
 }
 
