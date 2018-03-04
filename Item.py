@@ -7,9 +7,10 @@ from lxml import etree
 
 class Item:
 
-    def __init__(self, state = '', location = '', realm = 'All', index = -1):
+    def __init__(self, state = '', parent = '', location = '', realm = '', index = -1):
         self.ActiveState = state
         self.Equipped = int
+        self.Parent = parent
         self.Location = location
         self.Realm = realm
         self.Level = ''
@@ -29,7 +30,7 @@ class Item:
         self.Index = index
         self.SlotList = self.makeItemSlots()
 
-        # TODO: SET INITIAL ITEM TYPE ... MAYBE ...
+        # TODO: UNFUCK THIS ...
         if self.Location in ItemTypes['Jewelery']:
             self.Level = '50'
             self.Equipped = 2
