@@ -263,6 +263,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 parent.addChild(child)
 
         # TODO: SET A DYNAMIC MINIMAL WIDTH ...
+        # COULD TRY USING 'resizeColumnToContents' THEN
+        # SET THE 'sizeHint().width()' FOR 'SlotListTreeView'
         self.SlotListTreeView.setMinimumWidth(142)
         self.CharacterRealm.insertItems(0, Realms)
 
