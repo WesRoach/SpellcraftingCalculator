@@ -760,8 +760,8 @@ RangedTypes = {
         'Crossbow',
         'Recurve Bow',
         'Composite Bow',
-        'Throwing Weapon'
-        'Instrument'
+        'Throwing Weapon',
+        'Instrument',
     ],
 
     'Albion': [
@@ -772,7 +772,7 @@ RangedTypes = {
 
     'Hibernia': [
         'Recurve Bow',
-        'Instrument'
+        'Instrument',
     ],
 
     'Midgard': [
