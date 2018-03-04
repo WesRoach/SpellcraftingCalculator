@@ -75,7 +75,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.CurrentRealm = ''
         self.CurrentClass = ''
         self.CurrentRace = ''
-        self.CurrentItemParent = ''
+        self.CurrentItemRoot = ''
         self.CurrentItemLabel = ''
 
         self.TemplateName = None
@@ -454,11 +454,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         for parent, slots in ItemTypes.items():
             for location in slots:
                 if parent == 'Armor':
-                    item = Item('Crafted', parent, location, self.CurrentRealm, self.ItemIndex)
+                    item = Item('Crafted', location, self.CurrentRealm, self.ItemIndex)
                     item.Name = item.ActiveState + ' Item'
                     self.ItemIndex += 1
                 else:
-                    item = Item('Dropped', parent, location, 'All', self.ItemIndex)
+                    item = Item('Dropped', location, 'All', self.ItemIndex)
                     item.Name = item.ActiveState + ' Item'
                     self.ItemIndex += 1
 
@@ -714,7 +714,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.ItemRealm.insertItems(0, Realms)
 
         # TODO: TEST IF 'item.Realm' EXISTS IN DICTIONARY ... IF NOT, USE 'All' ...
-        self.ItemType.insertItems(0, ItemTypes[item.Parent][item.Location][item.Realm])
+        self.ItemType.insertItems(0, ItemTypes[self.CurrentItemRoot][item.Location][item.Realm])
         self.ItemOrigin.insertItems(0, ItemOrigins[item.ActiveState])
 
         if item.Location in ItemTypes['Weapons']:
@@ -1333,7 +1333,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         for parent, slots in ItemTypes.items():
             for location in slots:
                 if selection == location:
-                    self.CurrentItemParent = parent
+                    self.CurrentItemRoot = parent
                     self.CurrentItemLabel = location
                     self.RestoreItem(self.ItemAttributeList[self.CurrentItemLabel])
 
@@ -1578,7 +1578,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def newItem(self, action):
         newItemType = action.text().split(None, 1)[0]
         equipped = self.ItemAttributeList[self.CurrentItemLabel].Equipped
-        item = Item(newItemType, self.CurrentItemParent, self.CurrentItemLabel, self.CurrentRealm, self.ItemIndex)
+        item = Item(newItemType, self.CurrentItemLabel, self.CurrentRealm, self.ItemIndex)
         item.Name = action.text()
         self.ItemDictionary[self.CurrentItemLabel].insert(0, item)
         self.ItemAttributeList[self.CurrentItemLabel] = item
@@ -1626,7 +1626,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         newItemType = action.text().split(None, 1)[0]
         equipped = self.ItemAttributeList[self.CurrentItemLabel].Equipped
         index = self.ItemAttributeList[self.CurrentItemLabel].Index
-        item = Item(newItemType, self.CurrentItemParent, self.CurrentItemLabel, self.CurrentRealm, index)
+        item = Item(newItemType, self.CurrentItemLabel, self.CurrentRealm, index)
         item.Name = action.text()
         del self.ItemDictionary[self.CurrentItemLabel][0]
         self.ItemDictionary[self.CurrentItemLabel].insert(0, item)
@@ -1656,7 +1656,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         item = self.ItemAttributeList[self.CurrentItemLabel]
         itemState = self.ItemAttributeList[self.CurrentItemLabel].Equipped
         self.ItemDictionary[self.CurrentItemLabel].remove(item)
-        item = Item(item.ActiveState, self.CurrentItemParent, self.CurrentItemLabel, self.CurrentRealm, item.Index)
+        item = Item(item.ActiveState, self.CurrentItemLabel, self.CurrentRealm, item.Index)
         item.Name = item.ActiveState + ' Item'
         self.ItemDictionary[self.CurrentItemLabel].insert(0, item)
         self.ItemAttributeList[self.CurrentItemLabel] = item
@@ -1680,7 +1680,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self, 'Load Item:', '', 'Items (*.xml);; All Files (*.*)', options = options,)
         if filename == '': return
 
-        item = Item('Imported', self.CurrentItemParent, self.CurrentItemLabel, self.CurrentRealm, self.ItemIndex)
+        item = Item('Imported', self.CurrentItemLabel, self.CurrentRealm, self.ItemIndex)
         if item.importFromXML(filename) != -1:
             self.ItemDictionary[self.CurrentItemLabel].insert(0, item)
             self.ItemAttributeList[self.CurrentItemLabel] = item
