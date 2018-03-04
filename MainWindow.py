@@ -451,10 +451,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.CharacterRealm.setCurrentText('Midgard')
         self.CharacterRealmChanged()
 
-        # TODO: NOT REACHING THE 'if location =' STATEMENT ...
         for parent, slots in ItemTypes.items():
             for location in slots:
-                if location == 'Armor':
+                if parent == 'Armor':
                     item = Item('Crafted', parent, location, self.CurrentRealm, self.ItemIndex)
                     item.Name = item.ActiveState + ' Item'
                     self.ItemIndex += 1
