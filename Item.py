@@ -30,7 +30,7 @@ class Item:
         self.Index = index
         self.SlotList = self.makeItemSlots()
 
-        # TODO: UNFUCK THIS ...
+        # TODO: MOVE THIS TO 'MainWindow.py'
         if self.Location in ItemTypes['Jewelery']:
             self.Level = '50'
             self.Equipped = 2
