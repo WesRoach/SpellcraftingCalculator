@@ -7,10 +7,10 @@ from lxml import etree
 
 class Item:
 
-    def __init__(self, state = '', parent = '', location = '', realm = '', index = -1):
+    def __init__(self, state = '', location = '', realm = '', index = -1):
         self.ActiveState = state
         self.Equipped = int
-        self.Parent = parent
+        # self.Parent = parent
         self.Location = location
         self.Realm = realm
         self.Level = ''
