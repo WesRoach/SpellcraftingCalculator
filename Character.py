@@ -33,7 +33,7 @@ AllBonusList = {
     'Albion': {
 
         'Armsman': {
-            'All Melee Weapon Skills': ('Crush', 'Slash', 'Thrust', 'Polearm', 'Two Handed',),
+            'All Melee Weapon Skills': ('Crush', 'Slash', 'Thrust', 'Polearm', 'Two-Handed',),
             'All Archery Skills': ('Crossbow',),
             'Other Skills': ('Parry', 'Shield',),
             'Races': t2(('Avalonian', 'Briton', 'Half Ogre', 'Highlander', 'Inconnu', 'Korazh', 'Saracen',)),
@@ -104,7 +104,7 @@ AllBonusList = {
         },
 
         'Paladin': {
-            'All Melee Weapon Skills': ('Crush', 'Slash', 'Thrust', 'Two Handed',),
+            'All Melee Weapon Skills': ('Crush', 'Slash', 'Thrust', 'Two-Handed',),
             'Other Skills': ('Parry', 'Shield',),
             'No Skill Effect': ('Chants',),
             'Races': t2(('Avalonian', 'Briton', 'Highlander', 'Saracen',)),
@@ -786,59 +786,139 @@ ItemTypes = {
     'Jewelery': {
 
         'Neck': {
+
             'All': ['Necklace'],
-            'Albion': ['Necklace'],
-            'Hibernia': ['Necklace'],
-            'Midgard': ['Necklace'],
+
+            'Albion': [
+                'Necklace',
+            ],
+
+            'Hibernia': [
+                'Necklace',
+            ],
+
+            'Midgard': [
+                'Necklace',
+            ],
         },
 
         'Cloak': {
+
             'All': ['Cloak'],
-            'Albion': ['Cloak'],
-            'Hibernia': ['Cloak'],
-            'Midgard': ['Cloak'],
+
+            'Albion': [
+                'Cloak',
+            ],
+
+            'Hibernia': [
+                'Cloak',
+            ],
+
+            'Midgard': [
+                'Cloak',
+            ],
         },
 
         'Jewel': {
+
             'All': ['Jewelry'],
-            'Albion': ['Jewelry'],
-            'Hibernia': ['Jewelry'],
-            'Midgard': ['Jewelry'],
+
+            'Albion': [
+                'Jewelry',
+            ],
+
+            'Hibernia': [
+                'Jewelry',
+            ],
+
+            'Midgard': [
+                'Jewelry',
+            ],
         },
 
         'Belt': {
+
             'All': ['Belt'],
-            'Albion': ['Belt'],
-            'Hibernia': ['Belt'],
-            'Midgard': ['Belt'],
+
+            'Albion': [
+                'Belt',
+            ],
+
+            'Hibernia': [
+                'Belt',
+            ],
+
+            'Midgard': [
+                'Belt',
+            ],
         },
 
         'Left Ring': {
+
             'All': ['Ring'],
-            'Albion': ['Ring'],
-            'Hibernia': ['Ring'],
-            'Midgard': ['Ring'],
+
+            'Albion': [
+                'Ring',
+            ],
+
+            'Hibernia': [
+                'Ring',
+            ],
+
+            'Midgard': [
+                'Ring',
+            ],
         },
 
         'Right Ring': {
+
             'All': ['Ring'],
-            'Albion': ['Ring'],
-            'Hibernia': ['Ring'],
-            'Midgard': ['Ring'],
+
+            'Albion': [
+                'Ring',
+            ],
+
+            'Hibernia': [
+                'Ring',
+            ],
+
+            'Midgard': [
+                'Ring',
+            ],
         },
 
         'Left Wrist': {
+
             'All': ['Wrist'],
-            'Albion': ['Wrist'],
-            'Hibernia': ['Wrist'],
-            'Midgard': ['Wrist'],
+
+            'Albion': [
+                'Wrist',
+            ],
+
+            'Hibernia': [
+                'Wrist',
+            ],
+
+            'Midgard': [
+                'Wrist',
+            ],
         },
 
         'Right Wrist': {
+
             'All': ['Wrist'],
-            'Albion': ['Wrist'],
-            'Hibernia': ['Wrist'],
-            'Midgard': ['Wrist'],
+
+            'Albion': [
+                'Wrist',
+            ],
+
+            'Hibernia': [
+                'Wrist',
+            ],
+
+            'Midgard': [
+                'Wrist',
+            ],
         },
     },
 
@@ -863,10 +943,20 @@ ItemTypes = {
     'Mythical': {
 
         'Mythirian': {
+
             'All': ['Mythirian'],
-            'Albion': ['Mythirian'],
-            'Hibernia': ['Mythirian'],
-            'Midgard': ['Mythirian'],
+
+            'Albion': [
+                'Mythirian',
+            ],
+
+            'Hibernia': [
+                'Mythirian',
+            ],
+
+            'Midgard': [
+                'Mythirian',
+            ],
         },
     }
 }
