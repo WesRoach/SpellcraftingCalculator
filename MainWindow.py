@@ -451,6 +451,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.CharacterRealm.setCurrentText('Midgard')
         self.CharacterRealmChanged()
 
+        # TODO: NOT REACHING THE 'if location =' STATEMENT ...
         for parent, slots in ItemTypes.items():
             for location in slots:
                 if location == 'Armor':
@@ -462,7 +463,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     item.Name = item.ActiveState + ' Item'
                     self.ItemIndex += 1
 
-                # TODO: SET 'item.Level', 'item.Equipped', & 'item.Type'
+                # TODO: SET 'item.Level', 'item.Equipped', & 'item.Type' ...
                 self.ItemAttributeList[location] = item
                 self.ItemDictionary[location] = [item]
 
@@ -713,7 +714,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         elif item.ActiveState in ('Crafted', 'Legendary'):
             self.ItemRealm.insertItems(0, Realms)
 
-        # TODO: TEST IF 'item.Realm' EXISTS IN DICTIONARY ... IF NOT, USE 'All'
+        # TODO: TEST IF 'item.Realm' EXISTS IN DICTIONARY ... IF NOT, USE 'All' ...
         self.ItemType.insertItems(0, ItemTypes[item.Parent][item.Location][item.Realm])
         self.ItemOrigin.insertItems(0, ItemOrigins[item.ActiveState])
 
@@ -1361,7 +1362,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # DEBUGGING
         print('ItemStateChanged')
 
-    # TODO: UPDATE ITEM TYPE AND DAMAGE LIST WHEN REALM CHANGES
+    # TODO: UPDATE ITEM TYPE AND DAMAGE LIST WHEN REALM CHANGES ...
     def ItemRealmChanged(self):
         item = self.ItemAttributeList[self.CurrentItemLabel]
         item.Realm = self.ItemRealm.currentText()
