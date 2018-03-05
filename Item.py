@@ -29,20 +29,6 @@ class Item:
         self.Index = index
         self.SlotList = self.makeItemSlots()
 
-        # TODO: MOVE THIS TO 'MainWindow.py'
-        if self.Location in ItemTypes['Jewelery']:
-            self.Level = '50'
-            self.Equipped = 2
-        elif self.Location in ItemTypes['Armor']:
-            self.Level = '51'
-            self.Equipped = 2
-        elif self.Location in ItemTypes['Weapons']:
-            self.Level = '51'
-            self.Equipped = 0
-        elif self.Location in ItemTypes['Mythical']:
-            self.Level = '50'
-            self.Equipped = 0
-
     def makeItemSlots(self):
         ItemSlots = []
         if self.ActiveState == 'Crafted':
