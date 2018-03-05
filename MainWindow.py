@@ -463,24 +463,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     item = Item('Dropped', location, 'All', self.ItemIndex)
                     item.Name = item.ActiveState + ' Item'
                     self.ItemIndex += 1
-
-                if location in ItemTypes['Jewelery']:
-                    item.Equipped = 2
-                    item.Level = '50'
-                elif location in ItemTypes['Armor']:
-                    item.Equipped = 2
-                    item.Level = '51'
-                elif location in ItemTypes['Weapons']:
-                    item.Equipped = 0
-                    item.Level = '51'
-                elif location in ItemTypes['Mythical']:
-                    item.Equipped = 0
-                    item.Level = '50'
-
-                # TODO: SET THE INITIAL 'item.Type' FOR NOW, LATER WE
-                # SHOULD CONSIDER SETTING THE ITEM TYPE BASED ON THE
-                # CLASSES TOP TIER ARMOR ON CRAFTED PIECES ...
-
                 self.ItemAttributeList[location] = item
                 self.ItemDictionary[location] = [item]
 
