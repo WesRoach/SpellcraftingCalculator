@@ -464,7 +464,23 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     item.Name = item.ActiveState + ' Item'
                     self.ItemIndex += 1
 
-                # TODO: SET 'item.Level', 'item.Equipped', & 'item.Type' ...
+                if location in ItemTypes['Jewelery']:
+                    item.Equipped = 2
+                    item.Level = '50'
+                elif location in ItemTypes['Armor']:
+                    item.Equipped = 2
+                    item.Level = '51'
+                elif location in ItemTypes['Weapons']:
+                    item.Equipped = 0
+                    item.Level = '51'
+                elif location in ItemTypes['Mythical']:
+                    item.Equipped = 0
+                    item.Level = '50'
+
+                # TODO: SET THE INITIAL 'item.Type' FOR NOW, LATER WE
+                # SHOULD CONSIDER SETTING THE ITEM TYPE BASED ON THE
+                # CLASSES TOP TIER ARMOR ON CRAFTED PIECES ...
+
                 self.ItemAttributeList[location] = item
                 self.ItemDictionary[location] = [item]
 
@@ -741,11 +757,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ItemRequirement.setText(item.Requirement)
         self.ItemNotes.setPlainText(item.Notes)
         self.showItemRestrictions(item)
-
-        # for key, value in TestDict.items():
-        #     print('Key:', key, ', Value:', value)
-        #     if 'Legendary' in key:
-        #         print(True)
 
         # DEBUGGING
         print('setItemInfoWidgets')
@@ -1481,6 +1492,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # DEBUGGING
         print('ItemRestrictionsChanged')
 
+    # TODO: RESTRICT CRAFTABLE 5TH SLOT SELECTION BASED ON
+    # ARMOR TYPE AND WHICH SLOT THE BONUS RESIDES IN ...
     def EffectTypeChanged(self, etype = None, index = -1):
         if index == -1: index = self.getSlotIndex()
         item = self.ItemAttributeList[self.CurrentItemLabel]
