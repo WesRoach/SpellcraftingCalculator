@@ -579,7 +579,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 self.ItemDictionary[location] = []
 
         for item_xml in items:
-            item = Item('Imported')
+            item = Item('Import')
             item.importFromXML(item_xml, True)
             if int(item_xml.attrib['Index']) == 0:
                 self.ItemAttributeList[item.Location] = item
@@ -695,7 +695,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # DEBUGGING
         print('showDropWidgets')
 
-    def setItemInfoWidgets(self, item):
+    def showItemInfoWidgets(self, item):
         for widget in (
                 self.ItemRealm,
                 self.ItemType,
@@ -739,7 +739,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.showItemRestrictions(item)
 
         # DEBUGGING
-        print('setItemInfoWidgets')
+        print('showItemInfoWidgets')
 
     def showItemRestrictions(self, item):
         for index in range(self.ItemRestrictionsList.count()):
@@ -795,7 +795,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             tableEntry.setCheckState(Qt.Unchecked)
             self.ItemRestrictionsList.addItem(tableEntry)
 
-        self.setItemInfoWidgets(item)
+        self.showItemInfoWidgets(item)
         self.updateMenus(item)
 
         print(item.__dict__)
@@ -1692,7 +1692,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self, 'Load Item:', '', 'Items (*.xml);; All Files (*.*)', options = options,)
         if filename == '': return
 
-        item = Item('Imported', self.CurrentItemLabel, self.CurrentRealm, self.ItemIndex)
+        item = Item('Import', self.CurrentItemLabel, self.CurrentRealm, self.ItemIndex)
         if item.importFromXML(filename) != -1:
             self.ItemDictionary[self.CurrentItemLabel].insert(0, item)
             self.ItemAttributeList[self.CurrentItemLabel] = item
