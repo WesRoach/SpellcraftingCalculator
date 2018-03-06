@@ -31,16 +31,15 @@ class Item:
 
         if location in ItemTypes['Jewelery']:
             self.Equipped = 2
-            self.Level = '50'
         elif location in ItemTypes['Armor']:
             self.Equipped = 2
-            self.Level = '51'
         elif location in ItemTypes['Weapons']:
             self.Equipped = 0
-            self.Level = '51'
         elif location in ItemTypes['Mythical']:
             self.Equipped = 0
-            self.Level = '50'
+
+        if state == 'Crafted':
+            self.Level = '51'
 
         # TODO: WE SHOULD CONSIDER SETTING THE ITEM TYPE BASED
         # ON THE CLASSES TOP-TIER ARMOR FOR CRAFTED PIECES ...
