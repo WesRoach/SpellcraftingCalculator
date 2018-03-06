@@ -42,8 +42,8 @@ class Item:
             self.Level = '51'
             self.Origin = 'Crafted'
 
-        # TODO: WE SHOULD CONSIDER SETTING THE ITEM TYPE BASED
-        # ON THE CLASSES TOP-TIER ARMOR FOR CRAFTED PIECES ...
+        # TODO: ONLY SET 'self.Type' ON JEWELERY ITEMS UNTIL `Character.py`
+        # IS REVAMPED. CONSIDER SETTING 'self.Type' BASED ON TOP-TIER ...
         for parent, locations in ItemTypes.items():
             if location in locations and state != 'Import':
                 self.Type = ItemTypes[parent][location][self.Realm][0]
