@@ -16,13 +16,13 @@ class ReportWindow(QDialog, Ui_ReportWindow):
         self.initLayout()
         self.initControls()
 
-    def initLayout(self):
-        self.setWindowTitle('Report Window')
-        self.setWindowIcon(QIcon(None))
-
 # =============================================== #
 #       INTERFACE SETUP AND INITIALIZATION        #
 # =============================================== #
+
+    def initLayout(self):
+        self.setWindowTitle('Report Window')
+        self.setWindowIcon(QIcon(None))
 
     def initControls(self):
         self.CloseButton.clicked.connect(self.accept)
@@ -40,4 +40,7 @@ class ReportWindow(QDialog, Ui_ReportWindow):
         xslt = etree.parse(r'reports/DefaultTemplateReport.xsl')
         transform = etree.XSLT(xslt)
         report = transform(report)
+
+        print(str(report))
+
         self.ReportTextBrowser.setHtml(str(report))
