@@ -38,8 +38,9 @@ class Item:
         elif location in ItemTypes['Mythical']:
             self.Equipped = 0
 
-        if state == 'Crafted':
+        if state in ('Crafted', 'Legendary'):
             self.Level = '51'
+            self.Origin = 'Crafted'
 
         # TODO: WE SHOULD CONSIDER SETTING THE ITEM TYPE BASED
         # ON THE CLASSES TOP-TIER ARMOR FOR CRAFTED PIECES ...

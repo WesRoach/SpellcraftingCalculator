@@ -708,18 +708,17 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         if item.ActiveState == 'Dropped':
             self.ItemRealm.insertItems(0, AllRealms)
+            self.ItemOrigin.insertItems(0, ('',) + ItemOrigins[item.ActiveState])
         elif item.ActiveState in ('Crafted', 'Legendary'):
             self.ItemRealm.insertItems(0, Realms)
+            self.ItemOrigin.insertItems(0, ItemOrigins[item.ActiveState])
 
-        try:  # SOME ITEMS ARE THE SAME IN ALL THREE REALMS ...
-            self.ItemType.insertItems(0, ItemTypes[self.CurrentItemRoot][item.Location][item.Realm])
+        # TODO: DON'T INSERT EMPTY ENTRY FOR CRAFTED ITEMS ...
+
+        try:  # JEWELERY TYPES ARE IDENTICAL IN ALL REALMS ...
+            self.ItemType.insertItems(0, ('',) + ItemTypes[self.CurrentItemRoot][item.Location][item.Realm])
         except KeyError:
-            self.ItemType.insertItems(0, ItemTypes[self.CurrentItemRoot][item.Location]['All'])
-
-        self.ItemOrigin.insertItems(0, ItemOrigins[item.ActiveState])
-
-        if item.Location in ItemTypes['Weapons']:
-            self.ItemDamageType.insertItems(0, ItemDamageTypes[item.ActiveState])
+            self.ItemType.insertItems(0, ('',) + ItemTypes[self.CurrentItemRoot][item.Location]['All'])
 
         self.ItemRealm.setCurrentText(item.Realm)
         self.ItemOrigin.setCurrentText(item.Origin)
@@ -1685,7 +1684,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # DEBUGGING
         print('clearItemSlots')
 
-    # TODO: NEED TO SET A DEFAULT PATH ...
+    # TODO: NEED TO PREVENT CRAFTED ITEMS FROM BEING IMPORTED
+    # INTO DROPPED ITEM LOCATION. THIS INCLUDES SET A DEFAULT PATH ...
     def loadItem(self):
         options = QFileDialog.Options()
         filename, filters = QFileDialog.getOpenFileName(
