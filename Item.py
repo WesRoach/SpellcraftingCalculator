@@ -29,53 +29,24 @@ class Item:
         self.Index = index
         self.SlotList = self.makeItemSlots()
 
-        # TODO: SET THE INITIAL 'item.Type' FOR NOW, LATER WE
-        # SHOULD CONSIDER SETTING THE ITEM TYPE BASED ON THE
-        # CLASSES TOP TIER ARMOR FOR CRAFTED PIECES ...
-        # for parent, locations in ItemTypes.items():
+        if location in ItemTypes['Jewelery']:
+            self.Equipped = 2
+            self.Level = '50'
+        elif location in ItemTypes['Armor']:
+            self.Equipped = 2
+            self.Level = '51'
+        elif location in ItemTypes['Weapons']:
+            self.Equipped = 0
+            self.Level = '51'
+        elif location in ItemTypes['Mythical']:
+            self.Equipped = 0
+            self.Level = '50'
 
-        #     for location in locations:
-        #         if location in ItemTypes['Jewelery']:
-        #             self.Equipped = 2
-        #             self.Level = '50'
-        #         elif location in ItemTypes['Armor']:
-        #             self.Equipped = 2
-        #             self.Level = '51'
-        #         elif location in ItemTypes['Weapons']:
-        #             self.Equipped = 0
-        #             self.Level = '51'
-        #         elif location in ItemTypes['Mythical']:
-        #             self.Equipped = 0
-        #             self.Level = '50'
-
-        #         if self.ActiveState not in ('Crafted', 'Legendary'):
-        #             self.Type = ItemTypes[parent][location][self.Realm][0]
-        #         else: pass
-
-        # if self.Location in SlotList['Jewelery']:
-        #     self.Level = '50'
-        #     for key, value in ItemTypes.items():
-        #         if self.Location == key:
-        #             self.Type = ItemTypes[key][0]
-        #     self.Equipped = 2
-        # elif self.Location in SlotList['Armor']:
-        #     self.Level = '51'
-        #     for key, value in ItemTypes.items():
-        #         if self.Location == key:
-        #             self.Type = ItemTypes[key][self.Realm][0]
-        #     self.Equipped = 2
-        # elif self.Location in SlotList['Weapons']:
-        #     self.Level = '51'
-        #     for key, value in ItemTypes.items():
-        #         if self.Location == key:
-        #             self.Type = ItemTypes[key][self.Realm][0]
-        #     self.Equipped = 0
-        # elif self.Location in SlotList['Mythical']:
-        #     self.Level = '50'
-        #     for key, value in ItemTypes.items():
-        #         if self.Location in SlotList['Mythical'] == value:
-        #             self.Type = ItemTypes[key][0]
-        #     self.Equipped = 2
+        # TODO: WE SHOULD CONSIDER SETTING THE ITEM TYPE BASED
+        # ON THE CLASSES TOP-TIER ARMOR FOR CRAFTED PIECES ...
+        for parent, locations in ItemTypes.items():
+            if location in locations:
+                self.Type = ItemTypes[parent][location][self.Realm][0]
 
     def makeItemSlots(self):
         ItemSlots = []
