@@ -1274,7 +1274,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         print('setToolBarOptions')
 
     def setDistanceToCap(self):
-        self.calculate()
+        self.RestoreItem(self.ItemAttributeList[self.CurrentItemLabel])
 
         # DEBUGGING
         print('setDistanceToCap')
