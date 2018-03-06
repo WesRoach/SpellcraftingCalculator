@@ -45,7 +45,7 @@ class Item:
         # TODO: WE SHOULD CONSIDER SETTING THE ITEM TYPE BASED
         # ON THE CLASSES TOP-TIER ARMOR FOR CRAFTED PIECES ...
         for parent, locations in ItemTypes.items():
-            if location in locations:
+            if location in locations and state != 'Import':
                 self.Type = ItemTypes[parent][location][self.Realm][0]
 
     def makeItemSlots(self):
