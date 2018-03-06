@@ -703,19 +703,17 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 self.ItemDamageType
         ): widget.clear()
 
-        for parent, locations in ItemTypes.items():
-            if item.Location in locations:
-                for widget in self.ItemInfoWidgets[parent]:
-                    widget.setDisabled(True)
+        for widget in self.ItemInfoWidgets[self.CurrentItemRoot]:
+            widget.setDisabled(True)
 
-        if item.ActiveState in ('Crafted', 'Legendary'):
-            self.ItemRealm.insertItems(0, Realms)
-        else:
+        if item.ActiveState == 'Dropped':
             self.ItemRealm.insertItems(0, AllRealms)
+        elif item.ActiveState in ('Crafted', 'Legendary'):
+            self.ItemRealm.insertItems(0, Realms)
 
-        if item.Realm in ItemTypes[self.CurrentItemRoot][item.Location]:
+        try:  # SOME ITEMS ARE THE SAME IN ALL THREE REALMS ...
             self.ItemType.insertItems(0, ItemTypes[self.CurrentItemRoot][item.Location][item.Realm])
-        else:
+        except KeyError:
             self.ItemType.insertItems(0, ItemTypes[self.CurrentItemRoot][item.Location]['All'])
 
         self.ItemOrigin.insertItems(0, ItemOrigins[item.ActiveState])
