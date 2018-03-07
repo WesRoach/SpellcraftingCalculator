@@ -42,11 +42,14 @@ class Item:
             self.Level = '51'
             self.Origin = 'Crafted'
 
-        # TODO: ONLY SET 'self.Type' ON JEWELERY ITEMS UNTIL `Character.py`
-        # IS REVAMPED. CONSIDER SETTING 'self.Type' BASED ON TOP-TIER ...
+        # TODO: SET ARMOR TYPE BASED ON TOP-TIER ARMOR ...
+        if self.getParent() in ('Jewelery', 'Mythical') and state != 'Imported':
+            self.Type = ItemTypes[self.getParent()][location][self.Realm][0]
+
+    def getParent(self):
         for parent, locations in ItemTypes.items():
-            if location in locations and state != 'Import':
-                self.Type = ItemTypes[parent][location][self.Realm][0]
+            if self.Location in locations:
+                return parent
 
     def makeItemSlots(self):
         ItemSlots = []
@@ -64,12 +67,6 @@ class Item:
             for slot in range(0, 12):
                 ItemSlots.append(ItemSlot('Dropped'))
         return ItemSlots
-
-    def addSlot(self, itype):
-        self.SlotList.append(ItemSlot(itype))
-
-    def removeSlot(self, index):
-        del self.SlotList[index]
 
     def getSlot(self, index):
         return self.SlotList[index]
@@ -98,13 +95,13 @@ class Item:
         return values
 
     def getItemImbueValue(self):
-        if self.ActiveState != 'Crafted':
+        if self.ActiveState not in ('Crafted', 'Legendary'):
             return 0.0
         if int(self.Level) < 1 or int(self.Level) > 51:
             return 0.0
         return ImbuePoints[int(self.Level) - 1]
 
-    def getItemUtility(self):
+    def getUtility(self):
         utility = 0.0
         for slot in self.getSlotList():
             utility += slot.getGemUtility()
