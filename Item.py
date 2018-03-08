@@ -83,7 +83,7 @@ class Item:
     def clearSlots(self):
         self.SlotList = self.makeItemSlots()
 
-    def getSlotImbueValues(self):
+    def getImbueValues(self):
         if self.ActiveState not in ('Crafted', 'Legendary'):
             return 0.0, 0.0, 0.0, 0.0
         values = []
@@ -97,7 +97,7 @@ class Item:
                 values[index] /= 2.0
         return values
 
-    def getItemImbueValue(self):
+    def getMaxImbueValue(self):
         if self.ActiveState not in ('Crafted', 'Legendary'):
             return 0.0
         if int(self.Level) < 1 or int(self.Level) > 51:
@@ -109,9 +109,6 @@ class Item:
         for slot in self.getSlotList():
             utility += slot.getGemUtility()
         return utility
-
-    def getOverchargeSuccess(self):
-        pass
 
     def importFromXML(self, filename, export = False):
         tree = etree.parse(filename) if not export else etree.ElementTree(filename)
