@@ -75,7 +75,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.CurrentRealm = ''
         self.CurrentClass = ''
         self.CurrentRace = ''
-        self.CurrentItemRoot = ''
         self.CurrentItemLabel = ''
 
         self.TemplateName = None
@@ -253,7 +252,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         for key, locations in ItemTypes.items():
             parent = QTreeWidgetItem(self.SlotListTreeView, [key])
-            parent.setFlags(parent.flags() & ~Qt.ItemIsUserCheckable)
+            parent.setFlags(parent.flags() & ~Qt.ItemIsUserCheckable & ~Qt.ItemIsSelectable)
             if key == 'Jewelery':
                 parent.setExpanded(True)
             for location in locations:
@@ -579,7 +578,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 self.ItemDictionary[location] = []
 
         for item_xml in items:
-            item = Item('Import')
+            item = Item('Imported')
             item.importFromXML(item_xml, True)
             if int(item_xml.attrib['Index']) == 0:
                 self.ItemAttributeList[item.Location] = item
@@ -703,7 +702,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 self.ItemDamageType
         ): widget.clear()
 
-        for widget in self.ItemInfoWidgets[self.CurrentItemRoot]:
+        for widget in self.ItemInfoWidgets[item.getParent()]:
             widget.setDisabled(True)
 
         if item.ActiveState == 'Dropped':
@@ -713,12 +712,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.ItemRealm.insertItems(0, Realms)
             self.ItemOrigin.insertItems(0, ItemOrigins[item.ActiveState])
 
-        # TODO: DON'T INSERT EMPTY ENTRY FOR CRAFTED ITEMS ...
+        if item.Realm in ItemTypes[item.getParent()][item.Location]:
+            self.ItemType.insertItems(0, ('',) + ItemTypes[item.getParent()][item.Location][item.Realm])
+        elif 'All' in ItemTypes[item.getParent()][item.Location]:
+            self.ItemType.insertItems(0, ('',) + ItemTypes[item.getParent()][item.Location]['All'])
 
-        try:  # JEWELERY TYPES ARE IDENTICAL IN ALL REALMS ...
-            self.ItemType.insertItems(0, ('',) + ItemTypes[self.CurrentItemRoot][item.Location][item.Realm])
-        except KeyError:
-            self.ItemType.insertItems(0, ('',) + ItemTypes[self.CurrentItemRoot][item.Location]['All'])
+        if item.getParent() == 'Weapons':
+            self.ItemDamageType.insertItems(0, ('',) + ItemDamageTypes[item.ActiveState])
 
         self.ItemRealm.setCurrentText(item.Realm)
         self.ItemOrigin.setCurrentText(item.Origin)
@@ -934,7 +934,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             if not item.Equipped == 2:
                 continue
 
-            total['Utility'] += item.getItemUtility()
+            total['Utility'] += item.getUtility()
 
             for index in range(0, item.getSlotCount()):
                 effect = item.getSlot(index).getEffect()
@@ -1327,13 +1327,15 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def ItemSelected(self, selection = None):
         for index in self.SlotListTreeView.selectedIndexes():
             selection = index.data()
+        if not isinstance(selection, str):
+            if selection.text(0) in ItemTypes.keys():
+                selection = self.CurrentItemLabel
         if not self.SlotListTreeView.selectedIndexes():
             for slot in self.SlotListTreeView.findItems(selection, Qt.MatchRecursive):
                 slot.setSelected(True)
         for parent, locations in ItemTypes.items():
             for location in locations:
                 if selection == location:
-                    self.CurrentItemRoot = parent
                     self.CurrentItemLabel = location
                     self.RestoreItem(self.ItemAttributeList[self.CurrentItemLabel])
 
@@ -1361,8 +1363,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # DEBUGGING
         print('ItemStateChanged')
 
-    # TODO: UPDATE ITEM TYPE AND DAMAGE WHEN REALM
-    # CHANGES AS THE VALUES MIGHT NOT EXIST ...
     def ItemRealmChanged(self):
         item = self.ItemAttributeList[self.CurrentItemLabel]
         item.Realm = self.ItemRealm.currentText()
@@ -1471,8 +1471,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # DEBUGGING
         print('ItemRestrictionsChanged')
 
-    # TODO: RESTRICT CRAFTABLE 5TH SLOT SELECTION BASED ON
-    # ARMOR TYPE AND WHICH SLOT THE BONUS RESIDES IN ...
+    # TODO: 5TH SLOT SELECTION BASED ON TYPE AND LOCATION ...
     def EffectTypeChanged(self, etype = None, index = -1):
         if index == -1: index = self.getSlotIndex()
         item = self.ItemAttributeList[self.CurrentItemLabel]
@@ -1684,15 +1683,15 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # DEBUGGING
         print('clearItemSlots')
 
-    # TODO: NEED TO PREVENT CRAFTED ITEMS FROM BEING IMPORTED
-    # INTO DROPPED ITEM LOCATION. THIS INCLUDES SET A DEFAULT PATH ...
+    # TODO: PREVENT CRAFTED ITEMS FROM BEING IMPORTED TO
+    # TO NON-CRAFTABLE LOCATIONS. SET A DEFAULT PATH ...
     def loadItem(self):
         options = QFileDialog.Options()
         filename, filters = QFileDialog.getOpenFileName(
             self, 'Load Item:', '', 'Items (*.xml);; All Files (*.*)', options = options,)
         if filename == '': return
 
-        item = Item('Import', self.CurrentItemLabel, self.CurrentRealm, self.ItemIndex)
+        item = Item('Imported', self.CurrentItemLabel, self.CurrentRealm, self.ItemIndex)
         if item.importFromXML(filename) != -1:
             self.ItemDictionary[self.CurrentItemLabel].insert(0, item)
             self.ItemAttributeList[self.CurrentItemLabel] = item
@@ -1701,7 +1700,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.ItemIndex += 1
         else:
             QMessageBox.warning(
-                None, 'Error!', 'The item you are attempting to import \n is using an unsupported XML format.')
+                None, 'Error!', 'The item you are attempting to import\n is using an unsupported XML format.')
             return
 
         # DEBUGGING

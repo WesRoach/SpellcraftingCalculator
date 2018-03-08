@@ -199,6 +199,9 @@ class Item:
         else:
             return item
 
+    def parseLog(self, filename):
+        pass
+
 
 class ItemSlot:
 
