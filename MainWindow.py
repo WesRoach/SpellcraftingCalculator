@@ -63,14 +63,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.Requirement = []
         self.ImbuePoints = []
         self.GemName = []
+        self.GemNameLabel = []
         self.SwitchOnType = {}
-
-        # PLACE HOLDER
-        self.ItemImbuePoints = QLabel()
-        self.ItemImbuePointsTotal = QLabel()
-        self.ItemImbuePointsLabel = QLabel()
-        self.ItemOvercharge = QLabel()
-        self.ItemOverchargeLabel = QLabel()
 
         self.CurrentRealm = ''
         self.CurrentClass = ''
@@ -270,23 +264,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.SwitchOnType = {
 
             'Crafted': [
-                self.GemNameLabel,
                 self.ImbuePointsLabel,
-                # self.ItemImbuePoints,
-                # self.ItemImbuePointsTotal,
-                # self.ItemImbuePointsLabel,
-                # self.ItemOvercharge,
-                # self.ItemOverchargeLabel,
+                self.ItemGemInfoFrame,
             ],
 
             'Legendary': [
-                self.GemNameLabel,
                 self.ImbuePointsLabel,
-                # self.ItemImbuePoints,
-                # self.ItemImbuePointsTotal,
-                # self.ItemImbuePointsLabel,
-                # self.ItemOvercharge,
-                # self.ItemOverchargeLabel,
+                self.ItemGemInfoFrame,
             ],
 
             'Dropped': [self.RequirementLabel]}
@@ -298,7 +282,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ItemSaveButton.setFixedSize(QSize(buttonFixedWidth, buttonFixedHeight))
         self.ItemName.setFixedHeight(defaultFixedHeight)
 
-        width = testFont.size(Qt.TextSingleLine, "Slot 12: ", tabArray=None).width()
+        width = testFont.size(Qt.TextSingleLine, "Slot 12: ", tabArray = None).width()
         self.ItemStatsGroup.layout().setColumnMinimumWidth(0, width)
 
         width = self.setMinimumWidth(['Mythical Resist & Cap'])
@@ -335,9 +319,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         for index in range(0, 4):
             self.ImbuePoints.append(getattr(self, 'ImbuePoints%d' % index))
+            self.GemNameLabel.append(getattr(self, 'GemNameLabel%d' % index))
 
         for index in range(0, 7):
             self.GemName.append(getattr(self, 'GemName%d' % index))
+            if index > 3:
+                self.GemName[index].setFixedSize(QSize(width + 2, defaultFixedHeight))
 
         testItem = Item('Crafted')
         for index in range(0, testItem.getSlotCount()):
@@ -348,6 +335,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.SwitchOnType['Crafted'].append(self.GemName[index])
             if index < 4:
                 self.SwitchOnType['Crafted'].append(self.ImbuePoints[index])
+                self.SwitchOnType['Crafted'].append(self.GemNameLabel[index])
 
         testItem = Item('Legendary')
         for index in range(0, testItem.getSlotCount()):
@@ -358,6 +346,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             if index < 4:
                 self.SwitchOnType['Legendary'].append(self.AmountStatic[index])
                 self.SwitchOnType['Legendary'].append(self.ImbuePoints[index])
+                self.SwitchOnType['Legendary'].append(self.GemNameLabel[index])
             if index > 3:
                 self.SwitchOnType['Legendary'].append(self.AmountEdit[index])
 
@@ -1052,20 +1041,29 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def calculate(self):
         total = self.summarize()
 
-        print(str(total['Utility']))
-
         item = self.ItemAttributeList[self.CurrentItemLabel]
-        if item.ActiveState in ('Crafted', 'Legendary'):
-            slotImbueValues = item.getSlotImbueValues()
-            itemImbuePoints = item.getItemImbueValue()
+        self.BuildUtility.setText('%3.1f' % total['Utility'])
+        self.ItemUtility.setText('%3.1f' % item.getUtility())
+        self.ItemImbuePointsTotal.setText('%3.1f' % 0.0)
+        self.ItemImbuePoints.setText('/ 0.0')
+        self.ItemOvercharge.setText('N/A')
 
-            print(slotImbueValues)
-            print(str(sum(slotImbueValues)) + ' / ' + str(itemImbuePoints))
+        if item.ActiveState in ('Crafted', 'Legendary'):
+            self.ItemImbuePointsTotal.setText('%3.1f' % sum(item.getImbueValues()))
+            self.ItemImbuePoints.setText('/ ' + str(item.getMaxImbueValue()))
 
             for index in range(0, item.getSlotCount()):
-                if index < len(slotImbueValues):
-                    self.ImbuePoints[index].setText('%3.1f' % slotImbueValues[index])
+                if index < len(item.getImbueValues()):
+                    self.ImbuePoints[index].setText('%3.1f' % item.getImbueValues()[index])
                 self.GemName[index].setText(item.getSlot(index).getGemName(self.CurrentRealm))
+
+            # TODO: CALCULATE OVERCHARGE SUCCESS
+            if sum(item.getImbueValues()) <= item.getMaxImbueValue():
+                self.ItemOvercharge.setText('%d%%' % 100)
+            elif sum(item.getImbueValues()) >= (item.getMaxImbueValue() + 6):
+                self.ItemOvercharge.setText('%d%%' % 0)
+            else:
+                self.ItemOvercharge.setText('Not Calculated')
 
         for key, datum in total['Stats'].items():
             Acuity = AllBonusList[self.CurrentRealm][self.CurrentClass]["Acuity"]

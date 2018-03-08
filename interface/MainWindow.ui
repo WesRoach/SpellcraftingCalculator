@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>865</width>
-    <height>666</height>
+    <width>825</width>
+    <height>650</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -1424,6 +1424,9 @@
              <property name="autoScrollMargin">
               <number>15</number>
              </property>
+             <property name="selectionMode">
+              <enum>QAbstractItemView::NoSelection</enum>
+             </property>
              <property name="verticalScrollMode">
               <enum>QAbstractItemView::ScrollPerPixel</enum>
              </property>
@@ -1744,124 +1747,8 @@
                  <property name="spacing">
                   <number>2</number>
                  </property>
-                 <item row="12" column="1">
-                  <widget class="QComboBox" name="EffectType11">
-                   <property name="maxVisibleItems">
-                    <number>20</number>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="1" column="6">
-                  <widget class="QLabel" name="GemName0">
-                   <property name="text">
-                    <string/>
-                   </property>
-                   <property name="margin">
-                    <number>0</number>
-                   </property>
-                   <property name="indent">
-                    <number>8</number>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="2" column="3">
-                  <widget class="QComboBox" name="Effect1">
-                   <property name="maxVisibleItems">
-                    <number>20</number>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="3" column="2">
-                  <widget class="QComboBox" name="AmountStatic2">
-                   <property name="maxVisibleItems">
-                    <number>20</number>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="1" column="3">
-                  <widget class="QComboBox" name="Effect0">
-                   <property name="maxVisibleItems">
-                    <number>20</number>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="6" column="0">
-                  <widget class="QLabel" name="SlotLabel5">
-                   <property name="text">
-                    <string>Slot &amp;6:</string>
-                   </property>
-                   <property name="buddy">
-                    <cstring>EffectType5</cstring>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="4" column="1">
-                  <widget class="QComboBox" name="EffectType3">
-                   <property name="maxVisibleItems">
-                    <number>20</number>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="5" column="0">
-                  <widget class="QLabel" name="SlotLabel4">
-                   <property name="text">
-                    <string>Slot &amp;5:</string>
-                   </property>
-                   <property name="buddy">
-                    <cstring>EffectType4</cstring>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="2" column="2">
-                  <widget class="QComboBox" name="AmountStatic1">
-                   <property name="maxVisibleItems">
-                    <number>20</number>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="7" column="4" colspan="2">
-                  <widget class="QLineEdit" name="Requirement6">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="7" column="0">
-                  <widget class="QLabel" name="SlotLabel6">
-                   <property name="text">
-                    <string>Slot &amp;7:</string>
-                   </property>
-                   <property name="buddy">
-                    <cstring>EffectType6</cstring>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="3" column="3">
-                  <widget class="QComboBox" name="Effect2">
-                   <property name="maxVisibleItems">
-                    <number>20</number>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="7" column="1">
-                  <widget class="QComboBox" name="EffectType6">
-                   <property name="maxVisibleItems">
-                    <number>20</number>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="5" column="2">
-                  <widget class="QLineEdit" name="AmountEdit4">
-                   <property name="acceptDrops">
-                    <bool>false</bool>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="2" column="1">
-                  <widget class="QComboBox" name="EffectType1">
+                 <item row="4" column="3">
+                  <widget class="QComboBox" name="Effect3">
                    <property name="maxVisibleItems">
                     <number>20</number>
                    </property>
@@ -1883,6 +1770,13 @@
                    </property>
                   </widget>
                  </item>
+                 <item row="5" column="2">
+                  <widget class="QLineEdit" name="AmountEdit4">
+                   <property name="acceptDrops">
+                    <bool>false</bool>
+                   </property>
+                  </widget>
+                 </item>
                  <item row="4" column="0">
                   <widget class="QLabel" name="SlotLabel3">
                    <property name="text">
@@ -1890,13 +1784,6 @@
                    </property>
                    <property name="buddy">
                     <cstring>EffectType3</cstring>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="7" column="2">
-                  <widget class="QLineEdit" name="AmountEdit6">
-                   <property name="acceptDrops">
-                    <bool>false</bool>
                    </property>
                   </widget>
                  </item>
@@ -1910,8 +1797,15 @@
                    </property>
                   </widget>
                  </item>
-                 <item row="3" column="2">
-                  <widget class="QLineEdit" name="AmountEdit2">
+                 <item row="2" column="1">
+                  <widget class="QComboBox" name="EffectType1">
+                   <property name="maxVisibleItems">
+                    <number>20</number>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="7" column="2">
+                  <widget class="QLineEdit" name="AmountEdit6">
                    <property name="acceptDrops">
                     <bool>false</bool>
                    </property>
@@ -1924,6 +1818,23 @@
                    </property>
                   </widget>
                  </item>
+                 <item row="9" column="1">
+                  <widget class="QComboBox" name="EffectType8">
+                   <property name="maxVisibleItems">
+                    <number>20</number>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="3" column="2">
+                  <widget class="QLineEdit" name="AmountEdit2">
+                   <property name="acceptDrops">
+                    <bool>false</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="1" column="2">
+                  <widget class="QLineEdit" name="AmountEdit0"/>
+                 </item>
                  <item row="1" column="0">
                   <widget class="QLabel" name="SlotLabel0">
                    <property name="text">
@@ -1934,11 +1845,8 @@
                    </property>
                   </widget>
                  </item>
-                 <item row="1" column="2">
-                  <widget class="QLineEdit" name="AmountEdit0"/>
-                 </item>
-                 <item row="9" column="1">
-                  <widget class="QComboBox" name="EffectType8">
+                 <item row="6" column="1">
+                  <widget class="QComboBox" name="EffectType5">
                    <property name="maxVisibleItems">
                     <number>20</number>
                    </property>
@@ -1954,17 +1862,10 @@
                    </property>
                   </widget>
                  </item>
-                 <item row="5" column="2">
-                  <widget class="QComboBox" name="AmountStatic4">
-                   <property name="maxVisibleItems">
-                    <number>20</number>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="6" column="1">
-                  <widget class="QComboBox" name="EffectType5">
-                   <property name="maxVisibleItems">
-                    <number>20</number>
+                 <item row="4" column="2">
+                  <widget class="QLineEdit" name="AmountEdit3">
+                   <property name="acceptDrops">
+                    <bool>false</bool>
                    </property>
                   </widget>
                  </item>
@@ -1978,20 +1879,10 @@
                    </property>
                   </widget>
                  </item>
-                 <item row="4" column="2">
-                  <widget class="QLineEdit" name="AmountEdit3">
-                   <property name="acceptDrops">
-                    <bool>false</bool>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="1" column="1" alignment="Qt::AlignLeft">
-                  <widget class="QComboBox" name="EffectType0">
+                 <item row="5" column="2">
+                  <widget class="QComboBox" name="AmountStatic4">
                    <property name="maxVisibleItems">
                     <number>20</number>
-                   </property>
-                   <property name="modelColumn">
-                    <number>0</number>
                    </property>
                   </widget>
                  </item>
@@ -1999,16 +1890,6 @@
                   <widget class="QLabel" name="EffectTypeLabel">
                    <property name="text">
                     <string>Type</string>
-                   </property>
-                   <property name="alignment">
-                    <set>Qt::AlignCenter</set>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="0" column="6">
-                  <widget class="QLabel" name="GemNameLabel">
-                   <property name="text">
-                    <string>Gem</string>
                    </property>
                    <property name="alignment">
                     <set>Qt::AlignCenter</set>
@@ -2032,37 +1913,20 @@
                    </property>
                   </widget>
                  </item>
-                 <item row="9" column="2">
-                  <widget class="QLineEdit" name="AmountEdit8">
-                   <property name="acceptDrops">
-                    <bool>false</bool>
+                 <item row="1" column="1" alignment="Qt::AlignLeft">
+                  <widget class="QComboBox" name="EffectType0">
+                   <property name="maxVisibleItems">
+                    <number>20</number>
+                   </property>
+                   <property name="modelColumn">
+                    <number>0</number>
                    </property>
                   </widget>
                  </item>
                  <item row="6" column="4" colspan="3">
                   <widget class="QLabel" name="GemName5">
                    <property name="text">
-                    <string/>
-                   </property>
-                   <property name="indent">
-                    <number>8</number>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="10" column="1">
-                  <widget class="QComboBox" name="EffectType9">
-                   <property name="maxVisibleItems">
-                    <number>20</number>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="3" column="6">
-                  <widget class="QLabel" name="GemName2">
-                   <property name="text">
-                    <string/>
-                   </property>
-                   <property name="margin">
-                    <number>0</number>
+                    <string>GemName5</string>
                    </property>
                    <property name="indent">
                     <number>8</number>
@@ -2076,20 +1940,44 @@
                    </property>
                   </widget>
                  </item>
-                 <item row="5" column="4" colspan="3">
-                  <widget class="QLabel" name="GemName4">
-                   <property name="margin">
-                    <number>0</number>
+                 <item row="10" column="1">
+                  <widget class="QComboBox" name="EffectType9">
+                   <property name="maxVisibleItems">
+                    <number>20</number>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="9" column="2">
+                  <widget class="QLineEdit" name="AmountEdit8">
+                   <property name="acceptDrops">
+                    <bool>false</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="7" column="4" colspan="3">
+                  <widget class="QLabel" name="GemName6">
+                   <property name="text">
+                    <string>GemName6</string>
                    </property>
                    <property name="indent">
                     <number>8</number>
                    </property>
                   </widget>
                  </item>
-                 <item row="2" column="6">
-                  <widget class="QLabel" name="GemName1">
+                 <item row="2" column="4">
+                  <widget class="QLabel" name="ImbuePoints1">
                    <property name="text">
-                    <string/>
+                    <string>0.0</string>
+                   </property>
+                   <property name="alignment">
+                    <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="5" column="4" colspan="3">
+                  <widget class="QLabel" name="GemName4">
+                   <property name="text">
+                    <string>GemName4</string>
                    </property>
                    <property name="margin">
                     <number>0</number>
@@ -2115,30 +2003,109 @@
                    </property>
                   </spacer>
                  </item>
-                 <item row="7" column="4" colspan="3">
-                  <widget class="QLabel" name="GemName6">
-                   <property name="text">
-                    <string/>
-                   </property>
-                   <property name="indent">
-                    <number>8</number>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="2" column="4">
-                  <widget class="QLabel" name="ImbuePoints1">
-                   <property name="text">
-                    <string>0.0</string>
-                   </property>
-                   <property name="alignment">
-                    <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="4" column="3">
-                  <widget class="QComboBox" name="Effect3">
+                 <item row="12" column="1">
+                  <widget class="QComboBox" name="EffectType11">
                    <property name="maxVisibleItems">
                     <number>20</number>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="2" column="3">
+                  <widget class="QComboBox" name="Effect1">
+                   <property name="maxVisibleItems">
+                    <number>20</number>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="3" column="2">
+                  <widget class="QComboBox" name="AmountStatic2">
+                   <property name="maxVisibleItems">
+                    <number>20</number>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="4" column="1">
+                  <widget class="QComboBox" name="EffectType3">
+                   <property name="maxVisibleItems">
+                    <number>20</number>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="2" column="2">
+                  <widget class="QComboBox" name="AmountStatic1">
+                   <property name="maxVisibleItems">
+                    <number>20</number>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="6" column="0">
+                  <widget class="QLabel" name="SlotLabel5">
+                   <property name="text">
+                    <string>Slot &amp;6:</string>
+                   </property>
+                   <property name="buddy">
+                    <cstring>EffectType5</cstring>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="5" column="0">
+                  <widget class="QLabel" name="SlotLabel4">
+                   <property name="text">
+                    <string>Slot &amp;5:</string>
+                   </property>
+                   <property name="buddy">
+                    <cstring>EffectType4</cstring>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="1" column="3">
+                  <widget class="QComboBox" name="Effect0">
+                   <property name="maxVisibleItems">
+                    <number>20</number>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="3" column="3">
+                  <widget class="QComboBox" name="Effect2">
+                   <property name="maxVisibleItems">
+                    <number>20</number>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="7" column="4" colspan="2">
+                  <widget class="QLineEdit" name="Requirement6">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="7" column="0">
+                  <widget class="QLabel" name="SlotLabel6">
+                   <property name="text">
+                    <string>Slot &amp;7:</string>
+                   </property>
+                   <property name="buddy">
+                    <cstring>EffectType6</cstring>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="7" column="1">
+                  <widget class="QComboBox" name="EffectType6">
+                   <property name="maxVisibleItems">
+                    <number>20</number>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="2" column="0">
+                  <widget class="QLabel" name="SlotLabel1">
+                   <property name="text">
+                    <string>Slot &amp;2:</string>
+                   </property>
+                   <property name="buddy">
+                    <cstring>EffectType1</cstring>
                    </property>
                   </widget>
                  </item>
@@ -2148,9 +2115,6 @@
                     <bool>false</bool>
                    </property>
                   </widget>
-                 </item>
-                 <item row="2" column="2">
-                  <widget class="QLineEdit" name="AmountEdit1"/>
                  </item>
                  <item row="10" column="0">
                   <widget class="QLabel" name="SlotLabel9">
@@ -2169,15 +2133,8 @@
                    </property>
                   </widget>
                  </item>
-                 <item row="2" column="0">
-                  <widget class="QLabel" name="SlotLabel1">
-                   <property name="text">
-                    <string>Slot &amp;2:</string>
-                   </property>
-                   <property name="buddy">
-                    <cstring>EffectType1</cstring>
-                   </property>
-                  </widget>
+                 <item row="2" column="2">
+                  <widget class="QLineEdit" name="AmountEdit1"/>
                  </item>
                  <item row="8" column="2">
                   <widget class="QLineEdit" name="AmountEdit7">
@@ -2206,29 +2163,20 @@
                    </property>
                   </widget>
                  </item>
-                 <item row="13" column="0" colspan="8">
-                  <spacer>
-                   <property name="orientation">
-                    <enum>Qt::Vertical</enum>
-                   </property>
-                   <property name="sizeHint" stdset="0">
-                    <size>
-                     <width>20</width>
-                     <height>40</height>
-                    </size>
-                   </property>
-                  </spacer>
-                 </item>
-                 <item row="4" column="6">
-                  <widget class="QLabel" name="GemName3">
+                 <item row="0" column="3">
+                  <widget class="QLabel" name="EffectLabel">
                    <property name="text">
-                    <string/>
+                    <string>Effect</string>
                    </property>
-                   <property name="margin">
-                    <number>0</number>
+                   <property name="alignment">
+                    <set>Qt::AlignCenter</set>
                    </property>
-                   <property name="indent">
-                    <number>8</number>
+                  </widget>
+                 </item>
+                 <item row="8" column="3">
+                  <widget class="QComboBox" name="Effect7">
+                   <property name="maxVisibleItems">
+                    <number>20</number>
                    </property>
                   </widget>
                  </item>
@@ -2249,57 +2197,10 @@
                    </property>
                   </widget>
                  </item>
-                 <item row="8" column="3">
-                  <widget class="QComboBox" name="Effect7">
-                   <property name="maxVisibleItems">
-                    <number>20</number>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="0" column="3">
-                  <widget class="QLabel" name="EffectLabel">
-                   <property name="text">
-                    <string>Effect</string>
-                   </property>
-                   <property name="alignment">
-                    <set>Qt::AlignCenter</set>
-                   </property>
-                  </widget>
-                 </item>
                  <item row="3" column="1">
                   <widget class="QComboBox" name="EffectType2">
                    <property name="maxVisibleItems">
                     <number>20</number>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="8" column="0">
-                  <widget class="QLabel" name="SlotLabel7">
-                   <property name="text">
-                    <string>Slot &amp;8:</string>
-                   </property>
-                   <property name="buddy">
-                    <cstring>EffectType7</cstring>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="3" column="0">
-                  <widget class="QLabel" name="SlotLabel2">
-                   <property name="text">
-                    <string>Slot &amp;3:</string>
-                   </property>
-                   <property name="buddy">
-                    <cstring>EffectType2</cstring>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="8" column="4" colspan="2">
-                  <widget class="QLineEdit" name="Requirement7">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
                    </property>
                   </widget>
                  </item>
@@ -2330,15 +2231,18 @@
                    </property>
                   </widget>
                  </item>
-                 <item row="5" column="1">
-                  <widget class="QComboBox" name="EffectType4">
-                   <property name="maxVisibleItems">
-                    <number>20</number>
+                 <item row="8" column="0">
+                  <widget class="QLabel" name="SlotLabel7">
+                   <property name="text">
+                    <string>Slot &amp;8:</string>
+                   </property>
+                   <property name="buddy">
+                    <cstring>EffectType7</cstring>
                    </property>
                   </widget>
                  </item>
-                 <item row="4" column="4" colspan="2">
-                  <widget class="QLineEdit" name="Requirement3">
+                 <item row="8" column="4" colspan="2">
+                  <widget class="QLineEdit" name="Requirement7">
                    <property name="sizePolicy">
                     <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                      <horstretch>0</horstretch>
@@ -2347,8 +2251,28 @@
                    </property>
                   </widget>
                  </item>
+                 <item row="3" column="0">
+                  <widget class="QLabel" name="SlotLabel2">
+                   <property name="text">
+                    <string>Slot &amp;3:</string>
+                   </property>
+                   <property name="buddy">
+                    <cstring>EffectType2</cstring>
+                   </property>
+                  </widget>
+                 </item>
                  <item row="6" column="4" colspan="2">
                   <widget class="QLineEdit" name="Requirement5">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="9" column="4" colspan="2">
+                  <widget class="QLineEdit" name="Requirement8">
                    <property name="sizePolicy">
                     <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                      <horstretch>0</horstretch>
@@ -2364,8 +2288,8 @@
                    </property>
                   </widget>
                  </item>
-                 <item row="9" column="4" colspan="2">
-                  <widget class="QLineEdit" name="Requirement8">
+                 <item row="4" column="4" colspan="2">
+                  <widget class="QLineEdit" name="Requirement3">
                    <property name="sizePolicy">
                     <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                      <horstretch>0</horstretch>
@@ -2374,13 +2298,10 @@
                    </property>
                   </widget>
                  </item>
-                 <item row="3" column="4" colspan="2">
-                  <widget class="QLineEdit" name="Requirement2">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
+                 <item row="5" column="1">
+                  <widget class="QComboBox" name="EffectType4">
+                   <property name="maxVisibleItems">
+                    <number>20</number>
                    </property>
                   </widget>
                  </item>
@@ -2404,6 +2325,13 @@
                    </property>
                   </widget>
                  </item>
+                 <item row="11" column="3">
+                  <widget class="QComboBox" name="Effect10">
+                   <property name="maxVisibleItems">
+                    <number>20</number>
+                   </property>
+                  </widget>
+                 </item>
                  <item row="5" column="4" colspan="2">
                   <widget class="QLineEdit" name="Requirement4">
                    <property name="sizePolicy">
@@ -2414,13 +2342,6 @@
                    </property>
                   </widget>
                  </item>
-                 <item row="11" column="3">
-                  <widget class="QComboBox" name="Effect10">
-                   <property name="maxVisibleItems">
-                    <number>20</number>
-                   </property>
-                  </widget>
-                 </item>
                  <item row="11" column="2">
                   <widget class="QLineEdit" name="AmountEdit10">
                    <property name="acceptDrops">
@@ -2428,13 +2349,13 @@
                    </property>
                   </widget>
                  </item>
-                 <item row="12" column="0">
-                  <widget class="QLabel" name="SlotLabel11">
-                   <property name="text">
-                    <string>Slot 1&amp;2:</string>
-                   </property>
-                   <property name="buddy">
-                    <cstring>EffectType11</cstring>
+                 <item row="3" column="4" colspan="2">
+                  <widget class="QLineEdit" name="Requirement2">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
                    </property>
                   </widget>
                  </item>
@@ -2452,16 +2373,6 @@
                    </property>
                   </widget>
                  </item>
-                 <item row="12" column="4" colspan="2">
-                  <widget class="QLineEdit" name="Requirement11">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
-                  </widget>
-                 </item>
                  <item row="11" column="0">
                   <widget class="QLabel" name="SlotLabel10">
                    <property name="text">
@@ -2472,10 +2383,23 @@
                    </property>
                   </widget>
                  </item>
-                 <item row="12" column="3">
-                  <widget class="QComboBox" name="Effect11">
-                   <property name="maxVisibleItems">
-                    <number>20</number>
+                 <item row="12" column="4" colspan="2">
+                  <widget class="QLineEdit" name="Requirement11">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="12" column="0">
+                  <widget class="QLabel" name="SlotLabel11">
+                   <property name="text">
+                    <string>Slot 1&amp;2:</string>
+                   </property>
+                   <property name="buddy">
+                    <cstring>EffectType11</cstring>
                    </property>
                   </widget>
                  </item>
@@ -2489,7 +2413,14 @@
                    </property>
                   </widget>
                  </item>
-                 <item row="14" column="0" colspan="8">
+                 <item row="12" column="3">
+                  <widget class="QComboBox" name="Effect11">
+                   <property name="maxVisibleItems">
+                    <number>20</number>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="15" column="0" colspan="8">
                   <layout class="QHBoxLayout">
                    <property name="spacing">
                     <number>5</number>
@@ -2498,7 +2429,7 @@
                     <number>0</number>
                    </property>
                    <property name="topMargin">
-                    <number>8</number>
+                    <number>0</number>
                    </property>
                    <property name="rightMargin">
                     <number>0</number>
@@ -2590,16 +2521,16 @@
                     </widget>
                    </item>
                    <item>
-                    <widget class="QLabel" name="OverchargeLabel">
+                    <widget class="QLabel" name="ItemOverchargeLabel">
                      <property name="text">
-                      <string>Overcharge:</string>
+                      <string>Success:</string>
                      </property>
                     </widget>
                    </item>
                    <item>
-                    <widget class="QLabel" name="Overcharge">
+                    <widget class="QLabel" name="ItemOvercharge">
                      <property name="text">
-                      <string>0%</string>
+                      <string>100%</string>
                      </property>
                     </widget>
                    </item>
@@ -2618,9 +2549,171 @@
                    </item>
                   </layout>
                  </item>
+                 <item row="14" column="0" colspan="8">
+                  <spacer>
+                   <property name="orientation">
+                    <enum>Qt::Vertical</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>20</width>
+                     <height>40</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                 <item row="13" column="0" colspan="8">
+                  <widget class="QFrame" name="ItemGemInfoFrame">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <layout class="QGridLayout">
+                    <property name="leftMargin">
+                     <number>8</number>
+                    </property>
+                    <property name="topMargin">
+                     <number>8</number>
+                    </property>
+                    <property name="rightMargin">
+                     <number>8</number>
+                    </property>
+                    <property name="bottomMargin">
+                     <number>8</number>
+                    </property>
+                    <property name="spacing">
+                     <number>5</number>
+                    </property>
+                    <item row="0" column="2" rowspan="5">
+                     <spacer>
+                      <property name="orientation">
+                       <enum>Qt::Horizontal</enum>
+                      </property>
+                      <property name="sizeHint" stdset="0">
+                       <size>
+                        <width>40</width>
+                        <height>20</height>
+                       </size>
+                      </property>
+                     </spacer>
+                    </item>
+                    <item row="0" column="0">
+                     <widget class="QLabel" name="GemNameLabel0">
+                      <property name="text">
+                       <string>Gem 1:</string>
+                      </property>
+                      <property name="alignment">
+                       <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="2" column="0">
+                     <widget class="QLabel" name="GemNameLabel2">
+                      <property name="text">
+                       <string>Gem 3:</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="0">
+                     <widget class="QLabel" name="GemNameLabel1">
+                      <property name="text">
+                       <string>Gem 2:</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="0" column="1">
+                     <widget class="QLabel" name="GemName0">
+                      <property name="text">
+                       <string>GemName0</string>
+                      </property>
+                      <property name="alignment">
+                       <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+                      </property>
+                      <property name="margin">
+                       <number>0</number>
+                      </property>
+                      <property name="indent">
+                       <number>0</number>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="3" column="0">
+                     <widget class="QLabel" name="GemNameLabel3">
+                      <property name="text">
+                       <string>Gem 4:</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="1">
+                     <widget class="QLabel" name="GemName1">
+                      <property name="text">
+                       <string>GemName1</string>
+                      </property>
+                      <property name="alignment">
+                       <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+                      </property>
+                      <property name="margin">
+                       <number>0</number>
+                      </property>
+                      <property name="indent">
+                       <number>0</number>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="3" column="1">
+                     <widget class="QLabel" name="GemName3">
+                      <property name="text">
+                       <string>GemName3</string>
+                      </property>
+                      <property name="alignment">
+                       <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+                      </property>
+                      <property name="margin">
+                       <number>0</number>
+                      </property>
+                      <property name="indent">
+                       <number>0</number>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="2" column="1">
+                     <widget class="QLabel" name="GemName2">
+                      <property name="text">
+                       <string>GemName2</string>
+                      </property>
+                      <property name="alignment">
+                       <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+                      </property>
+                      <property name="margin">
+                       <number>0</number>
+                      </property>
+                      <property name="indent">
+                       <number>0</number>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                 <item row="1" column="5" rowspan="4">
+                  <spacer>
+                   <property name="orientation">
+                    <enum>Qt::Horizontal</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>40</width>
+                     <height>20</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
                 </layout>
                 <zorder>GemName6</zorder>
                 <zorder>GemName5</zorder>
+                <zorder>GemName4</zorder>
                 <zorder>RequirementLabel</zorder>
                 <zorder>Requirement0</zorder>
                 <zorder>Effect4</zorder>
@@ -2638,9 +2731,7 @@
                 <zorder>AmountStatic0</zorder>
                 <zorder>AmountStatic4</zorder>
                 <zorder>SlotLabel0</zorder>
-                <zorder>GemName0</zorder>
                 <zorder>AmountStatic3</zorder>
-                <zorder>GemNameLabel</zorder>
                 <zorder>EffectTypeLabel</zorder>
                 <zorder>EffectType5</zorder>
                 <zorder>SlotLabel5</zorder>
@@ -2693,14 +2784,11 @@
                 <zorder>EffectType11</zorder>
                 <zorder>Effect8</zorder>
                 <zorder>AmountEdit8</zorder>
-                <zorder>GemName3</zorder>
                 <zorder>ImbuePoints3</zorder>
                 <zorder>EffectType9</zorder>
-                <zorder>GemName1</zorder>
-                <zorder>GemName2</zorder>
                 <zorder>ImbuePoints2</zorder>
                 <zorder>ImbuePoints1</zorder>
-                <zorder>GemName4</zorder>
+                <zorder>ItemGemInfoFrame</zorder>
                </widget>
               </item>
               <item>
