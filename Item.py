@@ -44,7 +44,10 @@ class Item:
 
         # TODO: SET ARMOR TYPE BASED ON TOP-TIER ARMOR ...
         if self.getParent() in ('Jewelery', 'Mythical') and state != 'Imported':
-            self.Type = ItemTypes[self.getParent()][location][self.Realm][0]
+            self.Type = ItemTypes[self.getParent()][location][realm][0]
+
+        if self.Location == 'Left Hand':
+            self.LeftHand = 2
 
     def getParent(self):
         for parent, locations in ItemTypes.items():
@@ -285,14 +288,12 @@ class ItemSlot:
 
     # TODO: IMPLEMENT ENHANCED ITEMS
     def getGemName(self, realm):
-        if self.getSlotType() == 'Enhanced':
+        if self.getSlotType() in ('Dropped', 'Enhanced'):
             if self.getEffectType() == 'Unused':
                 return 'Unused'
-            return 'Craftable Bonus'
-        if self.getSlotType() == 'Dropped':
-            return 'Non-Craftable Bonus'
+            return 'Crafted Item Bonus'
         if not self.isCraftable():
-            return '--> SET THE COLUMN WIDTH'
+            return 'None'
         tier = GemNames[self.getGemIndex()]
         prefix = CraftedEffectTable[realm][self.EffectType][self.Effect][0]
         suffix = CraftedEffectTable[realm][self.EffectType][self.Effect][1]
