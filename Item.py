@@ -294,7 +294,7 @@ class ItemSlot:
         if self.getSlotType() in ('Dropped', 'Enhanced'):
             if self.getEffectType() == 'Unused':
                 return 'Unused'
-            return 'Crafted Item Bonus'
+            return 'Crafted Bonus'
         if not self.isCraftable():
             return 'None'
         tier = GemNames[self.getGemIndex()]
