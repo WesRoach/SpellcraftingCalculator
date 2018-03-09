@@ -24,7 +24,7 @@
             <xsl:choose>
                 <xsl:when test="@Type = 'Craftable'">
                     <tr>
-                        <td>Gem <xsl:copy-of select="$SlotNumber"/>:&#160;</td>
+                        <td> &#160;&#160;&#160; Gem <xsl:copy-of select="$SlotNumber"/>:&#160;</td>
                         <td align="right"><xsl:value-of select="Amount"/>&#160;</td>
                         <td>
                             <xsl:value-of select="Effect"/><xsl:text>&#160;</xsl:text>
@@ -38,7 +38,7 @@
                 </xsl:when>
                 <xsl:otherwise>
                     <tr>
-                        <td>Slot <xsl:copy-of select="$SlotNumber"/>:&#160;</td>
+                        <td> &#160;&#160;&#160; Slot <xsl:copy-of select="$SlotNumber"/>:&#160;</td>
                         <td align="right"><xsl:value-of select="Amount"/>&#160;</td>
                         <td>
                             <xsl:value-of select="Effect"/><xsl:text>&#160;</xsl:text>
@@ -66,32 +66,41 @@
         <xsl:if test="count(Slot) &gt; 0 and Equipped = '2'">
             <dl>
                 <dt><b><xsl:value-of select="Location" /></b></dt>
-                <dt>Name: <xsl:value-of select="Name"/></dt>
+                <dt><i><xsl:value-of select="Name"/></i></dt>
                 <dt>
-                    <xsl:text>Level: </xsl:text><xsl:value-of select="Level"/>
-                    <xsl:text> &#160; Quality: </xsl:text><xsl:value-of select="Quality"/>
-                    <xsl:if test="AFDPS != '' and AFDPS != '0' and AFDPS != '-1'">
-                        <xsl:text> &#160; AF/DPS: </xsl:text><xsl:value-of select="AFDPS"/>
+					<xsl:choose>
+                        <xsl:when test="Level != '' and Level != '0' and Level != '-1' ">
+                            <xsl:text>Level: </xsl:text><xsl:value-of select="Level"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:text>Level: None Specified</xsl:text>
+                        </xsl:otherwise>
+                    </xsl:choose>
+					<xsl:if test="Quality != '' and Quality != '0' and Quality != '-1' ">
+						<xsl:text>,&#160; Quality: </xsl:text><xsl:value-of select="Quality"/>
+					</xsl:if>
+                    <xsl:if test="AFDPS != '' and AFDPS != '0' and AFDPS != '-1' ">
+                        <xsl:text>,&#160; AF/DPS: </xsl:text><xsl:value-of select="AFDPS"/>
                     </xsl:if>
                     <xsl:if test="Speed != '' and Speed != '0' and Speed != '-1' ">
-                        <xsl:text> &#160; Speed: </xsl:text><xsl:value-of select="Speed"/>
+                        <xsl:text>,&#160; Speed: </xsl:text><xsl:value-of select="Speed"/>
                     </xsl:if>
                     <xsl:if test="Bonus != '' and Bonus != '0' and Bonus != '-1' ">
-                        <xsl:text> &#160; Bonus: </xsl:text><xsl:value-of select="Bonus"/>
+                        <xsl:text>,&#160; Bonus: </xsl:text><xsl:value-of select="Bonus"/>
                     </xsl:if>
                 </dt>
-                <xsl:if test="ActiveState = 'Crafted'">
+                <xsl:if test="ActiveState = 'Crafted' or ActiveState = 'Legendary' ">
                     <dt>
                         <xsl:text>Imbue Points: </xsl:text><xsl:value-of select="Imbue"/>
-                        <xsl:text> of </xsl:text><xsl:value-of select="ItemImbue"/>
+                        <xsl:text> of </xsl:text><xsl:value-of select="ImbueMax"/>
                         <!--<xsl:text> &#160; Quality: </xsl:text><xsl:value-of select="ItemQuality"/>-->
                         <xsl:text> &#160; Overcharge: </xsl:text>
                         <xsl:choose>
-                            <xsl:when test="(Imbue - ItemImbue) &lt; 0">
+                            <xsl:when test="(Imbue - ImbueMax) &lt; 0">
                                 <xsl:text>0</xsl:text>
                             </xsl:when>
                             <xsl:otherwise>
-                                <xsl:value-of select="Imbue - ItemImbue"/>
+                                <xsl:value-of select="Imbue - ImbueMax"/>
                             </xsl:otherwise>
                         </xsl:choose>
                     </dt>

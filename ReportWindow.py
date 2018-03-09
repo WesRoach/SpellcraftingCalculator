@@ -37,10 +37,9 @@ class ReportWindow(QDialog, Ui_ReportWindow):
 
     def templateReport(self, report):
         self.setWindowTitle('Template Report')
+
         xslt = etree.parse(r'reports/DefaultTemplateReport.xsl')
         transform = etree.XSLT(xslt)
         report = transform(report)
-
-        print(str(report))
 
         self.ReportTextBrowser.setHtml(str(report))

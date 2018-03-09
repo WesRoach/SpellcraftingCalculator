@@ -65,6 +65,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.GemName = []
         self.GemNameLabel = []
         self.SwitchOnType = {}
+        self.BuildUtility = QLabel()
 
         self.CurrentRealm = ''
         self.CurrentClass = ''
@@ -261,12 +262,20 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
             'Crafted': [
                 self.ImbuePointsLabel,
-                self.ItemGemInfoFrame,
+                self.ItemImbuePoints,
+                self.ItemImbuePointsTotal,
+                self.ItemImbuePointsLabel,
+                self.ItemOvercharge,
+                self.ItemOverchargeLabel,
             ],
 
             'Legendary': [
                 self.ImbuePointsLabel,
-                self.ItemGemInfoFrame,
+                self.ItemImbuePoints,
+                self.ItemImbuePointsTotal,
+                self.ItemImbuePointsLabel,
+                self.ItemOvercharge,
+                self.ItemOverchargeLabel,
             ],
 
             'Dropped': [
@@ -316,7 +325,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.Requirement[index].setFixedSize(QSize(width, defaultFixedHeight))
             self.Requirement[index].editingFinished.connect(self.EffectRequirementChanged)
 
-        width = self.setMinimumWidth(['37.5'])
+        width = self.setMinimumWidth(['-'])
         for index in range(0, 4):
             self.ImbuePoints.append(getattr(self, 'ImbuePoints%d' % index))
             self.ImbuePoints[index].setFixedSize(QSize(width, defaultFixedHeight))
@@ -324,6 +333,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         for index in range(0, 7):
             self.GemName.append(getattr(self, 'GemName%d' % index))
+
+        width = self.Requirement[0].width()
+        for index in range(4, 7):
+            self.GemName[index].setFixedSize(QSize(width, defaultFixedHeight))
+
+        width = testFont.size(Qt.TextSingleLine, "37.5", tabArray = None).width()
+        self.ItemImbuePointsTotal.setFixedWidth(width)
 
         testItem = Item('Crafted')
         for index in range(0, testItem.getSlotCount()):
@@ -429,6 +445,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ItemInformationGroup.setFixedWidth(186)
         self.ItemRestrictionsGroup.setFixedWidth(135)
 
+        width = testFont.size(Qt.TextSingleLine, "1999.9", tabArray=None).width()
+        self.BuildUtility.setFixedWidth(width)
+        self.BuildUtility.setAlignment(Qt.AlignRight)
+        self.StatusBar.addPermanentWidget(QLabel('Build Utility: '))
+        self.StatusBar.addPermanentWidget(self.BuildUtility)
+
     def initialize(self):
         self.TemplateName = None
         self.TemplatePath = None
@@ -521,7 +543,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def showTemplateReport(self):
         self.TemplateReport = ReportWindow(self, Qt.WindowCloseButtonHint)
-        self.TemplateReport.templateReport(self.exportAsXML(None, True))
+        self.TemplateReport.templateReport(self.exportAsXML(None, True, True))
         self.TemplateReport.exec_()
 
         # DEBUGGING
@@ -586,8 +608,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # DEBUGGING
         print('importFromXML')
 
-    # TODO: NEED TO ADD MORE FOR REPORT ...
-    def exportAsXML(self, filename, export = False):
+    def exportAsXML(self, filename, export = False, extended = False):
         template = etree.Element('Template')
         etree.SubElement(template, 'Name').text = self.CharacterName.text()
         etree.SubElement(template, 'Realm').text = self.CharacterRealm.currentText()
@@ -598,9 +619,16 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         for slot, items in self.ItemDictionary.items():
             for item in items:
-                element = item.exportAsXML(None, True)
+                if extended:
+                    element = item.exportAsXML(None, True, True)
+                else:
+                    element = item.exportAsXML(None, True)
                 element.set('Index', str(items.index(item)))
                 template.append(element)
+
+        # TODO: POPULATE TEMPLATE STATISTICS, LINE 868 IN `SCWindow.py`
+        if extended:
+            pass
 
         if not export:
             with open(filename, 'wb') as document:
@@ -1042,9 +1070,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         item = self.ItemAttributeList[self.CurrentItemLabel]
         self.BuildUtility.setText('%3.1f' % total['Utility'])
         self.ItemUtility.setText('%3.1f' % item.getUtility())
-        self.ItemImbuePointsTotal.setText('%3.1f' % 0.0)
-        self.ItemImbuePoints.setText('/ 0.0')
-        self.ItemOvercharge.setText('N/A')
 
         if item.ActiveState in ('Crafted', 'Legendary'):
             self.ItemImbuePointsTotal.setText('%3.1f' % sum(item.getImbueValues()))
@@ -1055,13 +1080,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     self.ImbuePoints[index].setText('%3.1f' % item.getImbueValues()[index])
                 self.GemName[index].setText(item.getSlot(index).getGemName(self.CurrentRealm))
 
-            # TODO: CALCULATE OVERCHARGE SUCCESS
-            if sum(item.getImbueValues()) <= item.getMaxImbueValue():
-                self.ItemOvercharge.setText('%d%%' % 100)
-            elif sum(item.getImbueValues()) >= (item.getMaxImbueValue() + 6):
-                self.ItemOvercharge.setText('%d%%' % 0)
+            if isinstance(item.getOverchargeSuccess(), int):
+                self.ItemOvercharge.setText('%d%%' % item.getOverchargeSuccess())
             else:
-                self.ItemOvercharge.setText('Not Calculated')
+                self.ItemOvercharge.setText(item.getOverchargeSuccess())
 
         for key, datum in total['Stats'].items():
             Acuity = AllBonusList[self.CurrentRealm][self.CurrentClass]["Acuity"]
@@ -1218,20 +1240,33 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # DEBUGGING
         print('insertSkill')
 
-    # TODO: NOT COMPLETE, BAD VARIABLES ...
     def updateMenus(self, item):
         self.ItemNewMenu.clear()
         self.ItemTypeMenu.clear()
+        options = []
 
-        itemTypesList = [
-            'Crafted Item',
-            'Dropped Item',
-            'Legendary Bow',
-            'Legendary Staff',
-            'Legendary Weapon',
-        ]
+        if item.getParent() in ('Armor', 'Weapons'):
+            self.ItemTypeMenu.setEnabled(True)
+            self.ItemTypeButton.setEnabled(True)
+            if item.getParent() == 'Armor':
+                options.extend([
+                    'Crafted Item',
+                    'Dropped Item',
+                ])
+            elif item.getParent() == 'Weapons':
+                options.extend([
+                    'Crafted Item',
+                    'Dropped Item',
+                    'Legendary Bow',
+                    'Legendary Staff',
+                    'Legendary Weapon',
+                ])
+        else:
+            self.ItemTypeMenu.setDisabled(True)
+            self.ItemTypeButton.setDisabled(True)
+            options.extend(['Dropped'])
 
-        for value in itemTypesList:
+        for value in options:
             self.ItemNewMenu.addAction(value)
             self.ItemTypeMenu.addAction(value)
 

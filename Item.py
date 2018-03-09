@@ -110,6 +110,15 @@ class Item:
             utility += slot.getGemUtility()
         return utility
 
+    # TODO: CALCULATE OVERCHARGE SUCCESS
+    def getOverchargeSuccess(self):
+        if sum(self.getImbueValues()) <= self.getMaxImbueValue():
+            return 100
+        elif sum(self.getImbueValues()) >= (self.getMaxImbueValue() + 6):
+            return 0
+        else:
+            return 'N/A'
+
     def importFromXML(self, filename, export = False):
         tree = etree.parse(filename) if not export else etree.ElementTree(filename)
         if tree.getroot().tag == 'Item':
@@ -143,13 +152,11 @@ class Item:
             self.Restrictions = ['All']
 
     # TODO: NEED TO ADD MORE FOR REPORT ...
-    def exportAsXML(self, filename, export = False):
+    def exportAsXML(self, filename, export = False, extended = False):
         fields = [
             ('Realm', self.Realm),
             ('ActiveState', self.ActiveState),
             ('Type', self.Type),
-            ('Location', self.Location),
-            ('Equipped', self.Equipped),
             ('Name', self.Name),
             ('Level', self.Level),
             ('Quality', self.Quality),
@@ -164,14 +171,23 @@ class Item:
             ('Notes', self.Notes,)
         ]
 
-        # SlotImbuePoints
-        # ItemImbuePoints
-        # OverChargeSuccess
-        # Utility
+        if export:
+            fields.extend([
+                ('Location', self.Location),
+                ('Equipped', self.Equipped),
+            ])
+
+        if extended:
+            fields.extend([
+                ('Utility', '%.1f' % self.getUtility()),
+                ('Imbue', '%.1f' % sum(self.getImbueValues())),
+                ('ImbueMax', str(self.getMaxImbueValue())),
+                # ('Success', str(self.getOverchargeSuccess)),
+            ])
 
         item = etree.Element('Item')
         for key, value in fields:
-            if key not in ('Location', 'Restrictions', 'Equipped') and value != '':
+            if key != 'Restrictions' and value != '':
                 etree.SubElement(item, key).text = str(value)
             elif key == 'Restrictions' and value:
                 restrictions = etree.SubElement(item, 'Restrictions')
