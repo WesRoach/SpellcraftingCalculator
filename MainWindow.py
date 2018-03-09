@@ -222,8 +222,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.StatsGroup.layout().setColumnMinimumWidth(2, width)
         width = testFont.size(Qt.TextSingleLine, "(-26)", tabArray = None).width()
         self.StatsGroup.layout().setColumnMinimumWidth(3, width)
-        width = testFont.size(Qt.TextSingleLine, "Imbue", tabArray=None).width()
-        self.ItemStatsGroup.layout().setColumnMinimumWidth(4, width)
 
         for resist in (DropEffectList['All']['Resist']):
             self.StatLabel[resist] = getattr(self, resist + 'Label')
@@ -256,8 +254,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 parent.addChild(child)
 
         # TODO: SET A DYNAMIC MINIMAL WIDTH ...
-        # COULD TRY USING 'resizeColumnToContents' THEN
-        # SET THE 'sizeHint().width()' FOR 'SlotListTreeView'
         self.SlotListTreeView.setMinimumWidth(142)
         self.CharacterRealm.insertItems(0, Realms)
 
@@ -273,7 +269,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 self.ItemGemInfoFrame,
             ],
 
-            'Dropped': [self.RequirementLabel]}
+            'Dropped': [
+                self.RequirementLabel,
+            ]
+        }
 
         self.ItemNewButton.setFixedSize(QSize(buttonFixedWidth, buttonFixedHeight))
         self.ItemTypeButton.setFixedSize(QSize(buttonFixedWidth, buttonFixedHeight))
@@ -317,14 +316,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.Requirement[index].setFixedSize(QSize(width, defaultFixedHeight))
             self.Requirement[index].editingFinished.connect(self.EffectRequirementChanged)
 
+        width = self.setMinimumWidth(['37.5'])
         for index in range(0, 4):
             self.ImbuePoints.append(getattr(self, 'ImbuePoints%d' % index))
+            self.ImbuePoints[index].setFixedSize(QSize(width, defaultFixedHeight))
             self.GemNameLabel.append(getattr(self, 'GemNameLabel%d' % index))
 
         for index in range(0, 7):
             self.GemName.append(getattr(self, 'GemName%d' % index))
-            if index > 3:
-                self.GemName[index].setFixedSize(QSize(width + 2, defaultFixedHeight))
 
         testItem = Item('Crafted')
         for index in range(0, testItem.getSlotCount()):
@@ -364,7 +363,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ItemInfoWidgets = {
 
             'All': [
-
                 self.ItemRealm,
                 self.ItemRealmLabel,
                 self.ItemType,
@@ -383,10 +381,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 self.ItemAFDPSLabel,
                 self.ItemSpeed,
                 self.ItemSpeedLabel,
-                self.ItemLeftHand],
+                self.ItemLeftHand
+            ],
 
             'Jewelery': [
-
                 self.ItemDamageType,
                 self.ItemDamageTypeLabel,
                 self.ItemAFDPS,
@@ -396,24 +394,24 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 self.ItemLeftHand],
 
             'Armor': [
-
                 self.ItemDamageType,
                 self.ItemDamageTypeLabel,
                 self.ItemSpeed,
                 self.ItemSpeedLabel,
-                self.ItemLeftHand],
+                self.ItemLeftHand
+            ],
 
             'Weapons': [],
 
             'Mythical': [
-
                 self.ItemDamageType,
                 self.ItemDamageTypeLabel,
                 self.ItemAFDPS,
                 self.ItemAFDPSLabel,
                 self.ItemSpeed,
                 self.ItemSpeedLabel,
-                self.ItemLeftHand]
+                self.ItemLeftHand
+            ],
         }
 
         self.ItemRealm.setFixedHeight(defaultFixedHeight)
@@ -428,7 +426,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ItemAFDPS.setFixedSize(QSize(width, defaultFixedHeight))
         self.ItemSpeed.setFixedSize(QSize(width, defaultFixedHeight))
 
-        self.ItemInfoGroup.setFixedWidth(186)
+        self.ItemInformationGroup.setFixedWidth(186)
         self.ItemRestrictionsGroup.setFixedWidth(135)
 
     def initialize(self):
