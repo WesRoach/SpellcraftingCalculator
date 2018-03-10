@@ -112,10 +112,12 @@ class Item:
 
     # TODO: CALCULATE OVERCHARGE SUCCESS
     def getOverchargeSuccess(self):
-        if sum(self.getImbueValues()) <= self.getMaxImbueValue():
-            return 100
-        elif sum(self.getImbueValues()) >= (self.getMaxImbueValue() + 6):
+        if sum(self.getImbueValues()) == 0:
             return 0
+        elif sum(self.getImbueValues()) >= (self.getMaxImbueValue() + 6.0):
+            return 0
+        elif sum(self.getImbueValues()) <= (self.getMaxImbueValue() + 1.0):
+            return 100
         else:
             return 'N/A'
 
