@@ -89,12 +89,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def getIcon(self, name):
         icon = QIcon()
-
         for size in (16, 24, 32):
             icon.addFile(r'images/normal/' + name + str(size) + '.png', QSize(size, size), QIcon.Normal, QIcon.Off)
             icon.addFile(r'images/active/' + name + str(size) + '.png', QSize(size, size), QIcon.Active, QIcon.Off)
             icon.addFile(r'images/disabled/' + name + str(size) + '.png', QSize(size, size), QIcon.Disabled, QIcon.Off)
-
         return icon
 
     def initMenuBar(self):
@@ -448,6 +446,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         width = testFont.size(Qt.TextSingleLine, "1999.9", tabArray=None).width()
         self.BuildUtility.setFixedWidth(width)
         self.BuildUtility.setAlignment(Qt.AlignRight)
+        self.StatusBar.setStyleSheet('QStatusBar::item {border: None;}')
         self.StatusBar.addPermanentWidget(QLabel('Build Utility: '))
         self.StatusBar.addPermanentWidget(self.BuildUtility)
 
