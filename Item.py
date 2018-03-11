@@ -113,13 +113,13 @@ class Item:
     # TODO: CALCULATE OVERCHARGE SUCCESS
     def getOverchargeSuccess(self):
         if sum(self.getImbueValues()) == 0:
-            return 0
+            return 'N/A'
         elif sum(self.getImbueValues()) >= (self.getMaxImbueValue() + 6.0):
             return 0
         elif sum(self.getImbueValues()) <= (self.getMaxImbueValue() + 1.0):
             return 100
         else:
-            return 'N/A'
+            return 'N/C'
 
     def importFromXML(self, filename, export = False):
         tree = etree.parse(filename) if not export else etree.ElementTree(filename)
