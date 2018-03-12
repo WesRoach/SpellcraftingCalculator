@@ -19,6 +19,7 @@ __all__ = [
     'ImbuePoints',
     'MythicalCap',
     'OverchargeBasePercent',
+    'OverchargeSkillBonus',
 ]
 
 UnusedList = t2()
@@ -171,6 +172,8 @@ GemCraftingMaterialsOrder = t2(
 )
 
 OverchargeBasePercent = (-0, -10, -20, -30, -50, -70)
+
+OverchargeSkillBonus = (-45, -40, -35, -30, -25, -20, -15, -10, -5, 0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50,)
 
 ImbuePoints = (
     1, 2, 2, 3, 4, 4, 5, 5, 6, 7,
