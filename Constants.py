@@ -728,9 +728,11 @@ DropTypeList = t2((
     'Cap Increase',
     'Mythical Stat Cap',
     'Mythical Resist Cap',
+    'Mythical Stat & Cap',
+    'Mythical Resist & Cap',
     'Mythical Bonus',
-    'PvE Bonus',
     'Other Bonus',
+    'PvE Bonus',
 ))
 
 # =============================================== #
@@ -818,9 +820,11 @@ DropEffectList = {
         'Cap Increase': StatCapList,
         'Mythical Stat Cap': MythicalStatCapList,
         'Mythical Resist Cap': MythicalResistCapList,
+        'Mythical Stat & Cap': MythicalStatCapList,
+        'Mythical Resist & Cap': MythicalResistCapList,
         'Mythical Bonus': MythicalBonusList,
-        'PvE Bonus': PVEBonusList,
         'Other Bonus': OtherBonusList,
+        'PvE Bonus': PVEBonusList,
     }}
 
 for realm in Realms:
