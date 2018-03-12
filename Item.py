@@ -1,8 +1,13 @@
 # HEADER PLACE HOLDER
 
 from Character import ItemTypes
-from Constants import CraftedEffectTable, CraftedValuesList, GemNames, ImbuePoints
+from Constants import CraftedEffectTable, CraftedValuesList, GemNames, ImbuePoints, OverchargeBasePercent, OverchargeSkillBonus
 from lxml import etree
+
+# noinspection PyUnresolvedReferences
+# FIXES BUG IN PYCHARM THAT CAUSES
+# AN UNRESOLVED REFERENCE ERROR
+from math import floor
 
 
 class Item:
@@ -111,7 +116,7 @@ class Item:
         return utility
 
     # TODO: CALCULATE OVERCHARGE SUCCESS
-    def getOverchargeSuccess(self):
+    def getOverchargeSuccess(self, skill = 1000):
         if sum(self.getImbueValues()) == 0:
             return 'N/A'
         elif sum(self.getImbueValues()) >= (self.getMaxImbueValue() + 6.0):
@@ -119,7 +124,10 @@ class Item:
         elif sum(self.getImbueValues()) <= (self.getMaxImbueValue() + 1.0):
             return 100
         else:
-            return 'N/C'
+            bonus = OverchargeSkillBonus[floor(skill / 50) - 1]
+            overcharge = floor(sum(self.getImbueValues())) - self.getMaxImbueValue()
+            success = OverchargeBasePercent[overcharge] + 44 + 26 + bonus
+            return 100 if success > 100 else success
 
     def importFromXML(self, filename, export = False):
         tree = etree.parse(filename) if not export else etree.ElementTree(filename)
@@ -286,7 +294,7 @@ class ItemSlot:
             if self.getEffect() not in ('Hits', 'Power'):
                 return float((int(self.getEffectAmount()) * 2.0) / 3.0)
             elif self.getEffect() == 'Hits':
-                return float(int(self.getEffectAmount()) * 4.0)
+                return float(int(self.getEffectAmount()) / 4.0)
             elif self.getEffect() == 'Power':
                 return float(int(self.getEffectAmount()) * 2.0)
         elif self.getEffectType() == 'Resist':
