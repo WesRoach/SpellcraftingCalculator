@@ -94,13 +94,16 @@
                         <xsl:text>Imbue Points: </xsl:text><xsl:value-of select="Imbue"/>
                         <xsl:text> of </xsl:text><xsl:value-of select="ImbueMax"/>
                         <!--<xsl:text> &#160; Quality: </xsl:text><xsl:value-of select="ItemQuality"/>-->
-                        <xsl:text> &#160; Overcharge: </xsl:text>
+                        <xsl:text>,&#160; Overcharge: </xsl:text>
                         <xsl:choose>
                             <xsl:when test="(Imbue - ImbueMax) &lt; 0">
-                                <xsl:text>0</xsl:text>
+                                <xsl:text>0 (</xsl:text><xsl:value-of select="Success"/><xsl:text>%)</xsl:text>
+                            </xsl:when>
+							<xsl:when test="(Imbue - ImbueMax) &gt; 5.5">
+                                <xsl:text>Impossible (</xsl:text><xsl:value-of select="Success"/><xsl:text>%)</xsl:text>
                             </xsl:when>
                             <xsl:otherwise>
-                                <xsl:value-of select="Imbue - ImbueMax"/>
+                                <xsl:value-of select="Imbue - ImbueMax"/><xsl:text> (</xsl:text><xsl:value-of select="Success"/><xsl:text>%)</xsl:text>
                             </xsl:otherwise>
                         </xsl:choose>
                     </dt>

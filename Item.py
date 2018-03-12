@@ -105,7 +105,7 @@ class Item:
     def getMaxImbueValue(self):
         if self.ActiveState not in ('Crafted', 'Legendary'):
             return 0.0
-        if int(self.Level) < 1 or int(self.Level) > 51:
+        if self.Level == '' or int(self.Level) < 1 or int(self.Level) > 51:
             return 0.0
         return ImbuePoints[int(self.Level) - 1]
 
@@ -115,7 +115,6 @@ class Item:
             utility += slot.getGemUtility()
         return utility
 
-    # TODO: CALCULATE OVERCHARGE SUCCESS
     def getOverchargeSuccess(self, skill = 1000):
         if sum(self.getImbueValues()) == 0:
             return 'N/A'
@@ -192,7 +191,7 @@ class Item:
                 ('Utility', '%.1f' % self.getUtility()),
                 ('Imbue', '%.1f' % sum(self.getImbueValues())),
                 ('ImbueMax', str(self.getMaxImbueValue())),
-                # ('Success', str(self.getOverchargeSuccess)),
+                ('Success', str(self.getOverchargeSuccess())),
             ])
 
         item = etree.Element('Item')

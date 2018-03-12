@@ -1419,6 +1419,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         item = self.ItemAttributeList[self.CurrentItemLabel]
         item.Level = self.ItemLevel.text()
         self.ItemLevel.setModified(False)
+        self.RestoreItem(self.ItemAttributeList[self.CurrentItemLabel])
 
         # DEBUGGING
         print('ItemLevelChanged')
