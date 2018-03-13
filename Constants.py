@@ -598,7 +598,7 @@ MythicalResistCapList = t2((
 #      [  4,  0] IS THE LEVEL * 4
 Cap = {
     'Armor Factor': (1.00, 0),
-    'Armor Factor Cap': (1.00, 0),
+    'Armor Factor Cap': (0, 0),
     'Arrow Recovery': (1.00, 0),
     'Death Experience Loss Reduction': (1.00, 0),
     'Duration of Spells': (.50, 0),
@@ -620,6 +620,7 @@ Cap = {
     'Stat Buff Effectiveness': (.50, 0),
     'Stat Debuff Effectiveness': (.50, 0),
     'Other Bonus': (.20, 0),
+    'None': (0, 0),
 }
 
 # CALCULATED AS % OF LEVEL + CONSTANT
@@ -635,6 +636,7 @@ MythicalCap = {
     'Stat Cap': (1, 2),
     'Resist Cap': (0, 15),
     'Mythical Bonus': (1.00, 0),
+    'None': (0, 0),
 }
 
 # =============================================== #
