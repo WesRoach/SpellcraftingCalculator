@@ -136,6 +136,9 @@
                     <xsl:when test="name() = 'Power'">
                         <td>Pow:&#160;</td>
                     </xsl:when>
+					<xsl:when test="name() = 'ArmorFactor'">
+                        <td>AF:&#160;</td>
+                    </xsl:when>
                     <xsl:when test="name() = 'PowerPool'">
                         <td>%PP:&#160;</td>
                     </xsl:when>
@@ -150,17 +153,17 @@
                 </td>
                 <td>
                     <xsl:text>/ </xsl:text>
-                    <xsl:value-of select="BaseCap + CapBonus"/>
+                    <xsl:value-of select="Base + CapBonus + MythicalCapBonus"/>
                     <xsl:if test="name() = 'PowerPool'"><xsl:text>%</xsl:text></xsl:if>
                     <xsl:text>&#160;</xsl:text>
                 </td>
                 <td>
-                    <xsl:if test="TotalCapBonus &gt; 0">
-                        <xsl:text>(+</xsl:text><xsl:value-of select="TotalCapBonus"/><xsl:text>)</xsl:text>
+                    <xsl:if test="TotalCapBonus &gt; 0 or TotalMythicalCapBonus &gt; 0">
+                        <xsl:text>(+</xsl:text><xsl:value-of select="TotalCapBonus + TotalMythicalCapBonus"/><xsl:text>)</xsl:text>
                     </xsl:if>
                     <xsl:text>&#160;</xsl:text>
                 </td>
-                <td width="10">&#160;&#160;&#160;</td>
+                <td width="15">&#160;&#160;&#160;</td>
             </xsl:for-each>
         </tr>
     </xsl:template>
@@ -170,7 +173,7 @@
         <xsl:call-template name="hr"/>
         <table cellspacing="0" cellpadding="0">
             <xsl:call-template name="statsRow">
-                <xsl:with-param name="nodes" select="Strength|Intelligence|Hits|AF"/>
+                <xsl:with-param name="nodes" select="Strength|Intelligence|Hits|ArmorFactor"/>
             </xsl:call-template>
             <xsl:call-template name="statsRow">
                 <xsl:with-param name="nodes" select="Constitution|Piety|Fatigue"/>
@@ -196,7 +199,7 @@
                 </td>
                 <td>
                     <xsl:text>/ </xsl:text>
-                    <xsl:value-of select="BaseCap"/>
+                    <xsl:value-of select="Base + MythicalCapBonus"/>
                     <xsl:text>&#160;</xsl:text>
                 </td>
                 <td>
@@ -239,10 +242,10 @@
             <xsl:for-each select="$nodes">
                 <tr>
                     <td align="right"><xsl:value-of select="TotalBonus"/>&#160;</td>
-                    <td>/ <xsl:value-of select="BaseCap"/>&#160;</td>
+                    <td>/ <xsl:value-of select="Base"/>&#160;</td>
                     <xsl:choose>
-                        <xsl:when test="@text != ''">
-                            <td><xsl:value-of select="@text"/></td>
+                        <xsl:when test="@Text != ''">
+                            <td><xsl:value-of select="@Text"/></td>
                         </xsl:when>
                         <xsl:otherwise>
                             <td><xsl:value-of select="name()"/></td>
@@ -264,12 +267,12 @@
                 <xsl:call-template name="br"/>
                 <xsl:apply-templates select="Stats"/>
                 <xsl:apply-templates select="Resists"/>
-                <xsl:for-each select="Skills|Focus|OtherBonuses|PvEBonuses">
+                <xsl:for-each select="Skills|Focus|MythicalBonuses|OtherBonuses|PvEBonuses">
                     <xsl:if test="count(./*) &gt; 0">
                         <xsl:choose>
-                            <xsl:when test="@text != ''">
+                            <xsl:when test="@Text != ''">
                                 <xsl:call-template name="bonuslist">
-                                    <xsl:with-param name="title" select="@text"/>
+                                    <xsl:with-param name="title" select="@Text"/>
                                     <xsl:with-param name="nodes" select="./*"/>
                                 </xsl:call-template>
                             </xsl:when>

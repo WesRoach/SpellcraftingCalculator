@@ -291,7 +291,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         width = testFont.size(Qt.TextSingleLine, "Slot 12: ", tabArray = None).width()
         self.ItemStatsGroup.layout().setColumnMinimumWidth(0, width)
 
-        width = self.setMinimumWidth(['Mythical Resist & Cap'])
+        width = self.setMinimumWidth(['Mythical Resist & Cap '])
         for index in range(0, 12):
             self.EffectType.append(getattr(self, 'EffectType%d' % index))
             self.EffectType[index].setFixedSize(QSize(width, defaultFixedHeight))
@@ -625,9 +625,26 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 element.set('Index', str(items.index(item)))
                 template.append(element)
 
-        # TODO: POPULATE TEMPLATE STATISTICS, LINE 868 IN `SCWindow.py`
         if extended:
-            pass
+            total = self.summarize()
+
+            # TODO: MAKE THIS MORE ELEGANT ...
+            for key in (key for key in total.keys() if key != 'Utility'):
+                element = etree.SubElement(template, key)
+
+                if key[-7:] == 'Bonuses':
+                    element.attrib['Text'] = key[:-7] + ' ' + key[-7:]
+
+                for attribute, bonuses in total[key].items():
+                    tag = ''.join(x for x in attribute if x.isalnum())
+
+                    if tag != attribute:
+                        root = etree.SubElement(element, tag, Text = attribute)
+                    else:
+                        root = etree.SubElement(element, tag)
+
+                    for bonus, value in bonuses.items():
+                        etree.SubElement(root, bonus).text = str(value)
 
         if not export:
             with open(filename, 'wb') as document:
@@ -909,18 +926,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
             total['MythicalBonuses'][effect]['Base'] = int(Level * Base[0]) + Base[1]
 
-        for effect in DropEffectList['All']['PvE Bonus']:
-            total['PvEBonuses'][effect] = {}
-            total['PvEBonuses'][effect]['Bonus'] = 0
-            total['PvEBonuses'][effect]['TotalBonus'] = 0
-
-            try:  # NOT ALL PVE BONUSES HAVE A CAP ...
-                Base = Cap[effect]
-            except KeyError:
-                Base = Cap['Other Bonus']
-
-            total['PvEBonuses'][effect]['Base'] = int(Level * Base[0]) + Base[1]
-
         for effect in DropEffectList['All']['Other Bonus']:
             try:  # NOT ALL BONUSES HAVE A CAP ...
                 Base = Cap[effect]
@@ -943,6 +948,18 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             total['OtherBonuses'][effect]['Bonus'] = 0
             total['OtherBonuses'][effect]['TotalBonus'] = 0
             total['OtherBonuses'][effect]['Base'] = int(Level * Base[0]) + Base[1]
+
+        for effect in DropEffectList['All']['PvE Bonus']:
+            total['PvEBonuses'][effect] = {}
+            total['PvEBonuses'][effect]['Bonus'] = 0
+            total['PvEBonuses'][effect]['TotalBonus'] = 0
+
+            try:  # NOT ALL PVE BONUSES HAVE A CAP ...
+                Base = Cap[effect]
+            except KeyError:
+                Base = Cap['Other Bonus']
+
+            total['PvEBonuses'][effect]['Base'] = int(Level * Base[0]) + Base[1]
 
         for key, item in self.ItemAttributeList.items():
             if not item.Equipped == 2:
@@ -1022,6 +1039,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     amts['TotalMythicalCapBonus'] += amount
                     amts['MythicalCapBonus'] = min(amts['TotalMythicalCapBonus'], amts['BaseMythicalCap'])
 
+                # TODO: COMPLETE SECTION
+                elif item.getSlot(index).getEffectType() == 'Mythical Stat & Cap':
+                    pass
+
+                # TODO: COMPLETE SECTION
+                elif item.getSlot(index).getEffectType() == 'Mythical Resist & Cap':
+                    pass
+
                 elif item.getSlot(index).getEffectType() == 'Mythical Bonus':
                     amts = total['MythicalBonuses'][effect]
                     amts['TotalBonus'] += amount
@@ -1057,6 +1082,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             if stat in DropEffectList['All']['Mythical Stat Cap']:
                 amts['BaseMythicalCap'] = amts['BaseMythicalCap'] - amts['CapBonus']
                 amts['MythicalCapBonus'] = min(amts['TotalMythicalCapBonus'], amts['BaseMythicalCap'])
+
+            if not amts == '':
+                print(amts)
 
         # DEBUGGING
         print('summarize')
