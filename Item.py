@@ -161,7 +161,7 @@ class Item:
             self.Restrictions = ['All']
 
     # TODO: NEED TO ADD MORE FOR REPORT ...
-    def exportAsXML(self, filename, export = False, extended = False):
+    def exportAsXML(self, filename, export = False, report = False):
         fields = [
             ('Realm', self.Realm),
             ('ActiveState', self.ActiveState),
@@ -186,7 +186,7 @@ class Item:
                 ('Equipped', self.Equipped),
             ])
 
-        if extended:
+        if report:
             fields.extend([
                 ('Utility', '%.1f' % self.getUtility()),
                 ('Imbue', '%.1f' % sum(self.getImbueValues())),
