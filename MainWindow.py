@@ -607,7 +607,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # DEBUGGING
         print('importFromXML')
 
-    def exportAsXML(self, filename, export = False, extended = False):
+    def exportAsXML(self, filename, export = False, report = False):
         template = etree.Element('Template')
         etree.SubElement(template, 'Name').text = self.CharacterName.text()
         etree.SubElement(template, 'Realm').text = self.CharacterRealm.currentText()
@@ -618,14 +618,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         for slot, items in self.ItemDictionary.items():
             for item in items:
-                if extended:
+                if report:
                     element = item.exportAsXML(None, True, True)
                 else:
                     element = item.exportAsXML(None, True)
                 element.set('Index', str(items.index(item)))
                 template.append(element)
 
-        if extended:
+        if report:
             total = self.summarize()
 
             for key in (key for key in total.keys() if key != 'Utility'):
