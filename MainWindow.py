@@ -628,21 +628,16 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if extended:
             total = self.summarize()
 
-            # TODO: MAKE THIS MORE ELEGANT ...
             for key in (key for key in total.keys() if key != 'Utility'):
                 element = etree.SubElement(template, key)
-
                 if key[-7:] == 'Bonuses':
                     element.attrib['Text'] = key[:-7] + ' ' + key[-7:]
-
                 for attribute, bonuses in total[key].items():
                     tag = ''.join(x for x in attribute if x.isalnum())
-
                     if tag != attribute:
                         root = etree.SubElement(element, tag, Text = attribute)
                     else:
                         root = etree.SubElement(element, tag)
-
                     for bonus, value in bonuses.items():
                         etree.SubElement(root, bonus).text = str(value)
 
@@ -837,8 +832,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 #        SUMMARIZER AND CALCULATOR METHODS        #
 # =============================================== #
 
-    # TODO: FIX HOW CAPS ARE CALCULATED ...
-    # 'Armor Factor' DOES NOT HAVE A CAP ...
     def summarize(self):
         Level = int(self.CharacterLevel.text())
         total = {
@@ -861,6 +854,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             total['Stats'][effect]['MythicalCapBonus'] = 0
             total['Stats'][effect]['TotalMythicalCapBonus'] = 0
 
+            # TODO: SEPARATE 'Base' AND 'BaseCap'
             if effect in Cap:
                 Base = Cap[effect]
                 BaseCap = Cap[effect + ' Cap']
@@ -1524,6 +1518,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # DEBUGGING
         print('ItemRestrictionsChanged')
 
+    # TODO: REWRITE AND SIMPLIFY ...
     # TODO: 5TH SLOT SELECTION BASED ON TYPE AND LOCATION ...
     def EffectTypeChanged(self, etype = None, index = -1):
         if index == -1: index = self.getSlotIndex()
@@ -1547,6 +1542,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # DEBUGGING
         print('EffectTypeChanged, EffectType = ' + str(etype))
 
+    # TODO: REWRITE AND SIMPLIFY ...
     def EffectChanged(self, effect = None, index = -1):
         if index == -1: index = self.getSlotIndex()
         item = self.ItemAttributeList[self.CurrentItemLabel]
@@ -1564,7 +1560,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.Effect[index].insertItems(0, DropEffectList[self.CurrentRealm][effectType])
 
         if self.Effect[index].findText(effect) == -1:
-            effect = self.Effect[index].currentText()
+            if item.getSlot(index).getSlotType() == 'Craftable' and effectType == 'Skill':
+                for i in range(0, self.Effect[index].count()):
+                    if self.Effect[index].itemText(i)[:5] != 'All M':
+                        effect = self.Effect[index].itemText(i)
+                        break
+            else:
+                effect = self.Effect[index].currentText()
+
         item.getSlot(index).setEffect(effect)
         self.Effect[index].setCurrentText(item.getSlot(index).getEffect())
 
@@ -1574,6 +1577,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # DEBUGGING
         print('EffectChanged, Effect = ' + str(effect))
 
+    # TODO: REWRITE AND SIMPLIFY ...
     def EffectAmountChanged(self, amount = None, index = -1):
         if index == -1: index = self.getSlotIndex()
         item = self.ItemAttributeList[self.CurrentItemLabel]
@@ -1612,6 +1616,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # DEBUGGING
         print('EffectAmountChanged')
 
+    # TODO: REWRITE AND SIMPLIFY ...
     def EffectRequirementChanged(self, requirement = None, index = -1):
         if index == -1: index = self.getSlotIndex()
         item = self.ItemAttributeList[self.CurrentItemLabel]
