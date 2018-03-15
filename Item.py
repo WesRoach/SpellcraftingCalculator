@@ -272,36 +272,37 @@ class ItemSlot:
 
     def getImbueValue(self, value = 0):
         if not self.isCraftable(): return 0.0
-        if self.getEffectType() == 'Stat':
-            if self.getEffect() not in ('Hits', 'Power'):
+        if self.getEffectType() == 'Skill':
+            value = (int(self.getEffectAmount()) - 1) * 5.0
+        elif self.getEffectType() == 'Attribute':
+            if self.getEffect() not in ('Hit Points', 'Power'):
                 value = round((int(self.getEffectAmount()) - 1) / 1.7)
-            elif self.getEffect() == 'Hits':
+            elif self.getEffect() == 'Hit Points':
                 value = int(self.getEffectAmount()) / 4.0
             elif self.getEffect() == 'Power':
                 value = (int(self.getEffectAmount()) - 1) * 2.0
-        elif self.getEffectType() == 'Resist':
+        elif self.getEffectType() == 'Resistance':
             value = (int(self.getEffectAmount()) - 1) * 2.0
-        elif self.getEffectType() == 'Skill':
-            value = (int(self.getEffectAmount()) - 1) * 5.0
+
         return 1.0 if value < 1.0 else value
 
     def getGemUtility(self):
         if not self.getEffectAmount() or self.getEffectAmount() == '0':
             return 0.0
 
-        if self.getEffectType() == 'Stat':
-            if self.getEffect() not in ('Hits', 'Power'):
+        if self.getEffectType() == 'Skill':
+            return float(int(self.getEffectAmount()) * 5.0)
+        elif self.getEffectType() == 'Attribute':
+            if self.getEffect() not in ('Hit Points', 'Power'):
                 return float((int(self.getEffectAmount()) * 2.0) / 3.0)
-            elif self.getEffect() == 'Hits':
+            elif self.getEffect() == 'Hit Points':
                 return float(int(self.getEffectAmount()) / 4.0)
             elif self.getEffect() == 'Power':
                 return float(int(self.getEffectAmount()) * 2.0)
-        elif self.getEffectType() == 'Resist':
+        elif self.getEffectType() == 'Resistance':
             return float(int(self.getEffectAmount()) * 2.0)
         elif self.getEffectType() == 'Focus':
             return float(int(self.getEffectAmount()) * 1.0)
-        elif self.getEffectType() == 'Skill':
-            return float(int(self.getEffectAmount()) * 5.0)
         else:
             return 0.0
 

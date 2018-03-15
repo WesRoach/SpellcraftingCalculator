@@ -17,12 +17,12 @@ __all__ = [
     'EnhancedValuesList',
     'GemNames',
     'ImbuePoints',
-    'MythicalCap',
+    'MythicalBonusCap',
     'OverchargeBasePercent',
     'OverchargeSkillBonus',
+    'PVEBonusCap',
+    'TOABonusCap',
 ]
-
-# __all__ = []
 
 UnusedList = t2()
 UnusedTable = d2({})
@@ -33,22 +33,13 @@ UnusedValues = t2()
 # =============================================== #
 
 GemSuffixName = d2({
-    'Stat': 'Essence Jewel',
-    'Resist': 'Shielding Jewel',
-    'Hits': 'Essence Jewel',
+    'Skill': '',
+    'Attribute': 'Essence Jewel',
+    'Resistance': 'Shielding Jewel',
+    'Hit Points': 'Essence Jewel',
     'Power': 'Essence Jewel',
     'Focus': '',
-    'Skill': '',
 })
-
-# GemSuffixName = d2({
-#     'Skill': '',
-#     'Attribute': 'Essence Jewel',
-#     'Resistance': 'Shielding Jewel',
-#     'Hit Points': 'Essence Jewel',
-#     'Power': 'Essence Jewel',
-#     'Focus': '',
-# })
 
 GemNames = t2((
     'Raw',
@@ -198,7 +189,7 @@ ImbuePoints = (
 #             STAT RELATED CONSTANTS              #
 # =============================================== #
 
-StatTableOrdered = (
+AttributeTableOrdered = (
     ('Strength', 'Fiery',),
     ('Constitution', 'Earthen',),
     ('Dexterity', 'Vapor',),
@@ -207,38 +198,25 @@ StatTableOrdered = (
     ('Piety', 'Watery',),
     ('Empathy', 'Heated',),
     ('Charisma', 'Icy',),
+    ('Hit Points', 'Blood',),
     ('Power', 'Mystical',),
-    ('Hits', 'Blood',),
 )
 
-# AttributeTableOrdered = (
-#     ('Strength', 'Fiery',),
-#     ('Constitution', 'Earthen',),
-#     ('Dexterity', 'Vapor',),
-#     ('Quickness', 'Airy',),
-#     ('Intelligence', 'Dusty',),
-#     ('Piety', 'Watery',),
-#     ('Empathy', 'Heated',),
-#     ('Charisma', 'Icy',),
-#     ('Hit Points', 'Blood',),
-#     ('Power', 'Mystical',),
-# )
-
 suffix = 'Essence Jewel'
-StatTable = dict(StatTableOrdered)
+AttributeTable = dict(AttributeTableOrdered)
 
-for (key, value) in list(StatTable.items()):
-    StatTable[key] = (value, suffix, GemDusts[suffix], GemLiquids[value],)
+for (key, value) in list(AttributeTable.items()):
+    AttributeTable[key] = (value, suffix, GemDusts[suffix], GemLiquids[value],)
 
-CraftedStatList = t2([x[0] for x in StatTableOrdered])
-CraftedStatTable = d2(StatTable)
-DropStatList = t2(CraftedStatList + ('Acuity',))
-DropStatTable = dict().fromkeys(DropStatList)
+CraftedAttributeList = t2([x[0] for x in AttributeTableOrdered])
+CraftedAttributeTable = d2(AttributeTable)
+DropAttributeList = t2(CraftedAttributeList + ('Acuity',))
+DropAttributeTable = dict().fromkeys(DropAttributeList)
 
-del StatTableOrdered
-del StatTable
+del AttributeTableOrdered
+del AttributeTable
 
-StatValues = t2((
+AttributeValues = t2((
     '2',
     '5',
     '8',
@@ -577,8 +555,15 @@ SkillValues = t2((
 # =============================================== #
 #              CAP RELATED CONSTANTS              #
 # =============================================== #
+#                                                 #
+#    CALCULATED AS % OF LEVEL + CONSTANT          #
+#    E.G. [.25,  1] IS THE LEVEL / 4 + 1          #
+#         [  0, 10] IS A FIXED VALUE OF 10        #
+#         [  4,  0] IS THE LEVEL * 4              #
+#                                                 #
+# =============================================== #
 
-StatCapList = t2((
+AttributeCapList = t2((
     'Strength',
     'Constitution',
     'Dexterity',
@@ -587,26 +572,11 @@ StatCapList = t2((
     'Piety',
     'Charisma',
     'Empathy',
+    'Hit Points',
     'Power',
-    'Hits',
     'Acuity',
     'Fatigue',
 ))
-
-# AttributeCapList = t2((
-#     'Strength',
-#     'Constitution',
-#     'Dexterity',
-#     'Quickness',
-#     'Intelligence',
-#     'Piety',
-#     'Charisma',
-#     'Empathy',
-#     'Hit Points',
-#     'Power',
-#     'Acuity',
-#     'Fatigue',
-# ))
 
 MythicalStatCapList = t2((
     'Strength',
@@ -633,223 +603,108 @@ MythicalResistCapList = t2((
     'Essence',
 ))
 
-# CALCULATED AS % OF LEVEL + CONSTANT
-# E.G. [.25,  1] IS THE LEVEL / 4 + 1
-#      [  0, 10] IS A FIXED VALUE OF 10
-#      [  4,  0] IS THE LEVEL * 4
 Cap = {
-    'Armor Factor (AF)': (1.00, 0),
-    'Armor Factor (AF)Cap': (0, 0),
-    'Arrow Recovery': (1.00, 0),
-    'Death Experience Loss Reduction': (1.00, 0),
-    'Duration of Spells': (.50, 0),
-    'Fatigue': (.50, 0),
-    'Fatigue Cap': (.50, 0),
+    'Skill': (0.20, 1),
+    'Attribute': (1.50, 0),
+    'Resistance': (0.50, 1),
+    'Hit Points': (4.00, 0),
+    'Power': (0.50, 1),
     'Focus': (1.00, 0),
-    'Healing Effectiveness': (.50, 0),
-    'Hits': (4.00, 0),
-    'Hits Cap': (8.00, 0),
-    'Power': (.50, 1),
-    'Power Cap': (1.00, 0),
-    '% Power Pool': (.50, 0),
-    '% Power Pool Cap': (1.00, 0),
-    'PvE Bonus': (.20, 0),
-    'Resist': (.50, 1),
-    'Skill': (.20, 1),
-    'Stat': (1.50, 0),
-    'Stat Cap': (.50, 1),
-    'Stat Buff Effectiveness': (.50, 0),
-    'Stat Debuff Effectiveness': (.50, 0),
-    'Other Bonus': (.20, 0),
-    'None': (0, 0),
 }
 
-# Cap = {
-#     'Skill': (0.20, 1),
-#     'Attribute': (1.50, 0),
-#     'Attribute Cap': (0.50, 1),
-#     'Resistance': (0.50, 1),
-#     'Hit Points': (4.00, 0),
-#     'Hit Points Cap': (8.00, 0),
-#     'Power': (0.50, 1),
-#     'Power Cap': (1.00, 0),
-#     '% Power Pool': (0.50, 0),
-#     '% Power Pool Cap': (1.00, 0),
-#     'Focus': (1.00, 0),
-#     'Armor Factor': (1.00, 0),
-#     'Fatigue': (0.50, 0),
-#     'Fatigue Cap': (.50, 0),
-#     'Spell Duration': (.50, 0),
-#     'Healing Effectiveness': (.50, 0),
-#     'Enhancement Effectiveness': (.50, 0),
-#     'Debuff Effectiveness': (.50, 0),
-#     'TOA Bonus': (0.20, 0),
-# }
+TOABonusCap = {
+    'Attribute Cap': (0.50, 1),
+    'Hit Points Cap': (8.00, 0),
+    'Power Cap': (1.00, 0),
+    '% Power Pool': (0.50, 0),
+    '% Power Pool Cap': (1.00, 0),
+    'Armor Factor': (1.00, 0),
+    'Fatigue': (0.50, 0),
+    'Fatigue Cap': (.50, 0),
+    'Spell Duration': (.50, 0),
+    'Healing Effectiveness': (.50, 0),
+    'Enhancement Effectiveness': (.50, 0),
+    'Debuff Effectiveness': (.50, 0),
+    'ToA Bonus': (0.20, 0),
+    'None': (0.00, 0),
+}
 
-# TOACap = {
-#     'Attribute Cap': (0.50, 1),
-#     'Hit Points Cap': (8.00, 0),
-#     'Power Cap': (1.00, 0),
-#     '% Power Pool': (0.50, 0),
-#     '% Power Pool Cap': (1.00, 0),
-#     'Armor Factor': (1.00, 0),
-#     'Fatigue': (0.50, 0),
-#     'Fatigue Cap': (.50, 0),
-#     'Spell Duration': (.50, 0),
-#     'Healing Effectiveness': (.50, 0),
-#     'Enhancement Effectiveness': (.50, 0),
-#     'Debuff Effectiveness': (.50, 0),
-#     'TOA Bonus': (0.20, 0),
-# }
+PVEBonusCap = {
+    'Death Exp. Loss Reduction': (1.00, 0),
+    'PvE Bonus': (0.20, 0),
+}
 
-# PVECap = {
-#     'Death Exp. Loss Reduction': (1.00, 0),
-#     'PVE Bonus': (0.20, 0),
-# }
-
-# CALCULATED AS % OF LEVEL + CONSTANT
-# E.G. [.25,  1] IS THE LEVEL / 4 + 1
-#      [  0, 10] IS A FIXED VALUE OF 10
-#      [  4,  0] IS THE LEVEL * 4
-MythicalCap = {
-    'Crowd Control Reduction': (1.00, 0),
-    'DPS': (.20, 0),
+MythicalBonusCap = {
+    'Stat Cap': (1, 2),
+    'Resist Cap': (0, 15),
     'Endurance Regen': (1.00, 0),
     'Health Regen': (1.00, 0),
     'Power Regen': (1.00, 0),
-    'Stat Cap': (1, 2),
-    'Resist Cap': (0, 15),
+    'CC Duration Decrease': (1.00, 0),
+    'DPS': (.20, 0),
     'Mythical Bonus': (1.00, 0),
-    'None': (0, 0),
 }
-
-# MythicalCap = {
-#     'Stat Cap': (1, 2),
-#     'Resist Cap': (0, 15),
-#     'Endurance Regen': (1.00, 0),
-#     'Health Regen': (1.00, 0),
-#     'Power Regen': (1.00, 0),
-#     'Crowd Control Reduction': (1.00, 0),
-#     'DPS': (.20, 0),
-#     'Mythical Bonus': (1.00, 0),
-# }
 
 # =============================================== #
 #             BONUS RELATED CONSTANTS             #
 # =============================================== #
 
+TOABonusList = t2((
+    '% Power Pool',
+    'Armor Factor',
+    'Conversion',
+    'Fatigue',
+    'Melee Combat Speed',
+    'Melee Damage',
+    'Style Damage',
+    'Casting Speed',
+    'Magic Damage',
+    'Spell Pierce',
+    'Spell Range',
+    'Spell Duration',
+    'Arcane Siphone',
+    'Healing Effectiveness',
+    'Enhancement Effectiveness',
+    'Debuff Effectiveness',
+    'Health Regeneration',
+    'Power Regeneration',
+))
+
+PVEBonusList = t2((
+    'Block',
+    'Evade',
+    'Parry',
+    'Defensive Bonus',
+    'To Hit Bonus',
+    'Reactionary Style Damage',
+    'Pierce Ablative',
+    'Concentration',
+    'Bladeturn Reinforcement',
+    'Style Cost Reduction',
+    'Spell Power Cost Reduction',
+    'Death Exp. Loss Reduction',
+    'Neg. Effect Duration Reduction',
+))
+
 MythicalBonusList = t2((
     'Coin',
     'Bounty Points',
     'Realm Points',
-    'Crowd Control Reduction',
+    'Encumbrance',
+    'Safe Fall',
     'Endurance Regen',
     'Health Regen',
     'Power Regen',
-    'Safe Fall',
-    'Seige Speed',
     'Spell Increase',
     'Physical Defense',
+    'Seige Speed',
+    'Seige Damage Ablative',
+    'CC Duration Decrease',
     'DPS',
     'Block',
     'Evade',
     'Parry',
 ))
-
-OtherBonusList = t2((
-    '% Power Pool',
-    'Armor Factor',
-    'Archery Damage',
-    'Archery Range',
-    'Archery Speed',
-    'Casting Speed',
-    'Duration of Spells',
-    'Fatigue',
-    'Healing Effectiveness',
-    'Melee Damage',
-    'Melee Combat Speed',
-    'Spell Damage',
-    'Spell Piercing',
-    'Spell Range',
-    'Stat Buff Effectiveness',
-    'Stat Debuff Effectiveness',
-    'Style Damage',
-))
-
-# TOABonusList = t2((
-#     '% Power Pool',
-#     'Armor Factor',
-#     'Conversion',
-#     'Fatigue',
-#     'Melee Combat Speed',
-#     'Melee Damage',
-#     'Style Damage',
-#     'Casting Speed',
-#     'Magic Damage',
-#     'Spell Pierce',
-#     'Spell Range',
-#     'Spell Duration',
-#     'Arcane Siphone',
-#     'Healing Effectiveness',
-#     'Enhancement Effectiveness',
-#     'Debuff Effectiveness',
-#     'Health Regeneration',
-#     'Power Regeneration',
-# ))
-
-PVEBonusList = t2((
-    'Arrow Recovery',
-    'Bladeturn Reinforcement',
-    'Block',
-    'Concentration',
-    'Damage Reduction',
-    'Death Experience Loss Reduction',
-    'Defensive',
-    'Evade',
-    'Negative Effect Duration Reduction',
-    'Parry',
-    'Piece Ablative',
-    'Reactionary Style Damage',
-    'Power Cost Reduction',
-    'Style Cost Reduction',
-    'To Hit',
-))
-
-# PVEBonusList = t2((
-#     'Block',
-#     'Evade',
-#     'Parry',
-#     'Defensive Bonus',
-#     'To Hit Bonus',
-#     'Reactionary Style Damage',
-#     'Pierce Ablative',
-#     'Concentration',
-#     'Bladeturn Reinforcement',
-#     'Style Cost Reduction',
-#     'Spell Power Cost Reduction',
-#     'Death Exp. Loss Reduction',
-#     'Neg. Effect Duration Reduction',
-# ))
-
-# MythicalBonusList = t2((
-#     'Coin',
-#     'Bounty Points',
-#     'Realm Points',
-#     'Encumbrance',
-#     'Safe Fall',
-#     'Endurance Regen',
-#     'Health Regen',
-#     'Power Regen',
-#     'Spell Increase',
-#     'Physical Defense',
-#     'Seige Speed',
-#     'Seige Damage Ablative',
-#     'CC Duration Decrease',
-#     'DPS',
-#     'Block',
-#     'Evade',
-#     'Parry',
-# ))
 
 # =============================================== #
 #          EFFECT TYPE RELATED CONSTANTS          #
@@ -857,71 +712,37 @@ PVEBonusList = t2((
 
 CraftedTypeList = t2((
     'Unused',
-    'Stat',
-    'Resist',
-    'Focus',
     'Skill',
+    'Attribute',
+    'Resistance',
+    'Focus',
 ))
-
-# CraftedTypeList = t2((
-#     'Unused',
-#     'Skill',
-#     'Attribute',
-#     'Resistance',
-#     'Focus',
-# ))
 
 EnhancedTypeList = t2((
     'Unused',
-    'Focus',
     'Skill',
-    'Stat',
-    'Cap Increase',
+    'Attribute',
+    'Attribute Cap',
+    'Focus',
+    'ToA Bonus',
     'PvE Bonus',
-    'Other Bonus',
 ))
-
-# EnhancedTypeList = t2((
-#     'Unused',
-#     'Skill',
-#     'Attribute',
-#     'Attribute Cap',
-#     'Focus',
-#     'TOA Bonus',
-#     'PVE Bonus',
-# ))
 
 DropTypeList = t2((
     'Unused',
-    'Stat',
-    'Resist',
-    'Focus',
     'Skill',
-    'Cap Increase',
+    'Attribute',
+    'Attribute Cap',
+    'Resistance',
+    'Focus',
+    'ToA Bonus',
+    'PvE Bonus',
     'Mythical Stat Cap',
     'Mythical Resist Cap',
     'Mythical Stat & Cap',
     'Mythical Resist & Cap',
     'Mythical Bonus',
-    'Other Bonus',  # TODO: RENAME TO 'TOA Bonus'
-    'PvE Bonus',
 ))
-
-# DropTypeList = t2((
-#     'Unused',
-#     'Skill',
-#     'Attribute',
-#     'Attribute Cap',
-#     'Resistance',
-#     'Focus',
-#     'TOA Bonus',
-#     'PVE Bonus',
-#     'Mythical Stat Cap',
-#     'Mythical Resist Cap',
-#     'Mythical Stat & Cap',
-#     'Mythical Resist & Cap',
-#     'Mythical Bonus',
-# ))
 
 # =============================================== #
 #             EFFECT RELATED CONSTANTS            #
@@ -931,43 +752,23 @@ CraftedEffectTable = {
 
     'All': {
         'Unused': UnusedTable,
-        'Stat': CraftedStatTable,
-        'Resist': CraftedResistTable,
-    }, }
-
-# CraftedEffectTable = {
-#
-#     'All': {
-#         'Unused': UnusedTable,
-#         'Attribute': CraftedStatTable,
-#         'Resistance': CraftedResistTable,
-#     }, }
+        'Attribute': CraftedAttributeTable,
+        'Resistance': CraftedResistTable,
+    }}
 
 CraftedEffectList = {
 
     'All': {
         'Unused': UnusedList,
-        'Stat': CraftedStatList,
-        'Resist': CraftedResistList,
-    }, }
-
-# CraftedEffectList = {
-#
-#     'All': {
-#         'Unused': UnusedList,
-#         'Attribute': CraftedStatList,
-#         'Resistance': CraftedResistList,
-#     }, }
+        'Attribute': CraftedAttributeList,
+        'Resistance': CraftedResistList,
+    }}
 
 EnhancedEffectList = {
 
     'All': {
 
         'Unused': UnusedList,
-
-        'Focus': (
-            'All Spell Lines',
-        ),
 
         'Skill': (
             'All Archery Skills',
@@ -977,131 +778,62 @@ EnhancedEffectList = {
             'Shield',
         ),
 
-        'Stat': (
+        'Attribute': (
             'Strength',
             'Constitution',
             'Dexterity',
             'Quickness',
             'Acuity',
-            'Hits',
+            'Hit Points',
         ),
 
-        'Cap Increase': (
+        'Attribute Cap': (
             'Strength',
             'Constitution',
             'Dexterity',
             'Quickness',
             'Acuity',
-            'Hits',
+            'Hit Points',
             'Power',
             'Fatigue',
         ),
 
-        'Other Bonus': (
+        'Focus': (
+            'All Spell Lines',
+        ),
+
+        'ToA Bonus': (
             '% Power Pool',
-            'Fatigue',
             'Armor Factor',
-            'Archery Damage',
+            'Fatigue',
             'Melee Damage',
-            'Spell Damage',
-            'Duration of Spells',
+            'Magic Damage',
+            'Spell Duration',
             'Healing Effectiveness',
-            'Stat Buff Effectiveness',
+            'Enhancement Effectiveness',
         ),
 
         'PvE Bonus': (
             'Defensive',
-            'To Hit',
-        ),
+            'To Hit Bonus',
+         ),
     }}
-
-# EnhancedEffectList = {
-#
-#     'All': {
-#
-#         'Unused': UnusedList,
-#
-#         'Skill': (
-#             'All Archery Skills',
-#             'All Dual Wield Skills',
-#             'All Magic Skills',
-#             'All Melee Weapon Skills',
-#             'Shield',
-#         ),
-#
-#         'Attribute': (
-#             'Strength',
-#             'Constitution',
-#             'Dexterity',
-#             'Quickness',
-#             'Acuity',
-#             'Hit Points',
-#         ),
-#
-#         'Attribute Cap': (
-#             'Strength',
-#             'Constitution',
-#             'Dexterity',
-#             'Quickness',
-#             'Acuity',
-#             'Hit Points',
-#             'Power',
-#             'Fatigue',
-#         ),
-#
-#         'Focus': (
-#             'All Spell Lines',
-#         ),
-#
-#         'TOA Bonus': (
-#             '% Power Pool',
-#             'Armor Factor',
-#             'Fatigue',
-#             'Archery Damage',
-#             'Melee Damage',
-#             'Spell Damage',
-#             'Spell Duration',
-#             'Healing Effectiveness',
-#             'Enhancement Effectiveness',
-#         ),
-#
-#         'PVE Bonus': (
-#             'Defensive',
-#             'To Hit Bonus',
-#         ),
-#     }}
 
 DropEffectList = {
 
     'All': {
         'Unused': UnusedList,
-        'Resist': DropResistList,
-        'Stat': DropStatList,
-        'Cap Increase': StatCapList,
+        'Resistance': DropResistList,
+        'Attribute': DropAttributeList,
+        'Attribute Cap': AttributeCapList,
+        'ToA Bonus': TOABonusList,
+        'PvE Bonus': PVEBonusList,
         'Mythical Stat Cap': MythicalStatCapList,
         'Mythical Resist Cap': MythicalResistCapList,
         'Mythical Stat & Cap': MythicalStatCapList,
         'Mythical Resist & Cap': MythicalResistCapList,
         'Mythical Bonus': MythicalBonusList,
-        'Other Bonus': OtherBonusList,
-        'PvE Bonus': PVEBonusList,
     }}
-
-# DropEffectList = {
-#
-#     'All': {
-#         'Unused': UnusedList,
-#         'Resistance': DropResistList,
-#         'Attribute': DropAttributeList,
-#         'Attribute Cap': AttributeCapList,
-#         'TOA Bonus': TOABonusList,
-#         'PVE Bonus': PVEBonusList,
-#         'Mythical Stat Cap': MythicalStatCapList,
-#         'Mythical Resist Cap': MythicalResistCapList,
-#         'Mythical Stat & Cap': MythicalStatCapList,
-#         'Mythical Resist & Cap': MythicalResistCapList,
-#         'Mythical Bonus': MythicalBonusList,
-#     }}
 
 for realm in Realms:
     CraftedEffectTable[realm] = {}
@@ -1133,133 +865,68 @@ DropEffectList = d2(DropEffectList)
 CraftedValuesList = d2({
 
     'Unused': UnusedValues,
+    'Skill': SkillValues,
 
-    'Stat': d2({
-        'Strength': StatValues,
-        'Constitution': StatValues,
-        'Dexterity': StatValues,
-        'Quickness': StatValues,
-        'Intelligence': StatValues,
-        'Piety': StatValues,
-        'Empathy': StatValues,
-        'Charisma': StatValues,
-        'Hits': HitsValues,
+    'Attribute': d2({
+        'Strength': AttributeValues,
+        'Constitution': AttributeValues,
+        'Dexterity': AttributeValues,
+        'Quickness': AttributeValues,
+        'Intelligence': AttributeValues,
+        'Piety': AttributeValues,
+        'Empathy': AttributeValues,
+        'Charisma': AttributeValues,
+        'Hit Points': HitsValues,
         'Power': PowerValues,
     }),
 
-    'Resist': ResistValues,
+    'Resistance': ResistValues,
     'Focus': FocusValues,
-    'Skill': SkillValues,
 })
-
-# CraftedValuesList = d2({
-#
-#     'Unused': UnusedValues,
-#     'Skill': SkillValues,
-#
-#     'Attribute': d2({
-#         'Strength': StatValues,
-#         'Constitution': StatValues,
-#         'Dexterity': StatValues,
-#         'Quickness': StatValues,
-#         'Intelligence': StatValues,
-#         'Piety': StatValues,
-#         'Empathy': StatValues,
-#         'Charisma': StatValues,
-#         'Hits': HitsValues,
-#         'Power': PowerValues,
-#     }),
-#
-#     'Resistance': ResistValues,
-#     'Focus': FocusValues,
-# })
 
 EnhancedValuesList = {
 
     'Unused': UnusedValues,
-    'Focus': ('50',),
     'Skill': ('3',),
 
-    'Stat': {
+    'Attribute': {
         'Strength': ('15',),
         'Constitution': ('15',),
         'Dexterity': ('15',),
         'Quickness': ('15',),
         'Acuity': ('15',),
-        'Hits': ('40',),
+        'Hit Points': ('40',),
     },
 
-    'Cap Increase': {
+    'Attribute Cap': {
         'Strength': ('5',),
         'Constitution': ('5',),
         'Dexterity': ('5',),
         'Quickness': ('5',),
         'Acuity': ('5',),
-        'Hits': ('40',),
+        'Hit Points': ('40',),
         'Power': ('5',),
         'Fatigue': ('5',),
     },
 
+    'Focus': ('50',),
+
     'PvE Bonus': {
-        'Defensive': ('5',),
-        'To Hit': ('3',),
+        'Defensive Bonus': ('5',),
+        'To Hit Bonus': ('3',),
     },
 
-    'Other Bonus': {
+    'ToA Bonus': {
         '% Power Pool': ('5',),
-        'Fatigue': ('5',),
         'Armor Factor': ('10',),
+        'Fatigue': ('5',),
         'Archery Damage': ('2',),
         'Melee Damage': ('2',),
-        'Spell Damage': ('2',),
-        'Duration of Spells': ('5',),
+        'Magic Damage': ('2',),
+        'Spell Duration': ('5',),
         'Healing Effectiveness': ('5',),
-        'Stat Buff Effectiveness': ('5',),
+        'Enhancement Effectiveness': ('5',),
     }}
-
-# EnhancedValuesList = {
-#
-#     'Unused': UnusedValues,
-#     'Skill': ('3',),
-#
-#     'Attribute': {
-#         'Strength': ('15',),
-#         'Constitution': ('15',),
-#         'Dexterity': ('15',),
-#         'Quickness': ('15',),
-#         'Acuity': ('15',),
-#         'Hits': ('40',),
-#     },
-#
-#     'Attribute Cap': {
-#         'Strength': ('5',),
-#         'Constitution': ('5',),
-#         'Dexterity': ('5',),
-#         'Quickness': ('5',),
-#         'Acuity': ('5',),
-#         'Hits': ('40',),
-#         'Power': ('5',),
-#         'Fatigue': ('5',),
-#     },
-#
-#     'Focus': ('50',),
-#
-#     'PVE Bonus': {
-#         'Defensive': ('5',),
-#         'To Hit': ('3',),
-#     },
-#
-#     'TOA Bonus': {
-#         '% Power Pool': ('5',),
-#         'Armor Factor': ('10',),
-#         'Fatigue': ('5',),
-#         'Archery Damage': ('2',),
-#         'Melee Damage': ('2',),
-#         'Spell Damage': ('2',),
-#         'Spell Duration': ('5',),
-#         'Healing Effectiveness': ('5',),
-#         'Enhancement Effectiveness': ('5',),
-#     }}
 
 # =============================================== #
 #             GAME RELATED CONSTANTS              #

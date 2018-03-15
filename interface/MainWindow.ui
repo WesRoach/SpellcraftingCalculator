@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>825</width>
-    <height>635</height>
+    <height>650</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -284,7 +284,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QGroupBox" name="StatsGroup">
+         <widget class="QGroupBox" name="AttributesGroup">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
             <horstretch>0</horstretch>
@@ -292,7 +292,7 @@
            </sizepolicy>
           </property>
           <property name="title">
-           <string>Stats</string>
+           <string>Attributes</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignHCenter|Qt::AlignTop</set>
@@ -605,7 +605,7 @@
             </widget>
            </item>
            <item row="13" column="1">
-            <widget class="QLabel" name="Hits">
+            <widget class="QLabel" name="HitPoints">
              <property name="text">
               <string>0</string>
              </property>
@@ -622,7 +622,7 @@
             </widget>
            </item>
            <item row="13" column="0">
-            <widget class="QLabel" name="HitsLabel">
+            <widget class="QLabel" name="HitPointsLabel">
              <property name="text">
               <string>HITS: </string>
              </property>
@@ -636,7 +636,7 @@
             </widget>
            </item>
            <item row="13" column="2">
-            <widget class="QLabel" name="HitsCap">
+            <widget class="QLabel" name="HitPointsCap">
              <property name="text">
               <string>-</string>
              </property>
@@ -838,7 +838,7 @@
             </widget>
            </item>
            <item row="13" column="3">
-            <widget class="QLabel" name="HitsMythicalCap">
+            <widget class="QLabel" name="HitPointsMythicalCap">
              <property name="text">
               <string>-</string>
              </property>
@@ -855,7 +855,7 @@
           <zorder>CharismaLabel</zorder>
           <zorder>PowerPoolLabel</zorder>
           <zorder>ArmorFactorLabel</zorder>
-          <zorder>HitsLabel</zorder>
+          <zorder>HitPointsLabel</zorder>
           <zorder>DexterityLabel</zorder>
           <zorder>QuicknessLabel</zorder>
           <zorder>PowerLabel</zorder>
@@ -873,7 +873,7 @@
           <zorder>PowerPool</zorder>
           <zorder>Fatigue</zorder>
           <zorder>ArmorFactor</zorder>
-          <zorder>Hits</zorder>
+          <zorder>HitPoints</zorder>
           <zorder>StrengthCap</zorder>
           <zorder>ConstitutionCap</zorder>
           <zorder>DexterityCap</zorder>
@@ -886,7 +886,7 @@
           <zorder>PowerPoolCap</zorder>
           <zorder>FatigueCap</zorder>
           <zorder>ArmorFactorCap</zorder>
-          <zorder>HitsCap</zorder>
+          <zorder>HitPointsCap</zorder>
           <zorder>EmpathyMythicalCap</zorder>
           <zorder>CharismaMythicalCap</zorder>
           <zorder>PietyMythicalCap</zorder>
@@ -903,7 +903,7 @@
           <zorder>PowerPoolMythicalCap</zorder>
           <zorder>FatigueMythicalCap</zorder>
           <zorder>ArmorFactorMythicalCap</zorder>
-          <zorder>HitsMythicalCap</zorder>
+          <zorder>HitPointsMythicalCap</zorder>
          </widget>
         </item>
         <item>
@@ -915,7 +915,7 @@
            </sizepolicy>
           </property>
           <property name="title">
-           <string>Resists</string>
+           <string>Resistances</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignHCenter|Qt::AlignTop</set>
@@ -1337,7 +1337,7 @@
            </sizepolicy>
           </property>
           <property name="title">
-           <string>Skills and Other Bonuses</string>
+           <string>Skills, ToA Bonuses, PvE Bonuses, and Mythical Bonuses</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignHCenter|Qt::AlignTop</set>

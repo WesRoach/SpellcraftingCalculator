@@ -7,7 +7,7 @@ from PyQt5.QtGui import QFontMetrics, QIcon, QIntValidator
 from PyQt5.QtWidgets import QFileDialog, QLabel, QListWidgetItem, QMainWindow, QMenu, QMessageBox, QToolBar, QTreeWidgetItem, QTreeWidgetItemIterator, QStyle, QStyleOptionComboBox
 from Character import AllBonusList, AllRealms, ClassList, ItemDamageTypes, ItemOrigins, ItemTypes, Races, Realms
 from Constants import Cap, CraftedTypeList, CraftedEffectList, CraftedValuesList, DropTypeList, DropEffectList
-from Constants import EnhancedTypeList, EnhancedEffectList, EnhancedValuesList, MythicalCap
+from Constants import EnhancedTypeList, EnhancedEffectList, EnhancedValuesList, MythicalBonusCap, PVEBonusCap, TOABonusCap
 from Item import Item
 from ReportWindow import ReportWindow
 from lxml import etree
@@ -203,26 +203,27 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.CharacterRealmRank.setFixedSize(QSize(width, defaultFixedHeight))
         self.CharacterChampLevel.setFixedSize(QSize(width, defaultFixedHeight))
 
-        for stat in (DropEffectList['All']['Stat'] + ('ArmorFactor', 'Fatigue', 'PowerPool',)):
-            self.StatLabel[stat] = getattr(self, stat + 'Label')
-            self.StatValue[stat] = getattr(self, stat)
-            self.StatCap[stat] = getattr(self, stat + 'Cap')
+        for attribute in DropEffectList['All']['Attribute'] + ('ArmorFactor', 'Fatigue', 'PowerPool',):
+            attribute = attribute.replace(' ', '')
+            self.StatLabel[attribute] = getattr(self, attribute + 'Label')
+            self.StatValue[attribute] = getattr(self, attribute)
+            self.StatCap[attribute] = getattr(self, attribute + 'Cap')
 
             try:  # NOT ALL STATS HAVE MYTHICAL CAP ...
-                self.StatMythicalCap[stat] = getattr(self, stat + 'MythicalCap')
+                self.StatMythicalCap[attribute] = getattr(self, attribute + 'MythicalCap')
             except AttributeError:
                 pass
 
         width = testFont.size(Qt.TextSingleLine, "CON: ", tabArray = None).width()
-        self.StatsGroup.layout().setColumnMinimumWidth(0, width)
+        self.AttributesGroup.layout().setColumnMinimumWidth(0, width)
         width = testFont.size(Qt.TextSingleLine, "-400", tabArray = None).width()
-        self.StatsGroup.layout().setColumnMinimumWidth(1, width)
+        self.AttributesGroup.layout().setColumnMinimumWidth(1, width)
         width = testFont.size(Qt.TextSingleLine, "(400)", tabArray = None).width()
-        self.StatsGroup.layout().setColumnMinimumWidth(2, width)
+        self.AttributesGroup.layout().setColumnMinimumWidth(2, width)
         width = testFont.size(Qt.TextSingleLine, "(-26)", tabArray = None).width()
-        self.StatsGroup.layout().setColumnMinimumWidth(3, width)
+        self.AttributesGroup.layout().setColumnMinimumWidth(3, width)
 
-        for resist in (DropEffectList['All']['Resist']):
+        for resist in DropEffectList['All']['Resistance']:
             self.StatLabel[resist] = getattr(self, resist + 'Label')
             self.StatValue[resist] = getattr(self, resist)
             self.StatBonus[resist] = getattr(self, resist + 'Cap')
@@ -291,7 +292,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         width = testFont.size(Qt.TextSingleLine, "Slot 12: ", tabArray = None).width()
         self.ItemStatsGroup.layout().setColumnMinimumWidth(0, width)
 
-        width = self.setMinimumWidth(['Mythical Resist & Cap '])
+        width = self.setMinimumWidth([' Mythical Resist & Cap '])
         for index in range(0, 12):
             self.EffectType.append(getattr(self, 'EffectType%d' % index))
             self.EffectType[index].setFixedSize(QSize(width, defaultFixedHeight))
@@ -310,7 +311,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.AmountStatic[index].setFixedSize(QSize(width, defaultFixedHeight))
             self.AmountStatic[index].activated[str].connect(self.EffectAmountChanged)
 
-        width = self.setMinimumWidth(['Negative Effect Duration Reduction'])
+        width = self.setMinimumWidth([' Neg. Effect Duration Reduction '])
         for index in range(0, 12):
             self.SlotLabel.append(getattr(self, 'SlotLabel%d' % index))
             self.Effect.append(getattr(self, 'Effect%d' % index))
@@ -835,59 +836,69 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def summarize(self):
         Level = int(self.CharacterLevel.text())
         total = {
-            'Stats': {},
-            'Resists': {},
             'Skills': {},
+            'Attributes': {},
+            'Resistances': {},
             'Focus': {},
+            'TOABonuses': {},
+            'PVEBonuses': {},
             'MythicalBonuses': {},
-            'OtherBonuses': {},
-            'PvEBonuses': {},
             'Utility': 0.0
         }
 
-        for effect in DropEffectList['All']['Stat'] + ('Armor Factor', 'Fatigue', '% Power Pool'):
-            total['Stats'][effect] = {}
-            total['Stats'][effect]['Bonus'] = 0
-            total['Stats'][effect]['TotalBonus'] = 0
-            total['Stats'][effect]['CapBonus'] = 0
-            total['Stats'][effect]['TotalCapBonus'] = 0
-            total['Stats'][effect]['MythicalCapBonus'] = 0
-            total['Stats'][effect]['TotalMythicalCapBonus'] = 0
+        # DEBUGGING
+        amts = ''
 
-            # TODO: SEPARATE 'Base' AND 'BaseCap'
-            if effect in Cap:
+        for effect in DropEffectList['All']['Attribute'] + ('Armor Factor', 'Fatigue', '% Power Pool'):
+            total['Attributes'][effect] = {}
+            total['Attributes'][effect]['Bonus'] = 0
+            total['Attributes'][effect]['TotalBonus'] = 0
+            total['Attributes'][effect]['CapBonus'] = 0
+            total['Attributes'][effect]['TotalCapBonus'] = 0
+            total['Attributes'][effect]['MythicalCapBonus'] = 0
+            total['Attributes'][effect]['TotalMythicalCapBonus'] = 0
+
+            if effect in ('Armor Factor', 'Fatigue', '% Power Pool'):
+                Base = TOABonusCap[effect]
+
+                try:  # NOT ALL ATTRIBUTES HAVE A CAP
+                    BaseCap = TOABonusCap[effect + ' Cap']
+                except KeyError:
+                    BaseCap = TOABonusCap['None']
+
+            elif effect in Cap:
                 Base = Cap[effect]
-                BaseCap = Cap[effect + ' Cap']
+                BaseCap = TOABonusCap[effect + ' Cap']
             else:
-                Base = Cap['Stat']
-                BaseCap = Cap['Stat Cap']
+                Base = Cap['Attribute']
+                BaseCap = TOABonusCap['Attribute Cap']
 
-            total['Stats'][effect]['Base'] = int(Level * Base[0]) + Base[1]
-            total['Stats'][effect]['BaseCap'] = int(Level * BaseCap[0]) + BaseCap[1]
+            total['Attributes'][effect]['Base'] = int(Level * Base[0]) + Base[1]
+            total['Attributes'][effect]['BaseCap'] = int(Level * BaseCap[0]) + BaseCap[1]
 
             if effect in DropEffectList['All']['Mythical Stat Cap']:
-                BaseMythicalCap = MythicalCap['Stat Cap']
-                total['Stats'][effect]['BaseMythicalCap'] = int(Level * BaseMythicalCap[0]) + BaseMythicalCap[1]
+                BaseMythicalCap = MythicalBonusCap['Stat Cap']
+                total['Attributes'][effect]['BaseMythicalCap'] = int(Level * BaseMythicalCap[0]) + BaseMythicalCap[1]
 
-            if effect in MythicalCap:
-                BaseMythicalCap = MythicalCap[effect]
-                total['Stats'][effect]['BaseMythicalCap'] = int(Level * BaseMythicalCap[0]) + BaseMythicalCap[1]
+            if effect in MythicalBonusCap:
+                BaseMythicalCap = MythicalBonusCap[effect]
+                total['Attributes'][effect]['BaseMythicalCap'] = int(Level * BaseMythicalCap[0]) + BaseMythicalCap[1]
 
-        for effect in DropEffectList['All']['Resist']:
-            total['Resists'][effect] = {}
-            total['Resists'][effect]['Bonus'] = 0
-            total['Resists'][effect]['TotalBonus'] = 0
-            total['Resists'][effect]['MythicalCapBonus'] = 0
-            total['Resists'][effect]['TotalMythicalCapBonus'] = 0
+        for effect in DropEffectList['All']['Resistance']:
+            total['Resistances'][effect] = {}
+            total['Resistances'][effect]['Bonus'] = 0
+            total['Resistances'][effect]['TotalBonus'] = 0
+            total['Resistances'][effect]['MythicalCapBonus'] = 0
+            total['Resistances'][effect]['TotalMythicalCapBonus'] = 0
             Race = str(self.CharacterRace.currentText())
 
-            if effect in Races['All'][Race]['Resists']:
-                total['Resists'][effect]['RacialBonus'] = Races['All'][Race]['Resists'][effect]
+            if effect in Races['All'][Race]['Resistances']:
+                total['Resistances'][effect]['RacialBonus'] = Races['All'][Race]['Resistances'][effect]
 
-            Base = Cap['Resist']
-            BaseMythicalCap = MythicalCap['Resist Cap']
-            total['Resists'][effect]['Base'] = int(Level * Base[0]) + Base[1]
-            total['Resists'][effect]['BaseMythicalCap'] = int(Level * BaseMythicalCap[0]) + BaseMythicalCap[1]
+            Base = Cap['Resistance']
+            BaseMythicalCap = MythicalBonusCap['Resist Cap']
+            total['Resistances'][effect]['Base'] = int(Level * Base[0]) + Base[1]
+            total['Resistances'][effect]['BaseMythicalCap'] = int(Level * BaseMythicalCap[0]) + BaseMythicalCap[1]
 
         for key, item in self.ItemAttributeList.items():
             if not item.Equipped == 2:
@@ -899,19 +910,52 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 effect = item.getSlot(index).getEffect()
                 amount = int('0' + re.sub('[^\d]', '', item.getSlot(index).getEffectAmount()))
 
-                if item.getSlot(index).getEffectType() == 'Stat':
+                if item.getSlot(index).getEffectType() == 'Skill':
+                    effects = [effect, ]
+
+                    if effect[0:4] == 'All ' and effect in AllBonusList[self.CurrentRealm][self.CurrentClass]:
+                        effects.extend(AllBonusList[self.CurrentRealm][self.CurrentClass][effect])
+
+                    for effect in effects:
+                        if effect in total['Skills']:
+                            amts = total['Skills'][effect]
+                            amts['TotalBonus'] += amount
+                        else:
+                            total['Skills'][effect] = {}
+                            total['Skills'][effect]['Bonus'] = 0
+                            total['Skills'][effect]['TotalBonus'] = amount
+                            total['Skills'][effect]['Base'] = int(Level * Cap['Skill'][0]) + Cap['Skill'][1]
+                            amts = total['Skills'][effect]
+
+                        amts['Bonus'] = min(amts['TotalBonus'], amts['Base'])
+
+                elif item.getSlot(index).getEffectType() == 'Attribute':
                     effects = [effect, ]
 
                     if effect == 'Acuity':
                         effects.extend(AllBonusList[self.CurrentRealm][self.CurrentClass][effect])
 
                     for effect in effects:
-                        amts = total['Stats'][effect]
+                        amts = total['Attributes'][effect]
                         amts['TotalBonus'] += amount
                         amts['Bonus'] = min(amts['TotalBonus'], amts['Base'] + amts['CapBonus'])
 
-                elif item.getSlot(index).getEffectType() == 'Resist':
-                    amts = total['Resists'][effect]
+                elif item.getSlot(index).getEffectType() == 'Attribute Cap':
+                    effects = [effect, ]
+
+                    if effect == 'Power':
+                        effects.append('% Power Pool')
+
+                    elif effect == 'Acuity':
+                        effects.extend(AllBonusList[self.CurrentRealm][self.CurrentClass][effect])
+
+                    for effect in effects:
+                        amts = total['Attributes'][effect]
+                        amts['TotalCapBonus'] += amount
+                        amts['CapBonus'] = min(amts['TotalCapBonus'], amts['BaseCap'])
+
+                elif item.getSlot(index).getEffectType() == 'Resistance':
+                    amts = total['Resistances'][effect]
                     amts['TotalBonus'] += amount
                     amts['Bonus'] = min(amts['TotalBonus'], amts['Base'] + amts['MythicalCapBonus'])
 
@@ -934,38 +978,60 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
                         amts['Bonus'] = min(amts['TotalBonus'], amts['Base'])
 
-                elif item.getSlot(index).getEffectType() == 'Skill':
-                    effects = [effect, ]
+                elif item.getSlot(index).getEffectType() == 'ToA Bonus':
 
-                    if effect[0:4] == 'All ' and effect in AllBonusList[self.CurrentRealm][self.CurrentClass]:
-                        effects.extend(AllBonusList[self.CurrentRealm][self.CurrentClass][effect])
-
-                    for effect in effects:
-                        if effect in total['Skills']:
-                            amts = total['Skills'][effect]
-                            amts['TotalBonus'] += amount
-                        else:
-                            total['Skills'][effect] = {}
-                            total['Skills'][effect]['Bonus'] = 0
-                            total['Skills'][effect]['TotalBonus'] = amount
-                            total['Skills'][effect]['Base'] = int(Level * Cap['Skill'][0]) + Cap['Skill'][1]
-                            amts = total['Skills'][effect]
-
+                    if effect in ('Armor Factor', 'Fatigue', '% Power Pool'):
+                        amts = total['Attributes'][effect]
+                        amts['TotalBonus'] += amount
                         amts['Bonus'] = min(amts['TotalBonus'], amts['Base'])
+                        continue
 
-                elif item.getSlot(index).getEffectType() == 'Cap Increase':
-                    effects = [effect, ]
+                    if effect == 'Casting Speed':
+                        effect = "Archery and Casting Speed"
 
-                    if effect == 'Power':
-                        effects.append('% Power Pool')
+                    if effect == 'Magic Damage':
+                        effect = "Archery and Magic Damage"
 
-                    elif effect == 'Acuity':
-                        effects.extend(AllBonusList[self.CurrentRealm][self.CurrentClass][effect])
+                    if effect == 'Spell Range':
+                        effect = "Archery and Spell Range"
 
-                    for effect in effects:
-                        amts = total['Stats'][effect]
-                        amts['TotalCapBonus'] += amount
-                        amts['CapBonus'] = min(amts['TotalCapBonus'], amts['BaseCap'])
+                    if effect in total['TOABonuses']:
+                        amts = total['TOABonuses'][effect]
+                        amts['TotalBonus'] += amount
+                    else:
+                        total['TOABonuses'][effect] = {}
+                        total['TOABonuses'][effect]['Bonus'] = 0
+                        total['TOABonuses'][effect]['TotalBonus'] = amount
+                        amts = total['TOABonuses'][effect]
+
+                        try:  # NOT ALL BONUSES HAVE A CAP ...
+                            Base = TOABonusCap[effect]
+                        except KeyError:
+                            Base = TOABonusCap['ToA Bonus']
+
+                        total['TOABonuses'][effect]['Base'] = int(Level * Base[0]) + Base[1]
+
+                    amts['Bonus'] = min(amts['TotalBonus'], amts['Base'])
+
+                elif item.getSlot(index).getEffectType() == 'PvE Bonus':
+
+                    if effect in total['PVEBonuses']:
+                        amts = total['PVEBonuses'][effect]
+                        amts['TotalBonus'] += amount
+                    else:
+                        total['PVEBonuses'][effect] = {}
+                        total['PVEBonuses'][effect]['Bonus'] = 0
+                        total['PVEBonuses'][effect]['TotalBonus'] = amount
+                        amts = total['PVEBonuses'][effect]
+
+                        try:  # NOT ALL PVE BONUSES HAVE A CAP ...
+                            Base = PVEBonusCap[effect]
+                        except KeyError:
+                            Base = PVEBonusCap['PvE Bonus']
+
+                        total['PVEBonuses'][effect]['Base'] = int(Level * Base[0]) + Base[1]
+
+                    amts['Bonus'] = min(amts['TotalBonus'], amts['Base'])
 
                 elif item.getSlot(index).getEffectType() == 'Mythical Stat Cap':
                     effects = [effect, ]
@@ -974,22 +1040,34 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                         effects.extend(AllBonusList[self.CurrentRealm][self.CurrentClass][effect])
 
                     for effect in effects:
-                        amts = total['Stats'][effect]
+                        amts = total['Attributes'][effect]
                         amts['TotalMythicalCapBonus'] += amount
                         amts['MythicalCapBonus'] = min(amts['TotalMythicalCapBonus'], amts['BaseMythicalCap'])
 
                 elif item.getSlot(index).getEffectType() == 'Mythical Resist Cap':
-                    amts = total['Resists'][effect]
+                    amts = total['Resistances'][effect]
                     amts['TotalMythicalCapBonus'] += amount
                     amts['MythicalCapBonus'] = min(amts['TotalMythicalCapBonus'], amts['BaseMythicalCap'])
 
-                # TODO: COMPLETE SECTION
                 elif item.getSlot(index).getEffectType() == 'Mythical Stat & Cap':
-                    pass
+                    effects = [effect, ]
 
-                # TODO: COMPLETE SECTION
+                    if effect == 'Acuity':
+                        effects.extend(AllBonusList[self.CurrentRealm][self.CurrentClass][effect])
+
+                    for effect in effects:
+                        amts = total['Attributes'][effect]
+                        amts['TotalBonus'] += amount
+                        amts['Bonus'] = min(amts['TotalBonus'], amts['Base'] + amts['CapBonus'])
+                        amts['TotalMythicalCapBonus'] += amount
+                        amts['MythicalCapBonus'] = min(amts['TotalMythicalCapBonus'], amts['BaseMythicalCap'])
+
                 elif item.getSlot(index).getEffectType() == 'Mythical Resist & Cap':
-                    pass
+                    amts = total['Resistances'][effect]
+                    amts['TotalBonus'] += amount
+                    amts['Bonus'] = min(amts['TotalBonus'], amts['Base'] + amts['MythicalCapBonus'])
+                    amts['TotalMythicalCapBonus'] += amount
+                    amts['MythicalCapBonus'] = min(amts['TotalMythicalCapBonus'], amts['BaseMythicalCap'])
 
                 elif item.getSlot(index).getEffectType() == 'Mythical Bonus':
 
@@ -1003,74 +1081,23 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                         amts = total['MythicalBonuses'][effect]
 
                         try:  # NOT ALL MYTHICAL BONUSES HAVE A CAP ...
-                            Base = MythicalCap[effect]
+                            Base = MythicalBonusCap[effect]
                         except KeyError:
-                            Base = MythicalCap['Mythical Bonus']
+                            Base = MythicalBonusCap['Mythical Bonus']
 
                         total['MythicalBonuses'][effect]['Base'] = int(Level * Base[0]) + Base[1]
 
                     amts['Bonus'] = min(amts['TotalBonus'], amts['Base'])
 
-                elif item.getSlot(index).getEffectType() == 'Other Bonus':
-
-                    if effect in ('Armor Factor', 'Fatigue', '% Power Pool'):
-                        amts = total['Stats'][effect]
-                        amts['TotalBonus'] += amount
-                        amts['Bonus'] = min(amts['TotalBonus'], amts['Base'])
-                        continue
-
-                    if effect in ('Casting Speed', 'Archery Speed'):
-                        effect = 'Archery and Casting Speed'
-
-                    if effect in ('Spell Damage', 'Archery Damage'):
-                        effect = 'Archery and Spell Damage'
-
-                    if effect in ('Spell Range', 'Archery Range'):
-                        effect = 'Archery and Spell Range'
-
-                    if effect in total['OtherBonuses']:
-                        amts = total['OtherBonuses'][effect]
-                        amts['TotalBonus'] += amount
-                    else:
-                        total['OtherBonuses'][effect] = {}
-                        total['OtherBonuses'][effect]['Bonus'] = 0
-                        total['OtherBonuses'][effect]['TotalBonus'] = amount
-                        amts = total['OtherBonuses'][effect]
-
-                        try:  # NOT ALL BONUSES HAVE A CAP ...
-                            Base = Cap[effect]
-                        except KeyError:
-                            Base = Cap['Other Bonus']
-
-                        total['OtherBonuses'][effect]['Base'] = int(Level * Base[0]) + Base[1]
-
-                    amts['Bonus'] = min(amts['TotalBonus'], amts['Base'])
-
-                elif item.getSlot(index).getEffectType() == 'PvE Bonus':
-
-                    if effect in total['PvEBonuses']:
-                        amts = total['PvEBonuses'][effect]
-                        amts['TotalBonus'] += amount
-                    else:
-                        total['PvEBonuses'][effect] = {}
-                        total['PvEBonuses'][effect]['Bonus'] = 0
-                        total['PvEBonuses'][effect]['TotalBonus'] = amount
-                        amts = total['PvEBonuses'][effect]
-
-                        try:  # NOT ALL PVE BONUSES HAVE A CAP ...
-                            Base = Cap[effect]
-                        except KeyError:
-                            Base = Cap['Other Bonus']
-
-                        total['PvEBonuses'][effect]['Base'] = int(Level * Base[0]) + Base[1]
-
-                    amts['Bonus'] = min(amts['TotalBonus'], amts['Base'])
-
         # THIS IS DIRTY ...
-        for stat, amts in total['Stats'].items():
-            if stat in DropEffectList['All']['Mythical Stat Cap']:
+        for attribute, amts in total['Attributes'].items():
+            if attribute in DropEffectList['All']['Mythical Stat Cap']:
                 amts['BaseMythicalCap'] = amts['BaseMythicalCap'] - amts['CapBonus']
                 amts['MythicalCapBonus'] = min(amts['TotalMythicalCapBonus'], amts['BaseMythicalCap'])
+
+        # DEBUGGING
+        if amts != '':
+            print(amts)
 
         # DEBUGGING
         print('summarize')
@@ -1098,14 +1125,17 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             else:
                 self.ItemOvercharge.setText(item.getOverchargeSuccess())
 
-        for key, datum in total['Stats'].items():
+        for key, datum in total['Attributes'].items():
             Acuity = AllBonusList[self.CurrentRealm][self.CurrentClass]["Acuity"]
             TotalBonus = datum['TotalBonus']
 
-            if key == "Armor Factor":
+            if key == 'Hit Points':
+                key = "HitPoints"
+
+            if key == 'Armor Factor':
                 key = "ArmorFactor"
 
-            if key == "% Power Pool":
+            if key == '% Power Pool':
                 key = "PowerPool"
 
             if key[:5] == "Power":
@@ -1160,7 +1190,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 if BaseCap == 0:
                     self.StatCap[key].setText('--  ')
 
-        for key, amts in total['Resists'].items():
+        for key, amts in total['Resistances'].items():
             Base = amts['Base'] + amts['MythicalCapBonus']
             TotalBonus = amts['TotalBonus']
             BaseMythicalCap = amts['BaseMythicalCap']
@@ -1190,26 +1220,26 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     amount = amts['Base'] - amts['TotalBonus']
                 self.insertSkill(amount, focus + ' Focus', 'Focus')
 
-        for bonus, amts in total['MythicalBonuses'].items():
-            amount = amts['TotalBonus']
-            if amts['Bonus'] > 0:
-                if self.DistanceToCap.isChecked():
-                    amount = amts['Base'] - amts['TotalBonus']
-                self.insertSkill(amount, 'Mythical ' + bonus, 'Bonus')
-
-        for bonus, amts in total['PvEBonuses'].items():
+        for bonus, amts in total['PVEBonuses'].items():
             amount = amts['TotalBonus']
             if amts['Bonus'] > 0:
                 if self.DistanceToCap.isChecked():
                     amount = amts['Base'] - amts['TotalBonus']
                 self.insertSkill(amount, bonus + ' (PvE)', 'Skill')
 
-        for bonus, amts in total['OtherBonuses'].items():
+        for bonus, amts in total['TOABonuses'].items():
             amount = amts['TotalBonus']
             if amts['Bonus'] > 0:
                 if self.DistanceToCap.isChecked():
                     amount = amts['Base'] - amts['TotalBonus']
                 self.insertSkill(amount, bonus, 'Skill')
+
+        for bonus, amts in total['MythicalBonuses'].items():
+            amount = amts['TotalBonus']
+            if amts['Bonus'] > 0:
+                if self.DistanceToCap.isChecked():
+                    amount = amts['Base'] - amts['TotalBonus']
+                self.insertSkill(amount, 'Mythical ' + bonus, 'Bonus')
 
         # DEBUGGING
         print('calculate')
@@ -1263,19 +1293,31 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if item.getParent() in ('Armor', 'Weapons'):
             self.ItemTypeMenu.setEnabled(True)
             self.ItemTypeButton.setEnabled(True)
-            if item.getParent() == 'Armor':
-                options.extend([
-                    'Crafted Item',
-                    'Dropped Item',
-                ])
-            elif item.getParent() == 'Weapons':
-                options.extend([
-                    'Crafted Item',
-                    'Dropped Item',
-                    'Legendary Bow',
-                    'Legendary Staff',
-                    'Legendary Weapon',
-                ])
+
+        if item.Location in ItemTypes['Armor']:
+            options.extend([
+                'Crafted Item',
+                'Dropped Item',
+            ])
+        elif item.Location in ('Right Hand', 'Left Hand'):
+            options.extend([
+                'Crafted Item',
+                'Dropped Item',
+                'Legendary Weapon',
+            ])
+        elif item.Location == 'Two-Handed':
+            options.extend([
+                'Crafted Item',
+                'Dropped Item',
+                'Legendary Staff',
+                'Legendary Weapon',
+            ])
+        elif item.Location == 'Ranged':
+            options.extend([
+                'Crafted Item',
+                'Dropped Item',
+                'Legendary Bow',
+            ])
         else:
             self.ItemTypeMenu.setDisabled(True)
             self.ItemTypeButton.setDisabled(True)
@@ -1360,11 +1402,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def CharacterRaceChanged(self):
         Race = self.CharacterRace.currentText()
-        for Resist in DropEffectList['All']['Resist']:
-            if Resist in Races['All'][Race]['Resists']:
-                self.StatBonus[Resist].setText('+ ' + str(Races['All'][Race]['Resists'][Resist]))
+        for resist in DropEffectList['All']['Resistance']:
+            if resist in Races['All'][Race]['Resistances']:
+                self.StatBonus[resist].setText('+ ' + str(Races['All'][Race]['Resistances'][resist]))
             else:
-                self.StatBonus[Resist].setText('-')
+                self.StatBonus[resist].setText('-')
         self.CurrentRace = Race
 
         # DEBUGGING
@@ -1518,8 +1560,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # DEBUGGING
         print('ItemRestrictionsChanged')
 
-    # TODO: REWRITE AND SIMPLIFY ...
-    # TODO: 5TH SLOT SELECTION BASED ON TYPE AND LOCATION ...
+    # TODO: 5TH SLOT SELECTION BASED ON TYPE / LOCATION ...
     def EffectTypeChanged(self, etype = None, index = -1):
         if index == -1: index = self.getSlotIndex()
         item = self.ItemAttributeList[self.CurrentItemLabel]
@@ -1542,7 +1583,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # DEBUGGING
         print('EffectTypeChanged, EffectType = ' + str(etype))
 
-    # TODO: REWRITE AND SIMPLIFY ...
     def EffectChanged(self, effect = None, index = -1):
         if index == -1: index = self.getSlotIndex()
         item = self.ItemAttributeList[self.CurrentItemLabel]
@@ -1577,7 +1617,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # DEBUGGING
         print('EffectChanged, Effect = ' + str(effect))
 
-    # TODO: REWRITE AND SIMPLIFY ...
     def EffectAmountChanged(self, amount = None, index = -1):
         if index == -1: index = self.getSlotIndex()
         item = self.ItemAttributeList[self.CurrentItemLabel]
@@ -1616,7 +1655,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # DEBUGGING
         print('EffectAmountChanged')
 
-    # TODO: REWRITE AND SIMPLIFY ...
     def EffectRequirementChanged(self, requirement = None, index = -1):
         if index == -1: index = self.getSlotIndex()
         item = self.ItemAttributeList[self.CurrentItemLabel]
@@ -1649,16 +1687,16 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if newItemType == 'Legendary':
             if action.text().split(None, 1)[1] == 'Staff':
                 item.getSlot(4).setAll('Focus', 'All Spell Lines', '50')
-                item.getSlot(5).setAll('Other Bonus', 'Casting Speed', '3')
-                item.getSlot(6).setAll('Other Bonus', 'Spell Damage', '3')
+                item.getSlot(5).setAll('ToA Bonus', 'Casting Speed', '3')
+                item.getSlot(6).setAll('ToA Bonus', 'Magic Damage', '3')
             elif action.text().split(None, 1)[1] == 'Bow':
-                item.getSlot(4).setAll('Other Bonus', 'Armor Factor', '10')
-                item.getSlot(5).setAll('Other Bonus', 'Archery Speed', '3')
-                item.getSlot(6).setAll('Other Bonus', 'Archery Damage', '3')
+                item.getSlot(4).setAll('ToA Bonus', 'Armor Factor', '10')
+                item.getSlot(5).setAll('ToA Bonus', 'Casting Speed', '3')
+                item.getSlot(6).setAll('ToA Bonus', 'Magic Damage', '3')
             elif action.text().split(None, 1)[1] == 'Weapon':
-                item.getSlot(4).setAll('Other Bonus', 'Armor Factor', '10')
-                item.getSlot(5).setAll('Other Bonus', 'Melee Damage', '3')
-                item.getSlot(6).setAll('Other Bonus', 'Style Damage', '3')
+                item.getSlot(4).setAll('ToA Bonus', 'Armor Factor', '10')
+                item.getSlot(5).setAll('ToA Bonus', 'Melee Damage', '3')
+                item.getSlot(6).setAll('ToA Bonus', 'Style Damage', '3')
 
         self.RestoreItem(self.ItemAttributeList[self.CurrentItemLabel])
         self.ItemIndex += 1
@@ -1701,16 +1739,16 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if newItemType == 'Legendary':
             if action.text().split(None, 1)[1] == 'Staff':
                 item.getSlot(4).setAll('Focus', 'All Spell Lines', '50')
-                item.getSlot(5).setAll('Other Bonus', 'Casting Speed', '3')
-                item.getSlot(6).setAll('Other Bonus', 'Spell Damage', '3')
+                item.getSlot(5).setAll('ToA Bonus', 'Casting Speed', '3')
+                item.getSlot(6).setAll('ToA Bonus', 'Magic Damage', '3')
             elif action.text().split(None, 1)[1] == 'Bow':
-                item.getSlot(4).setAll('Other Bonus', 'Armor Factor', '10')
-                item.getSlot(5).setAll('Other Bonus', 'Archery Speed', '3')
-                item.getSlot(6).setAll('Other Bonus', 'Archery Damage', '3')
+                item.getSlot(4).setAll('ToA Bonus', 'Armor Factor', '10')
+                item.getSlot(5).setAll('ToA Bonus', 'Casting Speed', '3')
+                item.getSlot(6).setAll('ToA Bonus', 'Magic Damage', '3')
             elif action.text().split(None, 1)[1] == 'Weapon':
-                item.getSlot(4).setAll('Other Bonus', 'Armor Factor', '10')
-                item.getSlot(5).setAll('Other Bonus', 'Melee Damage', '3')
-                item.getSlot(6).setAll('Other Bonus', 'Style Damage', '3')
+                item.getSlot(4).setAll('ToA Bonus', 'Armor Factor', '10')
+                item.getSlot(5).setAll('ToA Bonus', 'Melee Damage', '3')
+                item.getSlot(6).setAll('ToA Bonus', 'Style Damage', '3')
 
         self.RestoreItem(self.ItemAttributeList[self.CurrentItemLabel])
 
