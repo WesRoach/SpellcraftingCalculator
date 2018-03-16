@@ -33,14 +33,14 @@ UnusedValues = t2()
 #            CRAFTING RELATED CONSTANTS           #
 # =============================================== #
 
-GemSuffixNames = d2({
-    'Skill': '',
-    'Attribute': 'Essence Jewel',
-    'Resistance': 'Shielding Jewel',
-    'Hit Points': 'Essence Jewel',
-    'Power': 'Essence Jewel',
-    'Focus': '',
-})
+# GemSuffixNames = d2({
+#     'Skill': '',
+#     'Attribute': 'Essence Jewel',
+#     'Resistance': 'Shielding Jewel',
+#     'Hit Points': 'Essence Jewel',
+#     'Power': 'Essence Jewel',
+#     'Focus': '',
+# })
 
 GemTierNames = t2((
     'Raw',
