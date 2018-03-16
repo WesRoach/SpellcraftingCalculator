@@ -1,7 +1,7 @@
 # HEADER PLACE HOLDER
 
 from Character import ItemTypes
-from Constants import CraftedEffectTable, CraftedValuesList, GemGemsOrder, GemNames, ImbuePoints, OverchargeBasePercent, OverchargeSkillBonus
+from Constants import CraftedEffectTable, CraftedValuesList, GemGemsOrder, GemTierNames, ImbuePoints, OverchargeBasePercent, OverchargeSkillBonus
 from lxml import etree
 
 # noinspection PyUnresolvedReferences
@@ -315,7 +315,7 @@ class ItemSlot:
 
     def getGemName(self, realm):
         if self.isCraftable():
-            tier = GemNames[self.getGemIndex()]
+            tier = GemTierNames[self.getGemIndex()]
             prefix = CraftedEffectTable[realm][self.EffectType][self.Effect][0]
             suffix = CraftedEffectTable[realm][self.EffectType][self.Effect][1]
             return tier + ' ' + prefix + ' ' + suffix

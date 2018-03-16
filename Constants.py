@@ -16,7 +16,7 @@ __all__ = [
     'EnhancedEffectList',
     'EnhancedValuesList',
     'GemGemsOrder',
-    'GemNames',
+    'GemTierNames',
     'ImbuePoints',
     'MythicalBonusCap',
     'OverchargeBasePercent',
@@ -33,7 +33,7 @@ UnusedValues = t2()
 #            CRAFTING RELATED CONSTANTS           #
 # =============================================== #
 
-GemSuffixName = d2({
+GemSuffixNames = d2({
     'Skill': '',
     'Attribute': 'Essence Jewel',
     'Resistance': 'Shielding Jewel',
@@ -42,7 +42,7 @@ GemSuffixName = d2({
     'Focus': '',
 })
 
-GemNames = t2((
+GemTierNames = t2((
     'Raw',
     'Uncut',
     'Rough',
@@ -168,7 +168,7 @@ GemDustsOrder = (
     'Unseelie Dust',
 )
 
-GemCraftingMaterialsOrder = t2(
+GemMaterialsOrder = t2(
     GemGemsOrder
     + GemLiquidsOrder
     + GemDustsOrder
