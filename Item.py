@@ -353,5 +353,4 @@ class ItemSlot:
             materials['Dusts'][dust] = (index * 4) + 1
             materials['Liquids'][liquid] = index + 1
 
-        print(materials.items())
         return materials
