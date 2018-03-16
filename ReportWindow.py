@@ -31,9 +31,43 @@ class ReportWindow(QDialog, Ui_ReportWindow):
 #          REPORT METHODS AND FUNCTIONS           #
 # =============================================== #
 
-    def materialsReport(self):
+    def materialsReport(self, items, realm):
         self.setWindowTitle('Materials Report')
-        self.ReportTextBrowser.setHtml('Materials Report')
+        self.ExportHTMLButton.hide()
+        self.ExportPlainTextButton.hide()
+
+        gems = {}
+        materials = {'Gems': {}, 'Dusts': {}, 'Liquids': {}}
+
+        for location, item in items.items():
+            if item.ActiveState == 'Dropped' or item.Equipped != 2:
+                continue
+            for slot in item.getSlotList():
+                if slot.getSlotType() != 'Craftable' or slot.getEffectType() == 'Unused':
+                    continue
+                for material_type, material_list in slot.getGemMaterials(realm).items():
+                    for material, amount in material_list.items():
+                        if material in materials[material_type]:
+                            materials[material_type][material] += amount
+                        else:
+                            materials[material_type][material] = amount
+                if slot.getGemName(realm) in gems:
+                    gems[slot.getGemName(realm)] += 1
+                else:
+                    gems[slot.getGemName(realm)] = 1
+
+        output = '<center><b>Jewels</b></center><hr><ul>\n'
+
+        for gem_name, amount in gems.items():
+            output += '<li>%d  %s</li>\n' % (amount, gem_name)
+
+        output += '</ul>\n'
+
+        self.ReportTextBrowser.setHtml(output)
+
+        # DEBUGGING
+        print('Gems:', gems.items())
+        print('Materials', materials.items())
 
     def templateReport(self, report):
         self.setWindowTitle('Template Report')
