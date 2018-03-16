@@ -535,7 +535,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def showMaterialsReport(self):
         self.MaterialsReport = ReportWindow(self, Qt.WindowCloseButtonHint)
-        self.MaterialsReport.materialsReport()
+        self.MaterialsReport.materialsReport(self.ItemAttributeList, self.CurrentRealm)
         self.MaterialsReport.exec_()
 
         # DEBUGGING

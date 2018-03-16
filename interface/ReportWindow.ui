@@ -74,7 +74,7 @@
       <number>0</number>
      </property>
      <item>
-      <widget class="QPushButton" name="ExportReportHtml">
+      <widget class="QPushButton" name="ExportHTMLButton">
        <property name="text">
         <string>Export as HTML</string>
        </property>
@@ -84,9 +84,9 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="ExportText">
+      <widget class="QPushButton" name="ExportPlainTextButton">
        <property name="text">
-        <string>Export as Text</string>
+        <string>Export as Plain Text</string>
        </property>
        <property name="autoDefault">
         <bool>false</bool>
