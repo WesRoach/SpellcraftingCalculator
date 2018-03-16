@@ -15,7 +15,7 @@ __all__ = [
     'EnhancedTypeList',
     'EnhancedEffectList',
     'EnhancedValuesList',
-    'GemGemsOrder',
+    'GemMaterialsOrder',
     'GemTierNames',
     'ImbuePoints',
     'MythicalBonusCap',
@@ -53,19 +53,6 @@ GemTierNames = t2((
     'Precious',
     'Flawless',
     'Perfect',
-))
-
-GemGemsOrder = t2((
-    'Lo',
-    'Um',
-    'On',
-    'Ee',
-    'Pal',
-    'Mon',
-    'Ros',
-    'Zo',
-    'Kath',
-    'Ra',
 ))
 
 GemLiquids = d2({
@@ -121,20 +108,6 @@ GemLiquids = d2({
     'Clout': 'Giant Blood',
 })
 
-GemLiquidsOrder = (
-    'Air Elemental Essence',
-    'Draconic Fire',
-    'Frost From a Wasteland',
-    'Giant Blood',
-    'Heat From an Unearthly Pyre',
-    'Leviathan Blood',
-    'Mystic Energy',
-    'Sun Light',
-    'Swamp Fog',
-    'Treant Blood',
-    'Undead Ash and Holy Water',
-)
-
 GemDusts = d2({
     'Essence Jewel': 'Essence of Life',
     'Shielding Jewel': 'Ground Draconic Scales',
@@ -153,26 +126,48 @@ GemDusts = d2({
     'Arcane Spell Stone': 'Other Worldly Dust',
 })
 
-GemDustsOrder = (
-    'Bloodied Battlefield Dirt',
-    'Essence of Life',
-    'Fairy Dust',
-    'Ground Blessed Undead Bone',
-    'Ground Caer Stone',
-    'Ground Cave Crystal',
-    'Ground Draconic Scales',
-    'Ground Giant Bone',
-    'Ground Vendo Bone',
-    'Other Worldly Dust',
-    'Soot From Niflheim',
-    'Unseelie Dust',
-)
+GemMaterialsOrder = {
 
-GemMaterialsOrder = t2(
-    GemGemsOrder
-    + GemLiquidsOrder
-    + GemDustsOrder
-)
+    'Gems': (
+        'Lo',
+        'Um',
+        'On',
+        'Ee',
+        'Pal',
+        'Mon',
+        'Ros',
+        'Zo',
+        'Kath',
+        'Ra',
+    ),
+
+    'Liquids': (
+        'Air Elemental Essence',
+        'Draconic Fire',
+        'Frost From a Wasteland',
+        'Giant Blood',
+        'Heat From an Unearthly Pyre',
+        'Leviathan Blood',
+        'Mystic Energy',
+        'Sun Light',
+        'Swamp Fog',
+        'Treant Blood',
+        'Undead Ash and Holy Water',),
+
+    'Dusts': (
+        'Bloodied Battlefield Dirt',
+        'Essence of Life','Fairy Dust',
+        'Ground Blessed Undead Bone',
+        'Ground Caer Stone',
+        'Ground Cave Crystal',
+        'Ground Draconic Scales',
+        'Ground Giant Bone',
+        'Ground Vendo Bone',
+        'Other Worldly Dust',
+        'Soot From Niflheim',
+        'Unseelie Dust',
+    ),
+}
 
 OverchargeBasePercent = (-0, -10, -20, -30, -50, -70)
 
