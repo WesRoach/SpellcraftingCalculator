@@ -1,7 +1,7 @@
 # HEADER PLACE HOLDER
 
 from Character import ItemTypes
-from Constants import CraftedEffectTable, CraftedValuesList, GemNames, ImbuePoints, OverchargeBasePercent, OverchargeSkillBonus
+from Constants import CraftedEffectTable, CraftedValuesList, GemGemsOrder, GemNames, ImbuePoints, OverchargeBasePercent, OverchargeSkillBonus
 from lxml import etree
 
 # noinspection PyUnresolvedReferences
@@ -160,7 +160,6 @@ class Item:
         if 'All' in self.Restrictions:
             self.Restrictions = ['All']
 
-    # TODO: NEED TO ADD MORE FOR REPORT ...
     def exportAsXML(self, filename, export = False, report = False):
         fields = [
             ('Realm', self.Realm),
@@ -238,7 +237,7 @@ class ItemSlot:
 
     def isCraftable(self):
         if self.getSlotType() == 'Craftable':
-            return True if (self.getEffectType() != 'Unused') else False
+            return True if (self.getEffectType() not in ('', 'Unused')) else False
 
     def setAll(self, etype, effect, amount,):
         self.EffectType = etype
@@ -314,15 +313,45 @@ class ItemSlot:
         elif self.getEffectType() in CraftedValuesList:
             return CraftedValuesList[self.getEffectType()].index(self.getEffectAmount())
 
-    # TODO: IMPLEMENT ENHANCED ITEMS
     def getGemName(self, realm):
-        if self.getSlotType() in ('Dropped', 'Enhanced'):
-            if self.getEffectType() == 'Unused':
-                return 'Unused'
-            return 'Crafted Bonus'
-        if not self.isCraftable():
+        if self.isCraftable():
+            tier = GemNames[self.getGemIndex()]
+            prefix = CraftedEffectTable[realm][self.EffectType][self.Effect][0]
+            suffix = CraftedEffectTable[realm][self.EffectType][self.Effect][1]
+            return tier + ' ' + prefix + ' ' + suffix
+        elif self.getSlotType() in ('Dropped', 'Enhanced'):
+            return 'Unused' if (self.getEffectType() == 'Unused') else 'Crafted Bonus'
+        else:
             return 'None'
-        tier = GemNames[self.getGemIndex()]
-        prefix = CraftedEffectTable[realm][self.EffectType][self.Effect][0]
-        suffix = CraftedEffectTable[realm][self.EffectType][self.Effect][1]
-        return tier + ' ' + prefix + ' ' + suffix
+
+    def getGemMaterials(self, realm):
+        materials = {'Gems': {}, 'Liquids': {}, 'Dusts': {}}
+
+        if not self.isCraftable():
+            return
+
+        table = CraftedEffectTable[realm][self.getEffectType()]
+        if self.getEffect() not in table:
+            table = CraftedEffectTable['All'][self.getEffectType()]
+
+        index = self.getGemIndex()
+        dust = table[self.getEffect()][2]
+        liquid = table[self.getEffect()][3]
+        materials['Gems'][GemGemsOrder[index]] = 1
+
+        if self.getEffect()[0:4] == 'All ':
+            if self.getEffectType() == 'Focus':
+                materials['Gems'][GemGemsOrder[index]] = 3
+            materials['Dusts'][dust] = (index * 5) + 1
+            materials['Liquids'][liquid[0]] = (index * 6) + 2
+            materials['Liquids'][liquid[1]] = (index * 6) + 2
+            materials['Liquids'][liquid[2]] = (index * 6) + 2
+        elif self.getEffectType() == 'Focus' or self.getEffectType() == 'Resistance':
+            materials['Dusts'][dust] = (index * 5 + 1)
+            materials['Liquids'][liquid] = index + 1
+        else:
+            materials['Dusts'][dust] = (index * 4) + 1
+            materials['Liquids'][liquid] = index + 1
+
+        print(materials.items())
+        return materials
