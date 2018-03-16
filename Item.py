@@ -1,7 +1,7 @@
 # HEADER PLACE HOLDER
 
 from Character import ItemTypes
-from Constants import CraftedEffectTable, CraftedValuesList, GemGemsOrder, GemTierNames, ImbuePoints, OverchargeBasePercent, OverchargeSkillBonus
+from Constants import CraftedEffectTable, CraftedValuesList, GemMaterialsOrder, GemTierNames, ImbuePoints, OverchargeBasePercent, OverchargeSkillBonus
 from lxml import etree
 
 # noinspection PyUnresolvedReferences
@@ -336,17 +336,17 @@ class ItemSlot:
         index = self.getGemIndex()
         dust = table[self.getEffect()][2]
         liquid = table[self.getEffect()][3]
-        materials['Gems'][GemGemsOrder[index]] = 1
+        materials['Gems'][GemMaterialsOrder['Gems'][index]] = 1
 
         if self.getEffect()[0:4] == 'All ':
             if self.getEffectType() == 'Focus':
-                materials['Gems'][GemGemsOrder[index]] = 3
+                materials['Gems'][GemMaterialsOrder['Gems'][index]] = 3
             materials['Dusts'][dust] = (index * 5) + 1
             materials['Liquids'][liquid[0]] = (index * 6) + 2
             materials['Liquids'][liquid[1]] = (index * 6) + 2
             materials['Liquids'][liquid[2]] = (index * 6) + 2
         elif self.getEffectType() == 'Focus' or self.getEffectType() == 'Resistance':
-            materials['Dusts'][dust] = (index * 5 + 1)
+            materials['Dusts'][dust] = (index * 5) + 1
             materials['Liquids'][liquid] = index + 1
         else:
             materials['Dusts'][dust] = (index * 4) + 1
