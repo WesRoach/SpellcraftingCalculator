@@ -15,6 +15,7 @@ __all__ = [
     'EnhancedTypeList',
     'EnhancedEffectList',
     'EnhancedValuesList',
+    'GemGemsOrder',
     'GemNames',
     'ImbuePoints',
     'MythicalBonusCap',
