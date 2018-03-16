@@ -213,6 +213,8 @@ class Item:
                 etree.SubElement(slot, 'Amount').text = self.getSlot(index).getEffectAmount()
                 if self.getSlot(index).getEffectRequirement() != '':
                     etree.SubElement(slot, 'Requirement').text = self.getSlot(index).getEffectRequirement()
+                if report and self.ActiveState in ('Crafted', 'Legendary'):
+                    etree.SubElement(slot, 'GemName').text = self.getSlot(index).getGemName(self.Realm)
 
         if not export:
             with open(filename, 'wb') as document:

@@ -814,7 +814,7 @@ EnhancedEffectList = {
         ),
 
         'PvE Bonus': (
-            'Defensive',
+            'Defensive Bonus',
             'To Hit Bonus',
          ),
     }}

@@ -42,4 +42,6 @@ class ReportWindow(QDialog, Ui_ReportWindow):
         transform = etree.XSLT(xslt)
         report = transform(report)
 
+        print(etree.tostring(report, pretty_print=True).decode('UTF-8'))
+
         self.ReportTextBrowser.setHtml(str(report))
