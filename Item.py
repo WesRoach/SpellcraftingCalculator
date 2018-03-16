@@ -5,8 +5,7 @@ from Constants import CraftedEffectTable, CraftedValuesList, GemGemsOrder, GemTi
 from lxml import etree
 
 # noinspection PyUnresolvedReferences
-# FIXES BUG IN PYCHARM THAT CAUSES
-# AN UNRESOLVED REFERENCE ERROR
+# FIXES BUG IN PYCHARM THAT CAUSES AN UNRESOLVED REFERENCE ERROR
 from math import floor
 
 
