@@ -535,7 +535,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def showMaterialsReport(self):
         self.MaterialsReport = ReportWindow(self, Qt.WindowCloseButtonHint)
-        self.MaterialsReport.materialsReport(self.ItemAttributeList, self.CurrentRealm)
+        self.MaterialsReport.materialsReport(self.ItemAttributeList)
         self.MaterialsReport.exec_()
 
         # DEBUGGING
@@ -1120,7 +1120,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             for index in range(0, item.getSlotCount()):
                 if index < len(item.getImbueValues()):
                     self.ImbuePoints[index].setText('%3.1f' % item.getImbueValues()[index])
-                self.GemName[index].setText(item.getSlot(index).getGemName(self.CurrentRealm))
+                self.GemName[index].setText(item.getSlot(index).getGemName(item.Realm))
 
             if isinstance(item.getOverchargeSuccess(), int):
                 self.ItemOvercharge.setText('%d%%' % item.getOverchargeSuccess())
