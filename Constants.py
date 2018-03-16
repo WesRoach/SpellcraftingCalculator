@@ -551,7 +551,6 @@ SkillValues = t2((
     '8',
 ))
 
-# TODO: SPLIT UP CAPS DICTIONARY (Base, etc) ...
 # =============================================== #
 #              CAP RELATED CONSTANTS              #
 # =============================================== #
