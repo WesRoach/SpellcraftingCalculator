@@ -1120,7 +1120,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             for index in range(0, item.getSlotCount()):
                 if index < len(item.getImbueValues()):
                     self.ImbuePoints[index].setText('%3.1f' % item.getImbueValues()[index])
-                self.GemName[index].setText(item.getSlot(index).getGemName(item.Realm))
+                self.GemName[index].setText(item.getSlot(index).getGemName(self.CurrentRealm))
 
             if isinstance(item.getOverchargeSuccess(), int):
                 self.ItemOvercharge.setText('%d%%' % item.getOverchargeSuccess())
@@ -1398,6 +1398,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if self.CurrentItemLabel != '':
             self.RestoreItem(self.ItemAttributeList[self.CurrentItemLabel])
             self.calculate()
+
+        # BUG: INVALID SKILLS SET ON NON-CURRENT ITEMS DO NOT
+        # RESET WHEN THE CLASS CHANGES. PERHAPS WE SHOULD HAVE
+        # 'self.calculate()' VALIDATE SKILLS BEFORE-HAND ...
 
         # DEBUGGING
         print('CharacterClassChanged')
