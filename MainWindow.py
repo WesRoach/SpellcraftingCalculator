@@ -203,7 +203,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.CharacterRealmRank.setFixedSize(QSize(width, defaultFixedHeight))
         self.CharacterChampLevel.setFixedSize(QSize(width, defaultFixedHeight))
 
-        for attribute in DropEffectList['All']['Attribute'] + ('ArmorFactor', 'Fatigue', 'PowerPool',):
+        for attribute in DropEffectList['All']['Attribute'] + ('ArmorFactor', 'Fatigue', 'PowerPool'):
             attribute = attribute.replace(' ', '')
             self.StatLabel[attribute] = getattr(self, attribute + 'Label')
             self.StatValue[attribute] = getattr(self, attribute)
