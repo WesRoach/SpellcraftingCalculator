@@ -12,8 +12,8 @@ __all__ = [
     'EnhancedTypeList',
     'EnhancedEffectList',
     'EnhancedValuesList',
-    'GemMaterial',
-    'GemMaterialOrder',
+    'GemMaterials',
+    'GemMaterialsOrder',
     'GemTierName',
     'ImbuePoints',
     'MythicalBonusCap',
@@ -868,47 +868,9 @@ GemTierName = (
     'Perfect',
 )
 
-GemMaterial = {
+GemMaterials = {
 
     'All': {
-
-        'Skill': {
-
-            'Critical Strike': {
-                'Gem': 'Heated Battle Jewel',
-                'Dust': 'Bloodied Battlefield Dirt',
-                'Liquid': 'Heat From an Unearthly Pyre',
-            },
-
-            'Envenom': {
-                'Gem': 'Dusty Battle Jewel',
-                'Dust': 'Bloodied Battlefield Dirt',
-                'Liquid': 'Undead Ash and Holy Water',
-            },
-
-            'Parry': {
-                'Gem': 'Vapor Battle Jewel',
-                'Dust': 'Bloodied Battlefield Dirt',
-                'Liquid': 'Swamp Fog',
-            },
-
-            'Shield': {
-                'Gem': 'Fiery Battle Jewel',
-                'Dust': 'Bloodied Battlefield Dirt',
-                'Liquid': 'Draconic Fire',
-            },
-
-            'Staff': {
-                'Gem': 'Earthen Battle Jewel',
-                'Dust': 'Bloodied Battlefield Dirt',
-                'Liquid': 'Treant Blood',
-            },
-
-            'Stealth': {
-                'Gem': 'Airy Battle Jewel',
-                'Dust': 'Bloodied Battlefield Dirt',
-                'Liquid': 'Air Elemental Essence',
-            }},
 
         'Attribute': {
 
@@ -1080,6 +1042,12 @@ GemMaterial = {
                 'Liquid': 'Frost From a Wasteland',
             },
 
+            'Critical Strike': {
+                'Gem': 'Heated Battle Jewel',
+                'Dust': 'Bloodied Battlefield Dirt',
+                'Liquid': 'Heat From an Unearthly Pyre',
+            },
+
             'Crossbow': {
                 'Gem': 'Vapor War Sigil',
                 'Dust': 'Ground Caer Stone',
@@ -1120,6 +1088,12 @@ GemMaterial = {
                 'Gem': 'Airy Fervor Sigil',
                 'Dust': 'Ground Blessed Undead Bone',
                 'Liquid': 'Air Elemental Essence',
+            },
+
+            'Envenom': {
+                'Gem': 'Dusty Battle Jewel',
+                'Dust': 'Bloodied Battlefield Dirt',
+                'Liquid': 'Undead Ash and Holy Water',
             },
 
             'Flexible': {
@@ -1176,6 +1150,12 @@ GemMaterial = {
                 'Liquid': 'Mystic Energy',
             },
 
+            'Parry': {
+                'Gem': 'Vapor Battle Jewel',
+                'Dust': 'Bloodied Battlefield Dirt',
+                'Liquid': 'Swamp Fog',
+            },
+
             'Polearm': {
                 'Gem': 'Earthen War Sigil',
                 'Dust': 'Ground Caer Stone',
@@ -1192,6 +1172,12 @@ GemMaterial = {
                 'Gem': 'Watery Fervor Sigil',
                 'Dust': 'Ground Blessed Undead Bone',
                 'Liquid': 'Leviathan Blood',
+            },
+
+            'Shield': {
+                'Gem': 'Fiery Battle Jewel',
+                'Dust': 'Bloodied Battlefield Dirt',
+                'Liquid': 'Draconic Fire',
             },
 
             'Slash': {
@@ -1216,6 +1202,18 @@ GemMaterial = {
                 'Gem': 'Vapor Evocation Sigil',
                 'Dust': 'Ground Cave Crystal',
                 'Liquid': 'Swamp Fog',
+            },
+
+            'Staff': {
+                'Gem': 'Earthen Battle Jewel',
+                'Dust': 'Bloodied Battlefield Dirt',
+                'Liquid': 'Treant Blood',
+            },
+
+            'Stealth': {
+                'Gem': 'Airy Battle Jewel',
+                'Dust': 'Bloodied Battlefield Dirt',
+                'Liquid': 'Air Elemental Essence',
             },
 
             'Thrust': {
@@ -1383,6 +1381,12 @@ GemMaterial = {
                 'Liquid': 'Treant Blood',
             },
 
+            'Critical Strike': {
+                'Gem': 'Heated Battle Jewel',
+                'Dust': 'Bloodied Battlefield Dirt',
+                'Liquid': 'Heat From an Unearthly Pyre',
+            },
+
             'Dementia': {
                 'Gem': 'Aberrant Arcane Spell Stone',
                 'Dust': 'Other Worldly Dust',
@@ -1393,6 +1397,12 @@ GemMaterial = {
                 'Gem': 'Vapor Arcane Spell Stone',
                 'Dust': 'Other Worldly Dust',
                 'Liquid': 'Swamp Fog',
+            },
+
+            'Envenom': {
+                'Gem': 'Dusty Battle Jewel',
+                'Dust': 'Bloodied Battlefield Dirt',
+                'Liquid': 'Undead Ash and Holy Water',
             },
 
             'Ethereal Shriek': {
@@ -1461,6 +1471,12 @@ GemMaterial = {
                 'Liquid': 'Draconic Fire',
             },
 
+            'Parry': {
+                'Gem': 'Vapor Battle Jewel',
+                'Dust': 'Bloodied Battlefield Dirt',
+                'Liquid': 'Swamp Fog',
+            },
+
             'Phantasmal Wail': {
                 'Gem': 'Phantasmal Arcane Spell Stone',
                 'Dust': 'Other Worldly Dust',
@@ -1497,9 +1513,27 @@ GemMaterial = {
                 'Liquid': 'Swamp Fog',
             },
 
+            'Shield': {
+                'Gem': 'Fiery Battle Jewel',
+                'Dust': 'Bloodied Battlefield Dirt',
+                'Liquid': 'Draconic Fire',
+            },
+
             'Spectral Guard': {
                 'Gem': 'Spectral Arcane Spell Stone',
                 'Dust': 'Other Worldly Dust',
+                'Liquid': 'Air Elemental Essence',
+            },
+
+            'Staff': {
+                'Gem': 'Earthen Battle Jewel',
+                'Dust': 'Bloodied Battlefield Dirt',
+                'Liquid': 'Treant Blood',
+            },
+
+            'Stealth': {
+                'Gem': 'Airy Battle Jewel',
+                'Dust': 'Bloodied Battlefield Dirt',
                 'Liquid': 'Air Elemental Essence',
             },
 
@@ -1674,6 +1708,12 @@ GemMaterial = {
                 'Liquid': 'Draconic Fire',
             },
 
+            'Critical Strike': {
+                'Gem': 'Heated Battle Jewel',
+                'Dust': 'Bloodied Battlefield Dirt',
+                'Liquid': 'Heat From an Unearthly Pyre',
+            },
+
             'Cursing': {
                 'Gem': 'Blighted Primal Rune',
                 'Dust': 'Ground Vendo Bone',
@@ -1684,6 +1724,12 @@ GemMaterial = {
                 'Gem': 'Icy Chaos Rune',
                 'Dust': 'Soot From Niflheim',
                 'Liquid': 'Frost From a Wasteland',
+            },
+
+            'Envenom': {
+                'Gem': 'Dusty Battle Jewel',
+                'Dust': 'Bloodied Battlefield Dirt',
+                'Liquid': 'Undead Ash and Holy Water',
             },
 
             'Fist Wraps': {
@@ -1740,6 +1786,12 @@ GemMaterial = {
                 'Liquid': 'Swamp Fog',
             },
 
+            'Parry': {
+                'Gem': 'Vapor Battle Jewel',
+                'Dust': 'Bloodied Battlefield Dirt',
+                'Liquid': 'Swamp Fog',
+            },
+
             'Power Strikes': {
                 'Gem': 'Clout Primal Rune',
                 'Dust': 'Ground Vendo Bone',
@@ -1752,6 +1804,12 @@ GemMaterial = {
                 'Liquid': 'Heat From an Unearthly Pyre',
             },
 
+            'Shield': {
+                'Gem': 'Fiery Battle Jewel',
+                'Dust': 'Bloodied Battlefield Dirt',
+                'Liquid': 'Draconic Fire',
+            },
+
             'Spear': {
                 'Gem': 'Heated War Rune',
                 'Dust': 'Ground Giant Bone',
@@ -1762,6 +1820,12 @@ GemMaterial = {
                 'Gem': 'Earthen Battle Jewel',
                 'Dust': 'Bloodied Battlefield Dirt',
                 'Liquid': 'Treant Blood',
+            },
+
+            'Stealth': {
+                'Gem': 'Airy Battle Jewel',
+                'Dust': 'Bloodied Battlefield Dirt',
+                'Liquid': 'Air Elemental Essence',
             },
 
             'Stormcalling': {
@@ -1844,7 +1908,7 @@ GemMaterial = {
     },
 }
 
-GemMaterialOrder = {
+GemMaterialsOrder = {
 
     'Gems': (
         'Lo',
