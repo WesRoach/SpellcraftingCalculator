@@ -223,6 +223,10 @@
 									<xsl:value-of select = "Type"/><xsl:text>&#160;</xsl:text>
 									<xsl:text>(</xsl:text><xsl:value-of select = "Effect"/><xsl:text>)</xsl:text>
 								</xsl:when>
+								<xsl:when test = "Type = 'Mythical Bonus'">
+									<xsl:text>Mythical</xsl:text><xsl:text>&#160;</xsl:text>
+									<xsl:value-of select = "Effect"/>
+								</xsl:when>
 								<xsl:otherwise>
 									<xsl:value-of select = "Effect"/>
 								</xsl:otherwise>
