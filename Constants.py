@@ -1,22 +1,20 @@
 # HEADER PLACE HOLDER
 
-from Character import *
-from TupleTwo import *
-from DictionaryTwo import *
+from Character import Realms
 
 __all__ = [
     'Cap',
     'CraftedTypeList',
     'CraftedEffectList',
-    'CraftedEffectTable',
     'CraftedValuesList',
     'DropTypeList',
     'DropEffectList',
     'EnhancedTypeList',
     'EnhancedEffectList',
     'EnhancedValuesList',
-    'GemMaterialsOrder',
-    'GemTierNames',
+    'GemMaterial',
+    'GemMaterialOrder',
+    'GemTierName',
     'ImbuePoints',
     'MythicalBonusCap',
     'OverchargeBasePercent',
@@ -25,196 +23,325 @@ __all__ = [
     'TOABonusCap',
 ]
 
-UnusedList = t2()
-UnusedTable = d2({})
-UnusedValues = t2()
+UnusedList = ()
+UnusedValues = ()
 
 # =============================================== #
-#            CRAFTING RELATED CONSTANTS           #
+#             SKILL RELATED CONSTANTS             #
 # =============================================== #
 
-# GemSuffixNames = d2({
-#     'Skill': '',
-#     'Attribute': 'Essence Jewel',
-#     'Resistance': 'Shielding Jewel',
-#     'Hit Points': 'Essence Jewel',
-#     'Power': 'Essence Jewel',
-#     'Focus': '',
-# })
+CraftedSkillList = {
 
-GemTierNames = t2((
-    'Raw',
-    'Uncut',
-    'Rough',
-    'Flawed',
-    'Imperfect',
-    'Polished',
-    'Faceted',
-    'Precious',
-    'Flawless',
-    'Perfect',
-))
+    'All': set(),
 
-GemLiquids = d2({
-    'Fiery': 'Draconic Fire',
-    'Earthen': 'Treant Blood',
-    'Vapor': 'Swamp Fog',
-    'Airy': 'Air Elemental Essence',
-    'Heated': 'Heat From an Unearthly Pyre',
-    'Icy': 'Frost From a Wasteland',
-    'Watery': 'Leviathan Blood',
-    'Dusty': 'Undead Ash and Holy Water',
-    'Fire': 'Draconic Fire',
-    'Earth': 'Treant Blood',
-    'Vapor': 'Swamp Fog',
-    'Air': 'Air Elemental Essence',
-    'Heat': 'Heat From an Unearthly Pyre',
-    'Ice': 'Frost From a Wasteland',
-    'Water': 'Leviathan Blood',
-    'Dust': 'Undead Ash and Holy Water',
-    'Ashen': 'Undead Ash and Holy Water',
-    'Vacuous': 'Swamp Fog',
-    'Salt Crusted': 'Mystic Energy',
-    'Steaming Spell': 'Swamp Fog',
-    'Steaming Nature': 'Swamp Fog',
-    'Steaming Fervor': 'Heat From an Unearthly Pyre',
-    'Oozing': 'Treant Blood',
-    'Mineral Encrusted': 'Heat From an Unearthly Pyre',
-    'Lightning Charged': 'Leviathan Blood',
-    'Molten Magma': 'Leviathan Blood',
-    'Light': 'Sun Light',
-    'Blood': 'Giant Blood',
-    'Mystical': 'Mystic Energy',
-    'Mystic': 'Mystic Energy',
-    'Brilliant': ('Draconic Fire', 'Mystic Energy', 'Treant Blood'),
-    'Finesse': ('Draconic Fire', 'Mystic Energy', 'Treant Blood'),
-    'Ethereal Spell': 'Swamp Fog',
-    'Phantasmal Spell': 'Leviathan Blood',
-    'Spectral Spell': 'Draconic Fire',
-    'Ethereal Arcane': 'Leviathan Blood',
-    'Phantasmal Arcane': 'Draconic Fire',
-    'Spectral Arcane': 'Air Elemental Essence',
-    'Aberrant': 'Treant Blood',
-    'Embracing': 'Frost From a Wasteland',
-    'Shadowy': 'Swamp Fog',
-    'Blighted Primal': 'Air Elemental Essence',
-    'Blighted Rune': 'Undead Ash and Holy Water',
-    'Valiant': 'Swamp Fog',
-    'Unholy': 'Air Elemental Essence',
-    'Glacial': 'Frost From a Wasteland',
-    'Cinder': 'Draconic Fire',
-    'Radiant': 'Sun Light',
-    'Magnetic': 'Mystic Energy',
-    'Clout': 'Giant Blood',
-})
-
-GemDusts = d2({
-    'Essence Jewel': 'Essence of Life',
-    'Shielding Jewel': 'Ground Draconic Scales',
-    'Spell Stone': 'Ground Draconic Scales',
-    'Sigil': 'Ground Draconic Scales',
-    'Rune': 'Ground Draconic Scales',
-    'Chaos Rune': 'Soot From Niflheim',
-    'Battle Jewel': 'Bloodied Battlefield Dirt',
-    'War Rune': 'Ground Giant Bone',
-    'Primal Rune': 'Ground Vendo Bone',
-    'Evocation Sigil': 'Ground Cave Crystal',
-    'Fervor Sigil': 'Ground Blessed Undead Bone',
-    'War Sigil': 'Ground Caer Stone',
-    'Nature Spell Stone': 'Fairy Dust',
-    'War Spell Stone': 'Unseelie Dust',
-    'Arcane Spell Stone': 'Other Worldly Dust',
-})
-
-GemMaterialsOrder = {
-
-    'Gems': (
-        'Lo',
-        'Um',
-        'On',
-        'Ee',
-        'Pal',
-        'Mon',
-        'Ros',
-        'Zo',
-        'Kath',
-        'Ra',
+    'Albion': (
+        'All Magic Skills',
+        'All Melee Weapon Skills',
+        'Archery',
+        'Aura Manipulation',
+        'Body Magic',
+        'Chants',
+        'Cold Magic',
+        'Critical Strike',
+        'Crossbow',
+        'Crush',
+        'Death Servant',
+        'Deathsight',
+        'Dual Wield',
+        'Earth Magic',
+        'Enhancement',
+        'Envenom',
+        'Flexible',
+        'Fire Magic',
+        'Fist Wraps',
+        'Instruments',
+        'Magnetism',
+        'Matter Magic',
+        'Mauler Staff',
+        'Mind Magic',
+        'Painworking',
+        'Parry',
+        'Polearm',
+        'Power Strikes',
+        'Rejuvenation',
+        'Shield',
+        'Slash',
+        'Smite',
+        'Soulrending',
+        'Spirit Magic',
+        'Staff',
+        'Stealth',
+        'Thrust',
+        'Two-Handed',
+        'Wind Magic',
     ),
 
-    'Liquids': (
-        'Air Elemental Essence',
-        'Draconic Fire',
-        'Frost From a Wasteland',
-        'Giant Blood',
-        'Heat From an Unearthly Pyre',
-        'Leviathan Blood',
-        'Mystic Energy',
-        'Sun Light',
-        'Swamp Fog',
-        'Treant Blood',
-        'Undead Ash and Holy Water',
+    'Hibernia': (
+        'All Magic Skills',
+        'All Melee Weapon Skills',
+        'Arboreal Path',
+        'Archery',
+        'Aura Manipulation',
+        'Blades',
+        'Blunt',
+        'Celtic Dual',
+        'Celtic Spear',
+        'Creeping Path',
+        'Critical Strike',
+        'Dementia',
+        'Enchantments',
+        'Envenom',
+        'Ethereal Shriek',
+        'Fist Wraps',
+        'Large Weaponry',
+        'Light',
+        'Magnetism',
+        'Mana',
+        'Mauler Staff',
+        'Mentalism',
+        'Music',
+        'Nature',
+        'Nurture',
+        'Parry',
+        'Phantasmal Wail',
+        'Piercing',
+        'Power Strikes',
+        'Regrowth',
+        'Scythe',
+        'Shadow Mastery',
+        'Shield',
+        'Spectral Guard',
+        'Staff',
+        'Stealth',
+        'Valor',
+        'Vampiiric Embrace',
+        'Verdant Path',
+        'Void',
     ),
 
-    'Dusts': (
-        'Bloodied Battlefield Dirt',
-        'Essence of Life',
-        'Fairy Dust',
-        'Ground Blessed Undead Bone',
-        'Ground Caer Stone',
-        'Ground Cave Crystal',
-        'Ground Draconic Scales',
-        'Ground Giant Bone',
-        'Ground Vendo Bone',
-        'Other Worldly Dust',
-        'Soot From Niflheim',
-        'Unseelie Dust',
+    'Midgard': (
+        'All Magic Skills',
+        'All Melee Weapon Skills',
+        'Archery',
+        'Augmentation',
+        'Aura Manipulation',
+        'Axe',
+        'Battlesongs',
+        'Beastcraft',
+        'Bone Army',
+        'Cave Magic',
+        'Critical Strike',
+        'Cursing',
+        'Darkness',
+        'Envenom',
+        'Fist Wraps',
+        'Hammer',
+        'Hand To Hand',
+        'Hexing',
+        'Left Axe',
+        'Magnetism',
+        'Mauler Staff',
+        'Mending',
+        'Odin\'s Will',
+        'Parry',
+        'Power Strikes',
+        'Runecarving',
+        'Shield',
+        'Spear',
+        'Staff',
+        'Stealth',
+        'Stormcalling',
+        'Summoning',
+        'Suppression',
+        'Sword',
+        'Thrown Weapons',
     ),
 }
 
-OverchargeBasePercent = (-0, -10, -20, -30, -50, -70)
+DropSkillList = {
 
-OverchargeSkillBonus = (-45, -40, -35, -30, -25, -20, -15, -10, -5, 0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50,)
+    'All': set(),
 
-ImbuePoints = (
-    1, 2, 2, 3, 4, 4, 5, 5, 6, 7,
-    7, 8, 9, 9, 10, 10, 11, 12, 12, 13,
-    13, 14, 15, 15, 16, 16, 17, 18, 18, 19,
-    20, 20, 21, 21, 22, 23, 23, 24, 24, 25,
-    26, 26, 27, 27, 28, 29, 29, 30, 31, 31, 32,
+    'Albion': (
+        'All Archery Skills',
+        'All Dual Wield Skills',
+        'All Magic Skills',
+        'All Melee Weapon Skills',
+        'Archery',
+        'Aura Manipulation',
+        'Body Magic',
+        'Chants',
+        'Cold Magic',
+        'Critical Strike',
+        'Crossbow',
+        'Crush',
+        'Death Servant',
+        'Deathsight',
+        'Dual Wield',
+        'Earth Magic',
+        'Enhancement',
+        'Envenom',
+        'Flexible',
+        'Fire Magic',
+        'Fist Wraps',
+        'Instruments',
+        'Magnetism',
+        'Matter Magic',
+        'Mauler Staff',
+        'Mind Magic',
+        'Painworking',
+        'Parry',
+        'Polearm',
+        'Power Strikes',
+        'Rejuvenation',
+        'Shield',
+        'Slash',
+        'Smite',
+        'Soulrending',
+        'Spirit Magic',
+        'Staff',
+        'Stealth',
+        'Thrust',
+        'Two-Handed',
+        'Wind Magic',
+    ),
+
+    'Hibernia': (
+        'All Archery Skills',
+        'All Dual Wield Skills',
+        'All Magic Skills',
+        'All Melee Weapon Skills',
+        'Arboreal Path',
+        'Archery',
+        'Aura Manipulation',
+        'Blades',
+        'Blunt',
+        'Celtic Dual',
+        'Celtic Spear',
+        'Creeping Path',
+        'Critical Strike',
+        'Dementia',
+        'Enchantments',
+        'Envenom',
+        'Ethereal Shriek',
+        'Fist Wraps',
+        'Large Weaponry',
+        'Light',
+        'Magnetism',
+        'Mana',
+        'Mauler Staff',
+        'Mentalism',
+        'Music',
+        'Nature',
+        'Nurture',
+        'Parry',
+        'Phantasmal Wail',
+        'Piercing',
+        'Power Strikes',
+        'Regrowth',
+        'Scythe',
+        'Shadow Mastery',
+        'Shield',
+        'Spectral Guard',
+        'Staff',
+        'Stealth',
+        'Valor',
+        'Vampiiric Embrace',
+        'Verdant Path',
+        'Void',
+    ),
+
+    'Midgard': (
+        'All Archery Skills',
+        'All Dual Wield Skills',
+        'All Magic Skills',
+        'All Melee Weapon Skills',
+        'Archery',
+        'Augmentation',
+        'Aura Manipulation',
+        'Axe',
+        'Battlesongs',
+        'Beastcraft',
+        'Bone Army',
+        'Cave Magic',
+        'Critical Strike',
+        'Cursing',
+        'Darkness',
+        'Envenom',
+        'Fist Wraps',
+        'Hammer',
+        'Hand To Hand',
+        'Hexing',
+        'Left Axe',
+        'Magnetism',
+        'Mauler Staff',
+        'Mending',
+        'Odin\'s Will',
+        'Parry',
+        'Power Strikes',
+        'Runecarving',
+        'Shield',
+        'Spear',
+        'Staff',
+        'Stealth',
+        'Stormcalling',
+        'Summoning',
+        'Suppression',
+        'Sword',
+        'Thrown Weapons',
+        'Witchcraft',
+    ),
+}
+
+for realm in Realms:
+    CraftedSkillList['All'].update(CraftedSkillList[realm])
+    DropSkillList['All'].update(DropSkillList[realm])
+CraftedSkillList['All'] = tuple(sorted(CraftedSkillList['All']))
+DropSkillList['All'] = tuple(sorted(DropSkillList['All']))
+
+SkillValues = (
+    '1',
+    '2',
+    '3',
+    '4',
+    '5',
+    '6',
+    '7',
+    '8',
 )
 
 # =============================================== #
-#             STAT RELATED CONSTANTS              #
+#           ATTRIBUTE RELATED CONSTANTS           #
 # =============================================== #
 
-AttributeTableOrdered = (
-    ('Strength', 'Fiery',),
-    ('Constitution', 'Earthen',),
-    ('Dexterity', 'Vapor',),
-    ('Quickness', 'Airy',),
-    ('Intelligence', 'Dusty',),
-    ('Piety', 'Watery',),
-    ('Empathy', 'Heated',),
-    ('Charisma', 'Icy',),
-    ('Hit Points', 'Blood',),
-    ('Power', 'Mystical',),
+CraftedAttributeList = (
+    'Strength',
+    'Constitution',
+    'Dexterity',
+    'Quickness',
+    'Intelligence',
+    'Piety',
+    'Empathy',
+    'Charisma',
+    'Hit Points',
+    'Power',
 )
 
-suffix = 'Essence Jewel'
-AttributeTable = dict(AttributeTableOrdered)
+DropAttributeList = (
+    'Strength',
+    'Constitution',
+    'Dexterity',
+    'Quickness',
+    'Intelligence',
+    'Piety',
+    'Empathy',
+    'Charisma',
+    'Acuity',
+    'Hit Points',
+    'Power',
+)
 
-for (key, value) in list(AttributeTable.items()):
-    AttributeTable[key] = (value, suffix, GemDusts[suffix], GemLiquids[value],)
-
-CraftedAttributeList = t2([x[0] for x in AttributeTableOrdered])
-CraftedAttributeTable = d2(AttributeTable)
-DropAttributeList = t2(CraftedAttributeList + ('Acuity',))
-DropAttributeTable = dict().fromkeys(DropAttributeList)
-
-del AttributeTableOrdered
-del AttributeTable
-
-AttributeValues = t2((
+AttributeValues = (
     '2',
     '5',
     '8',
@@ -225,9 +352,9 @@ AttributeValues = t2((
     '23',
     '26',
     '29',
-))
+)
 
-HitsValues = t2((
+HitsValues = (
     '4',
     '12',
     '20',
@@ -238,9 +365,9 @@ HitsValues = t2((
     '60',
     '68',
     '76',
-))
+)
 
-PowerValues = t2((
+PowerValues = (
     '1',
     '2',
     '3',
@@ -251,306 +378,10 @@ PowerValues = t2((
     '13',
     '15',
     '17'
-))
-
-# =============================================== #
-#            RESIST RELATED CONSTANTS             #
-# =============================================== #
-
-ResistTableOrdered = (
-    ('Body', 'Dusty',),
-    ('Cold', 'Icy',),
-    ('Heat', 'Heated',),
-    ('Energy', 'Light',),
-    ('Matter', 'Earthen',),
-    ('Spirit', 'Vapor',),
-    ('Crush', 'Fiery',),
-    ('Thrust', 'Airy',),
-    ('Slash', 'Watery',),
 )
 
-suffix = 'Shielding Jewel'
-ResistTable = dict(ResistTableOrdered)
-
-for (key, value) in list(ResistTable.items()):
-    ResistTable[key] = (value, suffix, GemDusts[suffix], GemLiquids[value])
-
-CraftedResistTable = d2(ResistTable)
-CraftedResistList = t2([x[0] for x in ResistTableOrdered])
-DropResistList = t2(CraftedResistList + ('Essence',))
-DropResistTable = dict().fromkeys(DropResistList)
-
-del ResistTableOrdered
-del ResistTable
-
-ResistValues = t2((
-    '1',
-    '2',
-    '3',
-    '5',
-    '7',
-    '9',
-    '11',
-    '13',
-    '15',
-    '17',
-))
-
 # =============================================== #
-#             FOCUS RELATED CONSTANTS             #
-# =============================================== #
-
-FocusTable = {
-
-    'Albion': {
-
-        'All Spell Lines': ('Brilliant', 'Sigil',),
-        'Body Magic': ('Heat', 'Sigil',),
-        'Cold Magic': ('Ice', 'Sigil',),
-        'Death Servant': ('Ashen', 'Sigil',),
-        'Deathsight': ('Vacuous', 'Sigil',),
-        'Earth Magic': ('Earth', 'Sigil',),
-        'Fire Magic': ('Fire', 'Sigil',),
-        'Matter Magic': ('Dust', 'Sigil',),
-        'Mind Magic': ('Water', 'Sigil',),
-        'Painworking': ('Salt Crusted', 'Sigil',),
-        'Spirit Magic': ('Vapor', 'Sigil',),
-        'Wind Magic': ('Air', 'Sigil',),
-    },
-
-    'Hibernia': {
-
-        'All Spell Lines': ('Brilliant', 'Spell Stone',),
-        'Arboreal Path': ('Steaming', 'Spell Stone',),
-        'Creeping Path': ('Oozing', 'Spell Stone',),
-        'Enchantments': ('Vapor', 'Spell Stone',),
-        'Ethereal Shriek': ('Ethereal', 'Spell Stone',),
-        'Light': ('Fire', 'Spell Stone',),
-        'Mana': ('Water', 'Spell Stone',),
-        'Mentalism': ('Earth', 'Spell Stone',),
-        'Phantasmal Wail': ('Phantasmal', 'Spell Stone',),
-        'Spectral Guard': ('Spectral', 'Spell Stone',),
-        'Verdant Path': ('Mineral Encrusted', 'Spell Stone',),
-        'Void': ('Ice', 'Spell Stone',),
-    },
-
-    'Midgard': {
-
-        'All Spell Lines': ('Brilliant', 'Rune',),
-        'Bone Army': ('Ashen', 'Rune',),
-        'Cursing': ('Blighted', 'Rune',),
-        'Darkness': ('Ice', 'Rune',),
-        'Runecarving': ('Heat', 'Rune',),
-        'Summoning': ('Vapor', 'Rune',),
-        'Suppression': ('Dust', 'Rune',),
-    },
-
-    'All': {}}
-
-for realm in Realms:
-    for (key, value) in list(FocusTable[realm].items()):
-        if value[0] in GemLiquids:
-            liquid = GemLiquids[value[0]]
-        else:
-            liquid = GemLiquids[value[0] + " " + value[1].split()[0]]
-        FocusTable[realm][key] = (value[0], value[1], GemDusts[value[1]], liquid,)
-    FocusTable[realm] = d2(FocusTable[realm])
-    FocusTable['All'].update(FocusTable[realm])
-FocusTable['All'] = d2(FocusTable['All'])
-FocusTable = d2(FocusTable)
-
-FocusList = {}
-for realm in list(FocusTable.keys()):
-    FocusList[realm] = list(FocusTable[realm].keys())
-    FocusList[realm].sort()
-    FocusList[realm] = t2(FocusList[realm])
-FocusList = d2(FocusList)
-
-FocusValues = t2((
-    '5',
-    '10',
-    '15',
-    '20',
-    '25',
-    '30',
-    '35',
-    '40',
-    '45',
-    '50',
-))
-
-# =============================================== #
-#             SKILL RELATED CONSTANTS             #
-# =============================================== #
-
-SkillTable = {
-
-    'Albion': {
-
-        'All Magic Skills': ('Finesse', 'Fervor Sigil',),
-        'All Melee Weapon Skills': ('Finesse', 'War Sigil',),
-        'Archery': ('Airy', 'War Sigil',),
-        'Aura Manipulation': ('Radiant', 'Fervor Sigil',),
-        'Body Magic': ('Heated', 'Evocation Sigil',),
-        'Chants': ('Earthen', 'Fervor Sigil',),
-        'Cold Magic': ('Icy', 'Evocation Sigil',),
-        'Critical Strike': ('Heated', 'Battle Jewel',),
-        'Crossbow': ('Vapor', 'War Sigil',),
-        'Crush': ('Fiery', 'War Sigil',),
-        'Death Servant': ('Ashen', 'Fervor Sigil',),
-        'Deathsight': ('Vacuous', 'Fervor Sigil',),
-        'Dual Wield': ('Icy', 'War Sigil',),
-        'Earth Magic': ('Earthen', 'Evocation Sigil',),
-        'Enhancement': ('Airy', 'Fervor Sigil',),
-        'Envenom': ('Dusty', 'Battle Jewel',),
-        'Flexible': ('Molten Magma', 'War Sigil',),
-        'Fire Magic': ('Fiery', 'Evocation Sigil',),
-        'Fist Wraps': ('Glacial', 'War Sigil',),
-        'Instruments': ('Vapor', 'Fervor Sigil',),
-        'Magnetism': ('Magnetic', 'Fervor Sigil',),
-        'Matter Magic': ('Dusty', 'Evocation Sigil',),
-        'Mauler Staff': ('Cinder', 'War Sigil',),
-        'Mind Magic': ('Watery', 'Evocation Sigil',),
-        'Painworking': ('Salt Crusted', 'Fervor Sigil',),
-        'Parry': ('Vapor', 'Battle Jewel',),
-        'Polearm': ('Earthen', 'War Sigil',),
-        'Power Strikes': ('Clout', 'Fervor Sigil',),
-        'Rejuvenation': ('Watery', 'Fervor Sigil',),
-        'Shield': ('Fiery', 'Battle Jewel',),
-        'Slash': ('Watery', 'War Sigil',),
-        'Smite': ('Fiery', 'Fervor Sigil',),
-        'Soulrending': ('Steaming', 'Fervor Sigil',),
-        'Spirit Magic': ('Vapor', 'Evocation Sigil',),
-        'Staff': ('Earthen', 'Battle Jewel',),
-        'Stealth': ('Airy', 'Battle Jewel',),
-        'Thrust': ('Dusty', 'War Sigil',),
-        'Two-Handed': ('Heated', 'War Sigil',),
-        'Wind Magic': ('Airy', 'Evocation Sigil',),
-    },
-
-    'Hibernia': {
-
-        'All Magic Skills': ('Finesse', 'Nature Spell Stone',),
-        'All Melee Weapon Skills': ('Finesse', 'War Spell Stone',),
-        'Arboreal Path': ('Steaming', 'Nature Spell Stone',),
-        'Archery': ('Airy', 'War Spell Stone',),
-        'Aura Manipulation': ('Radiant', 'Nature Spell Stone'),
-        'Blades': ('Watery', 'War Spell Stone',),
-        'Blunt': ('Fiery', 'War Spell Stone',),
-        'Celtic Dual': ('Icy', 'War Spell Stone',),
-        'Celtic Spear': ('Earthen', 'War Spell Stone',),
-        'Creeping Path': ('Oozing', 'Nature Spell Stone',),
-        'Critical Strike': ('Heated', 'Battle Jewel',),
-        'Dementia': ('Aberrant', 'Arcane Spell Stone',),
-        'Enchantments': ('Vapor', 'Arcane Spell Stone',),
-        'Envenom': ('Dusty', 'Battle Jewel',),
-        'Ethereal Shriek': ('Ethereal', 'Arcane Spell Stone',),
-        'Fist Wraps': ('Glacial', 'War Spell Stone'),
-        'Large Weaponry': ('Heated', 'War Spell Stone',),
-        'Light': ('Fiery', 'Arcane Spell Stone',),
-        'Magnetism': ('Magnetic', 'Nature Spell Stone'),
-        'Mana': ('Watery', 'Arcane Spell Stone',),
-        'Mauler Staff': ('Cinder', 'War Spell Stone'),
-        'Mentalism': ('Earthen', 'Arcane Spell Stone',),
-        'Music': ('Airy', 'Nature Spell Stone',),
-        'Nature': ('Earthen', 'Nature Spell Stone',),
-        'Nurture': ('Fiery', 'Nature Spell Stone',),
-        'Parry': ('Vapor', 'Battle Jewel',),
-        'Phantasmal Wail': ('Phantasmal', 'Arcane Spell Stone',),
-        'Piercing': ('Dusty', 'War Spell Stone',),
-        'Power Strikes': ('Clout', 'Nature Spell Stone'),
-        'Regrowth': ('Watery', 'Nature Spell Stone',),
-        'Scythe': ('Light', 'War Spell Stone',),
-        'Shadow Mastery': ('Shadowy', 'Arcane Spell Stone',),
-        'Shield': ('Fiery', 'Battle Jewel',),
-        'Spectral Guard': ('Spectral', 'Arcane Spell Stone',),
-        'Staff': ('Earthen', 'Battle Jewel',),
-        'Stealth': ('Airy', 'Battle Jewel',),
-        'Valor': ('Airy', 'Arcane Spell Stone',),
-        'Vampiiric Embrace': ('Embracing', 'Arcane Spell Stone',),
-        'Verdant Path': ('Mineral Encrusted', 'Nature Spell Stone',),
-        'Void': ('Icy', 'Arcane Spell Stone',),
-    },
-
-    'Midgard': {
-
-        'All Magic Skills': ('Finesse', 'Primal Rune',),
-        'All Melee Weapon Skills': ('Finesse', 'War Rune',),
-        'Archery': ('Airy', 'War Rune',),
-        'Augmentation': ('Airy', 'Chaos Rune',),
-        'Aura Manipulation': ('Radiant', 'Primal Rune',),
-        'Axe': ('Earthen', 'War Rune',),
-        'Battlesongs': ('Airy', 'Primal Rune',),
-        'Beastcraft': ('Earthen', 'Primal Rune',),
-        'Bone Army': ('Ashen', 'Primal Rune',),
-        'Cave Magic': ('Fiery', 'Chaos Rune',),
-        'Critical Strike': ('Heated', 'Battle Jewel',),
-        'Cursing': ('Blighted', 'Primal Rune',),
-        'Darkness': ('Icy', 'Chaos Rune',),
-        'Envenom': ('Dusty', 'Battle Jewel',),
-        'Fist Wraps': ('Glacial', 'War Rune',),
-        'Hammer': ('Fiery', 'War Rune',),
-        'Hand To Hand': ('Lightning Charged', 'War Rune',),
-        'Hexing': ('Unholy', 'Primal Rune',),
-        'Left Axe': ('Icy', 'War Rune',),
-        'Magnetism': ('Magnetic', 'Primal Rune',),
-        'Mauler Staff': ('Cinder', 'War Rune',),
-        'Mending': ('Watery', 'Chaos Rune',),
-        'Odin\'s Will': ('Valiant', 'Primal Rune',),
-        'Parry': ('Vapor', 'Battle Jewel',),
-        'Power Strikes': ('Clout', 'Primal Rune',),
-        'Runecarving': ('Heated', 'Chaos Rune',),
-        'Shield': ('Fiery', 'Battle Jewel',),
-        'Spear': ('Heated', 'War Rune',),
-        'Staff': ('Earthen', 'Battle Jewel',),
-        'Stealth': ('Airy', 'Battle Jewel',),
-        'Stormcalling': ('Fiery', 'Primal Rune',),
-        'Summoning': ('Vapor', 'Chaos Rune',),
-        'Suppression': ('Dusty', 'Chaos Rune',),
-        'Sword': ('Watery', 'War Rune',),
-        'Thrown Weapons': ('Vapor', 'War Rune',),
-
-    }, 'All': {}}
-
-for realm in Realms:
-    for (key, value) in list(SkillTable[realm].items()):
-        if value[0] in GemLiquids:
-            liquid = GemLiquids[value[0]]
-        else:
-            liquid = GemLiquids[value[0] + " " + value[1].split()[0]]
-        SkillTable[realm][key] = (value[0], value[1], GemDusts[value[1]], liquid,)
-    SkillTable[realm] = d2(SkillTable[realm])
-    SkillTable['All'].update(SkillTable[realm])
-SkillTable['All'] = d2(SkillTable['All'])
-SkillTable = d2(SkillTable)
-
-CraftedSkillList = {}
-DropSkillList = {}
-for realm in list(SkillTable.keys()):
-    skills = list(SkillTable[realm].keys())
-    skills.sort()
-    CraftedSkillList[realm] = t2(skills)
-    skills.insert(2, 'All Archery Skills')
-    skills.insert(3, 'All Dual Wield Skills')
-    if realm == 'Midgard':  # ADD NON-CRAFTABLE 'Witchcraft' SKILL
-        skills.append('Witchcraft')
-    DropSkillList[realm] = t2(skills)
-CraftedSkillList = d2(CraftedSkillList)
-DropSkillList = d2(DropSkillList)
-
-SkillValues = t2((
-    '1',
-    '2',
-    '3',
-    '4',
-    '5',
-    '6',
-    '7',
-    '8',
-))
-
-# =============================================== #
-#              CAP RELATED CONSTANTS              #
+#      CAP (BASE/ATTRIBUTE) RELATED CONSTANTS     #
 # =============================================== #
 #                                                 #
 #    CALCULATED AS % OF LEVEL + CONSTANT          #
@@ -560,7 +391,7 @@ SkillValues = t2((
 #                                                 #
 # =============================================== #
 
-AttributeCapList = t2((
+AttributeCapList = (
     'Strength',
     'Constitution',
     'Dexterity',
@@ -573,9 +404,9 @@ AttributeCapList = t2((
     'Power',
     'Acuity',
     'Fatigue',
-))
+)
 
-MythicalStatCapList = t2((
+MythicalStatCapList = (
     'Strength',
     'Constitution',
     'Dexterity',
@@ -585,9 +416,9 @@ MythicalStatCapList = t2((
     'Charisma',
     'Empathy',
     'Acuity',
-))
+)
 
-MythicalResistCapList = t2((
+MythicalResistCapList = (
     'Body',
     'Cold',
     'Heat',
@@ -598,7 +429,7 @@ MythicalResistCapList = t2((
     'Thrust',
     'Slash',
     'Essence',
-))
+)
 
 Cap = {
     'Skill': (0.20, 1),
@@ -643,10 +474,120 @@ MythicalBonusCap = {
 }
 
 # =============================================== #
+#          RESISTANCE RELATED CONSTANTS           #
+# =============================================== #
+
+CraftedResistanceList = (
+    'Body',
+    'Cold',
+    'Heat',
+    'Energy',
+    'Matter',
+    'Spirit',
+    'Crush',
+    'Thrust',
+    'Slash',
+)
+
+DropResistanceList = (
+    'Body',
+    'Cold',
+    'Heat',
+    'Energy',
+    'Matter',
+    'Spirit',
+    'Crush',
+    'Thrust',
+    'Slash',
+    'Essence',
+)
+
+ResistValues = (
+    '1',
+    '2',
+    '3',
+    '5',
+    '7',
+    '9',
+    '11',
+    '13',
+    '15',
+    '17',
+)
+
+# =============================================== #
+#             FOCUS RELATED CONSTANTS             #
+# =============================================== #
+
+FocusList = {
+
+    'All': set(),
+
+    'Albion': (
+
+        'All Spell Lines',
+        'Body Magic',
+        'Cold Magic',
+        'Death Servant',
+        'Deathsight',
+        'Earth Magic',
+        'Fire Magic',
+        'Matter Magic',
+        'Mind Magic',
+        'Painworking',
+        'Spirit Magic',
+        'Wind Magic',
+    ),
+
+    'Hibernia': (
+        'All Spell Lines',
+        'Arboreal Path',
+        'Creeping Path',
+        'Enchantments',
+        'Ethereal Shriek',
+        'Light',
+        'Mana',
+        'Mentalism',
+        'Phantasmal Wail',
+        'Spectral Guard',
+        'Verdant Path',
+        'Void',
+    ),
+
+    'Midgard': (
+
+        'All Spell Lines',
+        'Bone Army',
+        'Cursing',
+        'Darkness',
+        'Runecarving',
+        'Summoning',
+        'Suppression',
+    ),
+}
+
+for realm in Realms:
+    FocusList['All'].update(FocusList[realm])
+FocusList['All'] = tuple(sorted(FocusList['All']))
+
+FocusValues = (
+    '5',
+    '10',
+    '15',
+    '20',
+    '25',
+    '30',
+    '35',
+    '40',
+    '45',
+    '50',
+)
+
+# =============================================== #
 #             BONUS RELATED CONSTANTS             #
 # =============================================== #
 
-TOABonusList = t2((
+TOABonusList = (
     '% Power Pool',
     'Armor Factor',
     'Conversion',
@@ -665,9 +606,9 @@ TOABonusList = t2((
     'Debuff Effectiveness',
     'Health Regeneration',
     'Power Regeneration',
-))
+)
 
-PVEBonusList = t2((
+PVEBonusList = (
     'Block',
     'Evade',
     'Parry',
@@ -681,9 +622,9 @@ PVEBonusList = t2((
     'Spell Power Cost Reduction',
     'Death Exp. Loss Reduction',
     'Neg. Effect Duration Reduction',
-))
+)
 
-MythicalBonusList = t2((
+MythicalBonusList = (
     'Coin',
     'Bounty Points',
     'Realm Points',
@@ -701,21 +642,21 @@ MythicalBonusList = t2((
     'Block',
     'Evade',
     'Parry',
-))
+)
 
 # =============================================== #
 #          EFFECT TYPE RELATED CONSTANTS          #
 # =============================================== #
 
-CraftedTypeList = t2((
+CraftedTypeList = (
     'Unused',
     'Skill',
     'Attribute',
     'Resistance',
     'Focus',
-))
+)
 
-EnhancedTypeList = t2((
+EnhancedTypeList = (
     'Unused',
     'Skill',
     'Attribute',
@@ -723,9 +664,9 @@ EnhancedTypeList = t2((
     'Focus',
     'ToA Bonus',
     'PvE Bonus',
-))
+)
 
-DropTypeList = t2((
+DropTypeList = (
     'Unused',
     'Skill',
     'Attribute',
@@ -739,26 +680,20 @@ DropTypeList = t2((
     'Mythical Stat & Cap',
     'Mythical Resist & Cap',
     'Mythical Bonus',
-))
+)
 
 # =============================================== #
 #             EFFECT RELATED CONSTANTS            #
 # =============================================== #
 
-CraftedEffectTable = {
-
-    'All': {
-        'Unused': UnusedTable,
-        'Attribute': CraftedAttributeTable,
-        'Resistance': CraftedResistTable,
-    }}
-
 CraftedEffectList = {
 
     'All': {
         'Unused': UnusedList,
+        'Skill': (),
         'Attribute': CraftedAttributeList,
-        'Resistance': CraftedResistList,
+        'Resistance': CraftedResistanceList,
+        'Focus': (),
     }}
 
 EnhancedEffectList = {
@@ -820,9 +755,11 @@ DropEffectList = {
 
     'All': {
         'Unused': UnusedList,
-        'Resistance': DropResistList,
+        'Skill': (),
         'Attribute': DropAttributeList,
         'Attribute Cap': AttributeCapList,
+        'Resistance': DropResistanceList,
+        'Focus': (),
         'ToA Bonus': TOABonusList,
         'PvE Bonus': PVEBonusList,
         'Mythical Stat Cap': MythicalStatCapList,
@@ -833,38 +770,30 @@ DropEffectList = {
     }}
 
 for realm in Realms:
-    CraftedEffectTable[realm] = {}
-    CraftedEffectTable[realm].update(CraftedEffectTable['All'])
     CraftedEffectList[realm] = {}
     CraftedEffectList[realm].update(CraftedEffectList['All'])
     DropEffectList[realm] = {}
     DropEffectList[realm].update(DropEffectList['All'])
 
-for realm in list(CraftedEffectTable.keys()):
-    CraftedEffectTable[realm]['Focus'] = FocusTable[realm]
-    CraftedEffectTable[realm]['Skill'] = SkillTable[realm]
-    CraftedEffectTable[realm] = d2(CraftedEffectTable[realm])
-    CraftedEffectList[realm]['Focus'] = FocusList[realm]
+for realm in list(CraftedEffectList.keys()):
     CraftedEffectList[realm]['Skill'] = CraftedSkillList[realm]
-    CraftedEffectList[realm] = d2(CraftedEffectList[realm])
-    DropEffectList[realm]['Focus'] = FocusList[realm]
+    CraftedEffectList[realm]['Focus'] = FocusList[realm]
     DropEffectList[realm]['Skill'] = DropSkillList[realm]
-    DropEffectList[realm] = d2(DropEffectList[realm])
+    DropEffectList[realm]['Focus'] = FocusList[realm]
 
-CraftedEffectTable = d2(CraftedEffectTable)
-CraftedEffectList = d2(CraftedEffectList)
-DropEffectList = d2(DropEffectList)
+for key, value in CraftedEffectList.items():
+    print('Crafted:', key, value)
 
 # =============================================== #
 #          EFFECT VALUE RELATED CONSTANTS         #
 # =============================================== #
 
-CraftedValuesList = d2({
+CraftedValuesList = {
 
     'Unused': UnusedValues,
     'Skill': SkillValues,
 
-    'Attribute': d2({
+    'Attribute': {
         'Strength': AttributeValues,
         'Constitution': AttributeValues,
         'Dexterity': AttributeValues,
@@ -875,11 +804,11 @@ CraftedValuesList = d2({
         'Charisma': AttributeValues,
         'Hit Points': HitsValues,
         'Power': PowerValues,
-    }),
+    },
 
     'Resistance': ResistValues,
     'Focus': FocusValues,
-})
+}
 
 EnhancedValuesList = {
 
@@ -926,12 +855,1060 @@ EnhancedValuesList = {
     }}
 
 # =============================================== #
+#            CRAFTING RELATED CONSTANTS           #
+# =============================================== #
+
+GemTierName = (
+    'Raw',
+    'Uncut',
+    'Rough',
+    'Flawed',
+    'Imperfect',
+    'Polished',
+    'Faceted',
+    'Precious',
+    'Flawless',
+    'Perfect',
+)
+
+GemMaterial = {
+
+    'All': {
+
+        'Skill': {
+
+            'Critical Strike': {
+                'Gem': 'Heated Battle Jewel',
+                'Dust': 'Bloodied Battlefield Dirt',
+                'Liquid': 'Heat From an Unearthly Pyre',
+            },
+
+            'Envenom': {
+                'Gem': 'Dusty Battle Jewel',
+                'Dust': 'Bloodied Battlefield Dirt',
+                'Liquid': 'Undead Ash and Holy Water',
+            },
+
+            'Parry': {
+                'Gem': 'Vapor Battle Jewel',
+                'Dust': 'Bloodied Battlefield Dirt',
+                'Liquid': 'Swamp Fog',
+            },
+
+            'Shield': {
+                'Gem': 'Fiery Battle Jewel',
+                'Dust': 'Bloodied Battlefield Dirt',
+                'Liquid': 'Draconic Fire',
+            },
+
+            'Staff': {
+                'Gem': 'Earthen Battle Jewel',
+                'Dust': 'Bloodied Battlefield Dirt',
+                'Liquid': 'Treant Blood',
+            },
+
+            'Stealth': {
+                'Gem': 'Airy Battle Jewel',
+                'Dust': 'Bloodied Battlefield Dirt',
+                'Liquid': 'Air Elemental Essence',
+            }},
+
+        'Attribute': {
+
+            'Strength': {
+                'Gem': 'Fiery Essence Jewel',
+                'Dust': 'Essence of Life',
+                'Liquid': 'Draconic Fire',
+            },
+
+            'Constitution': {
+                'Gem': 'Earthen Essence Jewel',
+                'Dust': 'Essence of Life',
+                'Liquid': 'Treant Blood',
+            },
+
+            'Dexterity': {
+                'Gem': 'Vapor Essence Jewel',
+                'Dust': 'Essence of Life',
+                'Liquid': 'Swamp Fog',
+            },
+
+            'Quickness': {
+                'Gem': 'Airy Essence Jewel',
+                'Dust': 'Essence of Life',
+                'Liquid': 'Air Elemental Essence',
+            },
+
+            'Intelligence': {
+                'Gem': 'Dusty Essence Jewel',
+                'Dust': 'Essence of Life',
+                'Liquid': 'Undead Ash and Holy Water',
+            },
+
+            'Piety': {
+                'Gem': 'Watery Essence Jewel',
+                'Dust': 'Essence of Life',
+                'Liquid': 'Leviathan Blood',
+            },
+
+            'Empathy': {
+                'Gem': 'Heated Essence Jewel',
+                'Dust': 'Essence of Life',
+                'Liquid': 'Heat From an Unearthly Pyre',
+            },
+
+            'Charisma': {
+                'Gem': 'Icy Essence Jewel',
+                'Dust': 'Essence of Life',
+                'Liquid': 'Frost From a Wasteland',
+            },
+
+            'Hit Points': {
+                'Gem': 'Blood Essence Jewel',
+                'Dust': 'Essence of Life',
+                'Liquid': 'Giant Blood',
+            },
+
+            'Power': {
+                'Gem': 'Mystical Essence Jewel',
+                'Dust': 'Essence of Life',
+                'Liquid': 'Mystic Energy',
+            }},
+
+        'Resistance': {
+
+            'Body': {
+                'Gem': 'Dusty Shielding Jewel',
+                'Dust': 'Ground Draconic Scales',
+                'Liquid': 'Undead Ash and Holy Water',
+            },
+
+            'Cold': {
+                'Gem': 'Icy Shielding Jewel',
+                'Dust': 'Ground Draconic Scales',
+                'Liquid': 'Frost From a Wasteland',
+            },
+
+            'Heat': {
+                'Gem': 'Heated Shielding Jewel',
+                'Dust': 'Ground Draconic Scales',
+                'Liquid': 'Heat From an Unearthly Pyre',
+            },
+
+            'Energy': {
+                'Gem': 'Light Shielding Jewel',
+                'Dust': 'Ground Draconic Scales',
+                'Liquid': 'Sun Light',
+            },
+
+            'Matter': {
+                'Gem': 'Earthen Shielding Jewel',
+                'Dust': 'Ground Draconic Scales',
+                'Liquid': 'Treant Blood',
+            },
+
+            'Spirit': {
+                'Gem': 'Vapor Shielding Jewel',
+                'Dust': 'Ground Draconic Scales',
+                'Liquid': 'Swamp Fog',
+            },
+
+            'Crush': {
+                'Gem': 'Fiery Shielding Jewel',
+                'Dust': 'Ground Draconic Scales',
+                'Liquid': 'Draconic Fire',
+            },
+
+            'Thrust': {
+                'Gem': 'Airy Shielding Jewel',
+                'Dust': 'Ground Draconic Scales',
+                'Liquid': 'Air Elemental Essence',
+            },
+
+            'Slash': {
+                'Gem': 'Watery Shielding Jewel',
+                'Dust': 'Ground Draconic Scales',
+                'Liquid': 'Leviathan Blood',
+            }}},
+
+    'Albion': {
+
+        'Skill': {
+
+            'All Magic Skills': {
+                'Gem': 'Finesse Fervor Sigil',
+                'Dust': 'Ground Blessed Undead Bone',
+                'Liquid': (
+                    'Draconic Fire',
+                    'Mystic Energy',
+                    'Treant Blood',
+                )},
+
+            'All Melee Weapon Skills': {
+                'Gem': 'Finesse War Sigil',
+                'Dust': 'Ground Caer Stone',
+                'Liquid': (
+                    'Draconic Fire',
+                    'Mystic Energy',
+                    'Treant Blood',
+                )},
+
+            'Archery': {
+                'Gem': 'Airy War Sigil',
+                'Dust': 'Ground Caer Stone',
+                'Liquid': 'Air Elemental Essence',
+            },
+
+            'Aura Manipulation': {
+                'Gem': 'Radiant Fervor Sigil',
+                'Dust': 'Ground Blessed Undead Bone',
+                'Liquid': 'Sun Light',
+            },
+
+            'Body Magic': {
+                'Gem': 'Heated Evocation Sigil',
+                'Dust': 'Ground Cave Crystal',
+                'Liquid': 'Heat From an Unearthly Pyre',
+            },
+
+            'Chants': {
+                'Gem': 'Earthen Fervor Sigil',
+                'Dust': 'Ground Blessed Undead Bone',
+                'Liquid': 'Treant Blood',
+            },
+
+            'Cold Magic': {
+                'Gem': 'Icy Evocation Sigil',
+                'Dust': 'Ground Cave Crystal',
+                'Liquid': 'Frost From a Wasteland',
+            },
+
+            'Crossbow': {
+                'Gem': 'Vapor War Sigil',
+                'Dust': 'Ground Caer Stone',
+                'Liquid': 'Swamp Fog',
+            },
+
+            'Crush': {
+                'Gem': 'Fiery War Sigil',
+                'Dust': 'Ground Caer Stone',
+                'Liquid': 'Draconic Fire',
+            },
+
+            'Death Servant': {
+                'Gem': 'Ashen Fervor Sigil',
+                'Dust': 'Ground Blessed Undead Bone',
+                'Liquid': 'Undead Ash and Holy Water',
+            },
+
+            'Deathsight': {
+                'Gem': 'Vacuous Fervor Sigil',
+                'Dust': 'Ground Blessed Undead Bone',
+                'Liquid': 'Swamp Fog',
+            },
+
+            'Dual Wield': {
+                'Gem': 'Icy War Sigil',
+                'Dust': 'Ground Caer Stone',
+                'Liquid': 'Frost From a Wasteland',
+            },
+
+            'Earth Magic': {
+                'Gem': 'Earthen Evocation Sigil',
+                'Dust': 'Ground Cave Crystal',
+                'Liquid': 'Treant Blood',
+            },
+
+            'Enhancement': {
+                'Gem': 'Airy Fervor Sigil',
+                'Dust': 'Ground Blessed Undead Bone',
+                'Liquid': 'Air Elemental Essence',
+            },
+
+            'Flexible': {
+                'Gem': 'Molten Magma War Sigil',
+                'Dust': 'Ground Caer Stone',
+                'Liquid': 'Leviathan Blood',
+            },
+
+            'Fire Magic': {
+                'Gem': 'Fiery Evocation Sigil',
+                'Dust': 'Ground Cave Crystal',
+                'Liquid': 'Draconic Fire',
+            },
+
+            'Fist Wraps': {
+                'Gem': 'Glacial War Sigil',
+                'Dust': 'Ground Caer Stone',
+                'Liquid': 'Frost From a Wasteland',
+            },
+
+            'Instruments': {
+                'Gem': 'Vapor Fervor Sigil',
+                'Dust': 'Ground Blessed Undead Bone',
+                'Liquid': 'Swamp Fog',
+            },
+
+            'Magnetism': {
+                'Gem': 'Magnetic Fervor Sigil',
+                'Dust': 'Ground Blessed Undead Bone',
+                'Liquid': 'Mystic Energy',
+            },
+
+            'Matter Magic': {
+                'Gem': 'Dusty Evocation Sigil',
+                'Dust': 'Ground Cave Crystal',
+                'Liquid': 'Undead Ash and Holy Water',
+            },
+
+            'Mauler Staff': {
+                'Gem': 'Cinder War Sigil',
+                'Dust': 'Ground Caer Stone',
+                'Liquid': 'Draconic Fire',
+            },
+
+            'Mind Magic': {
+                'Gem': 'Watery Evocation Sigil',
+                'Dust': 'Ground Cave Crystal',
+                'Liquid': 'Leviathan Blood',
+            },
+
+            'Painworking': {
+                'Gem': 'Salt Crusted Fervor Sigil',
+                'Dust': 'Ground Blessed Undead Bone',
+                'Liquid': 'Mystic Energy',
+            },
+
+            'Polearm': {
+                'Gem': 'Earthen War Sigil',
+                'Dust': 'Ground Caer Stone',
+                'Liquid': 'Treant Blood',
+            },
+
+            'Power Strikes': {
+                'Gem': 'Clout Fervor Sigil',
+                'Dust': 'Ground Blessed Undead Bone',
+                'Liquid': 'Giant Blood',
+            },
+
+            'Rejuvenation': {
+                'Gem': 'Watery Fervor Sigil',
+                'Dust': 'Ground Blessed Undead Bone',
+                'Liquid': 'Leviathan Blood',
+            },
+
+            'Slash': {
+                'Gem': 'Watery War Sigil',
+                'Dust': 'Ground Caer Stone',
+                'Liquid': 'Leviathan Blood',
+            },
+
+            'Smite': {
+                'Gem': 'Fiery Fervor Sigil',
+                'Dust': 'Ground Blessed Undead Bone',
+                'Liquid': 'Draconic Fire',
+            },
+
+            'Soulrendering': {
+                'Gem': 'Steaming Fervor Sigil',
+                'Dust': 'Ground Blessed Undead Bone',
+                'Liquid': 'Heat From an Unearthly Pyre',
+            },
+
+            'Spirit Magic': {
+                'Gem': 'Vapor Evocation Sigil',
+                'Dust': 'Ground Cave Crystal',
+                'Liquid': 'Swamp Fog',
+            },
+
+            'Thrust': {
+                'Gem': 'Dusty War Sigil',
+                'Dust': 'Ground Caer Stone',
+                'Liquid': 'Undead Ash and Holy Water',
+            },
+
+            'Two Handed': {
+                'Gem': 'Heated War Sigil',
+                'Dust': 'Ground Caer Stone',
+                'Liquid': 'Heat From an Unearthly Pyre',
+            },
+
+            'Wind Magic': {
+                'Gem': 'Airy Evocation Sigil',
+                'Dust': 'Ground Cave Crystal',
+                'Liquid': 'Air Elemental Essence',
+            }},
+
+        'Focus': {
+
+            'All Spell Lines': {
+                'Gem': 'Brilliant Sigil',
+                'Dust': 'Ground Draconic Scales',
+                'Liquid': (
+                    'Draconic Fire',
+                    'Mystic Energy',
+                    'Treant Blood',
+                )},
+
+            'Body Magic': {
+                'Gem': 'Heat Sigil',
+                'Dust': 'Ground Draconic Scales',
+                'Liquid': 'Heat From an Unearthly Pyre',
+            },
+
+            'Cold Magic': {
+                'Gem': 'Ice Sigil',
+                'Dust': 'Ground Draconic Scales',
+                'Liquid': 'Frost From a Wasteland',
+            },
+
+            'Death Servant': {
+                'Gem': 'Ashen Sigil',
+                'Dust': 'Ground Draconic Scales',
+                'Liquid': 'Undead Ash and Holy Water',
+            },
+
+            'Deathsight': {
+                'Gem': 'Vacuous Sigil',
+                'Dust': 'Ground Draconic Scales',
+                'Liquid': 'Swamp Fog',
+            },
+
+            'Earth Magic': {
+                'Gem': 'Earth Sigil',
+                'Dust': 'Ground Draconic Scales',
+                'Liquid': 'Treant Blood',
+            },
+
+            'Fire Magic': {
+                'Gem': 'Fire Sigil',
+                'Dust': 'Ground Draconic Scales',
+                'Liquid': 'Draconic Fire',
+            },
+
+            'Matter Magic': {
+                'Gem': 'Dust Sigil',
+                'Dust': 'Ground Draconic Scales',
+                'Liquid': 'Undead Ash and Holy Water',
+            },
+
+            'Mind Magic': {
+                'Gem': 'Water Sigil',
+                'Dust': 'Ground Draconic Scales',
+                'Liquid': 'Leviathan Blood',
+            },
+
+            'Painworking': {
+                'Gem': 'Salt Crusted Sigil',
+                'Dust': 'Ground Draconic Scales',
+                'Liquid': 'Mystic Energy',
+            },
+
+            'Spirit Magic': {
+                'Gem': 'Vapor Sigil',
+                'Dust': 'Ground Draconic Scales',
+                'Liquid': 'Swamp Fog',
+            },
+
+            'Wind Magic': {
+                'Gem': 'Air Sigil',
+                'Dust': 'Ground Draconic Scales',
+                'Liquid': 'Air Elemental Essence',
+            }}},
+
+    'Hibernia': {
+
+        'Skill': {
+
+            'All Magic Skills': {
+                'Gem': 'Finesse Nature Spell Stone',
+                'Dust': 'Fairy Dust',
+                'Liquid': (
+                    'Draconic Fire',
+                    'Mystic Energy',
+                    'Treant Blood',
+                )},
+
+            'All Melee Weapon Skills': {
+                'Gem': 'Finesse War Spell Stone',
+                'Dust': 'Unseelie Dust',
+                'Liquid': (
+                    'Draconic Fire',
+                    'Mystic Energy',
+                    'Treant Blood',
+                )},
+
+            'Arboreal Path': {
+                'Gem': 'Steaming Nature Spell Stone',
+                'Dust': 'Fiary Dust',
+                'Liquid': 'Swamp Fog',
+            },
+
+            'Archery': {
+                'Gem': 'Airy War Spell Stone',
+                'Dust': 'Unseelie Dust',
+                'Liquid': 'Air Elemental Essence',
+            },
+
+            'Aura Manipulation': {
+                'Gem': 'Radiant Nature Spell Stone',
+                'Dust': 'Fairy Dust',
+                'Liquid': 'Sun Light',
+            },
+
+            'Blades': {
+                'Gem': 'Watery War Spell Stone',
+                'Dust': 'Unseelie Dust',
+                'Liquid': 'Leviathan Blood',
+            },
+
+            'Blunt': {
+                'Gem': 'Fiery War Spell Stone',
+                'Dust': 'Unseelie Dust',
+                'Liquid': 'Draconic Fire',
+            },
+
+            'Celtic Dual': {
+                'Gem': 'Icy War Spell Stone',
+                'Dust': 'Unseelie Dust',
+                'Liquid': 'Frost From a Wasteland',
+            },
+
+            'Celtic Spear': {
+                'Gem': 'Earthen War Spell Stone',
+                'Dust': 'Unseelie Dust',
+                'Liquid': 'Treant Blood',
+            },
+
+            'Creeping Path': {
+                'Gem': 'Oozing Nature Spell Stone',
+                'Dust': 'Fairy Dust',
+                'Liquid': 'Treant Blood',
+            },
+
+            'Dementia': {
+                'Gem': 'Aberrant Arcane Spell Stone',
+                'Dust': 'Other Worldly Dust',
+                'Liquid': 'Treant Blood',
+            },
+
+            'Enchantments': {
+                'Gem': 'Vapor Arcane Spell Stone',
+                'Dust': 'Other Worldly Dust',
+                'Liquid': 'Swamp Fog',
+            },
+
+            'Ethereal Shriek': {
+                'Gem': 'Ethereal Arcane Spell Stone',
+                'Dust': 'Other Worldly Dust',
+                'Liquid': 'Leviathan Blood',
+            },
+
+            'Fist Wraps': {
+                'Gem': 'Glacial War Spell Stone',
+                'Dust': 'Unseelie Dust',
+                'Liquid': 'Frost From a Wasteland',
+            },
+
+            'Large Weaponry': {
+                'Gem': 'Heated War Spell Stone',
+                'Dust': 'Unseelie Dust',
+                'Liquid': 'Heat From an Unearthly Pyre',
+            },
+
+            'Light': {
+                'Gem': 'Fiery Arcane Spell Stone',
+                'Dust': 'Other Worldly Dust',
+                'Liquid': 'Draconic Fire',
+            },
+
+            'Magnetism': {
+                'Gem': 'Magnetic Nature Spell Stone',
+                'Dust': 'Fairy Dust',
+                'Liquid': 'Mystic Energy',
+            },
+
+            'Mana': {
+                'Gem': 'Watery Arcane Spell Stone',
+                'Dust': 'Other Worldly Dust',
+                'Liquid': 'Leviathan Blood',
+            },
+
+            'Mauler Staff': {
+                'Gem': 'Cinder War Spell Stone',
+                'Dust': 'Unseelie Dust',
+                'Liquid': 'Draconic Fire',
+            },
+
+            'Mentalism': {
+                'Gem': 'Earthen Arcane Spell Stone',
+                'Dust': 'Other Worldly Dust',
+                'Liquid': 'Treant Blood',
+            },
+
+            'Music': {
+                'Gem': 'Airy Nature Spell Stone',
+                'Dust': 'Fairy Dust',
+                'Liquid': 'Air Elemental Essence',
+            },
+
+            'Nature': {
+                'Gem': 'Earthen Nature Spell Stone',
+                'Dust': 'Fairy Dust',
+                'Liquid': 'Treant Blood',
+            },
+
+            'Nurture': {
+                'Gem': 'Fiery Nature Spell Stone',
+                'Dust': 'Fairy Dust',
+                'Liquid': 'Draconic Fire',
+            },
+
+            'Phantasmal Wail': {
+                'Gem': 'Phantasmal Arcane Spell Stone',
+                'Dust': 'Other Worldly Dust',
+                'Liquid': 'Draconic Fire',
+            },
+
+            'Piercing': {
+                'Gem': 'Dusty War Spell Stone',
+                'Dust': 'Unseelie Dust',
+                'Liquid': 'Undead Ash and Holy Water',
+            },
+
+            'Power Strikes': {
+                'Gem': 'Clout Nature Spell Stone',
+                'Dust': 'Fairy Dust',
+                'Liquid': 'Giant Blood',
+            },
+
+            'Regrowth': {
+                'Gem': 'Watery Nature Spell Stone',
+                'Dust': 'Fairy Dust',
+                'Liquid': 'Leviathan Blood',
+            },
+
+            'Scythe': {
+                'Gem': 'Light War Spell Stone',
+                'Dust': 'Unseelie Dust',
+                'Liquid': 'Sun Light',
+            },
+
+            'Shadow Mastery': {
+                'Gem': 'Shadowy Arcane Spell Stone',
+                'Dust': 'Other Worldly Dust',
+                'Liquid': 'Swamp Fog',
+            },
+
+            'Spectral Guard': {
+                'Gem': 'Spectral Arcane Spell Stone',
+                'Dust': 'Other Worldly Dust',
+                'Liquid': 'Air Elemental Essence',
+            },
+
+            'Valor': {
+                'Gem': 'Airy Arcane Spell Stone',
+                'Dust': 'Other Worldly Dust',
+                'Liquid': 'Air Elemental Essence',
+            },
+
+            'Vampiiric Embrace': {
+                'Gem': 'Embracing Arcane Spell Stone',
+                'Dust': 'Other Worldly Dust',
+                'Liquid': 'Frost From a Wasteland',
+            },
+
+            'Verdant Path': {
+                'Gem': 'Mineral Encrusted Nature Spell Stone',
+                'Dust': 'Fairy Dust',
+                'Liquid': 'Heat From an Unearthly Pyre',
+            },
+
+            'Void': {
+                'Gem': 'Icy Arcane Spell Stone',
+                'Dust': 'Other Worldly Dust',
+                'Liquid': 'Frost From a Wasteland',
+            }},
+
+        'Focus': {
+
+            'All Spell Lines': {
+                'Gem': 'Brilliant Spell Stone',
+                'Dust': 'Ground Draconic Scales',
+                'Liquid': (
+                    'Draconic Fire',
+                    'Mystic Energy',
+                    'Treant Blood'
+                )},
+
+            'Arboreal Path': {
+                'Gem': 'Steaming Spell Stone',
+                'Dust': 'Ground Draconic Scales',
+                'Liquid': 'Swamp Fog'
+            },
+
+            'Creeping Path': {
+                'Gem': 'Oozing Spell Stone',
+                'Dust': 'Ground Draconic Scales',
+                'Liquid': 'Treant Blood'
+            },
+
+            'Enchantments': {
+                'Gem': 'Vapor Spell Stone',
+                'Dust': 'Ground Draconic Scales',
+                'Liquid': 'Swamp Fog'
+            },
+
+            'Ethereal Shriek': {
+                'Gem': 'Ethereal Spell Stone',
+                'Dust': 'Ground Draconic Scales',
+                'Liquid': 'Swamp Fog'
+            },
+
+            'Light': {
+                'Gem': 'Fire Spell Stone',
+                'Dust': 'Ground Draconic Scales',
+                'Liquid': 'Draconic Fire'
+            },
+
+            'Mana': {
+                'Gem': 'Water Spell Stone',
+                'Dust': 'Ground Draconic Scales',
+                'Liquid': 'Leviathan Blood'
+            },
+
+            'Mentalism': {
+                'Gem': 'Earth Spell Stone',
+                'Dust': 'Ground Draconic Scales',
+                'Liquid': 'Treant Blood'
+            },
+
+            'Phantasmal Wail': {
+                'Gem': 'Phantasmal Spell Stone',
+                'Dust': 'Ground Draconic Scales',
+                'Liquid': 'Leviathan Blood'
+            },
+
+            'Spectral Guard': {
+                'Gem': 'Spectral Spell Stone',
+                'Dust': 'Ground Draconic Scales',
+                'Liquid': 'Draconic Fire'
+            },
+
+            'Verdant Path': {
+                'Gem': 'Mineral Encrusted Spell Stone',
+                'Dust': 'Ground Draconic Scales',
+                'Liquid': 'Heat From an Unearthly Pyre'
+            },
+
+            'Void': {
+                'Gem': 'Ice Spell Stone',
+                'Dust': 'Ground Draconic Scales',
+                'Liquid': 'Frost From a Wasteland'
+            }}},
+
+    'Midgard': {
+
+        'Skill': {
+
+            'All Magic Skills': {
+                'Gem': 'Finesse Primal Rune',
+                'Dust': 'Ground Vendo Bone',
+                'Liquid': (
+                    'Draconic Fire',
+                    'Mystic Energy',
+                    'Treant Blood',
+                )},
+
+            'All Melee Weapon Skills': {
+                'Gem': 'Finesse War Rune',
+                'Dust': 'Ground Giant Bone',
+                'Liquid': (
+                    'Draconic Fire',
+                    'Mystic Energy',
+                    'Treant Blood',
+                )},
+
+            'Archery': {
+                'Gem': 'Airy War Rune',
+                'Dust': 'Ground Giant Bone',
+                'Liquid': 'Air Elemental Essence',
+            },
+
+            'Augmentation': {
+                'Gem': 'Airy Chaos Rune',
+                'Dust': 'Soot From Niflheim',
+                'Liquid': 'Air Elemental Essence',
+            },
+
+            'Aura Manipulation': {
+                'Gem': 'Radiant Primal Rune',
+                'Dust': 'Ground Vendo Bone',
+                'Liquid': 'Sun Light',
+            },
+
+            'Axe': {
+                'Gem': 'Earthen War Rune',
+                'Dust': 'Ground Giant Bone',
+                'Liquid': 'Treant Blood',
+            },
+
+            'Battlesongs': {
+                'Gem': 'Airy Primal Rune',
+                'Dust': 'Ground Vendo Bone',
+                'Liquid': 'Air Elemental Essence',
+            },
+
+            'Beastcraft': {
+                'Gem': 'Earthen Primal Rune',
+                'Dust': 'Ground Vendo Bone',
+                'Liquid': 'Treant Blood',
+            },
+
+            'Bone Army': {
+                'Gem': 'Ashen Primal Rune',
+                'Dust': 'Ground Vendo Bone',
+                'Liquid': 'Undead Ash and Holy Water',
+            },
+
+            'Cave Magic': {
+                'Gem': 'Fiery Chaos Rune',
+                'Dust': 'Soot From Niflheim',
+                'Liquid': 'Draconic Fire',
+            },
+
+            'Cursing': {
+                'Gem': 'Blighted Primal Rune',
+                'Dust': 'Ground Vendo Bone',
+                'Liquid': 'Air Elemental Essence',
+            },
+
+            'Darkness': {
+                'Gem': 'Icy Chaos Rune',
+                'Dust': 'Soot From Niflheim',
+                'Liquid': 'Frost From a Wasteland',
+            },
+
+            'Fist Wraps': {
+                'Gem': 'Glacial War Rune',
+                'Dust': 'Ground Giant Bone',
+                'Liquid': 'Frost From a Wasteland',
+            },
+
+            'Hammer': {
+                'Gem': 'Fiery War Rune',
+                'Dust': 'Ground Giant Bone',
+                'Liquid': 'Draconic Fire',
+            },
+
+            'Hand To Hand': {
+                'Gem': 'Lightning Charged War Rune',
+                'Dust': 'Ground Giant Bone',
+                'Liquid': 'Leviathan Blood',
+            },
+
+            'Hexing': {
+                'Gem': 'Unholy Primal Rune',
+                'Dust': 'Ground Vendo Bone',
+                'Liquid': 'Air Elemental Essence',
+            },
+
+            'Left Axe': {
+                'Gem': 'Icy War Rune',
+                'Dust': 'Ground Giant Bone',
+                'Liquid': 'Frost From a Wasteland',
+            },
+
+            'Magnetism': {
+                'Gem': 'Magnetic Primal Rune',
+                'Dust': 'Ground Vendo Bone',
+                'Liquid': 'Mystic Energy',
+            },
+
+            'Mauler Staff': {
+                'Gem': 'Cinder War Rune',
+                'Dust': 'Ground Giant Bone',
+                'Liquid': 'Draconic Fire',
+            },
+
+            'Mending': {
+                'Gem': 'Watery Chaos Rune',
+                'Dust': 'Soot From Niflheim',
+                'Liquid': 'Leviathan Blood',
+            },
+
+            'Odin\'s Will': {
+                'Gem': 'Valiant Primal Rune',
+                'Dust': 'Ground Vendo Bone',
+                'Liquid': 'Swamp Fog',
+            },
+
+            'Power Strikes': {
+                'Gem': 'Clout Primal Rune',
+                'Dust': 'Ground Vendo Bone',
+                'Liquid': 'Giant Blood',
+            },
+
+            'Runecarving': {
+                'Gem': 'Heated Chaos Rune',
+                'Dust': 'Soot From Niflheim',
+                'Liquid': 'Heat From an Unearthly Pyre',
+            },
+
+            'Spear': {
+                'Gem': 'Heated War Rune',
+                'Dust': 'Ground Giant Bone',
+                'Liquid': 'Heat From an Unearthly Pyre',
+            },
+
+            'Staff': {
+                'Gem': 'Earthen Battle Jewel',
+                'Dust': 'Bloodied Battlefield Dirt',
+                'Liquid': 'Treant Blood',
+            },
+
+            'Stormcalling': {
+                'Gem': 'Fiery Primal Rune',
+                'Dust': 'Ground Vendo Bone',
+                'Liquid': 'Draconic Fire',
+            },
+
+            'Summoning': {
+                'Gem': 'Vapor Chaos Rune',
+                'Dust': 'Soot From Niflheim',
+                'Liquid': 'Swamp Fog',
+            },
+
+            'Suppression': {
+                'Gem': 'Dusty Chaos Rune',
+                'Dust': 'Soot From Niflheim',
+                'Liquid': 'Undead Ash and Holy Water',
+            },
+
+            'Sword': {
+                'Gem': 'Watery War Rune',
+                'Dust': 'Ground Giant Bone',
+                'Liquid': 'Leviathan Blood',
+            },
+
+            'Thrown Weapons': {
+                'Gem': 'Vapor War Rune',
+                'Dust': 'Ground Giant Bone',
+                'Liquid': 'Swamp Fog',
+            }},
+
+        'Focus': {
+
+            'All Spell Lines': {
+                'Gem': 'Brilliant Rune',
+                'Dust': 'Ground Draconic Scales',
+                'Liquid': (
+                    'Dragonic Fire',
+                    'Mystic Energy',
+                    'Trent Blood'
+                )},
+
+            'Bone Army': {
+                'Gem': 'Ashen Rune',
+                'Dust': 'Ground Draconic Scales',
+                'Liquid': 'Undead Ash and Holy Water',
+            },
+
+            'Cursing': {
+                'Gem': 'Blighted Rune',
+                'Dust': 'Ground Draconic Scales',
+                'Liquid': 'Undead Ash and Holy Water',
+            },
+
+            'Darkness': {
+                'Gem': 'Ice Rune',
+                'Dust': 'Ground Draconic Scales',
+                'Liquid': 'Frost From a Wasteland',
+            },
+
+            'Runecarving': {
+                'Gem': 'Heat Rune',
+                'Dust': 'Ground Draconic Scales',
+                'Liquid': 'Undead Ash and Holy Water',
+            },
+
+            'Summoning': {
+                'Gem': 'Vapor Rune',
+                'Dust': 'Ground Draconic Scales',
+                'Liquid': 'Swamp Fog',
+            },
+
+            'Suppression': {
+                'Gem': 'Dust Rune',
+                'Dust': 'Ground Draconic Scales',
+                'Liquid': 'Undead Ash and Holy Water',
+            },
+        },
+    },
+}
+
+GemMaterialOrder = {
+
+    'Gems': (
+        'Lo',
+        'Um',
+        'On',
+        'Ee',
+        'Pal',
+        'Mon',
+        'Ros',
+        'Zo',
+        'Kath',
+        'Ra',
+    ),
+
+    'Liquids': (
+        'Air Elemental Essence',
+        'Draconic Fire',
+        'Frost From a Wasteland',
+        'Giant Blood',
+        'Heat From an Unearthly Pyre',
+        'Leviathan Blood',
+        'Mystic Energy',
+        'Sun Light',
+        'Swamp Fog',
+        'Treant Blood',
+        'Undead Ash and Holy Water',),
+
+    'Dusts': (
+        'Bloodied Battlefield Dirt',
+        'Essence of Life','Fairy Dust',
+        'Ground Blessed Undead Bone',
+        'Ground Caer Stone',
+        'Ground Cave Crystal',
+        'Ground Draconic Scales',
+        'Ground Giant Bone',
+        'Ground Vendo Bone',
+        'Other Worldly Dust',
+        'Soot From Niflheim',
+        'Unseelie Dust',
+    ),
+}
+
+OverchargeBasePercent = (-0, -10, -20, -30, -50, -70)
+
+OverchargeSkillBonus = (-45, -40, -35, -30, -25, -20, -15, -10, -5, 0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50,)
+
+ImbuePoints = (
+    1, 2, 2, 3, 4, 4, 5, 5, 6, 7,
+    7, 8, 9, 9, 10, 10, 11, 12, 12, 13,
+    13, 14, 15, 15, 16, 16, 17, 18, 18, 19,
+    20, 20, 21, 21, 22, 23, 23, 24, 24, 25,
+    26, 26, 27, 27, 28, 29, 29, 30, 31, 31, 32,
+)
+
+# =============================================== #
 #             GAME RELATED CONSTANTS              #
 # =============================================== #
 
-GemHotkeyValues = d2({
+GemHotkeyValues = {
 
-    'Albion': d2({
+    'Albion': {
 
         'Fiery Essence Jewel': 0,
         'Earthen Essence Jewel': 2,
@@ -1003,9 +1980,9 @@ GemHotkeyValues = d2({
         'Radiant Fervor Sigil': 134,
         'Magnetic Fervor Sigil': 136,
         'Clout Fervor Sigil': 138,
-    }),
+    },
 
-    'Hibernia': d2({
+    'Hibernia': {
 
         'Fiery Essence Jewel': 0,
         'Earthen Essence Jewel': 2,
@@ -1078,9 +2055,9 @@ GemHotkeyValues = d2({
         'Radiant Nature Spell Stone': 136,
         'Magnetic Nature Spell Stone': 138,
         'Clout Nature Spell Stone': 140,
-    }),
+    },
 
-    'Midgard': d2({
+    'Midgard': {
 
         'Fiery Essence Jewel': 0,
         'Earthen Essence Jewel': 2,
@@ -1143,18 +2120,18 @@ GemHotkeyValues = d2({
         'Radiant Primal Rune': 120,
         'Magnetic Primal Rune': 122,
         'Clout Primal Rune': 124,
-    }),
-})
+    },
+}
 
 # SERVER CODES (*.IGN)
-ServerIgnCodes = d2({
+ServerIgnCodes = {
     'Pendragon': '74',
     'Gaheris': '95',
     'Ywain': '143',
-})
+}
 
 # SERVER CODES (*.INI)
-ServerCodes = d2({
+ServerCodes = {
     '5': 'Pendragon',
     '23': 'Gaheris',
     '41': 'Ywain-1',
@@ -1167,7 +2144,7 @@ ServerCodes = d2({
     '55': 'Ywain-8',
     '56': 'Ywain-9',
     '57': 'Ywain-10',
-})
+}
 
 if __name__ == "__main__":
     pass
