@@ -1399,9 +1399,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.RestoreItem(self.ItemAttributeList[self.CurrentItemLabel])
             self.calculate()
 
-        # BUG: INVALID SKILLS SET ON NON-CURRENT ITEMS DO NOT
-        # RESET WHEN THE CLASS CHANGES. PERHAPS WE SHOULD HAVE
-        # 'self.calculate()' VALIDATE SKILLS BEFORE-HAND ...
+        # BUG: INVALID SKILLS ON NON-CURRENT ITEMS DO NOT RESET
+        # WHEN THE CLASS CHANGES. PERHAPS HAVE 'self.calculate()'
+        # VALIDATE SKILLS WHEN-EVER IT IS CALLED ...
 
         # DEBUGGING
         print('CharacterClassChanged')
