@@ -781,9 +781,6 @@ for realm in list(CraftedEffectList.keys()):
     DropEffectList[realm]['Skill'] = DropSkillList[realm]
     DropEffectList[realm]['Focus'] = FocusList[realm]
 
-for key, value in CraftedEffectList.items():
-    print('Crafted:', key, value)
-
 # =============================================== #
 #          EFFECT VALUE RELATED CONSTANTS         #
 # =============================================== #
