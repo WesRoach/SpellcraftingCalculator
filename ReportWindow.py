@@ -4,8 +4,7 @@ from PyQt5 import uic
 from PyQt5.Qt import Qt, QIcon
 from PyQt5.QtWidgets import QDialog
 from Constants import GemMaterialsOrder
-from lxml import etree, html
-from xml.etree import ElementTree
+from lxml import etree
 
 Ui_ReportWindow = uic.loadUiType(r'interface/ReportWindow.ui')[0]
 
@@ -78,10 +77,10 @@ class ReportWindow(QDialog, Ui_ReportWindow):
         for key, value in materials.items():
             print(key, value)
 
-        output = etree.Element('html')
-        etree.SubElement(output, 'body').text = 'Hello World'
+        html = etree.Element('html')
+        body = etree.SubElement(html, 'body').text = 'Hello World!'
 
-        self.ReportTextBrowser.setHtml(etree.tounicode(output, method = 'html'))
+        self.ReportTextBrowser.setHtml(etree.tounicode(html, method = 'html'))
 
     def templateReport(self, report):
         self.setWindowTitle('Template Report')
