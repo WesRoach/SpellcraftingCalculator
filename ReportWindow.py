@@ -4,7 +4,8 @@ from PyQt5 import uic
 from PyQt5.Qt import Qt, QIcon
 from PyQt5.QtWidgets import QDialog
 from Constants import GemMaterialsOrder
-from lxml import etree
+from lxml import etree, html
+from xml.etree import ElementTree
 
 Ui_ReportWindow = uic.loadUiType(r'interface/ReportWindow.ui')[0]
 
@@ -39,7 +40,7 @@ class ReportWindow(QDialog, Ui_ReportWindow):
 
         materials = {'Items': {}, 'Jewels': {}, 'Gems': {}, 'Liquids': {}, 'Dusts': {}}
 
-        # GET CRAFTABLE AND EQUIPPED ITEMS ...
+        # GATHER CRAFTABLE AND EQUIPPED ITEMS ...
         for location, item in item_list.items():
             if item.ActiveState != 'Dropped' and item.Equipped != 0:
                 materials['Items'][location] = item
@@ -77,7 +78,10 @@ class ReportWindow(QDialog, Ui_ReportWindow):
         for key, value in materials.items():
             print(key, value)
 
-        self.ReportTextBrowser.setHtml('Materials Report')
+        output = etree.Element('html')
+        etree.SubElement(output, 'body').text = 'Hello World'
+
+        self.ReportTextBrowser.setHtml(etree.tounicode(output, method = 'html'))
 
     def templateReport(self, report):
         self.setWindowTitle('Template Report')
