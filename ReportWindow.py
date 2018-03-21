@@ -74,13 +74,11 @@ class ReportWindow(QDialog, Ui_ReportWindow):
             materials[material_type] = material_list
 
         # GENERATE THE MATERIALS REPORT ...
+        report = etree.Element('Report')
         for key, value in materials.items():
             print(key, value)
 
-        html = etree.Element('html')
-        body = etree.SubElement(html, 'body').text = 'Hello World!'
-
-        self.ReportTextBrowser.setHtml(etree.tounicode(html, method = 'html'))
+        self.ReportTextBrowser.setHtml('This shit is broken ...')
 
     def templateReport(self, report):
         self.setWindowTitle('Template Report')
