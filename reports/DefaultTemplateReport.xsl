@@ -6,16 +6,16 @@
             doctype-system = "DTD/xhtml1-strict.dtd"
             indent = "yes" omit-xml-declaration = "yes"/>
 
-    <xsl:template name="nl">
-        <xsl:text>&#xd;</xsl:text>
+    <xsl:template name = "br">
+        <xsl:text disable-output-escaping = "yes">&lt;br/&gt;</xsl:text>
     </xsl:template>
+	
+	<xsl:template name = "brbr">
+		<xsl:text disable-output-escaping = "yes">&lt;br/&gt;&lt;br/&gt;</xsl:text>
+	</xsl:template>
 
-    <xsl:template name="br">
-        <xsl:text disable-output-escaping="yes">&lt;br/&gt;</xsl:text>
-    </xsl:template>
-
-    <xsl:template name="hr">
-        <xsl:text disable-output-escaping="yes">&lt;hr/&gt;</xsl:text>
+    <xsl:template name = "hr">
+        <xsl:text disable-output-escaping = "yes">&lt;hr/&gt;</xsl:text>
     </xsl:template>
 
 	<!-- ATTRIBUTE SECTION -->
@@ -69,7 +69,8 @@
     </xsl:template>
 
     <xsl:template match = "Attributes">
-        <center><b>Attributes</b></center>
+		<xsl:call-template name = "br"/>
+        <b>Attributes:</b>
         <xsl:call-template name = "hr"/>
         <table cellspacing = "0" cellpadding = "0">
             <xsl:call-template name = "statsRow">
@@ -85,7 +86,7 @@
                 <xsl:with-param name = "nodes" select = "Quickness|Charisma|PowerPool"/>
             </xsl:call-template>
         </table>
-        <xsl:call-template name = "br"/>
+        <xsl:call-template name = "brbr"/>
     </xsl:template>
 	
 	<!-- RESISTANCE SECTION -->
@@ -116,7 +117,8 @@
     </xsl:template>
 
     <xsl:template match = "Resistances">
-        <center><b>Resistances</b></center>
+		<xsl:call-template name = "br"/>
+        <b>Resistances:</b>
         <xsl:call-template name = "hr"/>
         <table cellspacing = "0" cellpadding = "0">
             <xsl:call-template name = "resistsRow">
@@ -132,7 +134,7 @@
                 <xsl:with-param name = "nodes" select = "Essence"/>
             </xsl:call-template>
         </table>
-        <xsl:call-template name = "br"/>
+        <xsl:call-template name = "brbr"/>
     </xsl:template>
 	
 	<!-- BONUS SECTIONS (Skills, ToA Bonuse, PvE Bonuse, Mythical Bonus) -->
@@ -140,7 +142,8 @@
 	<xsl:template name = "bonuslist">
         <xsl:param name = "title"/>
         <xsl:param name = "nodes"/>
-        <center><b><xsl:value-of select="$title"/></b></center>
+		<xsl:call-template name = "br"/>
+        <b><xsl:value-of select="$title"/>:</b>
         <xsl:call-template name = "hr"/>
         <table cellspacing = "0" cellpadding = "0">
             <xsl:for-each select = "$nodes">
@@ -158,7 +161,7 @@
                 </tr>
             </xsl:for-each>
         </table>
-        <xsl:call-template name = "br"/>
+        <xsl:call-template name = "brbr"/>
     </xsl:template>
 	
 	<!-- SLOT & ITEM SECTION -->
@@ -297,7 +300,7 @@
             </head>
             <body>
                 <center><b>Template Report</b></center>
-                <xsl:call-template name = "br"/>
+				<xsl:call-template name = "br"/>
                 <xsl:apply-templates select = "Attributes"/>
                 <xsl:apply-templates select = "Resistances"/>
                 <xsl:for-each select = "Skills|Focus|TOABonuses|PVEBonuses|MythicalBonuses">
@@ -318,7 +321,8 @@
                         </xsl:choose>
                     </xsl:if>
                 </xsl:for-each>
-                <center><b>Item Listing</b></center>
+				<xsl:call-template name = "br"/>
+                <b>Item Listing:</b>
                 <xsl:call-template name = "hr"/>
                 <xsl:apply-templates select = "Item"/>
             </body>

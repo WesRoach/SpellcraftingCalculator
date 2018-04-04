@@ -88,7 +88,7 @@ class Item:
         self.SlotList = self.makeItemSlots()
 
     def getImbueValues(self):
-        if self.ActiveState not in ('Crafted', 'Legendary'):
+        if self.ActiveState == 'Dropped':
             return 0.0, 0.0, 0.0, 0.0
         values = []
         for index in range(0, self.getSlotCount() - 1):
@@ -215,9 +215,11 @@ class Item:
                     etree.SubElement(slot, 'GemName').text = self.getSlot(index).getGemName(self.Realm)
 
         if not export:
+
+            # TODO: CONVERT TO PYTHON 3.6 STANDARD (F-STRING) AND
+            # USE ETREE.UNICODE INSTEAD OF ENCODING ...
             with open(filename, 'wb') as document:
                 document.write(etree.tostring(item, encoding = 'UTF-8', pretty_print = True, xml_declaration = True))
-                document.close()
         else:
             return item
 
@@ -324,7 +326,7 @@ class ItemSlot:
 
     def getGemMaterials(self, realm):
         if not self.isCraftable(): return
-        materials = {'Gems': {}, 'Liquids': {}, 'Dusts': {}}
+        materials = {'Gems': {}, 'Dusts': {}, 'Liquids': {}}
 
         index = self.getGemIndex()
         realm = realm if (self.getEffectType() in GemMaterials[realm]) else 'All'
@@ -334,15 +336,16 @@ class ItemSlot:
         if self.getEffect()[0:4] == 'All ':
             if self.getEffectType() == 'Focus':
                 materials['Gems'][GemMaterialsOrder['Gems'][index]] = 3
+            materials['Dusts'][components['Dust']] = (index * 5) + 1
             materials['Liquids'][components['Liquid'][0]] = (index * 6) + 2
             materials['Liquids'][components['Liquid'][1]] = (index * 6) + 2
             materials['Liquids'][components['Liquid'][2]] = (index * 6) + 2
-            materials['Dusts'][components['Dust']] = (index * 5) + 1
+
         elif self.getEffectType() in ('Resistance', 'Focus'):
-            materials['Liquids'][components['Liquid']] = index + 1
             materials['Dusts'][components['Dust']] = (index * 5) + 1
-        else:
             materials['Liquids'][components['Liquid']] = index + 1
+        else:
             materials['Dusts'][components['Dust']] = (index * 4) + 1
+            materials['Liquids'][components['Liquid']] = index + 1
 
         return materials
