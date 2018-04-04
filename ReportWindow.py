@@ -16,6 +16,7 @@ class ReportWindow(QDialog, Ui_ReportWindow):
 
         self.initLayout()
         self.initControls()
+        self.RawHTMLReport = ''
 
 # =============================================== #
 #       INTERFACE SETUP AND INITIALIZATION        #
@@ -27,6 +28,8 @@ class ReportWindow(QDialog, Ui_ReportWindow):
 
     def initControls(self):
         self.CloseButton.clicked.connect(self.accept)
+        self.ExportHTMLButton.clicked.connect(self.exportToHTML)
+        self.ExportPlainTextButton.clicked.connect(self.exportToPlainText)
 
 # =============================================== #
 #          REPORT METHODS AND FUNCTIONS           #
@@ -80,6 +83,7 @@ class ReportWindow(QDialog, Ui_ReportWindow):
         self.ReportTextBrowser.setHtml(str(report))
 
     def templateReport(self, report):
+        self.RawHTMLReport = report
         self.setWindowTitle('Template Report')
 
         xslt = etree.parse(r'reports/DefaultTemplateReport.xsl')
@@ -89,8 +93,19 @@ class ReportWindow(QDialog, Ui_ReportWindow):
         self.ReportTextBrowser.setHtml(str(report))
 
 # =============================================== #
-#                       XML                       #
+#                    EXPORT                       #
 # =============================================== #
 
-    def exportToXML(self, item_list, materials):
+    def exportToPlainText(self):
+        report = self.RawHTMLReport
+
+        # DEBUGGING
+        print('exportToPlainText')
+        pass
+
+    def exportToHTML(self):
+        report = self.RawHTMLReport
+
+        # DEBUGGING
+        print('exportToHTML')
         pass

@@ -642,8 +642,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     for bonus, value in bonuses.items():
                         etree.SubElement(root, bonus).text = str(value)
 
-        print(etree.tostring(template, pretty_print = True).decode('UTF-8'))
-
         if not export:
 
             # TODO: CONVERT TO PYTHON 3.6 STANDARD (F-STRING) AND
