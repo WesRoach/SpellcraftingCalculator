@@ -4,7 +4,7 @@ from PyQt5 import uic
 from PyQt5.Qt import Qt, QIcon
 from PyQt5.QtWidgets import QDialog, QFileDialog
 from Constants import GemMaterialsOrder
-from lxml import etree, html
+from lxml import etree
 
 Ui_ReportWindow = uic.loadUiType(r'interface/ReportWindow.ui')[0]
 
