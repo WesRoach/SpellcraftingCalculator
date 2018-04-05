@@ -1885,9 +1885,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         print('saveTemplateAs')
 
     def importLokiTemplate(self):
-
-        # DEBUGGING
-        print('importLokiTemplate')
+        pass
 
     def exportGemsToQuickbar(self):
         self.CraftBarDialog = CraftBarDialog(self, Qt.WindowCloseButtonHint)
