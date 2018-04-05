@@ -1938,7 +1938,8 @@ GemMaterialsOrder = {
 
     'Dusts': (
         'Bloodied Battlefield Dirt',
-        'Essence of Life','Fairy Dust',
+        'Essence of Life',
+        'Fairy Dust',
         'Ground Blessed Undead Bone',
         'Ground Caer Stone',
         'Ground Cave Crystal',
