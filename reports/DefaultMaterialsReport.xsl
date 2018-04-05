@@ -14,10 +14,6 @@
         <xsl:text disable-output-escaping="yes">&lt;hr/&gt;</xsl:text>
     </xsl:template>
 	
-	<xsl:template name = "brbr">
-		<xsl:text disable-output-escaping = "yes">&lt;br/&gt;&lt;br/&gt;</xsl:text>
-	</xsl:template>
-	
 	<xsl:template name = "indent">
 		<xsl:text disable-output-escaping = "yes">&#160;&#160;&#160;&#160;</xsl:text>
 	</xsl:template>
@@ -29,11 +25,9 @@
         <xsl:call-template name = "hr"/>
 		<xsl:for-each select = "Item">
 			<b><xsl:call-template name = "indent"/><xsl:value-of select = "@Location"/></b>
-			<ul>
-			<xsl:for-each select = "Jewel">
+			<ul><xsl:for-each select = "Jewel">
 				<li><xsl:value-of select = "."/></li>
-			</xsl:for-each>
-			</ul>
+			</xsl:for-each></ul>
 		</xsl:for-each>
 		<xsl:call-template name = "br"/>
     </xsl:template>
@@ -45,11 +39,9 @@
 		<xsl:call-template name = "hr"/>
 		<xsl:for-each select = "Gems|Dusts|Liquids">
 			<b><xsl:call-template name = "indent"/><xsl:value-of select = "name()"/>:</b>
-			<ul>
-			<xsl:for-each select = "Material">
+			<ul><xsl:for-each select = "Material">
 				<li><xsl:value-of select = "@Amount"/>&#160;<xsl:value-of select = "@Material"/></li>
-			</xsl:for-each>
-			</ul>
+			</xsl:for-each></ul>
 		</xsl:for-each>
 	</xsl:template>
 	
@@ -58,8 +50,8 @@
     <xsl:template match = "/Materials">
         <html>
             <head>
-                <title>Materials Report</title>
-            </head>
+			<title>Materials Report</title>
+			</head>
             <body>
 				<xsl:apply-templates select = "Items"/>
 				<xsl:call-template name = "Materials"/>

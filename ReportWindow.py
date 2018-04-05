@@ -2,9 +2,9 @@
 
 from PyQt5 import uic
 from PyQt5.Qt import Qt, QIcon
-from PyQt5.QtWidgets import QDialog
+from PyQt5.QtWidgets import QDialog, QFileDialog
 from Constants import GemMaterialsOrder
-from lxml import etree
+from lxml import etree, html
 
 Ui_ReportWindow = uic.loadUiType(r'interface/ReportWindow.ui')[0]
 
@@ -78,34 +78,36 @@ class ReportWindow(QDialog, Ui_ReportWindow):
 
         xslt = etree.parse(r'reports/DefaultMaterialsReport.xsl')
         transform = etree.XSLT(xslt)
-        report = transform(report)
+        report = str(transform(report))
 
-        self.ReportTextBrowser.setHtml(str(report))
+        self.ReportTextBrowser.setHtml(report)
 
     def templateReport(self, report):
-        self.RawHTMLReport = report
         self.setWindowTitle('Template Report')
+
+        # TODO: IMPLEMENT PLAIN TEXT REPORTS
+        self.ExportPlainTextButton.setDisabled(True)
 
         xslt = etree.parse(r'reports/DefaultTemplateReport.xsl')
         transform = etree.XSLT(xslt)
-        report = transform(report)
+        report = str(transform(report))
 
-        self.ReportTextBrowser.setHtml(str(report))
+        parser = etree.HTMLParser(remove_blank_text = True)
+        self.RawHTMLReport = etree.HTML(report, parser)
+        self.ReportTextBrowser.setHtml(report)
 
 # =============================================== #
 #                    EXPORT                       #
 # =============================================== #
 
     def exportToPlainText(self):
-        report = self.RawHTMLReport
-
-        # DEBUGGING
-        print('exportToPlainText')
         pass
 
     def exportToHTML(self):
-        report = self.RawHTMLReport
+        options = QFileDialog.Options()
+        filename, filters = QFileDialog.getSaveFileName(
+            self, 'Save HTML Report', '', 'HTML Report (*.htm *.html);; All Files (*.*)', options = options)
+        if filename == '': return
 
-        # DEBUGGING
-        print('exportToHTML')
-        pass
+        with open(filename, 'wb') as document:
+            document.write(etree.tostring(self.RawHTMLReport, pretty_print = True, method = 'html'))

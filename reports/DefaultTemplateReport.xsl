@@ -9,10 +9,6 @@
     <xsl:template name = "br">
         <xsl:text disable-output-escaping = "yes">&lt;br/&gt;</xsl:text>
     </xsl:template>
-	
-	<xsl:template name = "brbr">
-		<xsl:text disable-output-escaping = "yes">&lt;br/&gt;&lt;br/&gt;</xsl:text>
-	</xsl:template>
 
     <xsl:template name = "hr">
         <xsl:text disable-output-escaping = "yes">&lt;hr/&gt;</xsl:text>
@@ -86,7 +82,7 @@
                 <xsl:with-param name = "nodes" select = "Quickness|Charisma|PowerPool"/>
             </xsl:call-template>
         </table>
-        <xsl:call-template name = "brbr"/>
+        <xsl:call-template name = "br"/>
     </xsl:template>
 	
 	<!-- RESISTANCE SECTION -->
@@ -134,7 +130,7 @@
                 <xsl:with-param name = "nodes" select = "Essence"/>
             </xsl:call-template>
         </table>
-        <xsl:call-template name = "brbr"/>
+        <xsl:call-template name = "br"/>
     </xsl:template>
 	
 	<!-- BONUS SECTIONS (Skills, ToA Bonuse, PvE Bonuse, Mythical Bonus) -->
@@ -161,7 +157,7 @@
                 </tr>
             </xsl:for-each>
         </table>
-        <xsl:call-template name = "brbr"/>
+        <xsl:call-template name = "br"/>
     </xsl:template>
 	
 	<!-- SLOT & ITEM SECTION -->
