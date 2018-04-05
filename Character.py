@@ -15,18 +15,18 @@ __all__ = [
     'Realms',
 ]
 
-Realms = t2((
+Realms = (
     'Albion',
     'Hibernia',
     'Midgard',
-))
+)
 
-AllRealms = t2((
+AllRealms = (
     'All',
     'Albion',
     'Hibernia',
     'Midgard',
-))
+)
 
 AllBonusList = {
 
