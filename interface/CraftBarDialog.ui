@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>387</width>
-    <height>284</height>
+    <width>468</width>
+    <height>288</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -38,13 +38,13 @@
       <number>5</number>
      </property>
      <property name="topMargin">
-      <number>0</number>
+      <number>3</number>
      </property>
      <property name="rightMargin">
       <number>5</number>
      </property>
      <property name="bottomMargin">
-      <number>0</number>
+      <number>3</number>
      </property>
      <item>
       <widget class="QLabel" name="CharacterPathLabel">
@@ -455,13 +455,13 @@
       <number>5</number>
      </property>
      <property name="topMargin">
-      <number>0</number>
+      <number>3</number>
      </property>
      <property name="rightMargin">
       <number>5</number>
      </property>
      <property name="bottomMargin">
-      <number>0</number>
+      <number>3</number>
      </property>
      <item>
       <widget class="QLabel" name="GemsExportLabel">
