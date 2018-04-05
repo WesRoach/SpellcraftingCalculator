@@ -4,10 +4,10 @@ from PyQt5 import uic
 from PyQt5.Qt import Qt, QIcon
 from PyQt5.QtWidgets import QDialog
 
-Ui_ReportWindow = uic.loadUiType(r'interface/CraftBarWindow.ui')[0]
+Ui_ReportWindow = uic.loadUiType(r'interface/CraftBarDialog.ui')[0]
 
 
-class CraftBarWindow(QDialog, Ui_ReportWindow):
+class CraftBarDialog(QDialog, Ui_ReportWindow):
     def __init__(self, parent = None, flags = Qt.Dialog):
         QDialog.__init__(self, parent, flags)
         self.setupUi(self)
@@ -20,8 +20,8 @@ class CraftBarWindow(QDialog, Ui_ReportWindow):
 # =============================================== #
 
     def initLayout(self):
-        self.setWindowTitle('Export Gems to QuickBar\'s')
+        self.setWindowTitle('Export Gems to Quickbar')
         self.setWindowIcon(QIcon(None))
 
     def initControls(self):
-        pass
+        self.CloseButton.clicked.connect(self.accept)

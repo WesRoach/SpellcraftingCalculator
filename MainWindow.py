@@ -9,6 +9,7 @@ from Character import AllBonusList, AllRealms, ClassList, ItemDamageTypes, ItemO
 from Constants import Cap, CraftedTypeList, CraftedEffectList, CraftedValuesList, DropTypeList, DropEffectList
 from Constants import EnhancedTypeList, EnhancedEffectList, EnhancedValuesList, MythicalBonusCap, PVEBonusCap, TOABonusCap
 from Item import Item
+from CraftBarDialog import CraftBarDialog
 from ReportWindow import ReportWindow
 from lxml import etree
 import os
@@ -1889,6 +1890,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         print('importLokiTemplate')
 
     def exportGemsToQuickbar(self):
+        self.CraftBarDialog = CraftBarDialog(self, Qt.WindowCloseButtonHint)
+        self.CraftBarDialog.exec_()
 
         # DEBUGGING
         print('exportGemsToQuickbar')

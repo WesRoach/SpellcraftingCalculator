@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>300</width>
-    <height>301</height>
+    <width>387</width>
+    <height>288</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -424,7 +424,7 @@
             <item>
              <widget class="QLabel" name="WarningLabel">
               <property name="text">
-               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#bf0003;&quot;&gt;You must be logged out of the selected&lt;br/&gt;character for the changes to take effect.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#bf0003;&quot;&gt;You must be logged out!&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignCenter</set>
