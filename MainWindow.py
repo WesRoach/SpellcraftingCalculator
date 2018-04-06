@@ -1888,7 +1888,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         pass
 
     def exportGemsToQuickbar(self):
-        self.CraftBarDialog = CraftBarDialog(self, Qt.WindowCloseButtonHint)
+        self.CraftBarDialog = CraftBarDialog(self, Qt.WindowCloseButtonHint, self.ItemAttributeList)
         self.CraftBarDialog.exec_()
 
         # DEBUGGING
