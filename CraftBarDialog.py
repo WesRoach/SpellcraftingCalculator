@@ -12,6 +12,7 @@ class CraftBarDialog(QDialog, Ui_ReportWindow):
         QDialog.__init__(self, parent, flags)
         self.setupUi(self)
 
+        self.ItemGemCount = 0
         self.ItemAttributeList = items
 
         self.CraftableItems = [
