@@ -1380,6 +1380,15 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.CurrentRealm = Realm
         self.CharacterClassChanged()
 
+        for location in self.ItemAttributeList.keys():
+            for item in self.ItemDictionary[location]:
+                if item.ActiveState in ('Crafted', 'Legendary'):
+                    item.Realm = self.CurrentRealm
+
+        if self.CurrentItemLabel != '':
+            self.RestoreItem(self.ItemAttributeList[self.CurrentItemLabel])
+            self.calculate()
+
         # DEBUGGING
         print('CharacterRealmChanged')
 
