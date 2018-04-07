@@ -44,8 +44,11 @@ class CraftBarDialog(QDialog, Ui_ReportWindow):
         self.setWindowIcon(QIcon(None))
 
         self.BarSpinBox.setValue(1)
+        self.BarSpinBox.setMaximum(3)
         self.RowSpinBox.setValue(1)
+        self.RowSpinBox.setMaximum(10)
         self.StartSpinBox.setValue(1)
+        self.StartSpinBox.setMaximum(10)
 
         for location, item in self.ItemAttributeList.items():
             if location not in self.CraftableItems:
