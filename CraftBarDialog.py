@@ -3,6 +3,7 @@
 from PyQt5 import uic
 from PyQt5.Qt import Qt, QIcon
 from PyQt5.QtWidgets import QDialog
+from os import getenv, listdir
 
 Ui_ReportWindow = uic.loadUiType(r'interface/CraftBarDialog.ui')[0]
 
@@ -14,23 +15,20 @@ class CraftBarDialog(QDialog, Ui_ReportWindow):
 
         self.ItemGemCount = 0
         self.ItemAttributeList = items
+        self.ItemCraftableList = {}
 
-        self.CraftableItems = [
-            'Chest', 'Arms', 'Head', 'Legs', 'Hands', 'Feet',
-            'Right Hand', 'Left Hand', 'Two-Handed', 'Ranged']
-
-        self.ItemCheckBoxes = [
-            self.ChestCheckBox,
-            self.ArmsCheckBox,
-            self.HeadCheckBox,
-            self.LegsCheckBox,
-            self.HandsCheckBox,
-            self.FeetCheckBox,
-            self.RightHandCheckBox,
-            self.LeftHandCheckBox,
-            self.TwoHandedCheckBox,
-            self.RangedCheckBox,
-        ]
+        self.CraftableItems = {
+            'Chest': self.ChestCheckBox,
+            'Arms': self.ArmsCheckBox,
+            'Head': self.HeadCheckBox,
+            'Legs': self.LegsCheckBox,
+            'Hands': self.HandsCheckBox,
+            'Feet': self.FeetCheckBox,
+            'Right Hand': self.RightHandCheckBox,
+            'Left Hand': self.LeftHandCheckBox,
+            'Two-Handed': self.TwoHandedCheckBox,
+            'Ranged': self.RangedCheckBox,
+        }
 
         self.initLayout()
         self.initControls()
@@ -46,6 +44,16 @@ class CraftBarDialog(QDialog, Ui_ReportWindow):
         self.BarSpinBox.setValue(1)
         self.RowSpinBox.setValue(1)
         self.StartSpinBox.setValue(1)
+
+        for location, checkbox in self.CraftableItems.items():
+            if self.ItemAttributeList[location].ActiveState == 'Dropped':
+                checkbox.setDisabled(True)
+
+        # TODO: LOAD PATH FROM SAVED SETTINGS ...
+        path = getenv('APPDATA') + '\\Electronic Arts\\Dark Age of Camelot\\'
+        self.CharacterPath.setText(path)
+        self.CharacterPath.setCursorPosition(0)
+        self.CloseButton.setFocus()
 
     def initControls(self):
         self.CloseButton.clicked.connect(self.accept)

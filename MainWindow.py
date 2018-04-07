@@ -1786,6 +1786,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # DEBUGGING
         print('clearItemSlots')
 
+    # TODO: LOAD PATH FROM SAVED SETTINGS ...
     # TODO: PREVENT CRAFTED ITEMS FROM BEING IMPORTED TO
     # TO NON-CRAFTABLE LOCATIONS. SET A DEFAULT PATH ...
     def loadItem(self):
@@ -1809,7 +1810,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # DEBUGGING
         print('loadItem')
 
-    # TODO: NEED TO SET A DEFAULT PATH ...
+    # TODO: LOAD PATH FROM SAVED SETTINGS ...
     def saveItem(self):
         item = self.ItemAttributeList[self.CurrentItemLabel]
         if not item.Name:
@@ -1846,6 +1847,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # DEBUGGING
         print('newTemplate')
 
+    # TODO: LOAD PATH FROM SAVED SETTINGS ...
     def openTemplate(self):
         options = QFileDialog.Options()
         filename, filters = QFileDialog.getOpenFileName(
@@ -1870,6 +1872,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # DEBUGGING
         print('saveTemplate')
 
+    # TODO: LOAD PATH FROM SAVED SETTINGS ...
     def saveTemplateAs(self):
         options = QFileDialog.Options()
         filename, filters = QFileDialog.getSaveFileName(
