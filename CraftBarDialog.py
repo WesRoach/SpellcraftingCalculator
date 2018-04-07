@@ -16,7 +16,7 @@ class CraftBarDialog(QDialog, Ui_ReportWindow):
 
         self.ItemGemCount = 0
         self.ItemAttributeList = items
-        self.ItemCraftableList = {}
+        self.ExportItemList = {}
 
         self.CraftableItems = {
             'Chest': self.ChestCheckBox,
@@ -34,7 +34,6 @@ class CraftBarDialog(QDialog, Ui_ReportWindow):
         self.initLayout()
         self.initControls()
         self.getCrafterList()
-        self.getGemExportCount()
 
 # =============================================== #
 #       INTERFACE SETUP AND INITIALIZATION        #
@@ -48,15 +47,25 @@ class CraftBarDialog(QDialog, Ui_ReportWindow):
         self.RowSpinBox.setValue(1)
         self.StartSpinBox.setValue(1)
 
-        for location, checkbox in self.CraftableItems.items():
-            if self.ItemAttributeList[location].ActiveState == 'Dropped':
-                checkbox.setDisabled(True)
+        for location, item in self.ItemAttributeList.items():
+            if location not in self.CraftableItems:
+                continue
+            elif item.ActiveState == 'Dropped' or item.Equipped == 0:
+                self.CraftableItems[location].setCheckState(Qt.Unchecked)
+                self.CraftableItems[location].setDisabled(True)
+
+        for location in self.CraftableItems.keys():
+            if self.CraftableItems[location].isEnabled():
+                for slot in self.ItemAttributeList[location].getSlotList():
+                    if slot.getSlotType() == 'Craftable' and slot.getEffectType() != 'Unused':
+                        self.CraftableItems[location].setCheckState(Qt.Checked)
 
         # TODO: LOAD PATH FROM SAVED SETTINGS ...
         path = getenv('APPDATA') + '\\Electronic Arts\\Dark Age of Camelot\\'
         self.CharacterPath.setText(path)
         self.CharacterPath.setCursorPosition(0)
         self.CloseButton.setFocus()
+        self.ItemSelectionChanged()
 
     def initControls(self):
         self.CloseButton.clicked.connect(self.accept)
@@ -83,18 +92,29 @@ class CraftBarDialog(QDialog, Ui_ReportWindow):
         pass
 
     def getGemExportCount(self):
-        count = 0
-        for location in self.CraftableItems.keys():
-            if self.ItemAttributeList[location].ActiveState in ('Crafted', 'Legendary'):
-                for slot in self.ItemAttributeList[location].getSlotList():
-                    if slot.getEffectType() != 'Unused':
-                        count += 1
-
-        self.GemExportCount.setText(str(count))
+        self.ItemGemCount = 0
+        for location in self.ExportItemList.keys():
+            if location in self.ItemAttributeList.keys():
+                if self.ItemAttributeList[location].ActiveState != 'Dropped':
+                    for slot in self.ItemAttributeList[location].getSlotList():
+                        if slot.getSlotType() == 'Craftable' and slot.getEffectType() != 'Unused':
+                            self.ItemGemCount += 1
+        self.GemExportCount.setText(str(self.ItemGemCount))
 
 # =============================================== #
 #        SLOT/SIGNAL METHODS AND FUNCTIONS        #
 # =============================================== #
 
+    def mousePressEvent(self, event):
+        try:  # NOT ALL WIDGETS HAVE 'clearFocus()' ...
+            self.focusWidget().clearFocus()
+        except AttributeError:
+            pass
+
     def ItemSelectionChanged(self):
-        pass
+        for location, checkbox in self.CraftableItems.items():
+            if checkbox.checkState() == Qt.Checked:
+                self.ExportItemList[location] = self.ItemAttributeList[location]
+            elif location in self.ExportItemList.keys():
+                del self.ExportItemList[location]
+        self.getGemExportCount()
