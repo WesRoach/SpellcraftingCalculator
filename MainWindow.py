@@ -1385,6 +1385,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 if item.ActiveState in ('Crafted', 'Legendary'):
                     item.Realm = self.CurrentRealm
 
+        # FIXES A BUG THAT CAUSES THE APPLICATION TO CRASH ON LAUNCH
+        # BECAUSE 'self.CurrentItemLabel' HAS NOT BEEN INSTANTIATED ...
         if self.CurrentItemLabel != '':
             self.RestoreItem(self.ItemAttributeList[self.CurrentItemLabel])
             self.calculate()
