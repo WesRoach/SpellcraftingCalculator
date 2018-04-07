@@ -3,6 +3,7 @@
 from PyQt5 import uic
 from PyQt5.Qt import Qt, QIcon
 from PyQt5.QtWidgets import QDialog
+from Item import Item
 from os import getenv, listdir
 
 Ui_ReportWindow = uic.loadUiType(r'interface/CraftBarDialog.ui')[0]
@@ -32,6 +33,8 @@ class CraftBarDialog(QDialog, Ui_ReportWindow):
 
         self.initLayout()
         self.initControls()
+        self.getCrafterList()
+        self.getGemExportCount()
 
 # =============================================== #
 #       INTERFACE SETUP AND INITIALIZATION        #
@@ -67,6 +70,27 @@ class CraftBarDialog(QDialog, Ui_ReportWindow):
         self.LeftHandCheckBox.clicked.connect(self.ItemSelectionChanged)
         self.TwoHandedCheckBox.clicked.connect(self.ItemSelectionChanged)
         self.RangedCheckBox.clicked.connect(self.ItemSelectionChanged)
+
+# =============================================== #
+#       MISCELLANEOUS METHODS AND FUNCTIONS       #
+# =============================================== #
+
+    def getCrafterList(self):
+        self.CharacterTable.model().removeRows(0, self.CharacterTable.model().rowCount())
+        pass
+
+    def exportGemsToQuickbar(self):
+        pass
+
+    def getGemExportCount(self):
+        count = 0
+        for location in self.CraftableItems.keys():
+            if self.ItemAttributeList[location].ActiveState in ('Crafted', 'Legendary'):
+                for slot in self.ItemAttributeList[location].getSlotList():
+                    if slot.getEffectType() != 'Unused':
+                        count += 1
+
+        self.GemExportCount.setText(str(count))
 
 # =============================================== #
 #        SLOT/SIGNAL METHODS AND FUNCTIONS        #
