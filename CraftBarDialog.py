@@ -3,8 +3,7 @@
 from PyQt5 import uic
 from PyQt5.Qt import Qt, QIcon, QModelIndex, QVariant
 from PyQt5.QtWidgets import QDialog
-from Constants import ServerCodes
-from os import getenv, path, walk
+from os import getenv, walk
 from re import compile
 
 Ui_ReportWindow = uic.loadUiType(r'interface/CraftBarDialog.ui')[0]
