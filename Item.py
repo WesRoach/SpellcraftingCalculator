@@ -1,7 +1,8 @@
 # HEADER PLACE HOLDER
 
 from Character import ItemTypes
-from Constants import CraftedValuesList, GemMaterials, GemMaterialsOrder, GemTierName, ImbuePoints, OverchargeBasePercent, OverchargeSkillBonus
+from Constants import CraftedValuesList, GemMaterials, GemMaterialsOrder, GemTierName
+from Constants import ImbuePoints, OverchargeBasePercent, OverchargeSkillBonus
 from lxml import etree
 from math import floor
 
