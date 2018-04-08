@@ -1,10 +1,11 @@
 # HEADER PLACE HOLDER
 
 from PyQt5 import uic
-from PyQt5.Qt import Qt, QIcon
+from PyQt5.Qt import Qt, QIcon, QModelIndex, QVariant
 from PyQt5.QtWidgets import QDialog
-from Item import Item
-from os import getenv, listdir
+from Constants import ServerCodes
+from os import getenv, path, walk
+from re import compile
 
 Ui_ReportWindow = uic.loadUiType(r'interface/CraftBarDialog.ui')[0]
 
@@ -17,6 +18,10 @@ class CraftBarDialog(QDialog, Ui_ReportWindow):
         self.ItemGemCount = 0
         self.ItemAttributeList = items
         self.ExportItemList = {}
+
+        self.reini = compile('(\w+)-(\d+)\.ini$')
+        self.resec = compile('\[(\w+)\]')
+        self.rectl = compile('[Hh]otkey_(\d+)=44,13,')
 
         self.CraftableItems = {
             'Chest': self.ChestCheckBox,
@@ -33,7 +38,6 @@ class CraftBarDialog(QDialog, Ui_ReportWindow):
 
         self.initLayout()
         self.initControls()
-        self.getCrafterList()
 
 # =============================================== #
 #       INTERFACE SETUP AND INITIALIZATION        #
@@ -68,6 +72,7 @@ class CraftBarDialog(QDialog, Ui_ReportWindow):
         self.CharacterPath.setText(path)
         self.CharacterPath.setCursorPosition(0)
         self.CloseButton.setFocus()
+        self.getCrafterList(path)
         self.ItemSelectionChanged()
 
     def initControls(self):
@@ -87,12 +92,10 @@ class CraftBarDialog(QDialog, Ui_ReportWindow):
 #       MISCELLANEOUS METHODS AND FUNCTIONS       #
 # =============================================== #
 
-    def getCrafterList(self):
-        self.CharacterTable.model().removeRows(0, self.CharacterTable.model().rowCount())
-        pass
-
-    def exportGemsToQuickbar(self):
-        pass
+    def getCrafterList(self, rootdir):
+        character_list = []
+        for root, dirs, files in walk(rootdir):
+            character_list += [x for x in files if self.reini.search(x)]
 
     def getGemExportCount(self):
         self.ItemGemCount = 0
@@ -103,6 +106,9 @@ class CraftBarDialog(QDialog, Ui_ReportWindow):
                         if slot.getSlotType() == 'Craftable' and slot.getEffectType() != 'Unused':
                             self.ItemGemCount += 1
         self.GemExportCount.setText(str(self.ItemGemCount))
+
+    def exportGemsToQuickbar(self):
+        pass
 
 # =============================================== #
 #        SLOT/SIGNAL METHODS AND FUNCTIONS        #

@@ -21,6 +21,8 @@ __all__ = [
     'OverchargeSkillBonus',
     'PVEBonusCap',
     'TOABonusCap',
+    'ServerCodes',
+    'ServerIgnCodes',
 ]
 
 UnusedList = ()
