@@ -3,9 +3,6 @@
 from Character import ItemTypes
 from Constants import CraftedValuesList, GemMaterials, GemMaterialsOrder, GemTierName, ImbuePoints, OverchargeBasePercent, OverchargeSkillBonus
 from lxml import etree
-
-# noinspection PyUnresolvedReferences
-# FIXES BUG IN PYCHARM THAT CAUSES AN UNRESOLVED REFERENCE ERROR
 from math import floor
 
 
