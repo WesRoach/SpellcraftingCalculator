@@ -4,10 +4,31 @@ from PyQt5 import uic
 from PyQt5.Qt import Qt, QIcon, QModelIndex, QVariant
 from PyQt5.QtWidgets import QDialog
 from Constants import ServerCodes
-from os import getenv, walk
+from configparser import DEFAULTSECT, RawConfigParser
+from os import getenv, path, remove, walk
 from re import compile
 
 Ui_ReportWindow = uic.loadUiType(r'interface/CraftBarDialog.ui')[0]
+
+
+class IniConfigParser(RawConfigParser):
+
+    def __init__(self, defaults = None):
+        RawConfigParser.__init__(self, defaults, strict = False)
+
+    def write(self, file, **kwargs):
+        if self._defaults:
+            file.write("[%s]\n" % DEFAULTSECT)
+            for (key, value) in list(self._defaults.items()):
+                file.write("%s=%s\n" % (key, str(value).replace('\n', '\n\t')))
+            file.write("\n")
+
+        for section in self._sections:
+            file.write("[%s]\n" % section)
+            for (key, value) in list(self._sections[section].items()):
+                if key != "__name__":
+                    file.write("%s=%s\n" % (key, str(value).replace('\n', '\n\t')))
+            file.write("\n")
 
 
 class CraftBarDialog(QDialog, Ui_ReportWindow):
@@ -18,6 +39,7 @@ class CraftBarDialog(QDialog, Ui_ReportWindow):
         self.ItemGemCount = 0
         self.ItemAttributeList = items
         self.ExportItemList = {}
+        self.Selection = []
 
         self.reini = compile('(\w+)-(\d+)\.ini$')
         self.resec = compile('\[(\w+)\]')
@@ -70,15 +92,14 @@ class CraftBarDialog(QDialog, Ui_ReportWindow):
                         self.CraftableItems[location].setCheckState(Qt.Checked)
 
         # TODO: LOAD PATH FROM SAVED SETTINGS ...
-        path = getenv('APPDATA') + '\\Electronic Arts\\Dark Age of Camelot\\'
-        self.CharacterPath.setText(path)
+        ini_path = getenv('APPDATA') + '\\Electronic Arts\\Dark Age of Camelot\\'
+        self.CharacterPath.setText(ini_path)
         self.CharacterPath.setCursorPosition(0)
         self.CloseButton.setFocus()
-        self.getCrafterList(path)
+        self.getCrafterList(ini_path)
         self.ItemSelectionChanged()
 
     def initControls(self):
-        self.CloseButton.clicked.connect(self.accept)
         self.ChestCheckBox.clicked.connect(self.ItemSelectionChanged)
         self.ArmsCheckBox.clicked.connect(self.ItemSelectionChanged)
         self.HeadCheckBox.clicked.connect(self.ItemSelectionChanged)
@@ -89,6 +110,10 @@ class CraftBarDialog(QDialog, Ui_ReportWindow):
         self.LeftHandCheckBox.clicked.connect(self.ItemSelectionChanged)
         self.TwoHandedCheckBox.clicked.connect(self.ItemSelectionChanged)
         self.RangedCheckBox.clicked.connect(self.ItemSelectionChanged)
+        self.CharacterTable.selectionModel().selectionChanged.connect(self.CharacterSelectionChanged)
+        self.ExportButton.clicked.connect(self.exportGemsToQuickbar)
+        self.RestoreButton.clicked.connect(self.restoreQuickbar)
+        self.CloseButton.clicked.connect(self.accept)
 
 # =============================================== #
 #       MISCELLANEOUS METHODS AND FUNCTIONS       #
@@ -104,8 +129,8 @@ class CraftBarDialog(QDialog, Ui_ReportWindow):
                         server = ServerCodes[server_code] if server_code in ServerCodes else 'Unknown'
                         self.TableModel.insertRows(self.TableModel.rowCount(), 1)
                         index = self.TableModel.index(self.TableModel.rowCount() - 1, 0, QModelIndex())
-                        self.TableModel.setData(index, QVariant(file), Qt.UserRole)
                         self.TableModel.setData(index, QVariant(' ' + server), Qt.DisplayRole)
+                        self.TableModel.setData(index, QVariant(root + '\\' + file), Qt.UserRole)
                         index = self.TableModel.index(self.TableModel.rowCount() - 1, 1, QModelIndex())
                         self.TableModel.setData(index, QVariant(' ' + character), Qt.DisplayRole)
         self.CharacterTable.resizeRowsToContents()
@@ -124,7 +149,24 @@ class CraftBarDialog(QDialog, Ui_ReportWindow):
         self.GemExportCount.setText(str(self.ItemGemCount))
 
     def exportGemsToQuickbar(self):
-        pass
+        if len(self.Selection) == 0 or self.ItemGemCount == 0: return
+        index = self.TableModel.index(self.Selection[0].row(), 0)
+        file = self.TableModel.data(index, Qt.UserRole)
+        with open(file, 'r') as document:
+            with open(file + '.bak', 'w') as backup:
+                print('WRITE FILE TO BACKUP FILE ...')
+                # backup.write(document.read())
+
+    def restoreQuickbar(self):
+        if len(self.Selection) == 0: return
+        index = self.TableModel.index(self.Selection[0].row(), 0)
+        file = self.TableModel.data(index, Qt.UserRole)
+        if path.exists(file + '.bak') and path.isfile(file + '.bak'):
+            with open(file, 'w') as document:
+                with open(file + '.bak', 'r') as backup:
+                    print('WRITE BACK UP TO FILE ...')
+                    # document.write(backup.read())
+            # remove(file + '.bak')
 
 # =============================================== #
 #        SLOT/SIGNAL METHODS AND FUNCTIONS        #
@@ -143,3 +185,6 @@ class CraftBarDialog(QDialog, Ui_ReportWindow):
             elif location in self.ExportItemList.keys():
                 del self.ExportItemList[location]
         self.getGemExportCount()
+
+    def CharacterSelectionChanged(self):
+        self.Selection = self.CharacterTable.selectedIndexes()
