@@ -152,19 +152,21 @@ class CraftBarDialog(QDialog, Ui_ReportWindow):
         if len(self.Selection) == 0 or self.ItemGemCount == 0: return
         index = self.TableModel.index(self.Selection[0].row(), 0)
         file = self.TableModel.data(index, Qt.UserRole)
+
         with open(file, 'r') as document:
             with open(file + '.bak', 'w') as backup:
-                print('WRITE FILE TO BACKUP FILE ...')
+                print('CREATE BACKUP FILE ...')
                 # backup.write(document.read())
 
     def restoreQuickbar(self):
         if len(self.Selection) == 0: return
         index = self.TableModel.index(self.Selection[0].row(), 0)
         file = self.TableModel.data(index, Qt.UserRole)
+
         if path.exists(file + '.bak') and path.isfile(file + '.bak'):
             with open(file, 'w') as document:
                 with open(file + '.bak', 'r') as backup:
-                    print('WRITE BACK UP TO FILE ...')
+                    print('RESTORE BACKUP FILE ...')
                     # document.write(backup.read())
             # remove(file + '.bak')
 
