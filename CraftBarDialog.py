@@ -3,6 +3,7 @@
 from PyQt5 import uic
 from PyQt5.Qt import Qt, QIcon, QModelIndex, QVariant
 from PyQt5.QtWidgets import QDialog
+from Constants import ServerCodes
 from os import getenv, walk
 from re import compile
 
@@ -21,6 +22,8 @@ class CraftBarDialog(QDialog, Ui_ReportWindow):
         self.reini = compile('(\w+)-(\d+)\.ini$')
         self.resec = compile('\[(\w+)\]')
         self.rectl = compile('[Hh]otkey_(\d+)=44,13,')
+
+        self.TableModel = self.CharacterTable.model()
 
         self.CraftableItems = {
             'Chest': self.ChestCheckBox,
@@ -50,7 +53,7 @@ class CraftBarDialog(QDialog, Ui_ReportWindow):
         self.BarSpinBox.setMaximum(3)
         self.RowSpinBox.setValue(1)
         self.RowSpinBox.setMaximum(10)
-        self.StartSpinBox.setValue(1)
+        self.StartSpinBox.setValue(0)
         self.StartSpinBox.setMaximum(10)
 
         for location, item in self.ItemAttributeList.items():
@@ -92,9 +95,23 @@ class CraftBarDialog(QDialog, Ui_ReportWindow):
 # =============================================== #
 
     def getCrafterList(self, rootdir):
-        character_list = []
         for root, dirs, files in walk(rootdir):
-            character_list += [x for x in files if self.reini.search(x)]
+            for file in (x for x in files if self.reini.search(x)):
+                with open(root + '\\' + file, 'r') as document:
+                    if self.rectl.search(document.read()) is not None:
+                        character = self.reini.search(file).group(1)
+                        server_code = self.reini.search(file).group(2)
+                        server = ServerCodes[server_code] if server_code in ServerCodes else 'Unknown'
+                        self.TableModel.insertRows(self.TableModel.rowCount(), 1)
+                        index = self.TableModel.index(self.TableModel.rowCount() - 1, 0, QModelIndex())
+                        self.TableModel.setData(index, QVariant(file), Qt.UserRole)
+                        self.TableModel.setData(index, QVariant(' ' + server), Qt.DisplayRole)
+                        index = self.TableModel.index(self.TableModel.rowCount() - 1, 1, QModelIndex())
+                        self.TableModel.setData(index, QVariant(' ' + character), Qt.DisplayRole)
+        self.CharacterTable.resizeRowsToContents()
+
+        if self.TableModel.rowCount() == 1:
+            self.CharacterTable.selectRow(0)
 
     def getGemExportCount(self):
         self.ItemGemCount = 0
