@@ -36,7 +36,7 @@ class CraftBarDialog(QDialog, Ui_ReportWindow):
         QDialog.__init__(self, parent, flags)
         self.setupUi(self)
 
-        self.ItemGemCount = 0
+        self.GemCount = 0
         self.ItemAttributeList = items
         self.ExportItemList = {}
         self.Selection = []
@@ -72,10 +72,13 @@ class CraftBarDialog(QDialog, Ui_ReportWindow):
         self.setWindowIcon(QIcon(None))
 
         self.BarSpinBox.setValue(1)
+        self.BarSpinBox.setMinimum(1)
         self.BarSpinBox.setMaximum(3)
         self.RowSpinBox.setValue(1)
+        self.RowSpinBox.setMinimum(1)
         self.RowSpinBox.setMaximum(10)
-        self.StartSpinBox.setValue(0)
+        self.StartSpinBox.setValue(1)
+        self.StartSpinBox.setMinimum(1)
         self.StartSpinBox.setMaximum(10)
 
         for location, item in self.ItemAttributeList.items():
@@ -139,17 +142,15 @@ class CraftBarDialog(QDialog, Ui_ReportWindow):
             self.CharacterTable.selectRow(0)
 
     def getGemExportCount(self):
-        self.ItemGemCount = 0
-        for location in self.ExportItemList.keys():
-            if location in self.ItemAttributeList.keys():
-                if self.ItemAttributeList[location].ActiveState != 'Dropped':
-                    for slot in self.ItemAttributeList[location].getSlotList():
-                        if slot.getSlotType() == 'Craftable' and slot.getEffectType() != 'Unused':
-                            self.ItemGemCount += 1
-        self.GemExportCount.setText(str(self.ItemGemCount))
+        self.GemCount = 0
+        for location, item in self.ExportItemList.items():
+            for slot in item.getSlotList():
+                if slot.getSlotType() == 'Craftable' and slot.getEffectType() != 'Unused':
+                    self.GemCount += 1
+        self.GemExportCount.setText(str(self.GemCount))
 
     def exportGemsToQuickbar(self):
-        if len(self.Selection) == 0 or self.ItemGemCount == 0: return
+        if len(self.Selection) == 0 or self.GemCount == 0: return
         index = self.TableModel.index(self.Selection[0].row(), 0)
         file = self.TableModel.data(index, Qt.UserRole)
 
@@ -186,6 +187,8 @@ class CraftBarDialog(QDialog, Ui_ReportWindow):
                 self.ExportItemList[location] = self.ItemAttributeList[location]
             elif location in self.ExportItemList.keys():
                 del self.ExportItemList[location]
+
+        # CASCADE THE CHANGES ...
         self.getGemExportCount()
 
     def CharacterSelectionChanged(self):
