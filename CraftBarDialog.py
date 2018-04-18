@@ -2,10 +2,10 @@
 
 from PyQt5 import uic
 from PyQt5.Qt import Qt, QIcon, QModelIndex, QVariant
-from PyQt5.QtWidgets import QDialog
+from PyQt5.QtWidgets import QDialog, QMessageBox
 from Constants import ServerCodes
 from configparser import DEFAULTSECT, RawConfigParser
-from os import getenv, path, remove, walk
+from os import getenv, path, walk
 from re import compile
 
 Ui_ReportWindow = uic.loadUiType(r'interface/CraftBarDialog.ui')[0]
@@ -39,6 +39,7 @@ class CraftBarDialog(QDialog, Ui_ReportWindow):
         self.GemCount = 0
         self.ItemAttributeList = items
         self.ExportItemList = {}
+        self.ExportGemList = {}
         self.Selection = []
 
         self.reini = compile('(\w+)-(\d+)\.ini$')
@@ -141,13 +142,18 @@ class CraftBarDialog(QDialog, Ui_ReportWindow):
         if self.TableModel.rowCount() == 1:
             self.CharacterTable.selectRow(0)
 
-    def getGemExportCount(self):
+    def getGemCount(self):
         self.GemCount = 0
         for location, item in self.ExportItemList.items():
-            for slot in item.getSlotList():
-                if slot.getSlotType() == 'Craftable' and slot.getEffectType() != 'Unused':
-                    self.GemCount += 1
+            for slot in [x for x in item.getSlotList() if x.getSlotType() == 'Craftable']:
+                self.GemCount += 1 if slot.getGemName(item.Realm) != 'None' else 0
         self.GemExportCount.setText(str(self.GemCount))
+
+        # CASCADE THE CHANGES ...
+        self.getGemNames()
+
+    def getGemNames(self):
+        pass
 
     def exportGemsToQuickbar(self):
         if len(self.Selection) == 0 or self.GemCount == 0: return
@@ -158,6 +164,18 @@ class CraftBarDialog(QDialog, Ui_ReportWindow):
             with open(file + '.bak', 'w') as backup:
                 print('CREATE BACKUP FILE ...')
                 # backup.write(document.read())
+
+        start_position = ((self.RowSpinBox.value() - 1) * 10) + (self.StartSpinBox.value() - 1)
+
+        if (100 - start_position) < self.GemCount:
+            QMessageBox.warning(
+                None, 'Error!', 'There is insufficient space on the selected \n Quickbar to export the gems.')
+            return
+
+        # BREAK DOWN THE GEM NAME ...
+        # FIND THE GEM IN 'GemHotkeyValues' DICTIONARY ...
+        # BUILD THE QUICKBAR STRING ...
+        # EXPORT TO FILE ...
 
     def restoreQuickbar(self):
         if len(self.Selection) == 0: return
@@ -189,7 +207,7 @@ class CraftBarDialog(QDialog, Ui_ReportWindow):
                 del self.ExportItemList[location]
 
         # CASCADE THE CHANGES ...
-        self.getGemExportCount()
+        self.getGemCount()
 
     def CharacterSelectionChanged(self):
         self.Selection = self.CharacterTable.selectedIndexes()
