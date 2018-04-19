@@ -320,7 +320,7 @@ class ItemSlot:
         elif self.getSlotType() in ('Dropped', 'Enhanced'):
             return 'Unused' if (self.getEffectType() == 'Unused') else 'Crafted Bonus'
         else:
-            return None
+            return 'None'
 
     def getGemMaterials(self, realm):
         if not self.isCraftable(): return
