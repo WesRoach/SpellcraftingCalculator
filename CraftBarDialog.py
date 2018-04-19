@@ -4,6 +4,7 @@ from PyQt5 import uic
 from PyQt5.Qt import Qt, QIcon, QModelIndex, QVariant
 from PyQt5.QtWidgets import QDialog, QMessageBox
 from Constants import ServerCodes
+from collections import OrderedDict
 from configparser import DEFAULTSECT, RawConfigParser
 from os import getenv, path, walk
 from re import compile
@@ -36,17 +37,11 @@ class CraftBarDialog(QDialog, Ui_ReportWindow):
         QDialog.__init__(self, parent, flags)
         self.setupUi(self)
 
-        self.GemCount = 0
-        self.ItemAttributeList = items
-        self.ExportItemList = {}
-        self.ExportGemList = {}
         self.Selection = []
-
-        self.reini = compile('(\w+)-(\d+)\.ini$')
-        self.resec = compile('\[(\w+)\]')
-        self.rectl = compile('[Hh]otkey_(\d+)=44,13,')
-
-        self.TableModel = self.CharacterTable.model()
+        self.GemCount = 0
+        self.GemExportList = {}
+        self.ItemExportList = {}
+        self.ItemAttributeList = items
 
         self.CraftableItems = {
             'Chest': self.ChestCheckBox,
@@ -60,6 +55,12 @@ class CraftBarDialog(QDialog, Ui_ReportWindow):
             'Two-Handed': self.TwoHandedCheckBox,
             'Ranged': self.RangedCheckBox,
         }
+
+        self.reini = compile('(\w+)-(\d+)\.ini$')
+        self.resec = compile('\[(\w+)\]')
+        self.rectl = compile('[Hh]otkey_(\d+)=44,13,')
+
+        self.TableModel = self.CharacterTable.model()
 
         self.initLayout()
         self.initControls()
@@ -83,7 +84,7 @@ class CraftBarDialog(QDialog, Ui_ReportWindow):
         self.StartSpinBox.setMaximum(10)
 
         for location, item in self.ItemAttributeList.items():
-            if location not in self.CraftableItems:
+            if location not in self.CraftableItems.keys():
                 continue
             elif item.ActiveState == 'Dropped' or item.Equipped == 0:
                 self.CraftableItems[location].setCheckState(Qt.Unchecked)
@@ -144,16 +145,21 @@ class CraftBarDialog(QDialog, Ui_ReportWindow):
 
     def getGemCount(self):
         self.GemCount = 0
-        for location, item in self.ExportItemList.items():
-            for slot in [x for x in item.getSlotList() if x.getSlotType() == 'Craftable']:
-                self.GemCount += 1 if slot.getGemName(item.Realm) != 'None' else 0
+        for item in self.ItemExportList.values():
+            for slot in item.getSlotList():
+                if slot.getSlotType() == 'Craftable' and slot.getEffectType() != 'Unused':
+                    self.GemCount += 1
         self.GemExportCount.setText(str(self.GemCount))
 
         # CASCADE THE CHANGES ...
         self.getGemNames()
 
     def getGemNames(self):
-        pass
+        self.GemExportList.clear()
+        for location, item in self.ItemExportList.items():
+            self.GemExportList[location] = []
+            for slot in [x for x in item.getSlotList() if x.getSlotType() == 'Craftable']:
+                self.GemExportList[location].append(slot.getGemName(item.Realm))
 
     def exportGemsToQuickbar(self):
         if len(self.Selection) == 0 or self.GemCount == 0: return
@@ -162,12 +168,11 @@ class CraftBarDialog(QDialog, Ui_ReportWindow):
 
         with open(file, 'r') as document:
             with open(file + '.bak', 'w') as backup:
-                print('CREATE BACKUP FILE ...')
-                # backup.write(document.read())
+                backup.write(document.read())
 
-        start_position = ((self.RowSpinBox.value() - 1) * 10) + (self.StartSpinBox.value() - 1)
+        start_location = ((self.RowSpinBox.value() - 1) * 10) + (self.StartSpinBox.value() - 1)
 
-        if (100 - start_position) < self.GemCount:
+        if (100 - start_location) < self.GemCount:
             QMessageBox.warning(
                 None, 'Error!', 'There is insufficient space on the selected \n Quickbar to export the gems.')
             return
@@ -200,11 +205,10 @@ class CraftBarDialog(QDialog, Ui_ReportWindow):
             pass
 
     def ItemSelectionChanged(self):
+        self.ItemExportList.clear()
         for location, checkbox in self.CraftableItems.items():
             if checkbox.checkState() == Qt.Checked:
-                self.ExportItemList[location] = self.ItemAttributeList[location]
-            elif location in self.ExportItemList.keys():
-                del self.ExportItemList[location]
+                self.ItemExportList[location] = self.ItemAttributeList[location]
 
         # CASCADE THE CHANGES ...
         self.getGemCount()
