@@ -4,7 +4,6 @@ from PyQt5 import uic
 from PyQt5.Qt import Qt, QIcon, QModelIndex, QVariant
 from PyQt5.QtWidgets import QDialog, QMessageBox
 from Constants import ServerCodes
-from collections import OrderedDict
 from configparser import DEFAULTSECT, RawConfigParser
 from os import getenv, path, walk
 from re import compile
@@ -39,7 +38,6 @@ class CraftBarDialog(QDialog, Ui_ReportWindow):
 
         self.Selection = []
         self.GemCount = 0
-        self.GemExportList = {}
         self.ItemExportList = {}
         self.ItemAttributeList = items
 
@@ -150,16 +148,6 @@ class CraftBarDialog(QDialog, Ui_ReportWindow):
                 if slot.getSlotType() == 'Craftable' and slot.getEffectType() != 'Unused':
                     self.GemCount += 1
         self.GemExportCount.setText(str(self.GemCount))
-
-        # CASCADE THE CHANGES ...
-        self.getGemNames()
-
-    def getGemNames(self):
-        self.GemExportList.clear()
-        for location, item in self.ItemExportList.items():
-            self.GemExportList[location] = []
-            for slot in [x for x in item.getSlotList() if x.getSlotType() == 'Craftable']:
-                self.GemExportList[location].append(slot.getGemName(item.Realm))
 
     def exportGemsToQuickbar(self):
         if len(self.Selection) == 0 or self.GemCount == 0: return
