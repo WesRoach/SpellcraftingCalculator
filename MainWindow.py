@@ -1351,8 +1351,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.calculate()
 
         # BUG: INVALID SKILLS ON NON-CURRENT ITEMS DO NOT RESET
-        # WHEN THE CLASS CHANGES. PERHAPS HAVE 'self.calculate()'
-        # VALIDATE SKILLS WHEN-EVER IT IS CALLED ...
+        # WHEN THE CLASS CHANGES. CREATE 'validateItems' ...
 
     def CharacterRaceChanged(self):
         Race = self.CharacterRace.currentText()
