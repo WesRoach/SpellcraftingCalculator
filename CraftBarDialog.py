@@ -3,7 +3,7 @@
 from PyQt5 import uic
 from PyQt5.Qt import Qt, QIcon, QModelIndex, QVariant
 from PyQt5.QtWidgets import QDialog, QMessageBox
-from Constants import ServerCodes
+from Constants import GemHotkeyValues, ServerCodes
 from configparser import DEFAULTSECT, RawConfigParser
 from os import getenv, path, walk
 from re import compile
@@ -71,27 +71,27 @@ class CraftBarDialog(QDialog, Ui_ReportWindow):
         self.setWindowTitle('Export Gems to Quickbar')
         self.setWindowIcon(QIcon(None))
 
-        self.BarSpinBox.setValue(1)
-        self.BarSpinBox.setMinimum(1)
-        self.BarSpinBox.setMaximum(3)
-        self.RowSpinBox.setValue(1)
-        self.RowSpinBox.setMinimum(1)
-        self.RowSpinBox.setMaximum(10)
-        self.StartSpinBox.setValue(1)
-        self.StartSpinBox.setMinimum(1)
-        self.StartSpinBox.setMaximum(10)
+        self.QuickbarNum.setValue(1)
+        self.QuickbarNum.setMinimum(1)
+        self.QuickbarNum.setMaximum(3)
+        self.QuickbarRow.setValue(1)
+        self.QuickbarRow.setMinimum(1)
+        self.QuickbarRow.setMaximum(10)
+        self.QuickbarStart.setValue(1)
+        self.QuickbarStart.setMinimum(1)
+        self.QuickbarStart.setMaximum(10)
 
         for location, item in self.ItemAttributeList.items():
             if location not in self.CraftableItems.keys():
                 continue
-            elif item.ActiveState == 'Dropped' or item.Equipped == 0:
+            elif not item.isCraftable():
                 self.CraftableItems[location].setCheckState(Qt.Unchecked)
                 self.CraftableItems[location].setDisabled(True)
 
         for location in self.CraftableItems.keys():
             if self.CraftableItems[location].isEnabled():
                 for slot in self.ItemAttributeList[location].getSlotList():
-                    if slot.getSlotType() == 'Craftable' and slot.getEffectType() != 'Unused':
+                    if slot.isCraftable():
                         self.CraftableItems[location].setCheckState(Qt.Checked)
 
         # TODO: LOAD PATH FROM SAVED SETTINGS ...
@@ -144,31 +144,45 @@ class CraftBarDialog(QDialog, Ui_ReportWindow):
     def getGemCount(self):
         self.GemCount = 0
         for item in self.ItemExportList.values():
-            for slot in item.getSlotList():
-                if slot.getSlotType() == 'Craftable' and slot.getEffectType() != 'Unused':
-                    self.GemCount += 1
+            self.GemCount += sum(1 for x in item.getSlotList() if x.isCraftable())
         self.GemExportCount.setText(str(self.GemCount))
 
     def exportGemsToQuickbar(self):
         if len(self.Selection) == 0 or self.GemCount == 0: return
-        index = self.TableModel.index(self.Selection[0].row(), 0)
-        file = self.TableModel.data(index, Qt.UserRole)
+        file = self.TableModel.data(self.TableModel.index(self.Selection[0].row(), 0), Qt.UserRole)
+        index = ((self.QuickbarRow.value() - 1) * 10) + (self.QuickbarStart.value() - 1)
+        bar = (self.QuickbarNum.value() - 1) if (self.QuickbarNum.value() != 1) else ''
 
         with open(file, 'r') as document:
             with open(file + '.bak', 'w') as backup:
                 backup.write(document.read())
 
-        start_location = ((self.RowSpinBox.value() - 1) * 10) + (self.StartSpinBox.value() - 1)
-
-        if (100 - start_location) < self.GemCount:
+        if (100 - index) < self.GemCount:
             QMessageBox.warning(
                 None, 'Error!', 'There is insufficient space on the selected \n Quickbar to export the gems.')
             return
 
-        # BREAK DOWN THE GEM NAME ...
-        # FIND THE GEM IN 'GemHotkeyValues' DICTIONARY ...
-        # BUILD THE QUICKBAR STRING ...
-        # EXPORT TO FILE ...
+        button_strings = []
+        for location, item in self.ItemExportList.items():
+            for slot in [x for x in item.getSlotList() if x.isCraftable()]:
+
+                try:  # HOTKEY MIGHT NOT EXIST ...
+                    gem_tier = slot.getGemIndex()
+                    gem_name = slot.getGemName(item.Realm).split(' ', 1)[1]
+                    gem_hotkey = GemHotkeyValues[item.Realm][gem_name]
+                    button_strings.append('45,13%03d%02d,,-1' % (gem_hotkey, gem_tier))
+                except ValueError:
+                    continue
+
+        config = IniConfigParser()
+        config.read([file])
+
+        for string in button_strings:
+            config.set(f'Quickbar{bar}', f'Hotkey_{index}', string)
+            index += 1
+
+        with open(file, 'w') as document:
+            config.write(document)
 
     def restoreQuickbar(self):
         if len(self.Selection) == 0: return

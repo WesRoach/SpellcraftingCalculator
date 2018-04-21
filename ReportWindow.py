@@ -42,20 +42,21 @@ class ReportWindow(QDialog, Ui_ReportWindow):
 
         materials = {'Items': {}, 'Gems': {}, 'Dusts': {}, 'Liquids': {}}
 
-        for location, item in item_list.items():
-            if item.ActiveState == 'Crafted' and item.Equipped != 0:
-                for slot in item.getSlotList():
-                    if slot.getSlotType() == 'Craftable' and slot.getEffectType() != 'Unused':
-                        if item.Location in materials['Items']:
-                            materials['Items'][item.Location] += [slot.getGemName(realm)]
-                        else:
-                            materials['Items'][item.Location] = [slot.getGemName(realm)]
-                        for material_type, material_list in slot.getGemMaterials(realm).items():
-                            for material, amount in material_list.items():
-                                if material in materials[material_type]:
-                                    materials[material_type][material] += amount
-                                else:
-                                    materials[material_type][material] = amount
+        for item in [x for x in item_list.values() if x.isCraftable()]:
+            for slot in [x for x in item.getSlotList() if x.isCraftable()]:
+
+                try:  # KEY MAY OR MAY NOT EXIST ...
+                    materials['Items'][item.Location] += [slot.getGemName(realm)]
+                except KeyError:
+                    materials['Items'][item.Location] = [slot.getGemName(realm)]
+
+                for material_type, material_list in slot.getGemMaterials(realm).items():
+                    for material, amount in material_list.items():
+
+                        try:  # KEY MAY OR MAY NOT EXIST ...
+                            materials[material_type][material] += amount
+                        except KeyError:
+                            materials[material_type][material] = amount
 
         for material_type, material_list in materials.items():
             if material_type in GemMaterialsOrder.keys():

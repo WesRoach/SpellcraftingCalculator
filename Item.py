@@ -51,27 +51,31 @@ class Item:
         if self.Location == 'Left Hand':
             self.LeftHand = 2
 
+    def isCraftable(self):
+        if self.ActiveState in ('Crafted', 'Legendary'):
+            return True if (self.Equipped != 0) else False
+
     def getParent(self):
         for parent, locations in ItemTypes.items():
             if self.Location in locations:
                 return parent
 
     def makeItemSlots(self):
-        ItemSlots = []
+        item_slots = []
         if self.ActiveState == 'Crafted':
             for slot in range(0, 4):
-                ItemSlots.append(ItemSlot('Craftable'))
-            ItemSlots.append(ItemSlot('Enhanced'))
+                item_slots.append(ItemSlot('Craftable'))
+            item_slots.append(ItemSlot('Enhanced'))
         elif self.ActiveState == 'Legendary':
             for slot in range(0, 4):
-                ItemSlots.append(ItemSlot('Craftable'))
-            ItemSlots.append(ItemSlot('Dropped'))
-            ItemSlots.append(ItemSlot('Dropped'))
-            ItemSlots.append(ItemSlot('Dropped'))
+                item_slots.append(ItemSlot('Craftable'))
+            item_slots.append(ItemSlot('Dropped'))
+            item_slots.append(ItemSlot('Dropped'))
+            item_slots.append(ItemSlot('Dropped'))
         elif self.ActiveState == 'Dropped':
             for slot in range(0, 12):
-                ItemSlots.append(ItemSlot('Dropped'))
-        return ItemSlots
+                item_slots.append(ItemSlot('Dropped'))
+        return item_slots
 
     def getSlot(self, index):
         return self.SlotList[index]
