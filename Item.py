@@ -31,16 +31,16 @@ class Item:
         self.Index = index
         self.SlotList = self.makeItemSlots()
 
-        if location in ItemTypes['Jewelery']:
+        if self.Location in ItemTypes['Jewelery']:
             self.Equipped = 2
-        elif location in ItemTypes['Armor']:
+        elif self.Location in ItemTypes['Armor']:
             self.Equipped = 2
-        elif location in ItemTypes['Weapons']:
+        elif self.Location in ItemTypes['Weapons']:
             self.Equipped = 0
-        elif location in ItemTypes['Mythical']:
+        elif self.Location in ItemTypes['Mythical']:
             self.Equipped = 0
 
-        if state in ('Crafted', 'Legendary'):
+        if self.ActiveState in ('Crafted', 'Legendary'):
             self.Level = '51'
             self.Origin = 'Crafted'
 
