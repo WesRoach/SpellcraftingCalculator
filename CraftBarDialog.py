@@ -5,7 +5,7 @@ from PyQt5.Qt import Qt, QIcon, QModelIndex, QVariant
 from PyQt5.QtWidgets import QDialog, QMessageBox
 from Constants import GemHotkeyValues, ServerCodes
 from configparser import DEFAULTSECT, RawConfigParser
-from os import getenv, path, walk
+from os import getenv, path, remove, walk
 from re import compile
 
 Ui_ReportWindow = uic.loadUiType(r'interface/CraftBarDialog.ui')[0]
@@ -149,9 +149,9 @@ class CraftBarDialog(QDialog, Ui_ReportWindow):
 
     def exportGemsToQuickbar(self):
         if len(self.Selection) == 0 or self.GemCount == 0: return
+        bar = (self.QuickbarNum.value() - 1) if (self.QuickbarNum.value() != 1) else ''
         file = self.TableModel.data(self.TableModel.index(self.Selection[0].row(), 0), Qt.UserRole)
         index = ((self.QuickbarRow.value() - 1) * 10) + (self.QuickbarStart.value() - 1)
-        bar = (self.QuickbarNum.value() - 1) if (self.QuickbarNum.value() != 1) else ''
 
         with open(file, 'r') as document:
             with open(file + '.bak', 'w') as backup:
@@ -159,7 +159,7 @@ class CraftBarDialog(QDialog, Ui_ReportWindow):
 
         if (100 - index) < self.GemCount:
             QMessageBox.warning(
-                None, 'Error!', 'There is insufficient space on the selected \n Quickbar to export the gems.')
+                self, 'Error!', 'There is insufficient space on the selected \n Quickbar to export the gems.')
             return
 
         button_strings = []
@@ -177,12 +177,14 @@ class CraftBarDialog(QDialog, Ui_ReportWindow):
         config = IniConfigParser()
         config.read([file])
 
-        for string in button_strings:
-            config.set(f'Quickbar{bar}', f'Hotkey_{index}', string)
-            index += 1
-
         with open(file, 'w') as document:
+            for string in button_strings:
+                config.set(f'Quickbar{bar}', f'Hotkey_{index}', string)
+                index += 1
             config.write(document)
+
+        QMessageBox.information(
+            self, 'Success!', 'Successfully exported gems to Quickbar!', QMessageBox.Ok)
 
     def restoreQuickbar(self):
         if len(self.Selection) == 0: return
@@ -192,9 +194,8 @@ class CraftBarDialog(QDialog, Ui_ReportWindow):
         if path.exists(file + '.bak') and path.isfile(file + '.bak'):
             with open(file, 'w') as document:
                 with open(file + '.bak', 'r') as backup:
-                    print('RESTORE BACKUP FILE ...')
-                    # document.write(backup.read())
-            # remove(file + '.bak')
+                    document.write(backup.read())
+            remove(file + '.bak')
 
 # =============================================== #
 #        SLOT/SIGNAL METHODS AND FUNCTIONS        #
