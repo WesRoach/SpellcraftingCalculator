@@ -530,25 +530,17 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 # =============================================== #
 
     def showItemDatabase(self):
-
-        # DEBUGGING
-        print('showItemDatabase')
+        pass
 
     def showMaterialsReport(self):
         self.MaterialsReport = ReportWindow(self, Qt.WindowCloseButtonHint)
         self.MaterialsReport.materialsReport(self.ItemAttributeList, self.CurrentRealm)
         self.MaterialsReport.exec_()
 
-        # DEBUGGING
-        print('showMaterialsReport')
-
     def showTemplateReport(self):
         self.TemplateReport = ReportWindow(self, Qt.WindowCloseButtonHint)
         self.TemplateReport.templateReport(self.exportAsXML(None, True, True))
         self.TemplateReport.exec_()
-
-        # DEBUGGING
-        print('showTemplateReport')
 
 # =============================================== #
 #              XML IMPORT AND EXPORT              #
@@ -606,9 +598,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     selection.setCheckState(0, Qt.Unchecked)
             iterator += 1
 
-        # DEBUGGING
-        print('importFromXML')
-
     def exportAsXML(self, filename, export = False, report = False):
         template = etree.Element('Template')
         etree.SubElement(template, 'Name').text = self.CharacterName.text()
@@ -652,9 +641,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         else:
             return template
 
-        # DEBUGGING
-        print('exportAsXML')
-
 # =============================================== #
 #   LAYOUT CHANGE/UPDATE METHODS AND FUNCTIONS    #
 # =============================================== #
@@ -686,9 +672,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 self.Effect[index].setDisabled(False)
                 self.AmountEdit[index].setDisabled(False)
 
-        # DEBUGGING
-        print('showCraftWidgets')
-
     def showLegendaryWidgets(self, item):
         for widget in self.SwitchOnType['Dropped']:
             widget.hide()
@@ -704,9 +687,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 self.Effect[index].setDisabled(True)
                 self.AmountEdit[index].setDisabled(True)
 
-        # DEBUGGING
-        print('showLegendaryWidgets')
-
     def showDropWidgets(self, item):
         for widget in self.SwitchOnType['Crafted']:
             widget.hide()
@@ -720,9 +700,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 self.EffectType[index].setDisabled(False)
                 self.Effect[index].setDisabled(False)
                 self.AmountEdit[index].setDisabled(False)
-
-        # DEBUGGING
-        print('showDropWidgets')
 
     def showItemInfoWidgets(self, item):
         for widget in (
@@ -767,9 +744,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ItemNotes.setPlainText(item.Notes)
         self.showItemRestrictions(item)
 
-        # DEBUGGING
-        print('showItemInfoWidgets')
-
     def showItemRestrictions(self, item):
         for index in range(self.ItemRestrictionsList.count()):
             self.ItemRestrictionsList.item(index).setHidden(True)
@@ -785,9 +759,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     self.ItemRestrictionsList.item(index).setCheckState(Qt.Unchecked)
                 if self.ItemRestrictionsList.item(index).text() == 'All':
                     self.ItemRestrictionsList.item(index).setCheckState(Qt.Checked)
-
-        # DEBUGGING
-        print('showItemRestrictions')
 
     def RestoreItem(self, item):
         if item.ActiveState == 'Crafted':
@@ -826,11 +797,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         self.showItemInfoWidgets(item)
         self.updateMenus(item)
-
-        print(item.__dict__)
-
-        # DEBUGGING
-        print('RestoreItem')
 
 # =============================================== #
 #        SUMMARIZER AND CALCULATOR METHODS        #
@@ -1102,9 +1068,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if amts != '':
             print(amts)
 
-        # DEBUGGING
-        print('summarize')
-
         return total
 
     def calculate(self):
@@ -1244,9 +1207,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     amount = amts['Base'] - amts['TotalBonus']
                 self.insertSkill(amount, 'Mythical ' + bonus, 'Bonus')
 
-        # DEBUGGING
-        print('calculate')
-
 # =============================================== #
 #       MISCELLANEOUS METHODS AND FUNCTIONS       #
 # =============================================== #
@@ -1284,9 +1244,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         index = self.SkillsView.model().index(self.SkillsView.model().rowCount() - 1, 0, QModelIndex())
         self.SkillsView.model().setData(index, QVariant(bonus), Qt.DisplayRole)
         self.SkillsView.model().setData(index, QVariant(group), Qt.UserRole)
-
-        # DEBUGGING
-        print('insertSkill')
 
     def updateMenus(self, item):
         self.ItemNewMenu.clear()
@@ -1330,9 +1287,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.ItemNewMenu.addAction(value)
             self.ItemTypeMenu.addAction(value)
 
-        # DEBUGGING
-        print('updateMenus')
-
 # =============================================== #
 #        SLOT/SIGNAL METHODS AND FUNCTIONS        #
 # =============================================== #
@@ -1342,9 +1296,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.focusWidget().clearFocus()
         except AttributeError:
             pass
-
-        # DEBUGGING
-        print('mousePressEvent')
 
     def setToolBarOptions(self, action):
         for act in self.ToolBarMenu.actions():
@@ -1358,20 +1309,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.setIconSize(QSize(action.data(), action.data()))
             self.ToolBar.show()
 
-        # DEBUGGING
-        print('setToolBarOptions')
-
     def setDistanceToCap(self):
         self.RestoreItem(self.ItemAttributeList[self.CurrentItemLabel])
 
-        # DEBUGGING
-        print('setDistanceToCap')
-
     def setUnusableSkills(self):
         self.RestoreItem(self.ItemAttributeList[self.CurrentItemLabel])
-
-        # DEBUGGING
-        print('setUnusableSkills')
 
     def CharacterRealmChanged(self):
         Realm = self.CharacterRealm.currentText()
@@ -1390,9 +1332,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if self.CurrentItemLabel != '':
             self.RestoreItem(self.ItemAttributeList[self.CurrentItemLabel])
             self.calculate()
-
-        # DEBUGGING
-        print('CharacterRealmChanged')
 
     def CharacterClassChanged(self):
         Realm = self.CharacterRealm.currentText()
@@ -1415,9 +1354,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # WHEN THE CLASS CHANGES. PERHAPS HAVE 'self.calculate()'
         # VALIDATE SKILLS WHEN-EVER IT IS CALLED ...
 
-        # DEBUGGING
-        print('CharacterClassChanged')
-
     def CharacterRaceChanged(self):
         Race = self.CharacterRace.currentText()
         for resist in DropEffectList['All']['Resistance']:
@@ -1426,9 +1362,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             else:
                 self.StatBonus[resist].setText('-')
         self.CurrentRace = Race
-
-        # DEBUGGING
-        print('CharacterRaceChanged')
 
     def ItemSelected(self, selection = None):
         for index in self.SlotListTreeView.selectedIndexes():
@@ -1445,9 +1378,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     self.CurrentItemLabel = location
                     self.RestoreItem(self.ItemAttributeList[self.CurrentItemLabel])
 
-        # DEBUGGING
-        print('ItemSelected' + ', Selection = ' + str(selection))
-
     def ItemNameChanged(self):
         if self.ItemName.currentIndex() != 0: return
         item = self.ItemAttributeList[self.CurrentItemLabel]
@@ -1456,9 +1386,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ItemName.setItemText(0, item.Name)
         self.ItemName.lineEdit().setCursorPosition(cursorPosition)
 
-        # DEBUGGING
-        print('ItemNameChanged')
-
     def ItemStateChanged(self, selection, column):
         self.ItemAttributeList[selection.text(column)].Equipped = selection.checkState(column)
         for item in self.ItemDictionary[selection.text(column)]:
@@ -1466,30 +1393,18 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if selection.text(column) == self.SlotListTreeView.selectedIndexes():
             self.RestoreItem(self.ItemAttributeList[selection.text(column)])
 
-        # DEBUGGING
-        print('ItemStateChanged')
-
     def ItemRealmChanged(self):
         item = self.ItemAttributeList[self.CurrentItemLabel]
         item.Realm = self.ItemRealm.currentText()
         self.RestoreItem(self.ItemAttributeList[self.CurrentItemLabel])
 
-        # DEBUGGING
-        print('ItemRealmChanged')
-
     def ItemTypeChanged(self):
         item = self.ItemAttributeList[self.CurrentItemLabel]
         item.Type = self.ItemType.currentText()
 
-        # DEBUGGING
-        print('ItemTypeChanged')
-
     def ItemOriginChanged(self):
         item = self.ItemAttributeList[self.CurrentItemLabel]
         item.Origin = self.ItemOrigin.currentText()
-
-        # DEBUGGING
-        print('ItemOriginChanged')
 
     def ItemLevelChanged(self):
         item = self.ItemAttributeList[self.CurrentItemLabel]
@@ -1497,69 +1412,42 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ItemLevel.setModified(False)
         self.RestoreItem(self.ItemAttributeList[self.CurrentItemLabel])
 
-        # DEBUGGING
-        print('ItemLevelChanged')
-
     def ItemQualityChanged(self):
         item = self.ItemAttributeList[self.CurrentItemLabel]
         item.Quality = self.ItemQuality.text()
         self.ItemQuality.setModified(False)
 
-        # DEBUGGING
-        print('ItemQualityChanged')
-
     def ItemDamageTypeChanged(self):
         item = self.ItemAttributeList[self.CurrentItemLabel]
         item.DamageType = self.ItemDamageType.currentText()
-
-        # DEBUGGING
-        print('ItemDamageTypeChanged')
 
     def ItemBonusChanged(self):
         item = self.ItemAttributeList[self.CurrentItemLabel]
         item.Bonus = self.ItemBonus.text()
         self.ItemBonus.setModified(False)
 
-        # DEBUGGING
-        print('ItemBonusChanged')
-
     def ItemAFDPSChanged(self):
         item = self.ItemAttributeList[self.CurrentItemLabel]
         item.AFDPS = self.ItemAFDPS.text()
         self.ItemAFDPS.setModified(False)
-
-        # DEBUGGING
-        print('ItemAFDPSChanged')
 
     def ItemSpeedChanged(self):
         item = self.ItemAttributeList[self.CurrentItemLabel]
         item.Speed = self.ItemSpeed.text()
         self.ItemSpeed.setModified(False)
 
-        # DEBUGGING
-        print('ItemSpeedChanged')
-
     def ItemLeftHandChanged(self, state):
         item = self.ItemAttributeList[self.CurrentItemLabel]
         item.LeftHand = state
-
-        # DEBUGGING
-        print('ItemLeftHandChanged')
 
     def ItemRequirementChanged(self):
         item = self.ItemAttributeList[self.CurrentItemLabel]
         item.Requirement = self.ItemRequirement.text()
         self.ItemRequirement.setModified(False)
 
-        # DEBUGGING
-        print('ItemRequirementChanged')
-
     def ItemNotesChanged(self):
         item = self.ItemAttributeList[self.CurrentItemLabel]
         item.Notes = self.ItemNotes.toPlainText()
-
-        # DEBUGGINg
-        print('ItemNotesChanged')
 
     def ItemRestrictionsChanged(self, selection = None):
         item = self.ItemAttributeList[self.CurrentItemLabel]
@@ -1574,9 +1462,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             item.Restrictions.append(selection.text())
         elif selection.checkState() == Qt.Unchecked:
             item.Restrictions.remove(selection.text())
-
-        # DEBUGGING
-        print('ItemRestrictionsChanged')
 
     # TODO: 5TH SLOT SELECTION BASED ON TYPE / LOCATION ...
     def EffectTypeChanged(self, etype = None, index = -1):
@@ -1597,9 +1482,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         # CASCADE THE CHANGES ...
         self.EffectChanged(item.getSlot(index).getEffect(), index)
-
-        # DEBUGGING
-        print('EffectTypeChanged, EffectType = ' + str(etype))
 
     def EffectChanged(self, effect = None, index = -1):
         if index == -1: index = self.getSlotIndex()
@@ -1631,9 +1513,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         # CASCADE THE CHANGES ...
         self.EffectAmountChanged(item.getSlot(index).getEffectAmount(), index)
-
-        # DEBUGGING
-        print('EffectChanged, Effect = ' + str(effect))
 
     def EffectAmountChanged(self, amount = None, index = -1):
         if index == -1: index = self.getSlotIndex()
@@ -1670,9 +1549,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.EffectRequirementChanged(item.getSlot(index).getEffectRequirement(), index)
         self.calculate()
 
-        # DEBUGGING
-        print('EffectAmountChanged')
-
     def EffectRequirementChanged(self, requirement = None, index = -1):
         if index == -1: index = self.getSlotIndex()
         item = self.ItemAttributeList[self.CurrentItemLabel]
@@ -1686,9 +1562,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             item.getSlot(index).setEffectRequirement(requirement)
             self.Requirement[index].setText(item.getSlot(index).getEffectRequirement())
         self.Requirement[index].setModified(False)
-
-        # DEBUGGING
-        print('EffectRequirementChanged')
 
     def newItem(self, action):
         newItemType = action.text().split(None, 1)[0]
@@ -1719,9 +1592,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.RestoreItem(self.ItemAttributeList[self.CurrentItemLabel])
         self.ItemIndex += 1
 
-        # DEBUGGING
-        print('newItem')
-
     def changeItem(self, index):
         equipped = self.ItemAttributeList[self.CurrentItemLabel].Equipped
         self.ItemAttributeList[self.CurrentItemLabel].Equipped = 0
@@ -1736,9 +1606,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ItemAttributeList[self.CurrentItemLabel] = item
         self.ItemAttributeList[self.CurrentItemLabel].Equipped = equipped
         self.RestoreItem(self.ItemAttributeList[self.CurrentItemLabel])
-
-        # DEBUGGING
-        print('changeItem, Selected Item = %s' % item.Name)
 
     def changeItemType(self, action):
         newItemType = action.text().split(None, 1)[0]
@@ -1770,9 +1637,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         self.RestoreItem(self.ItemAttributeList[self.CurrentItemLabel])
 
-        # DEBUGGING
-        print('changeItemType')
-
     def clearItem(self):
         item = self.ItemAttributeList[self.CurrentItemLabel]
         itemState = self.ItemAttributeList[self.CurrentItemLabel].Equipped
@@ -1787,15 +1651,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ItemAttributeList[self.CurrentItemLabel].Equipped = itemState
         self.RestoreItem(self.ItemAttributeList[self.CurrentItemLabel])
 
-        # DEBUGGING
-        print('clearItem')
-
     def clearItemSlots(self):
         self.ItemAttributeList[self.CurrentItemLabel].clearSlots()
         self.RestoreItem(self.ItemAttributeList[self.CurrentItemLabel])
-
-        # DEBUGGING
-        print('clearItemSlots')
 
     # TODO: LOAD PATH FROM SAVED SETTINGS ...
     # TODO: PREVENT CRAFTED ITEMS FROM BEING IMPORTED TO
@@ -1818,9 +1676,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 None, 'Error!', 'The item you are attempting to import\n is using an unsupported XML format.')
             return
 
-        # DEBUGGING
-        print('loadItem')
-
     # TODO: LOAD PATH FROM SAVED SETTINGS ...
     def saveItem(self):
         item = self.ItemAttributeList[self.CurrentItemLabel]
@@ -1833,9 +1688,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self, 'Save Item', item.Name, 'Items (*.xml);; All Files (*.*)', options = options)
         if filename: item.exportAsXML(filename)
 
-        # DEBUGGING
-        print('saveItem')
-
     def deleteItem(self):
         if len(self.ItemDictionary[self.CurrentItemLabel]) == 1:
             self.clearItem()
@@ -1847,16 +1699,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ItemAttributeList[self.CurrentItemLabel].Equipped = equipped
         self.RestoreItem(self.ItemAttributeList[self.CurrentItemLabel])
 
-        # DEBUGGING
-        print('deleteItem')
-
     # TODO: NEED TO ENSURE THAT ALL VARIABLE
     # DECLARATIONS ARE GETTING RESET ...
     def newTemplate(self):
         self.initialize()
-
-        # DEBUGGING
-        print('newTemplate')
 
     # TODO: LOAD PATH FROM SAVED SETTINGS ...
     def openTemplate(self):
@@ -1870,18 +1716,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.TemplatePath = os.path.dirname(filename)
             self.TemplateModified = False
 
-        # DEBUGGING
-        print('loadTemplate')
-
     def saveTemplate(self):
         if None in (self.TemplateName, self.TemplatePath):
             self.saveTemplateAs()
         else:
             self.exportAsXML(os.path.join(self.TemplatePath, self.TemplateName))
             self.TemplateModified = False
-
-        # DEBUGGING
-        print('saveTemplate')
 
     # TODO: LOAD PATH FROM SAVED SETTINGS ...
     def saveTemplateAs(self):
@@ -1895,15 +1735,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.TemplatePath = os.path.dirname(filename)
             self.TemplateModified = False
 
-        # DEBUGGING
-        print('saveTemplateAs')
-
     def importLokiTemplate(self):
         pass
 
     def exportGemsToQuickbar(self):
         self.CraftBarDialog = CraftBarDialog(self, Qt.WindowCloseButtonHint, self.ItemAttributeList)
         self.CraftBarDialog.exec_()
-
-        # DEBUGGING
-        print('exportGemsToQuickbar')
