@@ -181,6 +181,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ItemLoadButton.setMenu(self.ItemLoadMenu)
         self.ItemLoadButton.setToolTip('Load Item')
         self.ItemLoadButton.clicked.connect(self.ItemLoadButton.showMenu)
+
         self.ItemDeleteButton.setToolTip('Delete Item')
         self.ItemSaveButton.setToolTip('Save Item')
 
@@ -1200,6 +1201,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     amount = amts['Base'] - amts['TotalBonus']
                 self.insertSkill(amount, 'Mythical ' + bonus, 'Bonus')
 
+        # VALIDATE 'self.ItemAttributeList'
+        self.validateItemAttributes()
+
 # =============================================== #
 #       MISCELLANEOUS METHODS AND FUNCTIONS       #
 # =============================================== #
@@ -1280,6 +1284,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.ItemNewMenu.addAction(value)
             self.ItemTypeMenu.addAction(value)
 
+    def validateItemAttributes(self):
+        self.ErrorMenu.clear()
+        pass
+
 # =============================================== #
 #        SLOT/SIGNAL METHODS AND FUNCTIONS        #
 # =============================================== #
@@ -1344,7 +1352,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.calculate()
 
         # BUG: INVALID SKILLS ON NON-CURRENT ITEMS DO NOT RESET
-        # WHEN THE CLASS CHANGES. CREATE 'validateItems' ...
+        # WHEN THE CLASS CHANGES. CREATE 'validateItem' ...
 
     def CharacterRaceChanged(self):
         Race = self.CharacterRace.currentText()
