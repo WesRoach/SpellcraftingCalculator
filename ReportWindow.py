@@ -45,7 +45,7 @@ class ReportWindow(QDialog, Ui_ReportWindow):
         for item in [x for x in item_list.values() if x.isCraftable()]:
             for slot in [x for x in item.getSlotList() if x.isCraftable()]:
 
-                try:  # KEY MAY OR MAY NOT EXIST ...
+                try:  # THE KEY MAY OR MAY NOT EXIST ...
                     materials['Items'][item.Location] += [slot.getGemName(realm)]
                 except KeyError:
                     materials['Items'][item.Location] = [slot.getGemName(realm)]
@@ -53,7 +53,7 @@ class ReportWindow(QDialog, Ui_ReportWindow):
                 for material_type, material_list in slot.getGemMaterials(realm).items():
                     for material, amount in material_list.items():
 
-                        try:  # KEY MAY OR MAY NOT EXIST ...
+                        try:  # THE KEY MAY OR MAY NOT EXIST ...
                             materials[material_type][material] += amount
                         except KeyError:
                             materials[material_type][material] = amount

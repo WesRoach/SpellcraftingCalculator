@@ -185,7 +185,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ItemSaveButton.setToolTip('Save Item')
 
     def initLayout(self):
-        self.setWindowTitle('Spellcrafting Calculator')
+        self.setWindowTitle('Kort\'s Spellcrafting Calculator')
 
         # MAKE SURE WE ARE TESTING WIDTH AND HEIGHT
         # VALUES BASED ON THE FONT BEING USED ...
@@ -815,9 +815,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             'Utility': 0.0
         }
 
-        # DEBUGGING
-        amts = ''
-
         for effect in DropEffectList['All']['Attribute'] + ('Armor Factor', 'Fatigue', '% Power Pool'):
             total['Attributes'][effect] = {}
             total['Attributes'][effect]['Bonus'] = 0
@@ -1063,10 +1060,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             if attribute in DropEffectList['All']['Mythical Stat Cap']:
                 amts['BaseMythicalCap'] = amts['BaseMythicalCap'] - amts['CapBonus']
                 amts['MythicalCapBonus'] = min(amts['TotalMythicalCapBonus'], amts['BaseMythicalCap'])
-
-        # DEBUGGING
-        if amts != '':
-            print(amts)
 
         return total
 
