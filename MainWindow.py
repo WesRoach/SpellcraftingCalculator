@@ -1244,7 +1244,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     amount = amts['Base'] - amts['TotalBonus']
                 self.insertSkill(amount, 'Mythical ' + bonus, 'Bonus')
 
-        # VALIDATE 'self.ItemAttributeList'
+        # VALIDATE ATTRIBUTES ...
         self.validateItemAttributes()
 
 # =============================================== #
@@ -1297,7 +1297,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         if invalid_attribute_found:
             QMessageBox.information(
-                self, 'Attribute Change', 'Some attributes were not available in the selected class.')
+                self, 'Attribute Change', 'Some attributes were not available' +
+                                          '\n' + 'in the selected class\'s skill tree.')
             return
 
     def updateMenus(self, item):
@@ -1393,10 +1394,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         Class = self.CharacterClass.currentText()
         self.CharacterRace.clear()
         self.CharacterRace.insertItems(0, AllBonusList[Realm][Class]['Races'])
+
         if self.CurrentRace in AllBonusList[Realm][Class]['Races']:
             self.CharacterRace.setCurrentText(self.CurrentRace)
         else:
             self.CharacterRaceChanged()
+
         self.CurrentClass = Class
 
         # FIXES A BUG THAT CAUSES THE APPLICATION TO CRASH ON LAUNCH
@@ -1528,6 +1531,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.EffectType[index].insertItems(0, DropTypeList)
         if item.Location != 'Two-Handed':
             self.EffectType[index].removeItem(self.EffectType[index].findText('Focus'))
+
         self.EffectType[index].setCurrentText(etype)
         item.getSlot(index).setEffectType(etype)
 
@@ -1603,7 +1607,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def EffectRequirementChanged(self, requirement = None, index = -1):
         if index == -1: index = self.getSlotIndex()
         item = self.ItemAttributeList[self.CurrentItemLabel]
-
         if item.getSlot(index).getEffectType() == 'Unused':
             item.getSlot(index).setEffectRequirement('')
             self.Requirement[index].clear()
@@ -1622,7 +1625,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             item = Item(newItemType, self.CurrentItemLabel, self.CurrentRealm, self.ItemIndex)
         else:
             item = Item(newItemType, self.CurrentItemLabel, 'All', self.ItemIndex)
-
         item.Name = action.text()
         self.ItemDictionary[self.CurrentItemLabel].insert(0, item)
         self.ItemAttributeList[self.CurrentItemLabel] = item
@@ -1669,7 +1671,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             item = Item(newItemType, self.CurrentItemLabel, self.CurrentRealm, index)
         else:
             item = Item(newItemType, self.CurrentItemLabel, 'All', index)
-
         item.Name = action.text()
         del self.ItemDictionary[self.CurrentItemLabel][0]
         self.ItemDictionary[self.CurrentItemLabel].insert(0, item)
@@ -1707,7 +1708,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             item = Item(item.ActiveState, self.CurrentItemLabel, self.CurrentRealm, item.Index)
         else:
             item = Item(item.ActiveState, self.CurrentItemLabel, 'All', item.Index)
-
         item.Name = item.ActiveState + ' Item'
         self.ItemDictionary[self.CurrentItemLabel].insert(0, item)
         self.ItemAttributeList[self.CurrentItemLabel] = item
