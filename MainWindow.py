@@ -1354,9 +1354,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.RestoreItem(self.ItemAttributeList[self.CurrentItemLabel])
             self.calculate()
 
-        # BUG: INVALID SKILLS ON NON-CURRENT ITEMS DO NOT RESET
-        # WHEN THE CLASS CHANGES. CREATE 'validateItem' ...
-
     def CharacterRaceChanged(self):
         Race = self.CharacterRace.currentText()
         for resist in DropEffectList['All']['Resistance']:
