@@ -24,12 +24,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         QMainWindow.__init__(self, parent, flags)
         self.setupUi(self)
 
+        # MENUS ...
         self.FileMenu = QMenu('&File', self)
         self.EditMenu = QMenu('&Edit', self)
         self.ViewMenu = QMenu('&View', self)
         self.ErrorMenu = QMenu('&Errors', self)
         self.HelpMenu = QMenu('&Help', self)
-        self.ItemLoadMenu = QMenu('Load Item', self)
         self.ItemNewMenu = QMenu('&New Item', self)
         self.ItemTypeMenu = QMenu('Item &Type', self)
         self.ItemSwapMenu = QMenu('S&wap Gems with', self)
@@ -37,6 +37,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.RecentMenu = QMenu('Recent Templates', self)
         self.ToolBarMenu = QMenu('&Toolbar', self)
         self.ToolBar = QToolBar("Crafting")
+
+        # SUBMENUS ...
+        self.ItemLoadMenu = QMenu('Load Item', self)
+        self.MoveJeweleryMenu = QMenu('Jewelery', self)
+        self.MoveArmorMenu = QMenu('Armor', self)
+        self.MoveWeaponMenu = QMenu('Weapon', self)
+        self.SwapArmorMenu = QMenu('Armor', self)
+        self.SwapWeaponMenu = QMenu('Weapon', self)
 
         self.DistanceToCap = QAction()
         self.UnusableSkills = QAction()
@@ -112,6 +120,28 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ItemLoadMenu.addAction('Item XML File ...', self.loadItem)
         self.ItemLoadMenu.addAction('Item Database ...', self.showItemDatabase)
 
+        for location in ItemTypes['Jewelery']:
+            action = QAction(location, self)
+            action.setData(QVariant(location))
+            self.MoveJeweleryMenu.addAction(action)
+        self.ItemMoveMenu.addMenu(self.MoveJeweleryMenu)
+
+        for location in ItemTypes['Armor']:
+            action = QAction(location, self)
+            action.setData(QVariant(location))
+            self.MoveArmorMenu.addAction(action)
+            self.SwapArmorMenu.addAction(action)
+        self.ItemMoveMenu.addMenu(self.MoveArmorMenu)
+        self.ItemSwapMenu.addMenu(self.SwapArmorMenu)
+
+        for location in ItemTypes['Weapons']:
+            action = QAction(location, self)
+            action.setData(QVariant(location))
+            self.MoveWeaponMenu.addAction(action)
+            self.SwapWeaponMenu.addAction(action)
+        self.ItemMoveMenu.addMenu(self.MoveWeaponMenu)
+        self.ItemSwapMenu.addMenu(self.SwapWeaponMenu)
+
         self.EditMenu.addMenu(self.ItemLoadMenu)
         self.EditMenu.addAction('Save Item ...', self.saveItem)
         self.EditMenu.addSeparator()
@@ -177,6 +207,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ItemTypeButton.setMenu(self.ItemTypeMenu)
         self.ItemTypeButton.setToolTip('Change Item Type')
         self.ItemTypeButton.clicked.connect(self.ItemTypeButton.showMenu)
+
+        self.ItemMoveButton.setMenu(self.ItemMoveMenu)
+        self.ItemMoveButton.setToolTip('Move Item')
+        self.ItemMoveButton.clicked.connect(self.ItemTypeButton.showMenu)
+
+        self.ItemSwapButton.setMenu(self.ItemSwapMenu)
+        self.ItemSwapButton.setToolTip('Swap Item Gems')
+        self.ItemSwapButton.clicked.connect(self.ItemTypeButton.showMenu)
 
         self.ItemLoadButton.setMenu(self.ItemLoadMenu)
         self.ItemLoadButton.setToolTip('Load Item')
@@ -286,6 +324,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         self.ItemNewButton.setFixedSize(QSize(buttonFixedWidth, buttonFixedHeight))
         self.ItemTypeButton.setFixedSize(QSize(buttonFixedWidth, buttonFixedHeight))
+        self.ItemMoveButton.setFixedSize(QSize(buttonFixedWidth, buttonFixedHeight))
+        self.ItemSwapButton.setFixedSize(QSize(buttonFixedWidth, buttonFixedHeight))
         self.ItemLoadButton.setFixedSize(QSize(buttonFixedWidth, buttonFixedHeight))
         self.ItemDeleteButton.setFixedSize(QSize(buttonFixedWidth, buttonFixedHeight))
         self.ItemSaveButton.setFixedSize(QSize(buttonFixedWidth, buttonFixedHeight))
@@ -493,6 +533,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def initControls(self):
         self.ItemNewMenu.triggered.connect(self.newItem)
         self.ItemTypeMenu.triggered.connect(self.changeItemType)
+        self.ItemMoveMenu.triggered.connect(self.moveItemLocation)
+        self.ItemMoveMenu.triggered.connect(self.swapItemGemsWith)
         self.ToolBarMenu.triggered.connect(self.setToolBarOptions)
         self.DistanceToCap.triggered.connect(self.setDistanceToCap)
         self.UnusableSkills.triggered.connect(self.setUnusableSkills)
@@ -1652,6 +1694,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 item.getSlot(6).setAll('ToA Bonus', 'Style Damage', '3')
 
         self.RestoreItem(self.ItemAttributeList[self.CurrentItemLabel])
+
+    def moveItemLocation(self, action):
+        pass
+
+    def swapItemGemsWith(self, action):
+        pass
 
     def clearItem(self):
         item = self.ItemAttributeList[self.CurrentItemLabel]
