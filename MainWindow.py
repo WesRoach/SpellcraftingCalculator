@@ -1693,7 +1693,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.ItemIndex += 1
         else:
             QMessageBox.warning(
-                None, 'Error!', 'The item you are attempting to import' +
+                self, 'Error!', 'The item you are attempting to import' +
                                 '\n' + 'is using an unsupported XML format.')
             return
 
@@ -1703,7 +1703,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         if item.Name == '' or item.Name is None:
             QMessageBox.warning(
-                None, 'Error!', 'You must specify a name before saving this item!')
+                self, 'Error!', 'You must specify a name before saving this item!')
             return
 
         options = QFileDialog.Options()
@@ -1762,11 +1762,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.TemplateModified = False
 
     def importLokiTemplate(self):
-        options = QFileDialog.Options()
-        filename, filters = QFileDialog.getSaveFileName(
-            self, 'Save Item', '', 'Templates (*.mmr);; All Files (*.*)', options = options)
-
-        if filename == '' or filename is None:
-            return
-
+        QMessageBox.information(
+            self, 'Error!', 'Feature not implemented yet!')
         pass
