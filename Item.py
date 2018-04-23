@@ -217,9 +217,6 @@ class Item:
                     etree.SubElement(slot, 'GemName').text = self.getSlot(index).getGemName(self.Realm)
 
         if not export:
-
-            # TODO: CONVERT TO PYTHON 3.6 STANDARD (F-STRING) AND
-            # USE ETREE.UNICODE INSTEAD OF ENCODING ...
             with open(filename, 'wb') as document:
                 document.write(etree.tostring(item, encoding = 'UTF-8', pretty_print = True, xml_declaration = True))
         else:
