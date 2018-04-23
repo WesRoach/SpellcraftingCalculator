@@ -8,7 +8,7 @@ from configparser import DEFAULTSECT, RawConfigParser
 from os import getenv, path, remove, walk
 from re import compile
 
-Ui_ReportWindow = uic.loadUiType(r'interface/CraftBarDialog.ui')[0]
+Ui_QuickbarWindow = uic.loadUiType(r'interface/QuickbarWindow.ui')[0]
 
 
 class IniConfigParser(RawConfigParser):
@@ -31,7 +31,7 @@ class IniConfigParser(RawConfigParser):
             file.write("\n")
 
 
-class CraftBarDialog(QDialog, Ui_ReportWindow):
+class QuickbarWindow(QDialog, Ui_QuickbarWindow):
     def __init__(self, parent = None, flags = Qt.Dialog, items = None):
         QDialog.__init__(self, parent, flags)
         self.setupUi(self)
@@ -159,7 +159,8 @@ class CraftBarDialog(QDialog, Ui_ReportWindow):
 
         if (100 - index) < self.GemCount:
             QMessageBox.warning(
-                self, 'Error!', 'There is insufficient space on the selected \n Quickbar to export the gems.')
+                self, 'Error!', 'There is insufficient space on the selected' +
+                                '\n' + 'Quickbar to export the gems.')
             return
 
         button_strings = []

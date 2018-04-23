@@ -9,7 +9,7 @@ from Character import AllBonusList, AllRealms, ClassList, ItemDamageTypes, ItemO
 from Constants import Cap, CraftedTypeList, CraftedEffectList, CraftedValuesList, DropTypeList, DropEffectList
 from Constants import EnhancedTypeList, EnhancedEffectList, EnhancedValuesList, MythicalBonusCap, PVEBonusCap, TOABonusCap
 from Item import Item
-from CraftBarDialog import CraftBarDialog
+from QuickbarWindow import QuickbarWindow
 from ReportWindow import ReportWindow
 from lxml import etree
 import os
@@ -103,7 +103,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.FileMenu.addAction('Save Template As ...', self.saveTemplateAs)
         self.FileMenu.addSeparator()
         self.FileMenu.addAction('Import Loki Template ...', self.importLokiTemplate)
-        self.FileMenu.addAction('Export Gem\'s to Quickbar ...', self.exportGemsToQuickbar)
+        self.FileMenu.addAction('Export Gem\'s to Quickbar ...', self.showQuickbarWindow)
         self.FileMenu.addSeparator()
         self.FileMenu.addMenu(self.RecentMenu)
         self.FileMenu.addSeparator()
@@ -163,7 +163,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ToolBar.addAction('Save Template', self.saveTemplate)
         self.ToolBar.addAction('Save Template As', self.saveTemplateAs)
         self.ToolBar.addSeparator()
-        self.ToolBar.addAction('Export Gems', self.exportGemsToQuickbar)
+        self.ToolBar.addAction('Export Gems', self.showQuickbarWindow)
         self.ToolBar.addSeparator()
         self.ToolBar.addAction('Materials Report', self.showMaterialsReport)
         self.ToolBar.addAction('Template Report', self.showTemplateReport)
@@ -542,6 +542,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.TemplateReport = ReportWindow(self, Qt.WindowCloseButtonHint)
         self.TemplateReport.templateReport(self.exportAsXML(None, True, True))
         self.TemplateReport.exec_()
+
+    def showQuickbarWindow(self):
+        self.QuickbarWindow = QuickbarWindow(self, Qt.WindowCloseButtonHint, self.ItemAttributeList)
+        self.QuickbarWindow.exec_()
 
 # =============================================== #
 #              XML IMPORT AND EXPORT              #
@@ -1234,13 +1238,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if not index.isdigit(): index = index[-1:]
         return int(index)
 
-    def validateItemAttributes(self):
-        if self.UnusableSkills.isChecked(): return
-        for item in [x for x in self.ItemAttributeList.values() if x.isCraftable()]:
-            for slot in [x for x in item.getSlotList() if x.isCraftable() and x.getEffectType() == 'Skill']:
-                if slot.getEffect() not in AllBonusList['All'][self.CurrentClass]['All Skills']:
-                    slot.setEffect(AllBonusList['All'][self.CurrentClass]['All Skills'][1])
-
     def insertSkill(self, amount, bonus, group):
         self.SkillsView.model().insertRows(self.SkillsView.model().rowCount(), 1)
         width = 3 if (-10 < amount < 10) else 2
@@ -1248,6 +1245,21 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         index = self.SkillsView.model().index(self.SkillsView.model().rowCount() - 1, 0, QModelIndex())
         self.SkillsView.model().setData(index, QVariant(bonus), Qt.DisplayRole)
         self.SkillsView.model().setData(index, QVariant(group), Qt.UserRole)
+
+    def validateItemAttributes(self):
+        if self.UnusableSkills.isChecked(): return
+
+        invalid_attribute_found = False
+        for item in [x for x in self.ItemAttributeList.values() if x.isCraftable()]:
+            for slot in [x for x in item.getSlotList() if x.isCraftable() and x.getEffectType() == 'Skill']:
+                if slot.getEffect() not in AllBonusList['All'][self.CurrentClass]['All Skills']:
+                    slot.setEffect(AllBonusList['All'][self.CurrentClass]['All Skills'][1])
+                    invalid_attribute_found = True
+
+        if invalid_attribute_found:
+            QMessageBox.information(
+                self, 'Attribute Change', 'Some attributes were not available in the selected class.')
+            return
 
     def updateMenus(self, item):
         self.ItemNewMenu.clear()
@@ -1566,10 +1578,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def newItem(self, action):
         newItemType = action.text().split(None, 1)[0]
         equipped = self.ItemAttributeList[self.CurrentItemLabel].Equipped
+
         if newItemType in ('Crafted', 'Legendary'):
             item = Item(newItemType, self.CurrentItemLabel, self.CurrentRealm, self.ItemIndex)
         else:
             item = Item(newItemType, self.CurrentItemLabel, 'All', self.ItemIndex)
+
         item.Name = action.text()
         self.ItemDictionary[self.CurrentItemLabel].insert(0, item)
         self.ItemAttributeList[self.CurrentItemLabel] = item
@@ -1611,10 +1625,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         newItemType = action.text().split(None, 1)[0]
         equipped = self.ItemAttributeList[self.CurrentItemLabel].Equipped
         index = self.ItemAttributeList[self.CurrentItemLabel].Index
+
         if newItemType in ('Crafted', 'Legendary'):
             item = Item(newItemType, self.CurrentItemLabel, self.CurrentRealm, index)
         else:
             item = Item(newItemType, self.CurrentItemLabel, 'All', index)
+
         item.Name = action.text()
         del self.ItemDictionary[self.CurrentItemLabel][0]
         self.ItemDictionary[self.CurrentItemLabel].insert(0, item)
@@ -1641,10 +1657,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         item = self.ItemAttributeList[self.CurrentItemLabel]
         itemState = self.ItemAttributeList[self.CurrentItemLabel].Equipped
         self.ItemDictionary[self.CurrentItemLabel].remove(item)
+
         if item.ActiveState in ('Crafted', 'Legendary'):
             item = Item(item.ActiveState, self.CurrentItemLabel, self.CurrentRealm, item.Index)
         else:
             item = Item(item.ActiveState, self.CurrentItemLabel, 'All', item.Index)
+
         item.Name = item.ActiveState + ' Item'
         self.ItemDictionary[self.CurrentItemLabel].insert(0, item)
         self.ItemAttributeList[self.CurrentItemLabel] = item
@@ -1662,7 +1680,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         options = QFileDialog.Options()
         filename, filters = QFileDialog.getOpenFileName(
             self, 'Load Item:', '', 'Items (*.xml);; All Files (*.*)', options = options,)
-        if filename == '': return
+
+        if filename == '' or filename is None:
+            return
 
         item = Item('Imported', self.CurrentItemLabel, self.CurrentRealm, self.ItemIndex)
         if item.importFromXML(filename) != -1:
@@ -1673,16 +1693,19 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.ItemIndex += 1
         else:
             QMessageBox.warning(
-                None, 'Error!', 'The item you are attempting to import\n is using an unsupported XML format.')
+                None, 'Error!', 'The item you are attempting to import' +
+                                '\n' + 'is using an unsupported XML format.')
             return
 
     # TODO: LOAD PATH FROM SAVED SETTINGS ...
     def saveItem(self):
         item = self.ItemAttributeList[self.CurrentItemLabel]
-        if not item.Name:
+
+        if item.Name == '' or item.Name is None:
             QMessageBox.warning(
                 None, 'Error!', 'You must specify a name before saving this item!')
             return
+
         options = QFileDialog.Options()
         filename, filters = QFileDialog.getSaveFileName(
             self, 'Save Item', item.Name, 'Items (*.xml);; All Files (*.*)', options = options)
@@ -1692,6 +1715,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if len(self.ItemDictionary[self.CurrentItemLabel]) == 1:
             self.clearItem()
             return
+
         equipped = self.ItemAttributeList[self.CurrentItemLabel].Equipped
         del self.ItemDictionary[self.CurrentItemLabel][0]
         item = self.ItemDictionary[self.CurrentItemLabel][0]
@@ -1699,7 +1723,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ItemAttributeList[self.CurrentItemLabel].Equipped = equipped
         self.RestoreItem(self.ItemAttributeList[self.CurrentItemLabel])
 
-    # TODO: NEED TO ENSURE THAT ALL VARIABLE RESET ...
     def newTemplate(self):
         self.initialize()
 
@@ -1709,11 +1732,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         filename, filters = QFileDialog.getOpenFileName(
             self, "Open Template", '', 'Templates (*.ktf);; All Files (*.*)', options = options)
 
-        if filename:
-            self.importFromXML(filename)
-            self.TemplateName = os.path.basename(filename)
-            self.TemplatePath = os.path.dirname(filename)
-            self.TemplateModified = False
+        if filename == '' or filename is None:
+            return
+
+        self.importFromXML(filename)
+        self.TemplateName = os.path.basename(filename)
+        self.TemplatePath = os.path.dirname(filename)
+        self.TemplateModified = False
 
     def saveTemplate(self):
         if None in (self.TemplateName, self.TemplatePath):
@@ -1728,15 +1753,20 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         filename, filters = QFileDialog.getSaveFileName(
             self, 'Save Item', '', 'Templates (*.ktf);; All Files (*.*)', options = options)
 
-        if filename:
-            self.exportAsXML(filename)
-            self.TemplateName = os.path.basename(filename)
-            self.TemplatePath = os.path.dirname(filename)
-            self.TemplateModified = False
+        if filename == '' or filename is None:
+            return
+
+        self.exportAsXML(filename)
+        self.TemplateName = os.path.basename(filename)
+        self.TemplatePath = os.path.dirname(filename)
+        self.TemplateModified = False
 
     def importLokiTemplate(self):
-        pass
+        options = QFileDialog.Options()
+        filename, filters = QFileDialog.getSaveFileName(
+            self, 'Save Item', '', 'Templates (*.mmr);; All Files (*.*)', options = options)
 
-    def exportGemsToQuickbar(self):
-        self.CraftBarDialog = CraftBarDialog(self, Qt.WindowCloseButtonHint, self.ItemAttributeList)
-        self.CraftBarDialog.exec_()
+        if filename == '' or filename is None:
+            return
+
+        pass
