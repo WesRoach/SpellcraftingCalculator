@@ -1234,6 +1234,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if not index.isdigit(): index = index[-1:]
         return int(index)
 
+    def validateItemAttributes(self):
+        if self.UnusableSkills.isChecked(): return
+        for item in [x for x in self.ItemAttributeList.values() if x.isCraftable()]:
+            for slot in [x for x in item.getSlotList() if x.isCraftable() and x.getEffectType() == 'Skill']:
+                if slot.getEffect() not in AllBonusList['All'][self.CurrentClass]['All Skills']:
+                    slot.setEffect(AllBonusList['All'][self.CurrentClass]['All Skills'][1])
+
     def insertSkill(self, amount, bonus, group):
         self.SkillsView.model().insertRows(self.SkillsView.model().rowCount(), 1)
         width = 3 if (-10 < amount < 10) else 2
@@ -1283,10 +1290,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         for value in options:
             self.ItemNewMenu.addAction(value)
             self.ItemTypeMenu.addAction(value)
-
-    def validateItemAttributes(self):
-        self.ErrorMenu.clear()
-        pass
 
 # =============================================== #
 #        SLOT/SIGNAL METHODS AND FUNCTIONS        #
@@ -1699,8 +1702,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ItemAttributeList[self.CurrentItemLabel].Equipped = equipped
         self.RestoreItem(self.ItemAttributeList[self.CurrentItemLabel])
 
-    # TODO: NEED TO ENSURE THAT ALL VARIABLE
-    # DECLARATIONS ARE GETTING RESET ...
+    # TODO: NEED TO ENSURE THAT ALL VARIABLE RESET ...
     def newTemplate(self):
         self.initialize()
 
