@@ -164,6 +164,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             action.setCheckable(True)
             self.ToolBarMenu.addAction(action)
         self.ToolBarMenu.actions()[1].setChecked(True)
+
         self.ViewMenu.addMenu(self.ToolBarMenu)
         self.ViewMenu.addSeparator()
 
