@@ -1675,23 +1675,9 @@
                 </widget>
                </item>
                <item>
-                <widget class="QPushButton" name="ItemMoveButton">
-                 <property name="text">
-                  <string>M</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QPushButton" name="ItemSwapButton">
-                 <property name="text">
-                  <string>S</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
                 <widget class="QPushButton" name="ItemSaveButton">
                  <property name="text">
-                  <string>SI</string>
+                  <string>S</string>
                  </property>
                 </widget>
                </item>
