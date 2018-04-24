@@ -119,27 +119,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         self.ItemLoadMenu.addAction('Item XML File ...', self.loadItem)
         self.ItemLoadMenu.addAction('Item Database ...', self.showItemDatabase)
-
-        for location in ItemTypes['Jewelery']:
-            action = QAction(location, self)
-            action.setData(QVariant(location))
-            self.MoveJeweleryMenu.addAction(action)
         self.ItemMoveMenu.addMenu(self.MoveJeweleryMenu)
-
-        for location in ItemTypes['Armor']:
-            action = QAction(location, self)
-            action.setData(QVariant(location))
-            self.MoveArmorMenu.addAction(action)
-            self.SwapArmorMenu.addAction(action)
         self.ItemMoveMenu.addMenu(self.MoveArmorMenu)
-        self.ItemSwapMenu.addMenu(self.SwapArmorMenu)
-
-        for location in ItemTypes['Weapons']:
-            action = QAction(location, self)
-            action.setData(QVariant(location))
-            self.MoveWeaponMenu.addAction(action)
-            self.SwapWeaponMenu.addAction(action)
         self.ItemMoveMenu.addMenu(self.MoveWeaponMenu)
+        self.ItemSwapMenu.addMenu(self.SwapArmorMenu)
         self.ItemSwapMenu.addMenu(self.SwapWeaponMenu)
 
         self.EditMenu.addMenu(self.ItemLoadMenu)
@@ -208,14 +191,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ItemTypeButton.setMenu(self.ItemTypeMenu)
         self.ItemTypeButton.setToolTip('Change Item Type')
         self.ItemTypeButton.clicked.connect(self.ItemTypeButton.showMenu)
-
-        self.ItemMoveButton.setMenu(self.ItemMoveMenu)
-        self.ItemMoveButton.setToolTip('Move Item')
-        self.ItemMoveButton.clicked.connect(self.ItemTypeButton.showMenu)
-
-        self.ItemSwapButton.setMenu(self.ItemSwapMenu)
-        self.ItemSwapButton.setToolTip('Swap Item Gems')
-        self.ItemSwapButton.clicked.connect(self.ItemTypeButton.showMenu)
 
         self.ItemLoadButton.setMenu(self.ItemLoadMenu)
         self.ItemLoadButton.setToolTip('Load Item')
@@ -325,8 +300,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         self.ItemNewButton.setFixedSize(QSize(buttonFixedWidth, buttonFixedHeight))
         self.ItemTypeButton.setFixedSize(QSize(buttonFixedWidth, buttonFixedHeight))
-        self.ItemMoveButton.setFixedSize(QSize(buttonFixedWidth, buttonFixedHeight))
-        self.ItemSwapButton.setFixedSize(QSize(buttonFixedWidth, buttonFixedHeight))
         self.ItemLoadButton.setFixedSize(QSize(buttonFixedWidth, buttonFixedHeight))
         self.ItemDeleteButton.setFixedSize(QSize(buttonFixedWidth, buttonFixedHeight))
         self.ItemSaveButton.setFixedSize(QSize(buttonFixedWidth, buttonFixedHeight))
@@ -535,7 +508,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ItemNewMenu.triggered.connect(self.newItem)
         self.ItemTypeMenu.triggered.connect(self.changeItemType)
         self.ItemMoveMenu.triggered.connect(self.moveItemLocation)
-        self.ItemMoveMenu.triggered.connect(self.swapItemGemsWith)
+        self.ItemSwapMenu.triggered.connect(self.swapItemGemsWith)
         self.ToolBarMenu.triggered.connect(self.setToolBarOptions)
         self.DistanceToCap.triggered.connect(self.setDistanceToCap)
         self.UnusableSkills.triggered.connect(self.setUnusableSkills)
@@ -1343,6 +1316,55 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         for value in options:
             self.ItemNewMenu.addAction(value)
             self.ItemTypeMenu.addAction(value)
+
+        self.MoveJeweleryMenu.clear()
+        self.MoveArmorMenu.clear()
+        self.MoveWeaponMenu.clear()
+        self.SwapArmorMenu.clear()
+        self.SwapWeaponMenu.clear()
+
+        for key, locations in ItemTypes.items():
+            if key == 'Jewelery':
+                for location in locations:
+                    action = QAction(location, self)
+                    action.setData(QVariant(location))
+                    self.MoveJeweleryMenu.addAction(action)
+                    if item.Location == action.data():
+                        action.setDisabled(True)
+            if key == 'Armor':
+                for location in locations:
+                    action = QAction(location, self)
+                    action.setData(QVariant(location))
+                    self.MoveArmorMenu.addAction(action)
+                    if item.Location == action.data():
+                        action.setDisabled(True)
+            if key == 'Weapons':
+                for location in locations:
+                    action = QAction(location, self)
+                    action.setData(QVariant(location))
+                    self.MoveWeaponMenu.addAction(action)
+                    if item.Location == action.data():
+                        action.setDisabled(True)
+
+        for key, locations in ItemTypes.items():
+            if key == 'Armor':
+                for location in locations:
+                    action = QAction(location, self)
+                    action.setData(QVariant(location))
+                    self.SwapArmorMenu.addAction(action)
+                    if item.Location == action.data():
+                        action.setDisabled(True)
+                    if self.ItemAttributeList[action.data()].ActiveState == 'Dropped':
+                        action.setDisabled(True)
+            if key == 'Weapons':
+                for location in locations:
+                    action = QAction(location, self)
+                    action.setData(QVariant(location))
+                    self.SwapWeaponMenu.addAction(action)
+                    if item.Location == action.data():
+                        action.setDisabled(True)
+                    if self.ItemAttributeList[action.data()].ActiveState == 'Dropped':
+                        action.setDisabled(True)
 
 # =============================================== #
 #        SLOT/SIGNAL METHODS AND FUNCTIONS        #
