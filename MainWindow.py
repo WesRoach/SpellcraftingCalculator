@@ -30,21 +30,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ViewMenu = QMenu('&View', self)
         self.ErrorMenu = QMenu('&Errors', self)
         self.HelpMenu = QMenu('&Help', self)
-        self.ItemNewMenu = QMenu('&New Item', self)
+        self.ItemLoadMenu = QMenu('Load Item', self)
         self.ItemTypeMenu = QMenu('Item &Type', self)
-        self.ItemSwapMenu = QMenu('S&wap Gems with', self)
-        self.ItemMoveMenu = QMenu('&Move Item to', self)
+        self.ItemNewMenu = QMenu('&New Item', self)
         self.RecentMenu = QMenu('Recent Templates', self)
         self.ToolBarMenu = QMenu('&Toolbar', self)
         self.ToolBar = QToolBar("Crafting")
-
-        # SUBMENUS ...
-        self.ItemLoadMenu = QMenu('Load Item', self)
-        self.MoveJeweleryMenu = QMenu('Jewelery', self)
-        self.MoveArmorMenu = QMenu('Armor', self)
-        self.MoveWeaponMenu = QMenu('Weapon', self)
-        self.SwapArmorMenu = QMenu('Armor', self)
-        self.SwapWeaponMenu = QMenu('Weapon', self)
 
         self.DistanceToCap = QAction()
         self.UnusableSkills = QAction()
@@ -59,7 +50,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.StatMythicalCap = {}
         self.StatBonus = {}
 
-        self.ItemIndex = 0
         self.ItemAttributeList = {}
         self.ItemDictionary = {}
         self.ItemInfoWidgets = {}
@@ -110,7 +100,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.FileMenu.addAction('Save Template', self.saveTemplate)
         self.FileMenu.addAction('Save Template As ...', self.saveTemplateAs)
         self.FileMenu.addSeparator()
-        self.FileMenu.addAction('Import Loki Template ...', self.importLokiTemplate)
         self.FileMenu.addAction('Export Gem\'s to Quickbar ...', self.showQuickbarWindow)
         self.FileMenu.addSeparator()
         self.FileMenu.addMenu(self.RecentMenu)
@@ -119,18 +108,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         self.ItemLoadMenu.addAction('Item XML File ...', self.loadItem)
         self.ItemLoadMenu.addAction('Item Database ...', self.showItemDatabase)
-        self.ItemMoveMenu.addMenu(self.MoveJeweleryMenu)
-        self.ItemMoveMenu.addMenu(self.MoveArmorMenu)
-        self.ItemMoveMenu.addMenu(self.MoveWeaponMenu)
-        self.ItemSwapMenu.addMenu(self.SwapArmorMenu)
-        self.ItemSwapMenu.addMenu(self.SwapWeaponMenu)
 
         self.EditMenu.addMenu(self.ItemLoadMenu)
         self.EditMenu.addAction('Save Item ...', self.saveItem)
         self.EditMenu.addSeparator()
         self.EditMenu.addMenu(self.ItemTypeMenu)
-        self.EditMenu.addMenu(self.ItemMoveMenu)
-        self.EditMenu.addMenu(self.ItemSwapMenu)
         self.EditMenu.addSeparator()
         self.EditMenu.addMenu(self.ItemNewMenu)
         self.EditMenu.addAction('Delete Item', self.deleteItem)
@@ -470,6 +452,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def initialize(self):
         self.TemplateName = None
         self.TemplatePath = None
+        self.TemplateModified = False
         self.CharacterName.setText('')
         self.CharacterLevel.setText('50')
 
@@ -480,13 +463,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         for parent, locations in ItemTypes.items():
             for location in locations:
                 if parent == 'Armor':
-                    item = Item('Crafted', location, self.CurrentRealm, self.ItemIndex)
+                    item = Item('Crafted', location, self.CurrentRealm)
                     item.Name = item.ActiveState + ' Item'
-                    self.ItemIndex += 1
                 else:
-                    item = Item('Dropped', location, 'All', self.ItemIndex)
+                    item = Item('Dropped', location, 'All')
                     item.Name = item.ActiveState + ' Item'
-                    self.ItemIndex += 1
                 self.ItemAttributeList[location] = item
                 self.ItemDictionary[location] = [item]
 
@@ -507,8 +488,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def initControls(self):
         self.ItemNewMenu.triggered.connect(self.newItem)
         self.ItemTypeMenu.triggered.connect(self.changeItemType)
-        self.ItemMoveMenu.triggered.connect(self.moveItemLocation)
-        self.ItemSwapMenu.triggered.connect(self.swapItemGemsWith)
         self.ToolBarMenu.triggered.connect(self.setToolBarOptions)
         self.DistanceToCap.triggered.connect(self.setDistanceToCap)
         self.UnusableSkills.triggered.connect(self.setUnusableSkills)
@@ -1271,8 +1250,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         if invalid_attribute_found:
             QMessageBox.information(
-                self, 'Attribute Change', 'Some attributes were not available' +
-                                          '\n' + 'in the selected class\'s skill tree.')
+                self, 'Attribute Change',
+                'Some attributes were not available \n'
+                'in the selected class\'s skill tree.')
             return
 
     def updateMenus(self, item):
@@ -1317,54 +1297,25 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.ItemNewMenu.addAction(value)
             self.ItemTypeMenu.addAction(value)
 
-        self.MoveJeweleryMenu.clear()
-        self.MoveArmorMenu.clear()
-        self.MoveWeaponMenu.clear()
-        self.SwapArmorMenu.clear()
-        self.SwapWeaponMenu.clear()
+    # TODO: IMPLEMENT SAVE OPTIONS ...
+    def closeEvent(self, event):
+        if self.TemplateModified:
+            prompt = QMessageBox.warning(
+                self, 'Save Changes?',
+                'This template has been changed.\n'
+                'Do you want to save these changes?',
+                QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel)
 
-        for key, locations in ItemTypes.items():
-            if key == 'Jewelery':
-                for location in locations:
-                    action = QAction(location, self)
-                    action.setData(QVariant(location))
-                    self.MoveJeweleryMenu.addAction(action)
-                    if item.Location == action.data():
-                        action.setDisabled(True)
-            if key == 'Armor':
-                for location in locations:
-                    action = QAction(location, self)
-                    action.setData(QVariant(location))
-                    self.MoveArmorMenu.addAction(action)
-                    if item.Location == action.data():
-                        action.setDisabled(True)
-            if key == 'Weapons':
-                for location in locations:
-                    action = QAction(location, self)
-                    action.setData(QVariant(location))
-                    self.MoveWeaponMenu.addAction(action)
-                    if item.Location == action.data():
-                        action.setDisabled(True)
-
-        for key, locations in ItemTypes.items():
-            if key == 'Armor':
-                for location in locations:
-                    action = QAction(location, self)
-                    action.setData(QVariant(location))
-                    self.SwapArmorMenu.addAction(action)
-                    if item.Location == action.data():
-                        action.setDisabled(True)
-                    if self.ItemAttributeList[action.data()].ActiveState == 'Dropped':
-                        action.setDisabled(True)
-            if key == 'Weapons':
-                for location in locations:
-                    action = QAction(location, self)
-                    action.setData(QVariant(location))
-                    self.SwapWeaponMenu.addAction(action)
-                    if item.Location == action.data():
-                        action.setDisabled(True)
-                    if self.ItemAttributeList[action.data()].ActiveState == 'Dropped':
-                        action.setDisabled(True)
+            if prompt == QMessageBox.Yes:
+                self.saveTemplate()
+                if self.TemplateModified:
+                    event.ignore()
+                    return
+            if prompt == QMessageBox.No:
+                event.accept()
+            if prompt == QMessageBox.Cancel:
+                event.ignore()
+                return
 
 # =============================================== #
 #        SLOT/SIGNAL METHODS AND FUNCTIONS        #
@@ -1640,157 +1591,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.Requirement[index].setText(item.getSlot(index).getEffectRequirement())
         self.Requirement[index].setModified(False)
 
-    def newItem(self, action):
-        newItemType = action.text().split(None, 1)[0]
-        equipped = self.ItemAttributeList[self.CurrentItemLabel].Equipped
-
-        if newItemType in ('Crafted', 'Legendary'):
-            item = Item(newItemType, self.CurrentItemLabel, self.CurrentRealm, self.ItemIndex)
-        else:
-            item = Item(newItemType, self.CurrentItemLabel, 'All', self.ItemIndex)
-        item.Name = action.text()
-        self.ItemDictionary[self.CurrentItemLabel].insert(0, item)
-        self.ItemAttributeList[self.CurrentItemLabel] = item
-        self.ItemAttributeList[self.CurrentItemLabel].Equipped = equipped
-
-        if newItemType == 'Legendary':
-            if action.text().split(None, 1)[1] == 'Staff':
-                item.getSlot(4).setAll('Focus', 'All Spell Lines', '50')
-                item.getSlot(5).setAll('ToA Bonus', 'Casting Speed', '3')
-                item.getSlot(6).setAll('ToA Bonus', 'Magic Damage', '3')
-            elif action.text().split(None, 1)[1] == 'Bow':
-                item.getSlot(4).setAll('ToA Bonus', 'Armor Factor', '10')
-                item.getSlot(5).setAll('ToA Bonus', 'Casting Speed', '3')
-                item.getSlot(6).setAll('ToA Bonus', 'Magic Damage', '3')
-            elif action.text().split(None, 1)[1] == 'Weapon':
-                item.getSlot(4).setAll('ToA Bonus', 'Armor Factor', '10')
-                item.getSlot(5).setAll('ToA Bonus', 'Melee Damage', '3')
-                item.getSlot(6).setAll('ToA Bonus', 'Style Damage', '3')
-
-        self.RestoreItem(self.ItemAttributeList[self.CurrentItemLabel])
-        self.ItemIndex += 1
-
-    def changeItem(self, index):
-        equipped = self.ItemAttributeList[self.CurrentItemLabel].Equipped
-        self.ItemAttributeList[self.CurrentItemLabel].Equipped = 0
-
-        try:  # FIXES BUG IN 'QComboBox' WHEN PRESSING ENTER ...
-            item = self.ItemDictionary[self.CurrentItemLabel][index]
-        except IndexError:
-            item = self.ItemDictionary[self.CurrentItemLabel][0]
-
-        self.ItemDictionary[self.CurrentItemLabel].remove(item)
-        self.ItemDictionary[self.CurrentItemLabel].insert(0, item)
-        self.ItemAttributeList[self.CurrentItemLabel] = item
-        self.ItemAttributeList[self.CurrentItemLabel].Equipped = equipped
-        self.RestoreItem(self.ItemAttributeList[self.CurrentItemLabel])
-
-    def changeItemType(self, action):
-        newItemType = action.text().split(None, 1)[0]
-        equipped = self.ItemAttributeList[self.CurrentItemLabel].Equipped
-        index = self.ItemAttributeList[self.CurrentItemLabel].Index
-
-        if newItemType in ('Crafted', 'Legendary'):
-            item = Item(newItemType, self.CurrentItemLabel, self.CurrentRealm, index)
-        else:
-            item = Item(newItemType, self.CurrentItemLabel, 'All', index)
-        item.Name = action.text()
-        del self.ItemDictionary[self.CurrentItemLabel][0]
-        self.ItemDictionary[self.CurrentItemLabel].insert(0, item)
-        self.ItemAttributeList[self.CurrentItemLabel] = item
-        self.ItemAttributeList[self.CurrentItemLabel].Equipped = equipped
-
-        if newItemType == 'Legendary':
-            if action.text().split(None, 1)[1] == 'Staff':
-                item.getSlot(4).setAll('Focus', 'All Spell Lines', '50')
-                item.getSlot(5).setAll('ToA Bonus', 'Casting Speed', '3')
-                item.getSlot(6).setAll('ToA Bonus', 'Magic Damage', '3')
-            elif action.text().split(None, 1)[1] == 'Bow':
-                item.getSlot(4).setAll('ToA Bonus', 'Armor Factor', '10')
-                item.getSlot(5).setAll('ToA Bonus', 'Casting Speed', '3')
-                item.getSlot(6).setAll('ToA Bonus', 'Magic Damage', '3')
-            elif action.text().split(None, 1)[1] == 'Weapon':
-                item.getSlot(4).setAll('ToA Bonus', 'Armor Factor', '10')
-                item.getSlot(5).setAll('ToA Bonus', 'Melee Damage', '3')
-                item.getSlot(6).setAll('ToA Bonus', 'Style Damage', '3')
-
-        self.RestoreItem(self.ItemAttributeList[self.CurrentItemLabel])
-
-    def moveItemLocation(self, action):
-        pass
-
-    def swapItemGemsWith(self, action):
-        pass
-
-    def clearItem(self):
-        item = self.ItemAttributeList[self.CurrentItemLabel]
-        itemState = self.ItemAttributeList[self.CurrentItemLabel].Equipped
-        self.ItemDictionary[self.CurrentItemLabel].remove(item)
-
-        if item.ActiveState in ('Crafted', 'Legendary'):
-            item = Item(item.ActiveState, self.CurrentItemLabel, self.CurrentRealm, item.Index)
-        else:
-            item = Item(item.ActiveState, self.CurrentItemLabel, 'All', item.Index)
-        item.Name = item.ActiveState + ' Item'
-        self.ItemDictionary[self.CurrentItemLabel].insert(0, item)
-        self.ItemAttributeList[self.CurrentItemLabel] = item
-        self.ItemAttributeList[self.CurrentItemLabel].Equipped = itemState
-        self.RestoreItem(self.ItemAttributeList[self.CurrentItemLabel])
-
-    def clearItemSlots(self):
-        self.ItemAttributeList[self.CurrentItemLabel].clearSlots()
-        self.RestoreItem(self.ItemAttributeList[self.CurrentItemLabel])
-
-    # TODO: LOAD PATH FROM SAVED SETTINGS ...
-    # TODO: PREVENT CRAFTED ITEMS FROM BEING IMPORTED TO
-    # TO NON-CRAFTABLE LOCATIONS. SET A DEFAULT PATH ...
-    def loadItem(self):
-        options = QFileDialog.Options()
-        filename, filters = QFileDialog.getOpenFileName(
-            self, 'Load Item:', '', 'Items (*.xml);; All Files (*.*)', options = options,)
-
-        if filename == '' or filename is None:
-            return
-
-        item = Item('Imported', self.CurrentItemLabel, self.CurrentRealm, self.ItemIndex)
-        if item.importFromXML(filename) != -1:
-            self.ItemDictionary[self.CurrentItemLabel].insert(0, item)
-            self.ItemAttributeList[self.CurrentItemLabel] = item
-            self.ItemAttributeList[self.CurrentItemLabel].Equipped = item.Equipped
-            self.RestoreItem(self.ItemAttributeList[self.CurrentItemLabel])
-            self.ItemIndex += 1
-        else:
-            QMessageBox.warning(
-                self, 'Error!', 'The item you are attempting to import' +
-                                '\n' + 'is using an unsupported XML format.')
-            return
-
-    # TODO: LOAD PATH FROM SAVED SETTINGS ...
-    def saveItem(self):
-        item = self.ItemAttributeList[self.CurrentItemLabel]
-
-        if item.Name == '' or item.Name is None:
-            QMessageBox.warning(
-                self, 'Error!', 'You must specify a name before saving this item!')
-            return
-
-        options = QFileDialog.Options()
-        filename, filters = QFileDialog.getSaveFileName(
-            self, 'Save Item', item.Name, 'Items (*.xml);; All Files (*.*)', options = options)
-        if filename: item.exportAsXML(filename)
-
-    def deleteItem(self):
-        if len(self.ItemDictionary[self.CurrentItemLabel]) == 1:
-            self.clearItem()
-            return
-
-        equipped = self.ItemAttributeList[self.CurrentItemLabel].Equipped
-        del self.ItemDictionary[self.CurrentItemLabel][0]
-        item = self.ItemDictionary[self.CurrentItemLabel][0]
-        self.ItemAttributeList[self.CurrentItemLabel] = item
-        self.ItemAttributeList[self.CurrentItemLabel].Equipped = equipped
-        self.RestoreItem(self.ItemAttributeList[self.CurrentItemLabel])
-
     def newTemplate(self):
         self.initialize()
 
@@ -1829,7 +1629,147 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.TemplatePath = os.path.dirname(filename)
         self.TemplateModified = False
 
-    def importLokiTemplate(self):
-        QMessageBox.information(
-            self, 'Error!', 'Feature not implemented yet!')
-        pass
+    def changeItem(self, index):
+        equipped = self.ItemAttributeList[self.CurrentItemLabel].Equipped
+        self.ItemAttributeList[self.CurrentItemLabel].Equipped = 0
+
+        try:  # FIXES BUG IN 'QComboBox' WHEN PRESSING ENTER ...
+            item = self.ItemDictionary[self.CurrentItemLabel][index]
+        except IndexError:
+            item = self.ItemDictionary[self.CurrentItemLabel][0]
+
+        self.ItemDictionary[self.CurrentItemLabel].remove(item)
+        self.ItemDictionary[self.CurrentItemLabel].insert(0, item)
+        self.ItemAttributeList[self.CurrentItemLabel] = item
+        self.ItemAttributeList[self.CurrentItemLabel].Equipped = equipped
+        self.RestoreItem(self.ItemAttributeList[self.CurrentItemLabel])
+
+    # TODO: LOAD PATH FROM SAVED SETTINGS ...
+    # TODO: PREVENT CRAFTED ITEMS FROM BEING IMPORTED TO
+    # TO NON-CRAFTABLE LOCATIONS. SET A DEFAULT PATH ...
+    def loadItem(self):
+        options = QFileDialog.Options()
+        filename, filters = QFileDialog.getOpenFileName(
+            self, 'Load Item:', '', 'Items (*.xml);; All Files (*.*)', options = options,)
+
+        if filename == '' or filename is None:
+            return
+
+        item = Item('Imported', self.CurrentItemLabel, self.CurrentRealm)
+        if item.importFromXML(filename) != -1:
+            self.ItemDictionary[self.CurrentItemLabel].insert(0, item)
+            self.ItemAttributeList[self.CurrentItemLabel] = item
+            self.ItemAttributeList[self.CurrentItemLabel].Equipped = item.Equipped
+            self.RestoreItem(self.ItemAttributeList[self.CurrentItemLabel])
+        else:
+            QMessageBox.warning(
+                self, 'Error!',
+                'The item you are attempting to import \n'
+                'is using an unsupported XML format.')
+            return
+
+    # TODO: LOAD PATH FROM SAVED SETTINGS ...
+    def saveItem(self):
+        item = self.ItemAttributeList[self.CurrentItemLabel]
+
+        if item.Name == '' or item.Name is None:
+            QMessageBox.warning(
+                self, 'Error!',
+                'You must specify a name before saving this item!')
+            return
+
+        options = QFileDialog.Options()
+        filename, filters = QFileDialog.getSaveFileName(
+            self, 'Save Item', item.Name, 'Items (*.xml);; All Files (*.*)', options = options)
+        if filename: item.exportAsXML(filename)
+
+    def changeItemType(self, action):
+        newItemType = action.text().split(None, 1)[0]
+        equipped = self.ItemAttributeList[self.CurrentItemLabel].Equipped
+        index = self.ItemAttributeList[self.CurrentItemLabel].Index
+
+        if newItemType in ('Crafted', 'Legendary'):
+            item = Item(newItemType, self.CurrentItemLabel, self.CurrentRealm)
+        else:
+            item = Item(newItemType, self.CurrentItemLabel, 'All')
+        item.Name = action.text()
+        del self.ItemDictionary[self.CurrentItemLabel][0]
+        self.ItemDictionary[self.CurrentItemLabel].insert(0, item)
+        self.ItemAttributeList[self.CurrentItemLabel] = item
+        self.ItemAttributeList[self.CurrentItemLabel].Equipped = equipped
+
+        if newItemType == 'Legendary':
+            if action.text().split(None, 1)[1] == 'Staff':
+                item.getSlot(4).setAll('Focus', 'All Spell Lines', '50')
+                item.getSlot(5).setAll('ToA Bonus', 'Casting Speed', '3')
+                item.getSlot(6).setAll('ToA Bonus', 'Magic Damage', '3')
+            elif action.text().split(None, 1)[1] == 'Bow':
+                item.getSlot(4).setAll('ToA Bonus', 'Armor Factor', '10')
+                item.getSlot(5).setAll('ToA Bonus', 'Casting Speed', '3')
+                item.getSlot(6).setAll('ToA Bonus', 'Magic Damage', '3')
+            elif action.text().split(None, 1)[1] == 'Weapon':
+                item.getSlot(4).setAll('ToA Bonus', 'Armor Factor', '10')
+                item.getSlot(5).setAll('ToA Bonus', 'Melee Damage', '3')
+                item.getSlot(6).setAll('ToA Bonus', 'Style Damage', '3')
+
+        self.RestoreItem(self.ItemAttributeList[self.CurrentItemLabel])
+
+    def newItem(self, action):
+        newItemType = action.text().split(None, 1)[0]
+        equipped = self.ItemAttributeList[self.CurrentItemLabel].Equipped
+
+        if newItemType in ('Crafted', 'Legendary'):
+            item = Item(newItemType, self.CurrentItemLabel, self.CurrentRealm)
+        else:
+            item = Item(newItemType, self.CurrentItemLabel, 'All')
+        item.Name = action.text()
+        self.ItemDictionary[self.CurrentItemLabel].insert(0, item)
+        self.ItemAttributeList[self.CurrentItemLabel] = item
+        self.ItemAttributeList[self.CurrentItemLabel].Equipped = equipped
+
+        if newItemType == 'Legendary':
+            if action.text().split(None, 1)[1] == 'Staff':
+                item.getSlot(4).setAll('Focus', 'All Spell Lines', '50')
+                item.getSlot(5).setAll('ToA Bonus', 'Casting Speed', '3')
+                item.getSlot(6).setAll('ToA Bonus', 'Magic Damage', '3')
+            elif action.text().split(None, 1)[1] == 'Bow':
+                item.getSlot(4).setAll('ToA Bonus', 'Armor Factor', '10')
+                item.getSlot(5).setAll('ToA Bonus', 'Casting Speed', '3')
+                item.getSlot(6).setAll('ToA Bonus', 'Magic Damage', '3')
+            elif action.text().split(None, 1)[1] == 'Weapon':
+                item.getSlot(4).setAll('ToA Bonus', 'Armor Factor', '10')
+                item.getSlot(5).setAll('ToA Bonus', 'Melee Damage', '3')
+                item.getSlot(6).setAll('ToA Bonus', 'Style Damage', '3')
+
+        self.RestoreItem(self.ItemAttributeList[self.CurrentItemLabel])
+
+    def deleteItem(self):
+        if len(self.ItemDictionary[self.CurrentItemLabel]) == 1:
+            self.clearItem()
+            return
+
+        equipped = self.ItemAttributeList[self.CurrentItemLabel].Equipped
+        del self.ItemDictionary[self.CurrentItemLabel][0]
+        item = self.ItemDictionary[self.CurrentItemLabel][0]
+        self.ItemAttributeList[self.CurrentItemLabel] = item
+        self.ItemAttributeList[self.CurrentItemLabel].Equipped = equipped
+        self.RestoreItem(self.ItemAttributeList[self.CurrentItemLabel])
+
+    def clearItem(self):
+        item = self.ItemAttributeList[self.CurrentItemLabel]
+        itemState = self.ItemAttributeList[self.CurrentItemLabel].Equipped
+        self.ItemDictionary[self.CurrentItemLabel].remove(item)
+
+        if item.ActiveState in ('Crafted', 'Legendary'):
+            item = Item(item.ActiveState, self.CurrentItemLabel, self.CurrentRealm)
+        else:
+            item = Item(item.ActiveState, self.CurrentItemLabel, 'All')
+        item.Name = item.ActiveState + ' Item'
+        self.ItemDictionary[self.CurrentItemLabel].insert(0, item)
+        self.ItemAttributeList[self.CurrentItemLabel] = item
+        self.ItemAttributeList[self.CurrentItemLabel].Equipped = itemState
+        self.RestoreItem(self.ItemAttributeList[self.CurrentItemLabel])
+
+    def clearItemSlots(self):
+        self.ItemAttributeList[self.CurrentItemLabel].clearSlots()
+        self.RestoreItem(self.ItemAttributeList[self.CurrentItemLabel])

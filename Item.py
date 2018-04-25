@@ -9,7 +9,7 @@ from math import floor
 
 class Item:
 
-    def __init__(self, state = '', location = '', realm = '', index = -1):
+    def __init__(self, state = '', location = '', realm = ''):
         self.ActiveState = state
         self.Equipped = int
         self.Location = location
@@ -28,7 +28,6 @@ class Item:
         self.Notes = ''
         self.Requirement = ''
         self.Database = False
-        self.Index = index
         self.SlotList = self.makeItemSlots()
 
         if self.Location in ItemTypes['Jewelery']:

@@ -159,8 +159,9 @@ class QuickbarWindow(QDialog, Ui_QuickbarWindow):
 
         if (100 - index) < self.GemCount:
             QMessageBox.warning(
-                self, 'Error!', 'There is insufficient space on the selected' +
-                                '\n' + 'Quickbar to export the gems.')
+                self, 'Error!',
+                'There is insufficient space on the selected \n'
+                'Quickbar to export the item\'s gems.')
             return
 
         button_strings = []
