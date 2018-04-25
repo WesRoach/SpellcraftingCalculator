@@ -74,6 +74,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.TemplateName = None
         self.TemplatePath = None
         self.TemplateModified = False
+        self.Initialized = False
 
         self.initMenuBar()
         self.initToolBar()
@@ -450,6 +451,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.StatusBar.addPermanentWidget(self.BuildUtility)
 
     def initialize(self):
+        self.Initialized = False
         self.TemplateName = None
         self.TemplatePath = None
         self.TemplateModified = False
@@ -484,6 +486,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 elif currentState == 0:
                     selection.setCheckState(0, Qt.Unchecked)
             iterator += 1
+
+        # APPLICATION INITIALIZED
+        self.Initialized = True
 
     def initControls(self):
         self.ItemNewMenu.triggered.connect(self.newItem)
