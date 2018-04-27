@@ -523,12 +523,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ItemSaveButton.clicked.connect(self.saveItem)
         self.ItemDeleteButton.clicked.connect(self.deleteItem)
 
-    def LoadSettings(self, settings):
-        pass
-
-    def SaveSettings(self, settings):
-        pass
-
 # =============================================== #
 #             DIALOG & WINDOW METHODS             #
 # =============================================== #
