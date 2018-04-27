@@ -2,15 +2,14 @@
 
 from configparser import ConfigParser
 from Singleton import Singleton
+import os.path
 
 
-class Settings(Singleton):
+class Settings(ConfigParser):
 
     def __init__(self):
-        Singleton.__init__(self)
-
-    def getAppDirectory(self):
-        pass
+        ConfigParser.__init__(self)
+        self.settings = ConfigParser()
 
     def getSetting(self, option, value):
         pass
@@ -31,7 +30,7 @@ class Settings(Singleton):
         pass
 
     def load(self):
-        pass
+        self.settings.read(r'settings.ini')
 
     def save(self):
         pass

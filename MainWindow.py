@@ -8,6 +8,7 @@ from PyQt5.QtWidgets import QFileDialog, QLabel, QListWidgetItem, QMainWindow, Q
 from Character import AllBonusList, AllRealms, ClassList, ItemDamageTypes, ItemOrigins, ItemTypes, Races, Realms
 from Constants import Cap, CraftedTypeList, CraftedEffectList, CraftedValuesList, DropTypeList, DropEffectList
 from Constants import EnhancedTypeList, EnhancedEffectList, EnhancedValuesList, MythicalBonusCap, PVEBonusCap, TOABonusCap
+from Settings import Settings
 from Item import Item
 from QuickbarWindow import QuickbarWindow
 from ReportWindow import ReportWindow
@@ -23,6 +24,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def __init__(self, parent = None, flags = Qt.Window):
         QMainWindow.__init__(self, parent, flags)
         self.setupUi(self)
+
+        self.settings = Settings().load()
 
         # MENUS ...
         self.FileMenu = QMenu('&File', self)
@@ -520,10 +523,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ItemSaveButton.clicked.connect(self.saveItem)
         self.ItemDeleteButton.clicked.connect(self.deleteItem)
 
-    def LoadOptions(self):
+    def LoadSettings(self, settings):
         pass
 
-    def SaveOptions(self):
+    def SaveSettings(self, settings):
         pass
 
 # =============================================== #
