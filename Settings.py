@@ -2,13 +2,12 @@
 
 from configparser import ConfigParser
 from Singleton import Singleton
-import os.path
 
 
-class Settings(ConfigParser):
+class Settings(Singleton):
 
     def __init__(self):
-        ConfigParser.__init__(self)
+        Singleton.__init__(self)
         self.settings = ConfigParser()
 
     def getSetting(self, option, value):
