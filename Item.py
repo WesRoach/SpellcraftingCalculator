@@ -79,11 +79,11 @@ class Item:
     def getSlot(self, index):
         return self.SlotList[index]
 
-    def getSlotCount(self):
-        return len(self.SlotList)
-
     def getSlotList(self):
         return list(self.SlotList)
+
+    def getSlotCount(self):
+        return len(self.SlotList)
 
     def clearSlots(self):
         self.SlotList = self.makeItemSlots()
