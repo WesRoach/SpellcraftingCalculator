@@ -28,7 +28,7 @@ class Item:
         self.Notes = ''
         self.Requirement = ''
         self.Database = False
-        self.SlotList = self.makeItemSlots()
+        self.SlotList = self.createItemSlots()
 
         if self.Location in ItemTypes['Jewelery']:
             self.Equipped = 2
@@ -59,21 +59,21 @@ class Item:
             if self.Location in locations:
                 return parent
 
-    def makeItemSlots(self):
+    def createItemSlots(self):
         item_slots = []
         if self.ActiveState == 'Crafted':
             for slot in range(0, 4):
-                item_slots.append(ItemSlot('Craftable'))
-            item_slots.append(ItemSlot('Enhanced'))
+                item_slots.append(Slot('Craftable'))
+            item_slots.append(Slot('Enhanced'))
         elif self.ActiveState == 'Legendary':
             for slot in range(0, 4):
-                item_slots.append(ItemSlot('Craftable'))
-            item_slots.append(ItemSlot('Dropped'))
-            item_slots.append(ItemSlot('Dropped'))
-            item_slots.append(ItemSlot('Dropped'))
+                item_slots.append(Slot('Craftable'))
+            item_slots.append(Slot('Dropped'))
+            item_slots.append(Slot('Dropped'))
+            item_slots.append(Slot('Dropped'))
         elif self.ActiveState == 'Dropped':
             for slot in range(0, 12):
-                item_slots.append(ItemSlot('Dropped'))
+                item_slots.append(Slot('Dropped'))
         return item_slots
 
     def getSlot(self, index):
@@ -86,7 +86,7 @@ class Item:
         return len(self.SlotList)
 
     def clearSlots(self):
-        self.SlotList = self.makeItemSlots()
+        self.SlotList = self.createItemSlots()
 
     def getImbueValues(self):
         if self.ActiveState == 'Dropped':
@@ -137,7 +137,7 @@ class Item:
                     if element.tag in self.__dict__:
                         setattr(self, element.tag, element.text)
                     if element.tag == 'ActiveState':
-                        self.SlotList = self.makeItemSlots()
+                        self.SlotList = self.createItemSlots()
                 elif element.tag == 'Equipped':
                     self.Equipped = int(element.text)
                 elif element.tag == 'Restrictions':
@@ -225,7 +225,7 @@ class Item:
         pass
 
 
-class ItemSlot:
+class Slot:
 
     def __init__(self, itype = '', etype = 'Unused', effect = '', amount = '', requirement = ''):
         self.SlotType = itype
