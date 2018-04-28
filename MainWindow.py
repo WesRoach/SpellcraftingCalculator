@@ -10,8 +10,8 @@ from Constants import Cap, CraftedTypeList, CraftedEffectList, CraftedValuesList
 from Constants import EnhancedTypeList, EnhancedEffectList, EnhancedValuesList, MythicalBonusCap, PVEBonusCap, TOABonusCap
 from Settings import Settings
 from Item import Item
-from QuickbarWindow import QuickbarWindow
-from ReportWindow import ReportWindow
+from QuickbarDialog import QuickbarDialog
+from ReportDialog import ReportDialog
 from lxml import etree
 import os
 import re
@@ -106,7 +106,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.FileMenu.addAction('Save Template', self.saveTemplate)
         self.FileMenu.addAction('Save Template As ...', self.saveTemplateAs)
         self.FileMenu.addSeparator()
-        self.FileMenu.addAction('Export Gem\'s to Quickbar ...', self.showQuickbarWindow)
+        self.FileMenu.addAction('Export Gem\'s to Quickbar ...', self.showQuickbarDialog)
         self.FileMenu.addSeparator()
         self.FileMenu.addMenu(self.RecentMenu)
         self.FileMenu.addSeparator()
@@ -165,7 +165,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ToolBar.addAction('Save Template', self.saveTemplate)
         self.ToolBar.addAction('Save Template As', self.saveTemplateAs)
         self.ToolBar.addSeparator()
-        self.ToolBar.addAction('Export Gems', self.showQuickbarWindow)
+        self.ToolBar.addAction('Export Gems', self.showQuickbarDialog)
         self.ToolBar.addSeparator()
         self.ToolBar.addAction('Materials Report', self.showMaterialsReport)
         self.ToolBar.addAction('Template Report', self.showTemplateReport)
@@ -533,18 +533,18 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         pass
 
     def showMaterialsReport(self):
-        self.MaterialsReport = ReportWindow(self, Qt.WindowCloseButtonHint)
+        self.MaterialsReport = ReportDialog(self, Qt.WindowCloseButtonHint)
         self.MaterialsReport.materialsReport(self.ItemAttributeList, self.CurrentRealm)
         self.MaterialsReport.exec_()
 
     def showTemplateReport(self):
-        self.TemplateReport = ReportWindow(self, Qt.WindowCloseButtonHint)
+        self.TemplateReport = ReportDialog(self, Qt.WindowCloseButtonHint)
         self.TemplateReport.templateReport(self.exportAsXML(None, True, True))
         self.TemplateReport.exec_()
 
-    def showQuickbarWindow(self):
-        self.QuickbarWindow = QuickbarWindow(self, Qt.WindowCloseButtonHint, self.ItemAttributeList)
-        self.QuickbarWindow.exec_()
+    def showQuickbarDialog(self):
+        self.QuickbarDialog = QuickbarDialog(self, Qt.WindowCloseButtonHint, self.ItemAttributeList)
+        self.QuickbarDialog.exec_()
 
 # =============================================== #
 #              XML IMPORT AND EXPORT              #

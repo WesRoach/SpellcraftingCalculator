@@ -8,7 +8,7 @@ from configparser import DEFAULTSECT, RawConfigParser
 from os import getenv, path, remove, walk
 from re import compile
 
-Ui_QuickbarWindow = uic.loadUiType(r'interface/QuickbarWindow.ui')[0]
+Ui_QuickbarDialog = uic.loadUiType(r'interface/QuickbarDialog.ui')[0]
 
 
 class IniConfigParser(RawConfigParser):
@@ -31,7 +31,7 @@ class IniConfigParser(RawConfigParser):
             file.write("\n")
 
 
-class QuickbarWindow(QDialog, Ui_QuickbarWindow):
+class QuickbarDialog(QDialog, Ui_QuickbarDialog):
     def __init__(self, parent = None, flags = Qt.Dialog, items = None):
         QDialog.__init__(self, parent, flags)
         self.setupUi(self)

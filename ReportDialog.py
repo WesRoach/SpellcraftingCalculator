@@ -6,10 +6,10 @@ from PyQt5.QtWidgets import QDialog, QFileDialog
 from Constants import GemMaterialsOrder
 from lxml import etree
 
-Ui_ReportWindow = uic.loadUiType(r'interface/ReportWindow.ui')[0]
+Ui_ReportDialog = uic.loadUiType(r'interface/ReportDialog.ui')[0]
 
 
-class ReportWindow(QDialog, Ui_ReportWindow):
+class ReportDialog(QDialog, Ui_ReportDialog):
     def __init__(self, parent = None, flags = Qt.Dialog):
         QDialog.__init__(self, parent, flags)
         self.setupUi(self)
