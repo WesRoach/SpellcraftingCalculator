@@ -27,7 +27,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         self.settings = Settings().load()
 
-        # MENUS ...
+        # DEBUGGING
+        print(self.settings)
+
         self.FileMenu = QMenu('&File', self)
         self.EditMenu = QMenu('&Edit', self)
         self.ViewMenu = QMenu('&View', self)
