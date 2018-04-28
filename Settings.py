@@ -10,22 +10,16 @@ class Settings(Singleton):
         Singleton.__init__(self)
         self.settings = ConfigParser()
 
-    def getSetting(self, option, value):
+    def get(self, option, value):
         pass
 
-    def setSetting(self, option, value):
+    def set(self, option, value):
         pass
 
-    def importFromXML(self):
+    def write(self):
         pass
 
-    def exportAsXML(self):
-        pass
-
-    def writeSetting(self):
-        pass
-
-    def parseSetting(self):
+    def parse(self):
         pass
 
     def load(self):
