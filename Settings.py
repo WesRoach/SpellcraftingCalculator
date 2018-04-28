@@ -23,6 +23,8 @@ class Settings(Singleton):
         pass
 
     def load(self):
+
+        # TODO: TEST IF FILE EXISTS ...
         self.settings.read(r'settings.ini')
 
     def save(self):
