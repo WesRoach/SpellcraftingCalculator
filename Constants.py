@@ -778,7 +778,7 @@ for realm in Realms:
     DropEffectList[realm] = {}
     DropEffectList[realm].update(DropEffectList['All'])
 
-for realm in list(CraftedEffectList.keys()):
+for realm in CraftedEffectList.keys():
     CraftedEffectList[realm]['Skill'] = CraftedSkillList[realm]
     CraftedEffectList[realm]['Focus'] = FocusList[realm]
     DropEffectList[realm]['Skill'] = DropSkillList[realm]

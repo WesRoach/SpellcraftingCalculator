@@ -1690,7 +1690,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def changeItemType(self, action):
         newItemType = action.text().split(None, 1)[0]
         equipped = self.ItemAttributeList[self.CurrentItemLabel].Equipped
-        index = self.ItemAttributeList[self.CurrentItemLabel].Index
 
         if newItemType in ('Crafted', 'Legendary'):
             item = Item(newItemType, self.CurrentItemLabel, self.CurrentRealm)
