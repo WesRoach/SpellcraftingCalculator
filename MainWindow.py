@@ -1481,6 +1481,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         item = self.ItemAttributeList[self.CurrentItemLabel]
         item.Notes = self.ItemNotes.toPlainText()
 
+    # BUG: LOGIC ERROR ...
     def ItemRestrictionsChanged(self, selection = None):
         item = self.ItemAttributeList[self.CurrentItemLabel]
         if selection.text() == 'All' and selection.checkState() == Qt.Checked:
@@ -1695,7 +1696,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             item = Item(newItemType, self.CurrentItemLabel, self.CurrentRealm)
         else:
             item = Item(newItemType, self.CurrentItemLabel, 'All')
-        item.Name = action.text()
+        item.Name = newItemType + ' Item'
         del self.ItemDictionary[self.CurrentItemLabel][0]
         self.ItemDictionary[self.CurrentItemLabel].insert(0, item)
         self.ItemAttributeList[self.CurrentItemLabel] = item
@@ -1725,7 +1726,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             item = Item(newItemType, self.CurrentItemLabel, self.CurrentRealm)
         else:
             item = Item(newItemType, self.CurrentItemLabel, 'All')
-        item.Name = action.text()
+        item.Name = newItemType + ' Item'
         self.ItemDictionary[self.CurrentItemLabel].insert(0, item)
         self.ItemAttributeList[self.CurrentItemLabel] = item
         self.ItemAttributeList[self.CurrentItemLabel].Equipped = equipped
