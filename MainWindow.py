@@ -803,6 +803,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 #        SUMMARIZER AND CALCULATOR METHODS        #
 # =============================================== #
 
+    # BUG: CALCULATING 'MythicalCapBonus' TWICE
     def summarize(self):
         Level = int(self.CharacterLevel.text())
         total = {
