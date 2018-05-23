@@ -1441,7 +1441,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if self.CurrentItemLabel != '':
             self.restoreItem(self.getItem())
 
-    # TODO: FOR VALUE WHEN NONE ...
     def changeCharLevel(self):
 
         try:  # VALUE MIGHT BE INVALIDE ...
