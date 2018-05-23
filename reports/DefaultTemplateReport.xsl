@@ -166,7 +166,7 @@
         <xsl:variable name = "SlotNumber"><xsl:value-of select = "number(@Number) + 1"/></xsl:variable>
         <xsl:if test = "Type != 'Unused'">
             <xsl:choose>
-                <xsl:when test = "@Type = 'Craftable'">
+                <xsl:when test = "@Type = 'Crafted'">
                     <tr>
                         <td><b> > </b><i> Gem <xsl:copy-of select = "$SlotNumber"/>:&#160;</i></td>
                         <td align = "center"><xsl:value-of select = "Amount"/>&#160;</td>

@@ -84,14 +84,14 @@ class QuickbarDialog(QDialog, Ui_QuickbarDialog):
         for location, item in self.ItemAttributeList.items():
             if location not in self.CraftableItems.keys():
                 continue
-            elif not item.isCraftable():
+            elif not item.isPlayerCrafted():
                 self.CraftableItems[location].setCheckState(Qt.Unchecked)
                 self.CraftableItems[location].setDisabled(True)
 
         for location in self.CraftableItems.keys():
             if self.CraftableItems[location].isEnabled():
                 for slot in self.ItemAttributeList[location].getSlotList():
-                    if slot.isCraftable():
+                    if slot.isCrafted():
                         self.CraftableItems[location].setCheckState(Qt.Checked)
 
         # TODO: LOAD PATH FROM SAVED SETTINGS ...
@@ -144,7 +144,7 @@ class QuickbarDialog(QDialog, Ui_QuickbarDialog):
     def getGemCount(self):
         self.GemCount = 0
         for item in self.ItemExportList.values():
-            self.GemCount += sum(1 for x in item.getSlotList() if x.isCraftable())
+            self.GemCount += sum(1 for x in item.getSlotList() if x.isCrafted() and x.isUtilized())
         self.GemExportCount.setText(str(self.GemCount))
 
     def exportGemsToQuickbar(self):
@@ -161,16 +161,18 @@ class QuickbarDialog(QDialog, Ui_QuickbarDialog):
             QMessageBox.warning(
                 self, 'Error!',
                 'There is insufficient space on the selected \n'
-                'Quickbar to export the item\'s gems.')
+                'Quickbar to export the item\'s gems.',
+                QMessageBox.Ok, QMessageBox.Ok
+            )
             return
 
         button_strings = []
         for location, item in self.ItemExportList.items():
-            for slot in [x for x in item.getSlotList() if x.isCraftable()]:
+            for slot in [x for x in item.getSlotList() if x.isCrafted() and x.isUtilized()]:
 
                 try:  # HOTKEY MIGHT NOT EXIST ...
                     gem_tier = slot.getGemIndex()
-                    gem_name = slot.getGemName(item.Realm).split(' ', 1)[1]
+                    gem_name = slot.getGemName(item.Realm).split(None, 1)[1]
                     gem_hotkey = GemHotkeyValues[item.Realm][gem_name]
                     button_strings.append('45,13%03d%02d,,-1' % (gem_hotkey, gem_tier))
                 except ValueError:
@@ -186,7 +188,10 @@ class QuickbarDialog(QDialog, Ui_QuickbarDialog):
             config.write(document)
 
         QMessageBox.information(
-            self, 'Success!', 'Successfully exported gems to Quickbar!', QMessageBox.Ok)
+            self, 'Success!',
+            'Successfully exported gems to Quickbar!',
+            QMessageBox.Ok, QMessageBox.Ok
+        )
 
     def restoreQuickbar(self):
         if len(self.Selection) == 0: return

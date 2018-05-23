@@ -3,9 +3,9 @@
 from PyQt5 import uic
 from PyQt5.Qt import QAction, Qt, QKeySequence
 from PyQt5.QtCore import QSize, QModelIndex, QVariant
-from PyQt5.QtGui import QFontMetrics, QIcon, QIntValidator
+from PyQt5.QtGui import QFontMetrics, QIcon, QIntValidator, QDoubleValidator
 from PyQt5.QtWidgets import QFileDialog, QLabel, QListWidgetItem, QMainWindow, QMenu, QMessageBox, QToolBar, QTreeWidgetItem, QTreeWidgetItemIterator, QStyle, QStyleOptionComboBox
-from Character import AllBonusList, AllRealms, ClassList, ItemDamageTypes, ItemOrigins, ItemTypes, Races, Realms
+from Character import AllBonusList, ClassList, ItemTypes, Races
 from Constants import Cap, CraftedTypeList, CraftedEffectList, CraftedValuesList, DropTypeList, DropEffectList
 from Constants import EnhancedTypeList, EnhancedEffectList, EnhancedValuesList, MythicalBonusCap, PVEBonusCap, TOABonusCap
 from Settings import Settings
@@ -27,7 +27,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         self.settings = Settings().load()
 
-        # DEBUGGING
+        # DEBUGGING ...
         print(self.settings)
 
         self.FileMenu = QMenu('&File', self)
@@ -40,14 +40,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ItemNewMenu = QMenu('&New Item', self)
         self.RecentMenu = QMenu('Recent Templates', self)
         self.ToolBarMenu = QMenu('&Toolbar', self)
-        self.ToolBar = QToolBar("Crafting")
+        self.ToolBar = QToolBar("Default Toolbar")
 
         self.DistanceToCap = QAction()
         self.UnusableSkills = QAction()
-
-        self.EffectList = list()
-        self.EffectTypeList = list()
-        self.EnhancedTypeList = list()
 
         self.StatLabel = {}
         self.StatValue = {}
@@ -58,6 +54,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ItemAttributeList = {}
         self.ItemDictionary = {}
         self.ItemInfoWidgets = {}
+        self.CurrentItemLabel = ''
 
         self.SlotLabel = []
         self.Effect = []
@@ -70,11 +67,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.GemNameLabel = []
         self.SwitchOnType = {}
         self.BuildUtility = QLabel()
-
-        self.CurrentRealm = ''
-        self.CurrentClass = ''
-        self.CurrentRace = ''
-        self.CurrentItemLabel = ''
 
         self.TemplateName = None
         self.TemplatePath = None
@@ -92,12 +84,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 #       INTERFACE SETUP AND INITIALIZATION        #
 # =============================================== #
 
-    def getIcon(self, name):
+    @staticmethod
+    def getIcon(name):
         icon = QIcon()
         for size in (16, 24, 32):
-            icon.addFile(r'images/normal/' + name + str(size) + '.png', QSize(size, size), QIcon.Normal, QIcon.Off)
-            icon.addFile(r'images/active/' + name + str(size) + '.png', QSize(size, size), QIcon.Active, QIcon.Off)
-            icon.addFile(r'images/disabled/' + name + str(size) + '.png', QSize(size, size), QIcon.Disabled, QIcon.Off)
+            icon.addFile(r'images/normal/' + f'{name}{size}.png', QSize(size, size), QIcon.Normal, QIcon.Off)
+            icon.addFile(r'images/active/' + f'{name}{size}.png', QSize(size, size), QIcon.Active, QIcon.Off)
+            icon.addFile(r'images/disabled/' f'{name}{size}.png', QSize(size, size), QIcon.Disabled, QIcon.Off)
         return icon
 
     def initMenuBar(self):
@@ -158,7 +151,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.menuBar().addMenu(self.HelpMenu)
 
     def initToolBar(self):
-        self.ToolBar.setObjectName("Crafting")
         self.ToolBar.setFloatable(False)
         self.ToolBar.addAction('New Template', self.newTemplate)
         self.ToolBar.addAction('Open Template', self.openTemplate)
@@ -200,12 +192,16 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         width = self.setMinimumWidth(['Necromancer'])
         self.CharacterName.setFixedSize(QSize(width, defaultFixedHeight))
+
         self.CharacterRealm.setFixedSize(QSize(width, defaultFixedHeight))
         self.CharacterClass.setFixedSize(QSize(width, defaultFixedHeight))
         self.CharacterRace.setFixedSize(QSize(width, defaultFixedHeight))
         self.CharacterLevel.setFixedSize(QSize(width, defaultFixedHeight))
+        self.CharacterLevel.setValidator(QIntValidator(-999, +999, self))
         self.CharacterRealmRank.setFixedSize(QSize(width, defaultFixedHeight))
+        self.CharacterRealmRank.setValidator(QIntValidator(-999, +999, self))
         self.CharacterChampLevel.setFixedSize(QSize(width, defaultFixedHeight))
+        self.CharacterChampLevel.setValidator(QIntValidator(-999, +999, self))
 
         for attribute in DropEffectList['All']['Attribute'] + ('ArmorFactor', 'Fatigue', 'PowerPool'):
             attribute = attribute.replace(' ', '')
@@ -259,7 +255,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         # TODO: SET A DYNAMIC MINIMAL WIDTH ...
         self.SlotListTreeView.setMinimumWidth(142)
-        self.CharacterRealm.insertItems(0, Realms)
+        self.CharacterRealm.insertItems(0, self.getRealms())
 
         self.SwitchOnType = {
 
@@ -300,33 +296,33 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         for index in range(0, 12):
             self.EffectType.append(getattr(self, 'EffectType%d' % index))
             self.EffectType[index].setFixedSize(QSize(width, defaultFixedHeight))
-            self.EffectType[index].activated[str].connect(self.EffectTypeChanged)
+            self.EffectType[index].activated[str].connect(self.changeEffectType)
 
         width = self.setMinimumWidth(['100'])
         for index in range(0, 12):
             self.AmountEdit.append(getattr(self, 'AmountEdit%d' % index))
             self.AmountEdit[index].setFixedSize(QSize(width, defaultFixedHeight))
             self.AmountEdit[index].setValidator(QIntValidator(-999, +999, self))
-            self.AmountEdit[index].textEdited[str].connect(self.EffectAmountChanged)
+            self.AmountEdit[index].textEdited[str].connect(self.changeEffectAmount)
 
         width = self.setMinimumWidth(['100'])
         for index in range(0, 5):
             self.AmountStatic.append(getattr(self, 'AmountStatic%d' % index))
             self.AmountStatic[index].setFixedSize(QSize(width, defaultFixedHeight))
-            self.AmountStatic[index].activated[str].connect(self.EffectAmountChanged)
+            self.AmountStatic[index].activated[str].connect(self.changeEffectAmount)
 
         width = self.setMinimumWidth([' Neg. Effect Duration Reduction '])
         for index in range(0, 12):
             self.SlotLabel.append(getattr(self, 'SlotLabel%d' % index))
             self.Effect.append(getattr(self, 'Effect%d' % index))
             self.Effect[index].setFixedSize(QSize(width, defaultFixedHeight))
-            self.Effect[index].activated[str].connect(self.EffectChanged)
+            self.Effect[index].activated[str].connect(self.changeEffect)
 
         width = self.setMinimumWidth(['vs. Enemy Players'])
         for index in range(0, 12):
             self.Requirement.append(getattr(self, 'Requirement%d' % index))
             self.Requirement[index].setFixedSize(QSize(width, defaultFixedHeight))
-            self.Requirement[index].editingFinished.connect(self.EffectRequirementChanged)
+            self.Requirement[index].textEdited.connect(self.changeEffectRequirement)
 
         width = self.setMinimumWidth(['-'])
         for index in range(0, 4):
@@ -410,7 +406,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 self.ItemAFDPSLabel,
                 self.ItemSpeed,
                 self.ItemSpeedLabel,
-                self.ItemLeftHand],
+                self.ItemLeftHand
+            ],
 
             'Armor': [
                 self.ItemDamageType,
@@ -440,10 +437,15 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         width = self.setMinimumWidth([' - '])
         self.ItemLevel.setFixedSize(QSize(width, defaultFixedHeight))
+        self.ItemLevel.setValidator(QIntValidator(-999, +999, self))
         self.ItemQuality.setFixedSize(QSize(width, defaultFixedHeight))
+        self.ItemQuality.setValidator(QIntValidator(-999, +999, self))
         self.ItemBonus.setFixedSize(QSize(width, defaultFixedHeight))
+        self.ItemBonus.setValidator(QIntValidator(-999, +999, self))
         self.ItemAFDPS.setFixedSize(QSize(width, defaultFixedHeight))
+        self.ItemAFDPS.setValidator(QDoubleValidator(-999.0, +999.0, 1, self))
         self.ItemSpeed.setFixedSize(QSize(width, defaultFixedHeight))
+        self.ItemSpeed.setValidator(QDoubleValidator(-999.0, +999.0, 1, self))
 
         self.ItemInformationGroup.setFixedWidth(186)
         self.ItemRestrictionsGroup.setFixedWidth(135)
@@ -456,72 +458,75 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.StatusBar.addPermanentWidget(self.BuildUtility)
 
     def initialize(self):
-        self.Initialized = False
         self.TemplateName = None
         self.TemplatePath = None
         self.TemplateModified = False
-        self.CharacterName.setText('')
-        self.CharacterLevel.setText('50')
 
-        # SETUP THE INITIAL REALM ...
-        self.CharacterRealm.setCurrentText('Midgard')
-        self.CharacterRealmChanged()
+        # SET INITIAL STATS ...
+        self.setCharName('')
+        self.setCharLevel('50')
+        self.setCharRealmRank('')
+        self.setCharChampLevel('')
+
+        # SET INITIAL REALM ...
+        self.setCharRealm('Midgard')
+        self.changeCharRealm(self.getCharRealm())
 
         for parent, locations in ItemTypes.items():
             for location in locations:
                 if parent == 'Armor':
-                    item = Item('Crafted', location, self.CurrentRealm)
-                    item.Name = item.ActiveState + ' Item'
+                    item = Item('Crafted', location, self.getCharRealm())
+                    item.setName(f'{item.getState()} Item')
                 else:
                     item = Item('Dropped', location, 'All')
-                    item.Name = item.ActiveState + ' Item'
+                    item.setName(f'{item.getState()} Item')
                 self.ItemAttributeList[location] = item
                 self.ItemDictionary[location] = [item]
 
-        # SET THE INITIAL SLOT
-        self.ItemSelected('Neck')
+        # SET INITIAL ITEM SLOT ...
+        self.changeItemSelection('Neck')
 
         iterator = QTreeWidgetItemIterator(self.SlotListTreeView)
         while iterator.value():
             selection = iterator.value()
             if selection.flags() & Qt.ItemIsUserCheckable:
-                currentState = self.ItemAttributeList[selection.text(0)].Equipped
-                if currentState == 2:
+                if self.ItemAttributeList[selection.text(0)].isEquipped():
                     selection.setCheckState(0, Qt.Checked)
-                elif currentState == 0:
+                else:
                     selection.setCheckState(0, Qt.Unchecked)
             iterator += 1
 
-        # APPLICATION INITIALIZED
-        self.Initialized = True
+        self.calculate()
 
     def initControls(self):
         self.ItemNewMenu.triggered.connect(self.newItem)
-        self.ItemTypeMenu.triggered.connect(self.changeItemType)
+        self.ItemTypeMenu.triggered.connect(self.convertItem)
         self.ToolBarMenu.triggered.connect(self.setToolBarOptions)
         self.DistanceToCap.triggered.connect(self.setDistanceToCap)
         self.UnusableSkills.triggered.connect(self.setUnusableSkills)
-        self.SlotListTreeView.itemClicked.connect(self.ItemSelected)
-        self.SlotListTreeView.itemChanged.connect(self.ItemStateChanged)
-        self.CharacterRealm.activated[int].connect(self.CharacterRealmChanged)
-        self.CharacterClass.activated[int].connect(self.CharacterClassChanged)
-        self.CharacterRace.activated[int].connect(self.CharacterRaceChanged)
-        self.CharacterLevel.editingFinished.connect(self.calculate)
-        self.ItemRealm.activated.connect(self.ItemRealmChanged)
-        self.ItemType.activated.connect(self.ItemTypeChanged)
-        self.ItemOrigin.activated.connect(self.ItemOriginChanged)
-        self.ItemLevel.editingFinished.connect(self.ItemLevelChanged)
-        self.ItemQuality.editingFinished.connect(self.ItemQualityChanged)
-        self.ItemDamageType.activated.connect(self.ItemDamageTypeChanged)
-        self.ItemBonus.editingFinished.connect(self.ItemBonusChanged)
-        self.ItemAFDPS.editingFinished.connect(self.ItemAFDPSChanged)
-        self.ItemSpeed.editingFinished.connect(self.ItemSpeedChanged)
-        self.ItemLeftHand.stateChanged.connect(self.ItemLeftHandChanged)
-        self.ItemRequirement.editingFinished.connect(self.ItemRequirementChanged)
-        self.ItemNotes.textChanged.connect(self.ItemNotesChanged)
-        self.ItemRestrictionsList.itemChanged.connect(self.ItemRestrictionsChanged)
+        self.SlotListTreeView.itemSelectionChanged.connect(self.changeItemSelection)
+        self.SlotListTreeView.itemChanged.connect(self.changeItemState)
+        self.CharacterRealm.activated[str].connect(self.changeCharRealm)
+        self.CharacterClass.activated[str].connect(self.changeCharClass)
+        self.CharacterRace.activated[str].connect(self.changeCharRace)
+        self.CharacterLevel.editingFinished.connect(self.changeCharLevel)
+        self.CharacterRealmRank.editingFinished.connect(self.changeCharRealmRank)
+        self.CharacterChampLevel.editingFinished.connect(self.changeCharChampLevel)
         self.ItemName.activated[int].connect(self.changeItem)
-        self.ItemName.editTextChanged[str].connect(self.ItemNameChanged)
+        self.ItemName.editTextChanged[str].connect(self.changeItemName)
+        self.ItemRealm.activated[str].connect(self.changeItemRealm)
+        self.ItemType.activated[str].connect(self.changeItemType)
+        self.ItemOrigin.activated[str].connect(self.changeItemOrigin)
+        self.ItemLevel.editingFinished.connect(self.changeItemLevel)
+        self.ItemQuality.editingFinished.connect(self.changeItemQuality)
+        self.ItemDamageType.activated[str].connect(self.changeItemDamageType)
+        self.ItemBonus.editingFinished.connect(self.changeItemBonus)
+        self.ItemAFDPS.editingFinished.connect(self.changeItemAFDPS)
+        self.ItemSpeed.editingFinished.connect(self.changeItemSpeed)
+        self.ItemLeftHand.stateChanged.connect(self.changeItemLeftHand)
+        self.ItemRequirement.editingFinished.connect(self.changeItemRequirement)
+        self.ItemNotes.textChanged.connect(self.changeItemNotes)
+        self.ItemRestrictionsList.itemChanged.connect(self.changeItemRestrictions)
         self.ItemSaveButton.clicked.connect(self.saveItem)
         self.ItemDeleteButton.clicked.connect(self.deleteItem)
 
@@ -533,104 +538,102 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         pass
 
     def showMaterialsReport(self):
-        self.MaterialsReport = ReportDialog(self, Qt.WindowCloseButtonHint)
-        self.MaterialsReport.materialsReport(self.ItemAttributeList, self.CurrentRealm)
-        self.MaterialsReport.exec_()
+        MaterialsReport = ReportDialog(self, Qt.WindowCloseButtonHint)
+        MaterialsReport.materialsReport(self.ItemAttributeList, self.getCharRealm())
+        MaterialsReport.exec_()
 
     def showTemplateReport(self):
-        self.TemplateReport = ReportDialog(self, Qt.WindowCloseButtonHint)
-        self.TemplateReport.templateReport(self.exportAsXML(None, True, True))
-        self.TemplateReport.exec_()
+        TemplateReport = ReportDialog(self, Qt.WindowCloseButtonHint)
+        TemplateReport.templateReport(self.exportAsXML(None, True, True))
+        TemplateReport.exec_()
 
     def showQuickbarDialog(self):
-        self.QuickbarDialog = QuickbarDialog(self, Qt.WindowCloseButtonHint, self.ItemAttributeList)
-        self.QuickbarDialog.exec_()
+        Dialog = QuickbarDialog(self, Qt.WindowCloseButtonHint, self.ItemAttributeList)
+        Dialog.exec_()
 
 # =============================================== #
-#              XML IMPORT AND EXPORT              #
+#                 XML PROCESSING                  #
 # =============================================== #
 
     def importFromXML(self, filename):
-        self.initialize()
-        items = list()
         tree = etree.parse(filename)
+
+        # RETURN ERROR CODE ...
         if tree.getroot().tag == 'Template':
-            elements = tree.getroot().getchildren()
-            for element in elements:
-                if element.tag == 'Name':
-                    self.CharacterName.setText(element.text)
-                elif element.tag == 'Realm':
-                    self.CharacterRealm.setCurrentText(element.text)
-                    self.CharacterRealmChanged()
-                elif element.tag == 'Class':
-                    self.CharacterClass.setCurrentText(element.text)
-                    self.CharacterClassChanged()
-                elif element.tag == 'Race':
-                    self.CharacterRace.setCurrentText(element.text)
-                    self.CharacterRaceChanged()
-                elif element.tag == 'Level':
-                    self.CharacterLevel.setText(element.text)
-                elif element.tag == 'RealmRank':
-                    self.CharacterRealmRank.setText(element.text)
-                elif element.tag == 'Item':
-                    items.append(element)
+            self.initialize()
         else:
             return -1
 
+        items = list()
+        elements = tree.getroot().getchildren()
+        for element in elements:
+            if element.tag == 'Name':
+                self.setCharName(element.text)
+            elif element.tag == 'Realm':
+                self.changeCharRealm(element.text)
+            elif element.tag == 'Class':
+                self.changeCharClass(element.text)
+            elif element.tag == 'Race':
+                self.changeCharRace(element.text)
+            elif element.tag == 'Level':
+                self.setCharLevel(element.text)
+            elif element.tag == 'RealmRank':
+                self.setCharRealmRank(element.text)
+            elif element.tag == 'Item':
+                items.append(element)
+
         self.ItemDictionary.clear()
         self.ItemAttributeList.clear()
-        for parent, locations in ItemTypes.items():
+        for locations in ItemTypes.values():
             for location in locations:
-                self.ItemDictionary[location] = []
+                self.ItemDictionary[location] = list()
 
         for item_xml in items:
             item = Item('Imported')
             item.importFromXML(item_xml, True)
             if int(item_xml.attrib['Index']) == 0:
-                self.ItemAttributeList[item.Location] = item
-            self.ItemDictionary[item.Location].insert(int(item_xml.attrib['Index']), item)
-        self.RestoreItem(self.ItemAttributeList[self.CurrentItemLabel])
+                self.ItemAttributeList[item.getLocation()] = item
+            self.ItemDictionary[item.getLocation()].insert(int(item_xml.attrib['Index']), item)
 
-        iterator = QTreeWidgetItemIterator(self.SlotListTreeView)
-        while iterator.value():
-            selection = iterator.value()
-            if selection.flags() & Qt.ItemIsUserCheckable:
-                currentState = self.ItemAttributeList[selection.text(0)].Equipped
-                if currentState == 2:
-                    selection.setCheckState(0, Qt.Checked)
-                elif currentState == 0:
-                    selection.setCheckState(0, Qt.Unchecked)
-            iterator += 1
+        # CASCADE THE CHANGES ...
+        self.restoreItem(self.getItem(self.CurrentItemLabel))
 
     def exportAsXML(self, filename, export = False, report = False):
         template = etree.Element('Template')
-        etree.SubElement(template, 'Name').text = self.CharacterName.text()
-        etree.SubElement(template, 'Realm').text = self.CharacterRealm.currentText()
-        etree.SubElement(template, 'Class').text = self.CharacterClass.currentText()
-        etree.SubElement(template, 'Race').text = self.CharacterRace.currentText()
-        etree.SubElement(template, 'Level').text = self.CharacterLevel.text()
-        etree.SubElement(template, 'RealmRank').text = self.CharacterRealmRank.text()
 
-        for slot, items in self.ItemDictionary.items():
+        xml_fields = {
+            'Name': self.getCharName(),
+            'Realm': self.getCharRealm(),
+            'Class': self.getCharClass(),
+            'Race': self.getCharRace(),
+            'Level': self.getCharLevel(),
+            'RealmRank': self.getCharRealmRank(),
+            'ChampLevel': self.getCharChampLevel(),
+        }
+
+        for (attribute, value) in xml_fields.items():
+            etree.SubElement(template, attribute).text = str(value)
+
+        for items in self.ItemDictionary.values():
             for item in items:
                 if report:
                     element = item.exportAsXML(None, True, True)
                 else:
-                    element = item.exportAsXML(None, True)
+                    element = item.exportAsXML(None, True, False)
                 element.set('Index', str(items.index(item)))
                 template.append(element)
 
         if report:
             total = self.summarize()
 
-            for key in (key for key in total.keys() if key != 'Utility'):
+            for key in (x for x in total.keys() if x != 'Utility'):
                 element = etree.SubElement(template, key)
                 if key[-7:] == 'Bonuses':
-                    element.attrib['Text'] = key[:-7] + ' ' + key[-7:]
+                    element.attrib['Text'] = str('{} {}').format(key[:-7], key[-7:])
                 for attribute, bonuses in total[key].items():
                     tag = ''.join(x for x in attribute if x.isalnum())
                     if tag != attribute:
-                        root = etree.SubElement(element, tag, Text = attribute)
+                        root = etree.SubElement(element, tag, Text=attribute)
                     else:
                         root = etree.SubElement(element, tag)
                     for bonus, value in bonuses.items():
@@ -643,7 +646,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             return template
 
 # =============================================== #
-#   LAYOUT CHANGE/UPDATE METHODS AND FUNCTIONS    #
+#           LAYOUT CHANGE/UPDATE METHODS          #
 # =============================================== #
 
     def showCharacterStat(self, stat, state):
@@ -666,8 +669,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         for widget in self.SwitchOnType['Crafted']:
             widget.show()
         for index in range(0, item.getSlotCount()):
-            if item.getSlot(index).getSlotType() == 'Craftable':
-                self.SlotLabel[index].setText('Gem &%d:' % (index + 1))
+            if item.getSlot(index).getSlotType() == 'Crafted':
+                self.SlotLabel[index].setText(f'Gem {index + 1}:')
             if item.getSlot(index).getSlotType() == 'Enhanced':
                 self.EffectType[index].setDisabled(False)
                 self.Effect[index].setDisabled(False)
@@ -681,9 +684,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         for widget in self.SwitchOnType['Legendary']:
             widget.show()
         for index in range(0, item.getSlotCount()):
-            if item.getSlot(index).getSlotType() == 'Craftable':
-                self.SlotLabel[index].setText('Gem &%d:' % (index + 1))
-            if item.getSlot(index).getSlotType() == 'Dropped':
+            if item.getSlot(index).isCrafted():
+                self.SlotLabel[index].setText(f'Gem {index + 1}:')
+            if item.getSlot(index).isDropped():
                 self.EffectType[index].setDisabled(True)
                 self.Effect[index].setDisabled(True)
                 self.AmountEdit[index].setDisabled(True)
@@ -696,116 +699,203 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         for widget in self.SwitchOnType['Dropped']:
             widget.show()
         for index in range(0, item.getSlotCount()):
-            if item.getSlot(index).getSlotType() == 'Dropped':
-                self.SlotLabel[index].setText('Slot &%d:' % (index + 1))
+            if item.getSlot(index).isDropped():
+                self.SlotLabel[index].setText(f'Slot {index + 1}:')
                 self.EffectType[index].setDisabled(False)
                 self.Effect[index].setDisabled(False)
                 self.AmountEdit[index].setDisabled(False)
 
-    def showItemInfoWidgets(self, item):
+    def updateMenuOptions(self, item):
+        self.ItemNewMenu.clear()
+        self.ItemTypeMenu.clear()
+        options = []
+
+        if item.getParent() in ('Armor', 'Weapons'):
+            self.ItemTypeMenu.setEnabled(True)
+            self.ItemTypeButton.setEnabled(True)
+
+        if item.getLocation() in ItemTypes['Armor']:
+            options.extend([
+                'Crafted Item',
+                'Dropped Item',
+            ])
+        elif item.getLocation() in ('Right Hand', 'Left Hand'):
+            options.extend([
+                'Crafted Item',
+                'Dropped Item',
+                'Legendary Weapon',
+            ])
+        elif item.getLocation() == 'Two-Handed':
+            options.extend([
+                'Crafted Item',
+                'Dropped Item',
+                'Legendary Staff',
+                'Legendary Weapon',
+            ])
+        elif item.getLocation() == 'Ranged':
+            options.extend([
+                'Crafted Item',
+                'Dropped Item',
+                'Legendary Bow',
+            ])
+        else:
+            self.ItemTypeMenu.setDisabled(True)
+            self.ItemTypeButton.setDisabled(True)
+            options.extend(['Dropped'])
+
+        for value in options:
+            self.ItemNewMenu.addAction(value)
+            self.ItemTypeMenu.addAction(value)
+
+    def restoreItem(self, item):
+        if item.isCrafted():
+            self.showCraftWidgets(item)
+        elif item.isLegendary():
+            self.showLegendaryWidgets(item)
+        elif item.isDropped():
+            self.showDropWidgets(item)
+
+        print(item.__dict__)
+
+        # VALIDATE ATTRIBUTES ...
+        self.validateAttributes()
+
+        # BLOCK WIDGET SIGNALS ...
+        self.SlotListTreeView.blockSignals(True)
+
+        iterator = QTreeWidgetItemIterator(self.SlotListTreeView)
+        while iterator.value():
+            selection = iterator.value()
+            if selection.flags() & Qt.ItemIsUserCheckable:
+                if self.ItemAttributeList[selection.text(0)].isEquipped():
+                    selection.setCheckState(0, Qt.Checked)
+                else:
+                    selection.setCheckState(0, Qt.Unchecked)
+            iterator += 1
+
+        # UNBLOCK WIDGET SIGNALS ...
+        self.SlotListTreeView.blockSignals(False)
+
         for widget in (
+                self.ItemName,
                 self.ItemRealm,
                 self.ItemType,
                 self.ItemOrigin,
-                self.ItemDamageType
+                self.ItemDamageType,
         ): widget.clear()
 
+        for index in range(len(self.EffectType)):
+            self.EffectType[index].clear()
+        for index in range(len(self.AmountEdit)):
+            self.AmountEdit[index].clear()
+        for index in range(len(self.AmountStatic)):
+            self.AmountStatic[index].clear()
+        for index in range(len(self.Effect)):
+            self.Effect[index].clear()
+        for index in range(len(self.Requirement)):
+            self.Requirement[index].clear()
+
+        for widget in self.ItemInfoWidgets['All']:
+            widget.setEnabled(True)
         for widget in self.ItemInfoWidgets[item.getParent()]:
             widget.setDisabled(True)
 
-        if item.ActiveState == 'Dropped':
-            self.ItemRealm.insertItems(0, AllRealms)
-            self.ItemOrigin.insertItems(0, ('',) + ItemOrigins[item.ActiveState])
-        elif item.ActiveState in ('Crafted', 'Legendary'):
-            self.ItemRealm.insertItems(0, Realms)
-            self.ItemOrigin.insertItems(0, ItemOrigins[item.ActiveState])
+        for item_entry in self.ItemDictionary[item.getLocation()]:
+            self.ItemName.addItem(item_entry.getName())
+        self.ItemName.setCurrentIndex(0)
 
-        if item.Realm in ItemTypes[item.getParent()][item.Location]:
-            self.ItemType.insertItems(0, ('',) + ItemTypes[item.getParent()][item.Location][item.Realm])
-        elif 'All' in ItemTypes[item.getParent()][item.Location]:
-            self.ItemType.insertItems(0, ('',) + ItemTypes[item.getParent()][item.Location]['All'])
+        if item.isPlayerCrafted():
+            origins = ('Crafted',)
+            self.ItemRealm.insertItems(0, self.getRealms())
+            self.ItemOrigin.insertItems(0, origins)
+        elif item.isDropped():
+            origins = ('Drop', 'Quest', 'Artifact', 'Merchant')
+            self.ItemRealm.insertItems(0, ('All',) + self.getRealms())
+            self.ItemOrigin.insertItems(0, ('',) + origins)
+
+        try:  # NOT ALL ITEM TYPE HAVE A REALM ...
+            item_types = ItemTypes[item.getParent()][item.getLocation()][item.getRealm()]
+        except KeyError:
+            item_types = ItemTypes[item.getParent()][item.getLocation()]['All']
+
+        # UPDATE THE COMBOBOX ...
+        self.ItemType.insertItems(0, ('',) + item_types)
 
         if item.getParent() == 'Weapons':
-            self.ItemDamageType.insertItems(0, ('',) + ItemDamageTypes[item.ActiveState])
+            if item.isCrafted():
+                damage_types = ('Slash', 'Thrust', 'Crush')
+                self.ItemDamageType.insertItems(0, ('',) + damage_types)
+            elif item.isLegendary():
+                damage_types = ('Body', 'Cold', 'Heat', 'Energy', 'Matter', 'Spirit')
+                self.ItemDamageType.insertItems(0, ('',) + damage_types)
+            elif item.isDropped():
+                damage_types = ('Slash', 'Thrust', 'Crush')
+                self.ItemDamageType.insertItems(0, ('',) + damage_types)
 
-        self.ItemRealm.setCurrentText(item.Realm)
-        self.ItemOrigin.setCurrentText(item.Origin)
-        self.ItemDamageType.setCurrentText(item.DamageType)
-        self.ItemType.setCurrentText(item.Type)
-        self.ItemBonus.setText(item.Bonus)
-        self.ItemAFDPS.setText(item.AFDPS)
-        self.ItemSpeed.setText(item.Speed)
+        self.ItemRealm.setCurrentText(item.getRealm())
+        self.ItemOrigin.setCurrentText(item.getOrigin())
+        self.ItemDamageType.setCurrentText(item.getDamageType())
+        self.ItemType.setCurrentText(item.getType())
+        self.ItemLevel.setText(item.getLevel())
+        self.ItemQuality.setText(item.getQuality())
+        self.ItemBonus.setText(item.getBonus())
+        self.ItemAFDPS.setText(item.getAFDPS())
+        self.ItemSpeed.setText(item.getSpeed())
 
-        if item.LeftHand == 2:
+        if item.isLeftHand():
             self.ItemLeftHand.setCheckState(Qt.Checked)
         else:
             self.ItemLeftHand.setCheckState(Qt.Unchecked)
 
-        self.ItemRequirement.setText(item.Requirement)
-        self.ItemNotes.setPlainText(item.Notes)
-        self.showItemRestrictions(item)
+        self.ItemRequirement.setText(item.getRequirement())
+        self.ItemNotes.setPlainText(item.getNotes())
 
-    def showItemRestrictions(self, item):
-        for index in range(self.ItemRestrictionsList.count()):
-            self.ItemRestrictionsList.item(index).setHidden(True)
-            if self.ItemRestrictionsList.item(index).text() == 'All':
-                self.ItemRestrictionsList.item(index).setHidden(False)
-            if self.ItemRestrictionsList.item(index).text() in ClassList[item.Realm]:
-                self.ItemRestrictionsList.item(index).setHidden(False)
-        for index in range(self.ItemRestrictionsList.count()):
-            if self.ItemRestrictionsList.item(index).text() in item.Restrictions:
-                if self.ItemRestrictionsList.item(index).text() in ClassList[item.Realm]:
-                    self.ItemRestrictionsList.item(index).setCheckState(Qt.Checked)
-                if self.ItemRestrictionsList.item(index).text() not in ClassList[item.Realm]:
-                    self.ItemRestrictionsList.item(index).setCheckState(Qt.Unchecked)
-                if self.ItemRestrictionsList.item(index).text() == 'All':
-                    self.ItemRestrictionsList.item(index).setCheckState(Qt.Checked)
-
-    def RestoreItem(self, item):
-        if item.ActiveState == 'Crafted':
-            self.showCraftWidgets(item)
-        elif item.ActiveState == 'Legendary':
-            self.showLegendaryWidgets(item)
-        elif item.ActiveState == 'Dropped':
-            self.showDropWidgets(item)
-
-        self.ItemName.clear()
-        for value in self.ItemDictionary[item.Location]:
-            self.ItemName.addItem(value.Name)
-        self.ItemName.setCurrentIndex(0)
-        self.ItemLevel.setText(item.Level)
-        self.ItemQuality.setText(item.Quality)
-
-        # CHANGES TO THE 'EffectType' ARE CASCADED ...
-        for index in range(0, item.getSlotCount()):
-            self.EffectTypeChanged(item.getSlot(index).getEffectType(), index)
-
-        for widget in self.ItemInfoWidgets['All']:
-            widget.setEnabled(True)
-
-        tableEntry = QListWidgetItem('All')
-        tableEntry.setFlags(Qt.ItemIsUserCheckable | Qt.ItemIsEnabled)
-        tableEntry.setCheckState(Qt.Unchecked)
+        table_entry = QListWidgetItem('All')
+        table_entry.setFlags(Qt.ItemIsUserCheckable | Qt.ItemIsEnabled)
+        table_entry.setCheckState(Qt.Unchecked)
 
         self.ItemRestrictionsList.clear()
-        self.ItemRestrictionsList.addItem(tableEntry)
+        self.ItemRestrictionsList.addItem(table_entry)
 
         for key in ClassList['All']:
-            tableEntry = QListWidgetItem(key)
-            tableEntry.setFlags(Qt.ItemIsUserCheckable | Qt.ItemIsEnabled)
-            tableEntry.setCheckState(Qt.Unchecked)
-            self.ItemRestrictionsList.addItem(tableEntry)
+            table_entry = QListWidgetItem(key)
+            table_entry.setFlags(Qt.ItemIsUserCheckable | Qt.ItemIsEnabled)
+            table_entry.setCheckState(Qt.Unchecked)
+            self.ItemRestrictionsList.addItem(table_entry)
 
-        self.showItemInfoWidgets(item)
-        self.updateMenus(item)
+        for index in range(self.ItemRestrictionsList.count()):
+            table_entry = self.ItemRestrictionsList.item(index)
+            if table_entry.text() not in (('All',) + ClassList[item.getRealm()]):
+                table_entry.setHidden(True)
+
+        # BLOCK WIDGET SIGNALS ...
+        self.ItemRestrictionsList.blockSignals(True)
+
+        for index in range(self.ItemRestrictionsList.count()):
+            table_entry = self.ItemRestrictionsList.item(index)
+            if table_entry.text() in item.getRestrictions():
+                if table_entry.text() in (('All',) + ClassList[item.getRealm()]):
+                    table_entry.setCheckState(Qt.Checked)
+                else:
+                    table_entry.setCheckState(Qt.Unchecked)
+                    self.changeItemRestrictions(table_entry)
+
+        # UNBLOCK WIDGET SIGNALS ...
+        self.ItemRestrictionsList.blockSignals(False)
+
+        for index in range(0, item.getSlotCount()):
+            self.updateEffectTypeList(index)
+
+        # UPDATE THE MENUS ...
+        self.updateMenuOptions(item)
 
 # =============================================== #
 #        SUMMARIZER AND CALCULATOR METHODS        #
 # =============================================== #
 
-    # BUG: CALCULATING 'MythicalCapBonus' TWICE
+    # LEGACY CODE ...
     def summarize(self):
-        Level = int(self.CharacterLevel.text())
+        Level = int(self.getCharLevel())
         total = {
             'Skills': {},
             'Attributes': {},
@@ -858,10 +948,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             total['Resistances'][effect]['TotalBonus'] = 0
             total['Resistances'][effect]['MythicalCapBonus'] = 0
             total['Resistances'][effect]['TotalMythicalCapBonus'] = 0
-            Race = str(self.CharacterRace.currentText())
 
-            if effect in Races['All'][Race]['Resistances']:
-                total['Resistances'][effect]['RacialBonus'] = Races['All'][Race]['Resistances'][effect]
+            race = self.getCharRace()
+            if effect in Races['All'][race]['Resistances']:
+                total['Resistances'][effect]['RacialBonus'] = Races['All'][race]['Resistances'][effect]
 
             Base = Cap['Resistance']
             BaseMythicalCap = MythicalBonusCap['Resist Cap']
@@ -869,7 +959,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             total['Resistances'][effect]['BaseMythicalCap'] = int(Level * BaseMythicalCap[0]) + BaseMythicalCap[1]
 
         for key, item in self.ItemAttributeList.items():
-            if not item.Equipped == 2:
+            if not item.isEquipped():
                 continue
 
             total['Utility'] += item.getUtility()
@@ -881,8 +971,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 if item.getSlot(index).getEffectType() == 'Skill':
                     effects = [effect, ]
 
-                    if effect[0:4] == 'All ' and effect in AllBonusList[self.CurrentRealm][self.CurrentClass]:
-                        effects.extend(AllBonusList[self.CurrentRealm][self.CurrentClass][effect])
+                    if effect.split(None)[0] == 'All':
+                        if effect in AllBonusList[self.getCharRealm()][self.getCharClass()]:
+                            effects.extend(AllBonusList[self.getCharRealm()][self.getCharClass()][effect])
 
                     for effect in effects:
                         if effect in total['Skills']:
@@ -901,7 +992,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     effects = [effect, ]
 
                     if effect == 'Acuity':
-                        effects.extend(AllBonusList[self.CurrentRealm][self.CurrentClass][effect])
+                        effects.extend(AllBonusList[self.getCharRealm()][self.getCharClass()][effect])
 
                     for effect in effects:
                         amts = total['Attributes'][effect]
@@ -915,7 +1006,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                         effects.append('% Power Pool')
 
                     elif effect == 'Acuity':
-                        effects.extend(AllBonusList[self.CurrentRealm][self.CurrentClass][effect])
+                        effects.extend(AllBonusList[self.getCharRealm()][self.getCharClass()][effect])
 
                     for effect in effects:
                         amts = total['Attributes'][effect]
@@ -930,8 +1021,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 elif item.getSlot(index).getEffectType() == 'Focus':
                     effects = [effect, ]
 
-                    if effect[0:4] == 'All ':
-                        effects.extend(AllBonusList[self.CurrentRealm][self.CurrentClass][effect])
+                    if effect.split(None)[0] == 'All':
+                        effects.extend(AllBonusList[self.getCharRealm()][self.getCharClass()][effect])
 
                     for effect in effects:
                         if effect in total['Focus']:
@@ -954,13 +1045,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                         amts['Bonus'] = min(amts['TotalBonus'], amts['Base'])
                         continue
 
-                    if effect == 'Casting Speed':
+                    elif effect == 'Casting Speed':
                         effect = "Archery and Casting Speed"
 
-                    if effect == 'Magic Damage':
+                    elif effect == 'Magic Damage':
                         effect = "Archery and Magic Damage"
 
-                    if effect == 'Spell Range':
+                    elif effect == 'Spell Range':
                         effect = "Archery and Spell Range"
 
                     if effect in total['TOABonuses']:
@@ -1005,7 +1096,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     effects = [effect, ]
 
                     if effect == 'Acuity':
-                        effects.extend(AllBonusList[self.CurrentRealm][self.CurrentClass][effect])
+                        effects.extend(AllBonusList[self.getCharRealm()][self.getCharClass()][effect])
 
                     for effect in effects:
                         amts = total['Attributes'][effect]
@@ -1021,7 +1112,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     effects = [effect, ]
 
                     if effect == 'Acuity':
-                        effects.extend(AllBonusList[self.CurrentRealm][self.CurrentClass][effect])
+                        effects.extend(AllBonusList[self.getCharRealm()][self.getCharClass()][effect])
 
                     for effect in effects:
                         amts = total['Attributes'][effect]
@@ -1057,7 +1148,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
                     amts['Bonus'] = min(amts['TotalBonus'], amts['Base'])
 
-        # THIS IS DIRTY ...
+        # THIS IS DIRTY ... BUT IT WORKS ...
         for attribute, amts in total['Attributes'].items():
             if attribute in DropEffectList['All']['Mythical Stat Cap']:
                 amts['BaseMythicalCap'] = amts['BaseMythicalCap'] - amts['CapBonus']
@@ -1065,70 +1156,71 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         return total
 
+    # LEGACY CODE ...
     def calculate(self):
         total = self.summarize()
 
-        item = self.ItemAttributeList[self.CurrentItemLabel]
-        self.BuildUtility.setText('%3.1f' % total['Utility'])
-        self.ItemUtility.setText('%3.1f' % item.getUtility())
+        item = self.getItem()
+        self.BuildUtility.setText('{:3.1f}'.format(total['Utility']))
+        self.ItemUtility.setText('{:3.1f}'.format(item.getUtility()))
 
-        if item.ActiveState in ('Crafted', 'Legendary'):
-            self.ItemImbuePointsTotal.setText('%3.1f' % sum(item.getImbueValues()))
-            self.ItemImbuePoints.setText('/ ' + str(item.getMaxImbueValue()))
+        if item.isPlayerCrafted():
+            self.ItemImbuePointsTotal.setText('{:3.1f}'.format(sum(item.getImbueValues())))
+            self.ItemImbuePoints.setText('/ {}'.format(item.getMaxImbueValue()))
 
             for index in range(0, item.getSlotCount()):
                 if index < len(item.getImbueValues()):
-                    self.ImbuePoints[index].setText('%3.1f' % item.getImbueValues()[index])
-                self.GemName[index].setText(item.getSlot(index).getGemName(self.CurrentRealm))
+                    self.ImbuePoints[index].setText('{:3.1f}'.format(item.getImbueValues()[index]))
+                self.GemName[index].setText(item.getSlot(index).getGemName(self.getCharRealm()))
 
             if isinstance(item.getOverchargeSuccess(), int):
-                self.ItemOvercharge.setText('%d%%' % item.getOverchargeSuccess())
+                self.ItemOvercharge.setText('{}%'.format(item.getOverchargeSuccess()))
             else:
                 self.ItemOvercharge.setText(item.getOverchargeSuccess())
 
         for key, datum in total['Attributes'].items():
-            Acuity = AllBonusList[self.CurrentRealm][self.CurrentClass]["Acuity"]
+            Acuity = AllBonusList[self.getCharRealm()][self.getCharClass()]["Acuity"]
             TotalBonus = datum['TotalBonus']
 
             if key == 'Hit Points':
                 key = "HitPoints"
 
-            if key == 'Armor Factor':
+            elif key == 'Armor Factor':
                 key = "ArmorFactor"
 
-            if key == '% Power Pool':
+            elif key == '% Power Pool':
                 key = "PowerPool"
 
             if key[:5] == "Power":
-                Skills = AllBonusList[self.CurrentRealm][self.CurrentClass]["All Magic Skills"]
+                Skills = AllBonusList[self.getCharRealm()][self.getCharClass()]["All Magic Skills"]
                 self.showCharacterStat(key, (datum['TotalCapBonus'] > 0)
-                              or (datum['TotalMythicalCapBonus'] > 0)
-                              or (TotalBonus > 0)
-                              or (len(Skills) > 0))
+                            or (datum['TotalMythicalCapBonus'] > 0)
+                            or (TotalBonus > 0)
+                            or (len(Skills) > 0))
 
             elif key == "Fatigue":
-                Skills = AllBonusList[self.CurrentRealm][self.CurrentClass]["All Melee Weapon Skills"]
+                Skills = AllBonusList[self.getCharRealm()][self.getCharClass()]["All Melee Weapon Skills"]
                 self.showCharacterStat(key, (datum['TotalCapBonus'] > 0)
-                              or (datum['TotalMythicalCapBonus'] > 0)
-                              or (TotalBonus > 0)
-                              or (len(Skills) > 0))
+                            or (datum['TotalMythicalCapBonus'] > 0)
+                            or (TotalBonus > 0)
+                            or (len(Skills) > 0))
 
             elif key == "Acuity":
                 self.showCharacterStat(key, ((datum['TotalCapBonus'] > 0)
-                              or (datum['TotalMythicalCapBonus'] > 0)
-                              or (TotalBonus > 0))
-                              and (len(Acuity) == 0))
+                            or (datum['TotalMythicalCapBonus'] > 0)
+                            or (TotalBonus > 0))
+                            and (len(Acuity) == 0))
 
             elif key in ("Charisma", "Empathy", "Intelligence", "Piety"):
                 self.showCharacterStat(key, (datum['TotalCapBonus'] > 0)
-                              or (datum['TotalMythicalCapBonus'] > 0)
-                              or (TotalBonus > 0)
-                              or (key in Acuity))
+                            or (datum['TotalMythicalCapBonus'] > 0)
+                            or (TotalBonus > 0)
+                            or (key in Acuity))
 
             if not self.DistanceToCap.isChecked():
                 self.StatValue[key].setText(str(datum['TotalBonus']))
-                self.StatCap[key].setText('(' + str(datum['TotalCapBonus']) + ')')
-                self.StatMythicalCap[key].setText('(' + str(datum['TotalMythicalCapBonus']) + ')')
+                self.StatCap[key].setText('({})'.format(datum['TotalCapBonus']))
+                self.StatMythicalCap[key].setText('({})'.format(datum['TotalMythicalCapBonus']))
 
             elif self.DistanceToCap.isChecked():
                 Base = datum['Base'] + datum['CapBonus'] + datum['MythicalCapBonus']
@@ -1143,8 +1235,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 TotalMythicalCapBonus = datum['TotalMythicalCapBonus']
 
                 self.StatValue[key].setText(str(int(Base - TotalBonus)))
-                self.StatCap[key].setText('(' + str(int(BaseCap - TotalCapBonus)) + ')')
-                self.StatMythicalCap[key].setText('(' + str(int(BaseMythicalCap - TotalMythicalCapBonus)) + ')')
+                self.StatCap[key].setText('({})'.format(BaseCap - TotalCapBonus))
+                self.StatMythicalCap[key].setText('({})'.format(BaseMythicalCap - TotalMythicalCapBonus))
 
                 if BaseMythicalCap == 0:
                     self.StatMythicalCap[key].setText('--  ')
@@ -1159,11 +1251,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
             if not self.DistanceToCap.isChecked():
                 self.StatValue[key].setText(str(amts['TotalBonus']))
-                self.StatMythicalCap[key].setText('(' + str(amts['TotalMythicalCapBonus']) + ')')
+                self.StatMythicalCap[key].setText('({})'.format(amts['TotalMythicalCapBonus']))
 
             elif self.DistanceToCap.isChecked():
                 self.StatValue[key].setText(str(int(Base - TotalBonus)))
-                self.StatMythicalCap[key].setText('(' + str(int(BaseMythicalCap - TotalMythicalCapBonus)) + ')')
+                self.StatMythicalCap[key].setText('({})'.format(BaseMythicalCap - TotalMythicalCapBonus))
 
         self.SkillsView.model().removeRows(0, self.SkillsView.model().rowCount())
 
@@ -1202,12 +1294,649 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     amount = amts['Base'] - amts['TotalBonus']
                 self.insertSkill(amount, 'Mythical ' + bonus, 'Bonus')
 
-        # VALIDATE ATTRIBUTES ...
-        self.validateItemAttributes()
+    def validateAttributes(self, invalid = False):
+        if not self.UnusableSkills.isChecked():
+            for item in self.ItemAttributeList.values():
+                for slot in [x for x in item.getSlotList() if x.isCrafted()]:
+                    class_skills = AllBonusList['All'][self.getCharClass()]['All Skills']
+                    if slot.getEffectType() == 'Skill' and slot.getEffect() not in class_skills:
+                        slot.setEffect(self.getFirstClassSkill())
+                        invalid = True
+        if invalid:
+            QMessageBox.information(
+                self, 'Attribute Change',
+                'Some attributes on equipped items were not \n'
+                'available in the selected class\'s skill tree.',
+                QMessageBox.Ok, QMessageBox.Ok
+            )
 
 # =============================================== #
-#       MISCELLANEOUS METHODS AND FUNCTIONS       #
+#                  SETTER METHODS                 #
 # =============================================== #
+
+    def setCharName(self, char_name):
+        self.CharacterName.setText(str(char_name))
+
+    def setCharRealm(self, char_realm):
+        self.CharacterRealm.setCurrentText(str(char_realm))
+
+    def setCharClass(self, char_class):
+        self.CharacterClass.setCurrentText(str(char_class))
+
+    def setCharRace(self, char_race):
+        self.CharacterRace.setCurrentText(str(char_race))
+
+    def setCharLevel(self, char_level):
+        self.CharacterLevel.setText(str(char_level))
+
+    def setCharRealmRank(self, char_realm_rank):
+        self.CharacterRealmRank.setText(str(char_realm_rank))
+
+    def setCharChampLevel(self, char_champion_level):
+        self.CharacterChampLevel.setText(str(char_champion_level))
+
+    def setCurrentItem(self, item, location):
+        self.ItemAttributeList[location] = item
+
+    def setDistanceToCap(self):
+        self.restoreItem(self.getItem())
+        self.calculate()
+
+    def setUnusableSkills(self):
+        self.restoreItem(self.getItem())
+        self.calculate()
+
+# =============================================== #
+#                  GETTER METHODS                 #
+# =============================================== #
+#  BUG: RETURN NONE IF STRING EMPTY ...
+# =============================================== #
+
+    @staticmethod
+    def getRealms():
+        return tuple(('Albion', 'Hibernia', 'Midgard'))
+
+    def getClasses(self):
+        return tuple(ClassList[self.getCharRealm()])
+
+    def getRaces(self):
+        return tuple(AllBonusList[self.getCharRealm()][self.getCharClass()]['Races'])
+
+    def getFirstClassSkill(self):
+        for class_skill in AllBonusList['All'][self.getCharClass()]['All Skills']:
+            if class_skill.split(None)[0] != 'All':
+                return str(class_skill)
+
+    def getCharName(self):
+        return str(self.CharacterName.text())
+
+    def getCharRealm(self):
+        return str(self.CharacterRealm.currentText())
+
+    def getCharClass(self):
+        return str(self.CharacterClass.currentText())
+
+    def getCharRace(self):
+        return str(self.CharacterRace.currentText())
+
+    def getCharLevel(self):
+        return str(self.CharacterLevel.text())
+
+    def getCharRealmRank(self):
+        return str(self.CharacterRealmRank.text())
+
+    def getCharChampLevel(self):
+        return str(self.CharacterChampLevel.text())
+
+    def getItem(self, location = None):
+        location = location if location else self.CurrentItemLabel
+        return self.ItemAttributeList[location]
+
+    def getSlotIndex(self):
+        index = self.sender().objectName()[-2:]
+        if not index.isdigit(): index = index[-1:]
+        return int(index)
+
+# =============================================== #
+#                  CHANGE METHODS                 #
+# =============================================== #
+
+    def changeCharRealm(self, char_realm):
+        for location in self.ItemAttributeList.keys():
+            for item in self.ItemDictionary[location]:
+                if item.isPlayerCrafted():
+                    item.setRealm(char_realm)
+
+        # CASCADE THE CHANGES ...
+        self.changeCharClass(self.getCharClass())
+
+    def changeCharClass(self, char_class):
+        self.CharacterClass.clear()
+        self.CharacterClass.insertItems(0, self.getClasses())
+        if self.CharacterClass.findText(char_class, Qt.MatchFixedString):
+            self.setCharClass(char_class)
+        else:
+            self.setCharClass(self.getCharClass())
+
+        # CASCADE THE CHANGES ...
+        self.changeCharRace(self.getCharRace())
+
+    def changeCharRace(self, char_race):
+        self.CharacterRace.clear()
+        self.CharacterRace.insertItems(0, self.getRaces())
+        if self.CharacterRace.findText(char_race, Qt.MatchFixedString):
+            self.setCharRace(char_race)
+        else:
+            self.setCharRace(self.getCharRace())
+
+        racial_resists = Races['All'][self.getCharRace()]['Resistances']
+        for resist in DropEffectList['All']['Resistance']:
+            if resist in racial_resists:
+                self.StatBonus[resist].setText('+ {}'.format(racial_resists[resist]))
+            else:
+                self.StatBonus[resist].setText('-')
+
+        # FIXES A BUG THAT CAUSES THE APPLICATION TO CRASH ON LAUNCH
+        # BECAUSE 'self.CurrentItemLabel' HAS NOT BEEN INSTANTIATED ...
+        if self.CurrentItemLabel != '':
+            self.restoreItem(self.getItem())
+
+    # TODO: FOR VALUE WHEN NONE ...
+    def changeCharLevel(self):
+
+        try:  # VALUE MIGHT BE INVALIDE ...
+            char_level = int(self.getCharLevel())
+        except ValueError:
+            return
+
+        if char_level < 1 or char_level > 50:
+            self.setCharLevel('1' if char_level < 1 else '50')
+        self.CharacterLevel.setModified(False)
+        self.calculate()
+
+    def changeCharRealmRank(self):
+
+        try:  # VALUE MIGHT BE INVALIDE ...
+            char_realm_rank = int(self.getCharRealmRank())
+        except ValueError:
+            return
+
+        if char_realm_rank < 0 or char_realm_rank > 14:
+            self.setCharRealmRank('0' if char_realm_rank < 0 else '14')
+        self.CharacterRealmRank.setModified(False)
+
+    def changeCharChampLevel(self):
+
+        try:  # VALUE MIGHT BE INVALIDE ...
+            char_champion_level = int(self.getCharChampLevel())
+        except ValueError:
+            return
+
+        if char_champion_level < 0 or char_champion_level > 15:
+            self.setCharChampLevel('0' if char_champion_level < 0 else '15')
+        self.CharacterChampLevel.setModified(False)
+
+    def changeItemSelection(self, selection = None):
+        selection = selection if selection else self.CurrentItemLabel
+        if self.SlotListTreeView.selectedIndexes:
+            for index in self.SlotListTreeView.selectedIndexes():
+                selection = index.data()
+        self.SlotListTreeView.blockSignals(True)
+        for item in self.SlotListTreeView.findItems(selection, Qt.MatchRecursive):
+            item.setSelected(True)
+        self.SlotListTreeView.blockSignals(False)
+        self.CurrentItemLabel = selection
+        self.restoreItem(self.getItem())
+
+    def changeItemState(self, selection, column):
+        location = selection.text(column)
+        self.getItem(location).setEquipped(selection.checkState(column) == 2)
+        for item in self.ItemDictionary[location]:
+            item.setEquipped(selection.checkState(column) == 2)
+        if location == self.CurrentItemLabel:
+            self.restoreItem(self.getItem())
+
+    def changeItem(self, item_index):
+
+        try:  # FIXES BUG IN 'QComboBox' WHEN PRESSING ENTER ...
+            item = self.ItemDictionary[self.CurrentItemLabel][item_index]
+        except IndexError:
+            item = self.ItemDictionary[self.CurrentItemLabel][0]
+
+        self.ItemDictionary[self.CurrentItemLabel].remove(item)
+        self.ItemDictionary[self.CurrentItemLabel].insert(0, item)
+        self.ItemAttributeList[self.CurrentItemLabel] = item
+        self.restoreItem(self.getItem())
+
+    def changeItemName(self):
+        if self.ItemName.currentIndex() == 0:
+            item = self.getItem()
+            item.setName(str(self.ItemName.lineEdit().text()))
+            cursor_position = self.ItemName.lineEdit().cursorPosition()
+            self.ItemName.setItemText(0, item.getName())
+            self.ItemName.lineEdit().setCursorPosition(cursor_position)
+        else:
+            return
+
+    def changeItemRealm(self, item_realm):
+        self.getItem().setRealm(item_realm)
+        self.restoreItem(self.getItem())
+
+    def changeItemType(self, item_type):
+        self.getItem().setType(item_type)
+
+    def changeItemOrigin(self, item_origin):
+        self.getItem().setOrigin(item_origin)
+
+    def changeItemDamageType(self, item_damage_type):
+        self.getItem().setDamageType(item_damage_type)
+
+    def changeItemLevel(self):
+        self.getItem().setLevel(self.ItemLevel.text())
+        self.ItemLevel.setModified(False)
+        self.restoreItem(self.getItem())
+
+    def changeItemQuality(self):
+        self.getItem().setQuality(self.ItemQuality.text())
+        self.ItemQuality.setModified(False)
+
+    def changeItemBonus(self):
+        self.getItem().setBonus(self.ItemBonus.text())
+        self.ItemBonus.setModified(False)
+
+    def changeItemAFDPS(self):
+        self.getItem().setAFDPS(self.ItemAFDPS.text())
+        self.ItemAFDPS.setModified(False)
+
+    def changeItemSpeed(self):
+        self.getItem().setSpeed(self.ItemSpeed.text())
+        self.ItemSpeed.setModified(False)
+
+    def changeItemLeftHand(self, state):
+        self.getItem().setLeftHand(state == 2)
+
+    def changeItemRequirement(self):
+        self.getItem().setRequirement(self.ItemRequirement.text())
+
+    def changeItemNotes(self):
+        self.getItem().setNotes(self.ItemNotes.toPlainText())
+
+    # RECURSIVE METHOD ...
+    def changeItemRestrictions(self, selection):
+        item = self.getItem()
+        if selection.checkState() == Qt.Checked:
+            if selection.text() == 'All':
+                for index in range(1, self.ItemRestrictionsList.count()):
+                    self.ItemRestrictionsList.item(index).setCheckState(Qt.Unchecked)
+                item.addClassRestriction(selection.text())
+            else:
+                self.ItemRestrictionsList.item(0).setCheckState(Qt.Unchecked)
+                item.addClassRestriction(selection.text())
+        else:
+            item.removeClassRestriction(selection.text())
+
+# =============================================== #
+#     CHANGE ETYPE/EFFECT/AMOUNT/REQ METHODS      #
+# =============================================== #
+
+    def changeEffectType(self, etype, index = None):
+        index = self.getSlotIndex() if index is None else index
+        self.getItem().getSlot(index).setEffectType(etype)
+
+        # CASCADE THE CHANGES ...
+        self.updateEffectList(index)
+
+    def changeEffect(self, effect, index = None):
+        index = self.getSlotIndex() if index is None else index
+        self.getItem().getSlot(index).setEffect(effect)
+
+        # CASCADE THE CHANGES ...
+        self.updateEffectAmountList(index)
+
+    def changeEffectAmount(self, amount, index = None):
+        index = self.getSlotIndex() if index is None else index
+        self.getItem().getSlot(index).setEffectAmount(amount)
+
+        # CASCADE THE CHANGES ...
+        self.updateEffectRequirement(index)
+
+    def changeEffectRequirement(self, requirement, index = None):
+        index = self.getSlotIndex() if index is None else index
+        self.getItem().getSlot(index).setEffectRequirement(requirement)
+
+        # CASCADE THE CHANGES ...
+        self.calculate()
+
+# =============================================== #
+#     UPDATE ETYPE/EFFECT/AMOUNT/REQ METHODS      #
+# =============================================== #
+#        METHODS SEPARATED FOR READABILITY        #
+# =============================================== #
+#         REVAMP AFTER DICTIONARY REWRITE         #
+# =============================================== #
+
+    def updateEffectTypeList(self, index):
+        slot = self.getItem().getSlot(index)
+
+        # CLEAR THE COMBOBOX ...
+        self.EffectType[index].clear()
+
+        # POPULATE THE COMBOBOX ...
+        if slot.isCrafted():
+            self.EffectType[index].insertItems(0, CraftedTypeList)
+        elif slot.isEnhanced():
+            self.EffectType[index].insertItems(0, EnhancedTypeList)
+        elif slot.isDropped():
+            self.EffectType[index].insertItems(0, DropTypeList)
+
+        # REMOVE FOCUS FROM NON-STAFF LOCATIONS ...
+        if self.getItem().getLocation() != 'Two-Handed':
+            self.EffectType[index].removeItem(self.EffectType[index].findText('Focus'))
+
+        # UPDATE THE COMBOBOX ...
+        self.EffectType[index].setCurrentText(slot.getEffectType())
+
+        # CASCADE THE CHANGES ...
+        self.changeEffectType(slot.getEffectType(), index)
+
+# =============================================== #
+
+    def updateEffectList(self, index):
+        slot = self.getItem().getSlot(index)
+
+        # CLEAR THE COMBOBOX ...
+        self.Effect[index].clear()
+
+        # DETERMINE VALUES ...
+        if slot.isUtilized():
+
+            values = list()
+            if slot.isCrafted():
+                if not self.UnusableSkills.isChecked() and slot.getEffectType() == 'Skill':
+                    values = AllBonusList['All'][self.getCharClass()]['All Skills']
+                else:
+                    values = CraftedEffectList[self.getCharRealm()][slot.getEffectType()]
+            elif slot.isEnhanced():
+                values = EnhancedEffectList['All'][slot.getEffectType()]
+            elif slot.isDropped():
+                values = DropEffectList[self.getCharRealm()][slot.getEffectType()]
+
+            # POPULATE THE COMBOBOX ...
+            self.Effect[index].insertItems(0, values)
+
+        effect = slot.getEffect()
+        if self.Effect[index].findText(effect) == -1:
+            if slot.isCrafted() and slot.getEffectType() == 'Skill':
+                effect = self.getFirstClassSkill()
+            else:
+                effect = self.Effect[index].currentText()
+
+        # UPDATE THE COMBOBOX ...
+        self.Effect[index].setCurrentText(effect)
+
+        # CASCADE THE CHANGES ...
+        self.changeEffect(effect, index)
+
+# =============================================== #
+
+    def updateEffectAmountList(self, index):
+        slot = self.getItem().getSlot(index)
+
+        # CLEAR THE COMBOBOX IF ...
+        if slot.isCrafted() or slot.isEnhanced():
+            self.AmountStatic[index].clear()
+
+        # DETERMINE VALUES ...
+        if slot.isUtilized():
+
+            values = list()
+            if slot.isCrafted() or slot.isEnhanced():
+                if slot.isCrafted():
+                    if slot.getEffect().split(None)[0] == 'All':
+                        values = CraftedValuesList[slot.getEffectType()][:1]
+                    else:
+                        values = CraftedValuesList[slot.getEffectType()]
+                elif slot.isEnhanced():
+                    values = EnhancedValuesList[slot.getEffectType()]
+
+                try:  # VALUES MIGHT HAVE SUB-VALUES ...
+                    values = values[slot.getEffect()]
+                except TypeError:
+                    pass
+
+                # POPULATE THE COMBOBOX ...
+                self.AmountStatic[index].insertItems(0, values)
+
+        amount = slot.getEffectAmount()
+        if slot.isCrafted() or slot.isEnhanced():
+            if self.AmountStatic[index].findText(amount) == -1:
+                amount = self.AmountStatic[index].currentText()
+
+            # UPDATE THE COMBOBOX ...
+            self.AmountStatic[index].setCurrentText(amount)
+
+        if slot.isDropped():
+            amount = amount if slot.isUtilized() else ''
+
+            # UPDATE THE LINE-EDIT ...
+            self.AmountEdit[index].setText(amount)
+
+        # CASCADE THE CHANGES ...
+        self.changeEffectAmount(amount, index)
+
+# =============================================== #
+
+    def updateEffectRequirement(self, index):
+        slot = self.getItem().getSlot(index)
+
+        requirement = slot.getEffectRequirement()
+        if slot.isDropped():
+            requirement = requirement if slot.isUtilized() else ''
+
+            # UPDATE THE LINE-EDIT ...
+            self.Requirement[index].setText(requirement)
+
+        # CASCADE THE CHANGES ...
+        self.changeEffectRequirement(requirement, index)
+
+# =============================================== #
+#           NEW/SAVE/LOAD/DELETE METHODS          #
+# =============================================== #
+
+    def newTemplate(self):
+        self.initialize()
+
+    # TODO: LOAD PATH FROM SAVED SETTINGS ...
+    def openTemplate(self):
+        options = QFileDialog.Options()
+        filename, filters = QFileDialog.getOpenFileName(
+            QFileDialog(), "Open Template", '', 'Templates (*.ktf);; All Files (*.*)', options = options)
+
+        if filename in ('', None):
+            return
+
+        self.importFromXML(filename)
+        self.TemplateName = os.path.basename(filename)
+        self.TemplatePath = os.path.dirname(filename)
+        self.TemplateModified = False
+
+    def saveTemplate(self):
+        if None in (self.TemplateName, self.TemplatePath):
+            self.saveTemplateAs()
+        else:
+            self.exportAsXML(os.path.join(self.TemplatePath, self.TemplateName))
+            self.TemplateModified = False
+
+    # TODO: LOAD PATH FROM SAVED SETTINGS ...
+    def saveTemplateAs(self):
+        options = QFileDialog.Options()
+        filename, filters = QFileDialog.getSaveFileName(
+            QFileDialog(), 'Save Item', '', 'Templates (*.ktf);; All Files (*.*)', options=options)
+
+        if filename in ('', None):
+            return
+
+        self.exportAsXML(filename)
+        self.TemplateName = os.path.basename(filename)
+        self.TemplatePath = os.path.dirname(filename)
+        self.TemplateModified = False
+
+    def newItem(self, action):
+        selection = action.text().split(None)[0]
+        state = self.getItem().isEquipped()
+
+        realm = 'All' if selection == 'Dropped' else self.getCharRealm()
+        item = Item(selection, self.CurrentItemLabel, realm)
+        item.setName(f'{selection} Item')
+        item.setEquipped(state)
+
+        self.ItemDictionary[self.CurrentItemLabel].insert(0, item)
+        self.ItemAttributeList[self.CurrentItemLabel] = item
+
+        if selection == 'Legendary':
+            if action.text().split(None)[1] == 'Staff':
+                item.getSlot(4).setAll('Focus', 'All Spell Lines', '50')
+                item.getSlot(5).setAll('ToA Bonus', 'Casting Speed', '3')
+                item.getSlot(6).setAll('ToA Bonus', 'Magic Damage', '3')
+            elif action.text().split(None)[1] == 'Bow':
+                item.getSlot(4).setAll('ToA Bonus', 'Armor Factor', '10')
+                item.getSlot(5).setAll('ToA Bonus', 'Casting Speed', '3')
+                item.getSlot(6).setAll('ToA Bonus', 'Magic Damage', '3')
+            elif action.text().split(None)[1] == 'Weapon':
+                item.getSlot(4).setAll('ToA Bonus', 'Armor Factor', '10')
+                item.getSlot(5).setAll('ToA Bonus', 'Melee Damage', '3')
+                item.getSlot(6).setAll('ToA Bonus', 'Style Damage', '3')
+
+        # CASCADE THE CHANGES ...
+        self.restoreItem(self.getItem())
+
+    # TODO: LOAD PATH FROM SAVED SETTINGS ...
+    def loadItem(self):
+        options = QFileDialog.Options()
+        filename, filters = QFileDialog.getOpenFileName(
+            QFileDialog(), 'Load Item:', '', 'Items (*.xml);; All Files (*.*)', options = options)
+
+        if filename in ('', None):
+            return
+
+        item = Item('Imported', self.CurrentItemLabel, self.getCharRealm())
+        if item.importFromXML(filename) != -1:
+            self.ItemDictionary[self.CurrentItemLabel].insert(0, item)
+            self.ItemAttributeList[self.CurrentItemLabel] = item
+            self.restoreItem(self.getItem())
+        else:
+            QMessageBox.warning(
+                self, 'Error!',
+                'The item you are attempting to import \n'
+                'is using an unsupported XML format.',
+                QMessageBox.Ok, QMessageBox.Ok
+            )
+            return
+
+    def convertItem(self, action):
+        selection = action.text().split(None)[0]
+        state = self.getItem().isEquipped()
+
+        realm = 'All' if selection == 'Dropped' else self.getCharRealm()
+        item = Item(selection, self.CurrentItemLabel, realm)
+        item.setName(f'{selection} Item')
+        item.setEquipped(state)
+
+        del self.ItemDictionary[self.CurrentItemLabel][0]
+        self.ItemDictionary[self.CurrentItemLabel].insert(0, item)
+        self.ItemAttributeList[self.CurrentItemLabel] = item
+
+        if selection == 'Legendary':
+            if action.text().split(None)[1] == 'Staff':
+                item.getSlot(4).setAll('Focus', 'All Spell Lines', '50')
+                item.getSlot(5).setAll('ToA Bonus', 'Casting Speed', '3')
+                item.getSlot(6).setAll('ToA Bonus', 'Magic Damage', '3')
+            elif action.text().split(None)[1] == 'Bow':
+                item.getSlot(4).setAll('ToA Bonus', 'Armor Factor', '10')
+                item.getSlot(5).setAll('ToA Bonus', 'Casting Speed', '3')
+                item.getSlot(6).setAll('ToA Bonus', 'Magic Damage', '3')
+            elif action.text().split(None)[1] == 'Weapon':
+                item.getSlot(4).setAll('ToA Bonus', 'Armor Factor', '10')
+                item.getSlot(5).setAll('ToA Bonus', 'Melee Damage', '3')
+                item.getSlot(6).setAll('ToA Bonus', 'Style Damage', '3')
+
+        # CASCADE THE CHANGES ...
+        self.restoreItem(self.getItem())
+
+    # TODO: LOAD PATH FROM SAVED SETTINGS ...
+    def saveItem(self):
+        item = self.getItem(self.CurrentItemLabel)
+
+        if item.getName() in ('', None):
+            QMessageBox.warning(
+                self, 'Error!',
+                'You must specify a name before saving this item!',
+                QMessageBox.Ok, QMessageBox.Ok
+            )
+            return
+
+        if item.isPlayerCrafted():
+            QMessageBox.warning(
+                self, 'Error!',
+                'You cannot export a craftable item.',
+                QMessageBox.Ok, QMessageBox.Ok
+            )
+            return
+
+        options = QFileDialog.Options()
+        filename, filters = QFileDialog.getSaveFileName(
+            QFileDialog(), 'Save Item', item.getName(), 'Items (*.xml);; All Files (*.*)', options = options)
+
+        if filename:
+            item.exportAsXML(filename)
+
+    def deleteItem(self):
+        if len(self.ItemDictionary[self.CurrentItemLabel]) > 1:
+            del self.ItemDictionary[self.CurrentItemLabel][0]
+            item = self.ItemDictionary[self.CurrentItemLabel][0]
+            self.ItemAttributeList[self.CurrentItemLabel] = item
+            self.restoreItem(self.getItem())
+        else:
+            self.clearItem()
+
+    def clearItem(self):
+        state = self.getItem().isEquipped()
+        self.ItemDictionary[self.CurrentItemLabel].remove(self.getItem())
+
+        realm = 'All' if self.getItem().isDropped() else self.getCharRealm()
+        item = Item(self.getItem().getState(), self.CurrentItemLabel, realm)
+        item.setName(f'{item.getState()} Item')
+        item.setEquipped(state)
+
+        self.ItemDictionary[self.CurrentItemLabel].insert(0, item)
+        self.ItemAttributeList[self.CurrentItemLabel] = item
+        self.restoreItem(self.getItem())
+
+    def clearItemSlots(self):
+        self.getItem(self.CurrentItemLabel).clearSlots()
+        self.restoreItem(self.getItem())
+
+# =============================================== #
+#              MISCELLANEOUS METHODS              #
+# =============================================== #
+
+    def mousePressEvent(self, event):
+        try:  # NOT ALL WIDGETS HAVE 'clearFocus()' ...
+            self.focusWidget().clearFocus()
+        except AttributeError:
+            pass
+
+    def setToolBarOptions(self, action):
+        for act in self.ToolBarMenu.actions():
+            if act.data() == action.data() and not act.isChecked():
+                act.setChecked(True)
+            elif act.data() != action.data() and act.isChecked():
+                act.setChecked(False)
+        if action.data() == 0:
+            self.ToolBar.hide()
+        else:
+            self.setIconSize(QSize(action.data(), action.data()))
+            self.ToolBar.show()
 
     def setMinimumWidth(self, items = None):
         font = QFontMetrics(self.font())
@@ -1230,11 +1959,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             maxWidth = max(maxWidth, style.sizeFromContents(QStyle.CT_ComboBox, option, size, self).width())
         return maxWidth
 
-    def getSlotIndex(self):
-        index = self.sender().objectName()[-2:]
-        if not index.isdigit(): index = index[-1:]
-        return int(index)
-
     def insertSkill(self, amount, bonus, group):
         self.SkillsView.model().insertRows(self.SkillsView.model().rowCount(), 1)
         width = 3 if (-10 < amount < 10) else 2
@@ -1243,65 +1967,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.SkillsView.model().setData(index, QVariant(bonus), Qt.DisplayRole)
         self.SkillsView.model().setData(index, QVariant(group), Qt.UserRole)
 
-    def validateItemAttributes(self):
-        if self.UnusableSkills.isChecked(): return
-
-        invalid_attribute_found = False
-        for item in [x for x in self.ItemAttributeList.values() if x.isCraftable()]:
-            for slot in [x for x in item.getSlotList() if x.isCraftable() and x.getEffectType() == 'Skill']:
-                if slot.getEffect() not in AllBonusList['All'][self.CurrentClass]['All Skills']:
-                    slot.setEffect(AllBonusList['All'][self.CurrentClass]['All Skills'][1])
-                    invalid_attribute_found = True
-
-        if invalid_attribute_found:
-            QMessageBox.information(
-                self, 'Attribute Change',
-                'Some attributes were not available \n'
-                'in the selected class\'s skill tree.')
-            return
-
-    def updateMenus(self, item):
-        self.ItemNewMenu.clear()
-        self.ItemTypeMenu.clear()
-        options = []
-
-        if item.getParent() in ('Armor', 'Weapons'):
-            self.ItemTypeMenu.setEnabled(True)
-            self.ItemTypeButton.setEnabled(True)
-
-        if item.Location in ItemTypes['Armor']:
-            options.extend([
-                'Crafted Item',
-                'Dropped Item',
-            ])
-        elif item.Location in ('Right Hand', 'Left Hand'):
-            options.extend([
-                'Crafted Item',
-                'Dropped Item',
-                'Legendary Weapon',
-            ])
-        elif item.Location == 'Two-Handed':
-            options.extend([
-                'Crafted Item',
-                'Dropped Item',
-                'Legendary Staff',
-                'Legendary Weapon',
-            ])
-        elif item.Location == 'Ranged':
-            options.extend([
-                'Crafted Item',
-                'Dropped Item',
-                'Legendary Bow',
-            ])
-        else:
-            self.ItemTypeMenu.setDisabled(True)
-            self.ItemTypeButton.setDisabled(True)
-            options.extend(['Dropped'])
-
-        for value in options:
-            self.ItemNewMenu.addAction(value)
-            self.ItemTypeMenu.addAction(value)
-
     # TODO: IMPLEMENT SAVE OPTIONS ...
     def closeEvent(self, event):
         if self.TemplateModified:
@@ -1309,7 +1974,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 self, 'Save Changes?',
                 'This template has been changed.\n'
                 'Do you want to save these changes?',
-                QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel)
+                QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel, QMessageBox.Cancel
+            )
 
             if prompt == QMessageBox.Yes:
                 self.saveTemplate()
@@ -1321,460 +1987,3 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             if prompt == QMessageBox.Cancel:
                 event.ignore()
                 return
-
-# =============================================== #
-#        SLOT/SIGNAL METHODS AND FUNCTIONS        #
-# =============================================== #
-
-    def mousePressEvent(self, event):
-        try:  # NOT ALL WIDGETS HAVE 'clearFocus()' ...
-            self.focusWidget().clearFocus()
-        except AttributeError:
-            pass
-
-    def setToolBarOptions(self, action):
-        for act in self.ToolBarMenu.actions():
-            if act.data() == action.data() and not act.isChecked():
-                act.setChecked(True)
-            elif act.data() != action.data() and act.isChecked():
-                act.setChecked(False)
-        if action.data() == 0:
-            self.ToolBar.hide()
-        else:
-            self.setIconSize(QSize(action.data(), action.data()))
-            self.ToolBar.show()
-
-    def setDistanceToCap(self):
-        self.RestoreItem(self.ItemAttributeList[self.CurrentItemLabel])
-
-    def setUnusableSkills(self):
-        self.RestoreItem(self.ItemAttributeList[self.CurrentItemLabel])
-
-    def CharacterRealmChanged(self):
-        Realm = self.CharacterRealm.currentText()
-        self.CharacterClass.clear()
-        self.CharacterClass.insertItems(0, ClassList[Realm])
-        self.CurrentRealm = Realm
-        self.CharacterClassChanged()
-
-        for location in self.ItemAttributeList.keys():
-            for item in self.ItemDictionary[location]:
-                if item.ActiveState in ('Crafted', 'Legendary'):
-                    item.Realm = self.CurrentRealm
-
-        # FIXES A BUG THAT CAUSES THE APPLICATION TO CRASH ON LAUNCH
-        # BECAUSE 'self.CurrentItemLabel' HAS NOT BEEN INSTANTIATED ...
-        if self.CurrentItemLabel != '':
-            self.RestoreItem(self.ItemAttributeList[self.CurrentItemLabel])
-            self.calculate()
-
-    def CharacterClassChanged(self):
-        Realm = self.CharacterRealm.currentText()
-        Class = self.CharacterClass.currentText()
-        self.CharacterRace.clear()
-        self.CharacterRace.insertItems(0, AllBonusList[Realm][Class]['Races'])
-
-        if self.CurrentRace in AllBonusList[Realm][Class]['Races']:
-            self.CharacterRace.setCurrentText(self.CurrentRace)
-        else:
-            self.CharacterRaceChanged()
-
-        self.CurrentClass = Class
-
-        # FIXES A BUG THAT CAUSES THE APPLICATION TO CRASH ON LAUNCH
-        # BECAUSE 'self.CurrentItemLabel' HAS NOT BEEN INSTANTIATED ...
-        if self.CurrentItemLabel != '':
-            self.RestoreItem(self.ItemAttributeList[self.CurrentItemLabel])
-            self.calculate()
-
-    def CharacterRaceChanged(self):
-        Race = self.CharacterRace.currentText()
-        for resist in DropEffectList['All']['Resistance']:
-            if resist in Races['All'][Race]['Resistances']:
-                self.StatBonus[resist].setText('+ ' + str(Races['All'][Race]['Resistances'][resist]))
-            else:
-                self.StatBonus[resist].setText('-')
-        self.CurrentRace = Race
-
-    def ItemSelected(self, selection = None):
-        for index in self.SlotListTreeView.selectedIndexes():
-            selection = index.data()
-        if not isinstance(selection, str):
-            if selection.text(0) in ItemTypes.keys():
-                selection = self.CurrentItemLabel
-        if not self.SlotListTreeView.selectedIndexes():
-            for slot in self.SlotListTreeView.findItems(selection, Qt.MatchRecursive):
-                slot.setSelected(True)
-        for parent, locations in ItemTypes.items():
-            for location in locations:
-                if selection == location:
-                    self.CurrentItemLabel = location
-                    self.RestoreItem(self.ItemAttributeList[self.CurrentItemLabel])
-
-    def ItemNameChanged(self):
-        if self.ItemName.currentIndex() != 0: return
-        item = self.ItemAttributeList[self.CurrentItemLabel]
-        item.Name = str(self.ItemName.lineEdit().text())
-        cursorPosition = self.ItemName.lineEdit().cursorPosition()
-        self.ItemName.setItemText(0, item.Name)
-        self.ItemName.lineEdit().setCursorPosition(cursorPosition)
-
-    def ItemStateChanged(self, selection, column):
-        self.ItemAttributeList[selection.text(column)].Equipped = selection.checkState(column)
-        for item in self.ItemDictionary[selection.text(column)]:
-            item.Equipped = selection.checkState(column)
-        if selection.text(column) == self.SlotListTreeView.selectedIndexes():
-            self.RestoreItem(self.ItemAttributeList[selection.text(column)])
-
-    def ItemRealmChanged(self):
-        item = self.ItemAttributeList[self.CurrentItemLabel]
-        item.Realm = self.ItemRealm.currentText()
-        self.RestoreItem(self.ItemAttributeList[self.CurrentItemLabel])
-
-    def ItemTypeChanged(self):
-        item = self.ItemAttributeList[self.CurrentItemLabel]
-        item.Type = self.ItemType.currentText()
-
-    def ItemOriginChanged(self):
-        item = self.ItemAttributeList[self.CurrentItemLabel]
-        item.Origin = self.ItemOrigin.currentText()
-
-    def ItemLevelChanged(self):
-        item = self.ItemAttributeList[self.CurrentItemLabel]
-        item.Level = self.ItemLevel.text()
-        self.ItemLevel.setModified(False)
-        self.RestoreItem(self.ItemAttributeList[self.CurrentItemLabel])
-
-    def ItemQualityChanged(self):
-        item = self.ItemAttributeList[self.CurrentItemLabel]
-        item.Quality = self.ItemQuality.text()
-        self.ItemQuality.setModified(False)
-
-    def ItemDamageTypeChanged(self):
-        item = self.ItemAttributeList[self.CurrentItemLabel]
-        item.DamageType = self.ItemDamageType.currentText()
-
-    def ItemBonusChanged(self):
-        item = self.ItemAttributeList[self.CurrentItemLabel]
-        item.Bonus = self.ItemBonus.text()
-        self.ItemBonus.setModified(False)
-
-    def ItemAFDPSChanged(self):
-        item = self.ItemAttributeList[self.CurrentItemLabel]
-        item.AFDPS = self.ItemAFDPS.text()
-        self.ItemAFDPS.setModified(False)
-
-    def ItemSpeedChanged(self):
-        item = self.ItemAttributeList[self.CurrentItemLabel]
-        item.Speed = self.ItemSpeed.text()
-        self.ItemSpeed.setModified(False)
-
-    def ItemLeftHandChanged(self, state):
-        item = self.ItemAttributeList[self.CurrentItemLabel]
-        item.LeftHand = state
-
-    def ItemRequirementChanged(self):
-        item = self.ItemAttributeList[self.CurrentItemLabel]
-        item.Requirement = self.ItemRequirement.text()
-        self.ItemRequirement.setModified(False)
-
-    def ItemNotesChanged(self):
-        item = self.ItemAttributeList[self.CurrentItemLabel]
-        item.Notes = self.ItemNotes.toPlainText()
-
-    # BUG: LOGIC ERROR ...
-    def ItemRestrictionsChanged(self, selection = None):
-        item = self.ItemAttributeList[self.CurrentItemLabel]
-        if selection.text() == 'All' and selection.checkState() == Qt.Checked:
-            for count in range(1, self.ItemRestrictionsList.count()):
-                self.ItemRestrictionsList.item(count).setCheckState(Qt.Unchecked)
-            item.Restrictions.clear()
-            item.Restrictions.append(selection.text())
-        elif selection.checkState() == Qt.Checked:
-            if selection.text() != 'All' and 'All' in item.Restrictions:
-                self.ItemRestrictionsList.item(0).setCheckState(Qt.Unchecked)
-            item.Restrictions.append(selection.text())
-        elif selection.checkState() == Qt.Unchecked:
-            item.Restrictions.remove(selection.text())
-
-    # TODO: 5TH SLOT SELECTION BASED ON TYPE / LOCATION ...
-    def EffectTypeChanged(self, etype = None, index = -1):
-        if index == -1: index = self.getSlotIndex()
-        item = self.ItemAttributeList[self.CurrentItemLabel]
-        self.EffectType[index].clear()
-
-        if item.getSlot(index).getSlotType() == 'Craftable':
-            self.EffectType[index].insertItems(0, CraftedTypeList)
-        elif item.getSlot(index).getSlotType() == 'Enhanced':
-            self.EffectType[index].insertItems(0, EnhancedTypeList)
-        elif item.getSlot(index).getSlotType() == 'Dropped':
-            self.EffectType[index].insertItems(0, DropTypeList)
-        if item.Location != 'Two-Handed':
-            self.EffectType[index].removeItem(self.EffectType[index].findText('Focus'))
-
-        self.EffectType[index].setCurrentText(etype)
-        item.getSlot(index).setEffectType(etype)
-
-        # CASCADE THE CHANGES ...
-        self.EffectChanged(item.getSlot(index).getEffect(), index)
-
-    def EffectChanged(self, effect = None, index = -1):
-        if index == -1: index = self.getSlotIndex()
-        item = self.ItemAttributeList[self.CurrentItemLabel]
-        self.Effect[index].clear()
-
-        effectType = item.getSlot(index).getEffectType()
-        if item.getSlot(index).getSlotType() == 'Craftable':
-            if effectType == 'Skill' and not self.UnusableSkills.isChecked():
-                self.Effect[index].insertItems(0, AllBonusList['All'][self.CurrentClass]['All Skills'])
-            else:
-                self.Effect[index].insertItems(0, CraftedEffectList[self.CurrentRealm][effectType])
-        elif item.getSlot(index).getSlotType() == 'Enhanced':
-            self.Effect[index].insertItems(0, EnhancedEffectList['All'][effectType])
-        elif item.getSlot(index).getSlotType() == 'Dropped':
-            self.Effect[index].insertItems(0, DropEffectList[self.CurrentRealm][effectType])
-
-        if self.Effect[index].findText(effect) == -1:
-            if item.getSlot(index).getSlotType() == 'Craftable' and effectType == 'Skill':
-                for i in range(0, self.Effect[index].count()):
-                    if self.Effect[index].itemText(i)[:5] != 'All M':
-                        effect = self.Effect[index].itemText(i)
-                        break
-            else:
-                effect = self.Effect[index].currentText()
-
-        item.getSlot(index).setEffect(effect)
-        self.Effect[index].setCurrentText(item.getSlot(index).getEffect())
-
-        # CASCADE THE CHANGES ...
-        self.EffectAmountChanged(item.getSlot(index).getEffectAmount(), index)
-
-    def EffectAmountChanged(self, amount = None, index = -1):
-        if index == -1: index = self.getSlotIndex()
-        item = self.ItemAttributeList[self.CurrentItemLabel]
-
-        valuesList = list()
-        if item.getSlot(index).getSlotType() in ('Craftable', 'Enhanced'):
-            if item.getSlot(index).getSlotType() == 'Craftable':
-                if item.getSlot(index).getEffect()[0:9] in ('All Melee', 'All Magic'):
-                    valuesList = CraftedValuesList[item.getSlot(index).getEffectType()][:1]
-                else:
-                    valuesList = CraftedValuesList[item.getSlot(index).getEffectType()]
-            elif item.getSlot(index).getSlotType() == 'Enhanced':
-                valuesList = EnhancedValuesList[item.getSlot(index).getEffectType()]
-            if isinstance(valuesList, dict):
-                valuesList = valuesList[item.getSlot(index).getEffect()]
-            self.AmountStatic[index].clear()
-            self.AmountStatic[index].insertItems(0, valuesList)
-            if self.AmountStatic[index].findText(amount) == -1:
-                amount = self.AmountStatic[index].currentText()
-            item.getSlot(index).setEffectAmount(amount)
-            self.AmountStatic[index].setCurrentText(item.getSlot(index).getEffectAmount())
-
-        elif item.getSlot(index).getSlotType() == 'Dropped':
-            if item.getSlot(index).getEffectType() == 'Unused':
-                item.getSlot(index).setEffectAmount('')
-                self.AmountEdit[index].clear()
-            else:
-                item.getSlot(index).setEffectAmount(amount)
-                self.AmountEdit[index].setText(item.getSlot(index).getEffectAmount())
-            self.AmountEdit[index].setModified(False)
-
-        # CASCADE THE CHANGES ...
-        self.EffectRequirementChanged(item.getSlot(index).getEffectRequirement(), index)
-        self.calculate()
-
-    def EffectRequirementChanged(self, requirement = None, index = -1):
-        if index == -1: index = self.getSlotIndex()
-        item = self.ItemAttributeList[self.CurrentItemLabel]
-        if item.getSlot(index).getEffectType() == 'Unused':
-            item.getSlot(index).setEffectRequirement('')
-            self.Requirement[index].clear()
-        else:
-            if requirement is None:
-                requirement = self.Requirement[index].text()
-            item.getSlot(index).setEffectRequirement(requirement)
-            self.Requirement[index].setText(item.getSlot(index).getEffectRequirement())
-        self.Requirement[index].setModified(False)
-
-    def newTemplate(self):
-        self.initialize()
-
-    # TODO: LOAD PATH FROM SAVED SETTINGS ...
-    def openTemplate(self):
-        options = QFileDialog.Options()
-        filename, filters = QFileDialog.getOpenFileName(
-            self, "Open Template", '', 'Templates (*.ktf);; All Files (*.*)', options = options)
-
-        if filename == '' or filename is None:
-            return
-
-        self.importFromXML(filename)
-        self.TemplateName = os.path.basename(filename)
-        self.TemplatePath = os.path.dirname(filename)
-        self.TemplateModified = False
-
-    def saveTemplate(self):
-        if None in (self.TemplateName, self.TemplatePath):
-            self.saveTemplateAs()
-        else:
-            self.exportAsXML(os.path.join(self.TemplatePath, self.TemplateName))
-            self.TemplateModified = False
-
-    # TODO: LOAD PATH FROM SAVED SETTINGS ...
-    def saveTemplateAs(self):
-        options = QFileDialog.Options()
-        filename, filters = QFileDialog.getSaveFileName(
-            self, 'Save Item', '', 'Templates (*.ktf);; All Files (*.*)', options = options)
-
-        if filename == '' or filename is None:
-            return
-
-        self.exportAsXML(filename)
-        self.TemplateName = os.path.basename(filename)
-        self.TemplatePath = os.path.dirname(filename)
-        self.TemplateModified = False
-
-    def changeItem(self, index):
-        equipped = self.ItemAttributeList[self.CurrentItemLabel].Equipped
-        self.ItemAttributeList[self.CurrentItemLabel].Equipped = 0
-
-        try:  # FIXES BUG IN 'QComboBox' WHEN PRESSING ENTER ...
-            item = self.ItemDictionary[self.CurrentItemLabel][index]
-        except IndexError:
-            item = self.ItemDictionary[self.CurrentItemLabel][0]
-
-        self.ItemDictionary[self.CurrentItemLabel].remove(item)
-        self.ItemDictionary[self.CurrentItemLabel].insert(0, item)
-        self.ItemAttributeList[self.CurrentItemLabel] = item
-        self.ItemAttributeList[self.CurrentItemLabel].Equipped = equipped
-        self.RestoreItem(self.ItemAttributeList[self.CurrentItemLabel])
-
-    # TODO: LOAD PATH FROM SAVED SETTINGS ...
-    # TODO: PREVENT CRAFTED ITEMS FROM BEING IMPORTED TO
-    # TO NON-CRAFTABLE LOCATIONS. SET A DEFAULT PATH ...
-    def loadItem(self):
-        options = QFileDialog.Options()
-        filename, filters = QFileDialog.getOpenFileName(
-            self, 'Load Item:', '', 'Items (*.xml);; All Files (*.*)', options = options,)
-
-        if filename == '' or filename is None:
-            return
-
-        item = Item('Imported', self.CurrentItemLabel, self.CurrentRealm)
-        if item.importFromXML(filename) != -1:
-            self.ItemDictionary[self.CurrentItemLabel].insert(0, item)
-            self.ItemAttributeList[self.CurrentItemLabel] = item
-            self.ItemAttributeList[self.CurrentItemLabel].Equipped = item.Equipped
-            self.RestoreItem(self.ItemAttributeList[self.CurrentItemLabel])
-        else:
-            QMessageBox.warning(
-                self, 'Error!',
-                'The item you are attempting to import \n'
-                'is using an unsupported XML format.')
-            return
-
-    # TODO: LOAD PATH FROM SAVED SETTINGS ...
-    def saveItem(self):
-        item = self.ItemAttributeList[self.CurrentItemLabel]
-
-        if item.Name == '' or item.Name is None:
-            QMessageBox.warning(
-                self, 'Error!',
-                'You must specify a name before saving this item!')
-            return
-
-        options = QFileDialog.Options()
-        filename, filters = QFileDialog.getSaveFileName(
-            self, 'Save Item', item.Name, 'Items (*.xml);; All Files (*.*)', options = options)
-        if filename: item.exportAsXML(filename)
-
-    def changeItemType(self, action):
-        newItemType = action.text().split(None, 1)[0]
-        equipped = self.ItemAttributeList[self.CurrentItemLabel].Equipped
-
-        if newItemType in ('Crafted', 'Legendary'):
-            item = Item(newItemType, self.CurrentItemLabel, self.CurrentRealm)
-        else:
-            item = Item(newItemType, self.CurrentItemLabel, 'All')
-        item.Name = newItemType + ' Item'
-        del self.ItemDictionary[self.CurrentItemLabel][0]
-        self.ItemDictionary[self.CurrentItemLabel].insert(0, item)
-        self.ItemAttributeList[self.CurrentItemLabel] = item
-        self.ItemAttributeList[self.CurrentItemLabel].Equipped = equipped
-
-        if newItemType == 'Legendary':
-            if action.text().split(None, 1)[1] == 'Staff':
-                item.getSlot(4).setAll('Focus', 'All Spell Lines', '50')
-                item.getSlot(5).setAll('ToA Bonus', 'Casting Speed', '3')
-                item.getSlot(6).setAll('ToA Bonus', 'Magic Damage', '3')
-            elif action.text().split(None, 1)[1] == 'Bow':
-                item.getSlot(4).setAll('ToA Bonus', 'Armor Factor', '10')
-                item.getSlot(5).setAll('ToA Bonus', 'Casting Speed', '3')
-                item.getSlot(6).setAll('ToA Bonus', 'Magic Damage', '3')
-            elif action.text().split(None, 1)[1] == 'Weapon':
-                item.getSlot(4).setAll('ToA Bonus', 'Armor Factor', '10')
-                item.getSlot(5).setAll('ToA Bonus', 'Melee Damage', '3')
-                item.getSlot(6).setAll('ToA Bonus', 'Style Damage', '3')
-
-        self.RestoreItem(self.ItemAttributeList[self.CurrentItemLabel])
-
-    def newItem(self, action):
-        newItemType = action.text().split(None, 1)[0]
-        equipped = self.ItemAttributeList[self.CurrentItemLabel].Equipped
-
-        if newItemType in ('Crafted', 'Legendary'):
-            item = Item(newItemType, self.CurrentItemLabel, self.CurrentRealm)
-        else:
-            item = Item(newItemType, self.CurrentItemLabel, 'All')
-        item.Name = newItemType + ' Item'
-        self.ItemDictionary[self.CurrentItemLabel].insert(0, item)
-        self.ItemAttributeList[self.CurrentItemLabel] = item
-        self.ItemAttributeList[self.CurrentItemLabel].Equipped = equipped
-
-        if newItemType == 'Legendary':
-            if action.text().split(None, 1)[1] == 'Staff':
-                item.getSlot(4).setAll('Focus', 'All Spell Lines', '50')
-                item.getSlot(5).setAll('ToA Bonus', 'Casting Speed', '3')
-                item.getSlot(6).setAll('ToA Bonus', 'Magic Damage', '3')
-            elif action.text().split(None, 1)[1] == 'Bow':
-                item.getSlot(4).setAll('ToA Bonus', 'Armor Factor', '10')
-                item.getSlot(5).setAll('ToA Bonus', 'Casting Speed', '3')
-                item.getSlot(6).setAll('ToA Bonus', 'Magic Damage', '3')
-            elif action.text().split(None, 1)[1] == 'Weapon':
-                item.getSlot(4).setAll('ToA Bonus', 'Armor Factor', '10')
-                item.getSlot(5).setAll('ToA Bonus', 'Melee Damage', '3')
-                item.getSlot(6).setAll('ToA Bonus', 'Style Damage', '3')
-
-        self.RestoreItem(self.ItemAttributeList[self.CurrentItemLabel])
-
-    def deleteItem(self):
-        if len(self.ItemDictionary[self.CurrentItemLabel]) == 1:
-            self.clearItem()
-            return
-
-        equipped = self.ItemAttributeList[self.CurrentItemLabel].Equipped
-        del self.ItemDictionary[self.CurrentItemLabel][0]
-        item = self.ItemDictionary[self.CurrentItemLabel][0]
-        self.ItemAttributeList[self.CurrentItemLabel] = item
-        self.ItemAttributeList[self.CurrentItemLabel].Equipped = equipped
-        self.RestoreItem(self.ItemAttributeList[self.CurrentItemLabel])
-
-    def clearItem(self):
-        item = self.ItemAttributeList[self.CurrentItemLabel]
-        itemState = self.ItemAttributeList[self.CurrentItemLabel].Equipped
-        self.ItemDictionary[self.CurrentItemLabel].remove(item)
-
-        if item.ActiveState in ('Crafted', 'Legendary'):
-            item = Item(item.ActiveState, self.CurrentItemLabel, self.CurrentRealm)
-        else:
-            item = Item(item.ActiveState, self.CurrentItemLabel, 'All')
-        item.Name = item.ActiveState + ' Item'
-        self.ItemDictionary[self.CurrentItemLabel].insert(0, item)
-        self.ItemAttributeList[self.CurrentItemLabel] = item
-        self.ItemAttributeList[self.CurrentItemLabel].Equipped = itemState
-        self.RestoreItem(self.ItemAttributeList[self.CurrentItemLabel])
-
-    def clearItemSlots(self):
-        self.ItemAttributeList[self.CurrentItemLabel].clearSlots()
-        self.RestoreItem(self.ItemAttributeList[self.CurrentItemLabel])

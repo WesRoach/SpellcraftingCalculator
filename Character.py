@@ -5,24 +5,13 @@ from DictionaryTwo import *
 
 __all__ = [
     'AllBonusList',
-    'AllRealms',
     'ClassList',
-    'ItemDamageTypes',
-    'ItemOrigins',
     'ItemTypes',
     'RaceList',
     'Races',
-    'Realms',
 ]
 
 Realms = (
-    'Albion',
-    'Hibernia',
-    'Midgard',
-)
-
-AllRealms = (
-    'All',
     'Albion',
     'Hibernia',
     'Midgard',
@@ -381,7 +370,7 @@ AllBonusList = {
 ClassList = {'All': []}
 AllBonusList['All'] = {}
 
-for Realm in Realms:
+for Realm in ('Albion', 'Hibernia', 'Midgard'):
     Classes = list(AllBonusList[Realm].keys())
     Classes.sort()
     ClassList[Realm] = t2(Classes)
@@ -560,7 +549,7 @@ Races = {
 
 RaceList = {'All': []}
 
-for Realm in Realms:
+for Realm in ('Albion', 'Hibernia', 'Midgard'):
 
     for Class in Races[Realm]:
         Races['All'][Class] = Races[Realm][Class]
@@ -619,39 +608,39 @@ ArmorTypes = {
 RightHandTypes = {
 
     'All': (
-        'Crush',
-        'Blunt',
-        'Hammer',
-        'Thrust',
-        'Pierce',
         'Slash',
+        'Thrust',
+        'Crush',
         'Blade',
+        'Pierce',
+        'Blunt',
         'Axe',
         'Sword',
+        'Hammer',
         'Flexible',
         'Fist Wrap',
         'Hand to Hand',
     ),
 
     'Albion': (
-        'Crush',
-        'Thrust',
         'Slash',
+        'Thrust',
+        'Crush',
         'Flexible',
         'Fist Wrap',
     ),
 
     'Hibernia': (
-        'Blunt',
-        'Pierce',
         'Blade',
+        'Pierce',
+        'Blunt',
         'Fist Wrap',
     ),
 
     'Midgard': (
         'Axe',
-        'Hammer',
         'Sword',
+        'Hammer',
         'Fist Wrap',
         'Hand to Hand',
     ),
@@ -835,43 +824,6 @@ ItemTypes = {
             'All': ('Mythirian',),
         },
     }
-}
-
-ItemDamageTypes = {
-
-    'Crafted': (
-        'Slash',
-        'Thrust',
-        'Crush',
-    ),
-
-    'Legendary': (
-        'Elemental',
-    ),
-
-    'Dropped': (
-        'Slash',
-        'Thrust',
-        'Crush',
-    ),
-}
-
-ItemOrigins = {
-
-    'Crafted': (
-        'Crafted',
-    ),
-
-    'Legendary': (
-        'Crafted',
-    ),
-
-    'Dropped': (
-        'Drop',
-        'Quest',
-        'Artifact',
-        'Merchant',
-    ),
 }
 
 if __name__ == "__main__":

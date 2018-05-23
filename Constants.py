@@ -1,7 +1,5 @@
 # HEADER PLACE HOLDER
 
-from Character import Realms
-
 __all__ = [
     'Cap',
     'CraftedTypeList',
@@ -296,7 +294,7 @@ DropSkillList = {
     ),
 }
 
-for realm in Realms:
+for realm in ('Albion', 'Hibernia', 'Midgard'):
     CraftedSkillList['All'].update(CraftedSkillList[realm])
     DropSkillList['All'].update(DropSkillList[realm])
 CraftedSkillList['All'] = tuple(sorted(CraftedSkillList['All']))
@@ -569,7 +567,7 @@ FocusList = {
     ),
 }
 
-for realm in Realms:
+for realm in ('Albion', 'Hibernia', 'Midgard'):
     FocusList['All'].update(FocusList[realm])
 FocusList['All'] = tuple(sorted(FocusList['All']))
 
@@ -628,6 +626,10 @@ PVEBonusList = (
 )
 
 MythicalBonusList = (
+    'DPS',
+    'Block',
+    'Evade',
+    'Parry',
     'Coin',
     'Bounty Points',
     'Realm Points',
@@ -641,12 +643,9 @@ MythicalBonusList = (
     'Seige Speed',
     'Seige Damage Ablative',
     'CC Duration Decrease',
-    'DPS',
-    'Block',
-    'Evade',
-    'Parry',
 )
 
+# TODO: COMBINE INTO SUPER LIST ...
 # =============================================== #
 #          EFFECT TYPE RELATED CONSTANTS          #
 # =============================================== #
@@ -685,6 +684,7 @@ DropTypeList = (
     'Mythical Bonus',
 )
 
+# TODO: COMBINE INTO SUPER LIST ...
 # =============================================== #
 #             EFFECT RELATED CONSTANTS            #
 # =============================================== #
@@ -772,7 +772,7 @@ DropEffectList = {
         'Mythical Bonus': MythicalBonusList,
     }}
 
-for realm in Realms:
+for realm in ('Albion', 'Hibernia', 'Midgard'):
     CraftedEffectList[realm] = {}
     CraftedEffectList[realm].update(CraftedEffectList['All'])
     DropEffectList[realm] = {}
@@ -784,6 +784,7 @@ for realm in CraftedEffectList.keys():
     DropEffectList[realm]['Skill'] = DropSkillList[realm]
     DropEffectList[realm]['Focus'] = FocusList[realm]
 
+# TODO: COMBINE INTO SUPER LIST ...
 # =============================================== #
 #          EFFECT VALUE RELATED CONSTANTS         #
 # =============================================== #

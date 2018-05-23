@@ -10,7 +10,7 @@ from math import floor
 class Item:
 
     def __init__(self, state = '', location = '', realm = ''):
-        self.ActiveState = state
+        self.State = state
         self.Equipped = int
         self.Location = location
         self.Realm = realm
@@ -28,53 +28,162 @@ class Item:
         self.Notes = ''
         self.Requirement = ''
         self.Database = False
-        self.SlotList = self.createItemSlots()
+        self.SlotList = self.createSlots()
 
-        if self.Location in ItemTypes['Jewelery']:
-            self.Equipped = 2
-        elif self.Location in ItemTypes['Armor']:
-            self.Equipped = 2
-        elif self.Location in ItemTypes['Weapons']:
-            self.Equipped = 0
-        elif self.Location in ItemTypes['Mythical']:
-            self.Equipped = 0
+        if self.getParent() == 'Jewelery':
+            self.setEquipped(True)
+        elif self.getParent() == 'Armor':
+            self.setEquipped(True)
+        elif self.getParent() == 'Weapons':
+            self.setEquipped(False)
+        elif self.getParent() == 'Mythical':
+            self.setEquipped(False)
 
-        if self.ActiveState in ('Crafted', 'Legendary'):
-            self.Level = '51'
-            self.Origin = 'Crafted'
+        if self.isPlayerCrafted():
+            self.setLevel('51')
+            self.setOrigin('Crafted')
 
-        # TODO: SET ARMOR TYPE BASED ON TOP-TIER ARMOR ...
-        if self.getParent() in ('Jewelery', 'Mythical') and state != 'Imported':
-            self.Type = ItemTypes[self.getParent()][location][realm][0]
+        if self.getParent() in ('Jewelery', 'Mythical') and self.getState() != 'Imported':
+            self.setType(ItemTypes[self.getParent()][location][realm][-1])
 
-        if self.Location == 'Left Hand':
-            self.LeftHand = 2
+        if self.getLocation() == 'Left Hand':
+            self.setLeftHand(True)
 
-    def isCraftable(self):
-        if self.ActiveState in ('Crafted', 'Legendary'):
-            return True if (self.Equipped != 0) else False
+# =============================================== #
+#             BOOLEAN CHECK METHODS               #
+# =============================================== #
+
+    def isCrafted(self):
+        return True if self.getState() == 'Crafted' else False
+
+    def isLegendary(self):
+        return True if self.getState() == 'Legendary' else False
+
+    def isDropped(self):
+        return True if self.getState() == 'Dropped' else False
+
+    def isPlayerCrafted(self):
+        return True if self.getState() in ('Crafted', 'Legendary') else False
+
+    def isEquipped(self):
+        return True if self.Equipped else False
+
+    def isLeftHand(self):
+        return True if self.LeftHand else False
+
+# =============================================== #
+#                 SETTER METHODS                  #
+# =============================================== #
+
+    def setState(self, state):
+        self.State = str(state)
+
+    def setEquipped(self, boolean):
+        self.Equipped = int(2) if boolean else int(0)
+
+    def setLocation(self, location):
+        self.Location = str(location)
+
+    def setRealm(self, realm):
+        self.Realm = str(realm)
+
+    def setLevel(self, level):
+        self.Level = str(level)
+
+    def setQuality(self, quality):
+        self.Quality = str(quality)
+
+    def setType(self, item_type):
+        self.Type = str(item_type)
+
+    def setName(self, name):
+        self.Name = str(name)
+
+    def setAFDPS(self, af_dps):
+        self.AFDPS = str(af_dps)
+
+    def setSpeed(self, speed):
+        self.Speed = str(speed)
+
+    def setBonus(self, bonus):
+        self.Bonus = str(bonus)
+
+    def setOrigin(self, origin):
+        self.Origin = str(origin)
+
+    def setLeftHand(self, boolean):
+        self.LeftHand = int(2) if boolean else int(0)
+
+    def setDamageType(self, damage_type):
+        self.DamageType = str(damage_type)
+
+    def setNotes(self, notes):
+        self.Notes = str(notes)
+
+    def setRequirement(self, requirement):
+        self.Requirement = str(requirement)
+
+    def addClassRestriction(self, restriction):
+        self.Restrictions.append(restriction)
+
+    def removeClassRestriction(self, restriction):
+        self.Restrictions.remove(restriction)
+
+# =============================================== #
+#                 GETTER METHODS                  #
+# =============================================== #
+#  BUG: RETURN NONE IF STRING EMPTY ...
+# =============================================== #
 
     def getParent(self):
         for parent, locations in ItemTypes.items():
-            if self.Location in locations:
+            if self.getLocation() in locations:
                 return parent
 
-    def createItemSlots(self):
-        item_slots = []
-        if self.ActiveState == 'Crafted':
-            for slot in range(0, 4):
-                item_slots.append(Slot('Craftable'))
-            item_slots.append(Slot('Enhanced'))
-        elif self.ActiveState == 'Legendary':
-            for slot in range(0, 4):
-                item_slots.append(Slot('Craftable'))
-            item_slots.append(Slot('Dropped'))
-            item_slots.append(Slot('Dropped'))
-            item_slots.append(Slot('Dropped'))
-        elif self.ActiveState == 'Dropped':
-            for slot in range(0, 12):
-                item_slots.append(Slot('Dropped'))
-        return item_slots
+    def getState(self):
+        return str(self.State)
+
+    def getLocation(self):
+        return str(self.Location)
+
+    def getRealm(self):
+        return str(self.Realm)
+
+    def getLevel(self):
+        return str(self.Level)
+
+    def getQuality(self):
+        return str(self.Quality)
+
+    def getType(self):
+        return str(self.Type)
+
+    def getName(self):
+        return str(self.Name)
+
+    def getAFDPS(self):
+        return str(self.AFDPS)
+
+    def getSpeed(self):
+        return str(self.Speed)
+
+    def getBonus(self):
+        return str(self.Bonus)
+
+    def getOrigin(self):
+        return str(self.Origin)
+
+    def getDamageType(self):
+        return str(self.DamageType)
+
+    def getRestrictions(self):
+        return list(self.Restrictions)
+
+    def getNotes(self):
+        return str(self.Notes)
+
+    def getRequirement(self):
+        return str(self.Requirement)
 
     def getSlot(self, index):
         return self.SlotList[index]
@@ -85,245 +194,307 @@ class Item:
     def getSlotCount(self):
         return len(self.SlotList)
 
-    def clearSlots(self):
-        self.SlotList = self.createItemSlots()
-
+    # BUG: CALCULATING DROPPED ITEMS ...
     def getImbueValues(self):
-        if self.ActiveState == 'Dropped':
-            return 0.0, 0.0, 0.0, 0.0
-        values = []
-        for index in range(0, self.getSlotCount() - 1):
-            if self.getSlot(index).getSlotType() == 'Craftable':
-                values.append(self.getSlot(index).getImbueValue())
-        maxValue = max(values)
-        for index in range(0, self.getSlotCount() - 1):
-            if self.getSlot(index).getSlotType() == 'Craftable':
-                if index == values.index(maxValue): continue
-                values[index] /= 2.0
-        return values
+        imbue_values = []
+        for slot in (x for x in self.getSlotList() if x.isCrafted()):
+            imbue_values.append(slot.getImbueValue())
+        max_value = max(imbue_values)
+        for index in range(0, self.getSlotCount()):
+            if self.getSlot(index).isCrafted():
+                if index == imbue_values.index(max_value): continue
+                imbue_values[index] /= 2.0
+        return list(imbue_values)
 
     def getMaxImbueValue(self):
-        if self.ActiveState not in ('Crafted', 'Legendary'):
-            return 0.0
-        if self.Level == '' or int(self.Level) < 1 or int(self.Level) > 51:
-            return 0.0
-        return ImbuePoints[int(self.Level) - 1]
+        if 1 <= int(self.getLevel()) <= 51:
+            return float(ImbuePoints[int(self.getLevel()) - 1])
+        else:
+            return float(0.0)
 
     def getUtility(self):
-        utility = 0.0
-        for slot in self.getSlotList():
-            utility += slot.getGemUtility()
-        return utility
+        return sum([x.getGemUtility() for x in self.getSlotList()])
 
     def getOverchargeSuccess(self, skill = 1000):
         if sum(self.getImbueValues()) == 0:
-            return 'N/A'
-        elif sum(self.getImbueValues()) >= (self.getMaxImbueValue() + 6.0):
-            return 0
+            return str('N/A')
         elif sum(self.getImbueValues()) <= (self.getMaxImbueValue() + 1.0):
-            return 100
-        else:
-            bonus = OverchargeSkillBonus[floor(skill / 50) - 1]
-            overcharge = floor(sum(self.getImbueValues())) - self.getMaxImbueValue()
+            return int(100)
+        elif sum(self.getImbueValues()) < (self.getMaxImbueValue() + 6.0):
+            bonus = OverchargeSkillBonus[(floor(skill / 50) - 1)]
+            overcharge = int(floor(sum(self.getImbueValues())) - self.getMaxImbueValue())
             success = OverchargeBasePercent[overcharge] + 44 + 26 + bonus
-            return 100 if success > 100 else success
-
-    def importFromXML(self, filename, export = False):
-        tree = etree.parse(filename) if not export else etree.ElementTree(filename)
-        if tree.getroot().tag == 'Item':
-            elements = tree.getroot().getchildren()
-            for element in elements:
-                if element.tag not in ('Equipped', 'Restrictions', 'Slot'):
-                    if element.tag in self.__dict__:
-                        setattr(self, element.tag, element.text)
-                    if element.tag == 'ActiveState':
-                        self.SlotList = self.createItemSlots()
-                elif element.tag == 'Equipped':
-                    self.Equipped = int(element.text)
-                elif element.tag == 'Restrictions':
-                    for restriction in element:
-                        self.Restrictions.append(restriction.text)
-                elif element.tag == 'Slot':
-                    index = int(element.attrib['Number'])
-                    for attribute in element:
-                        if attribute.tag == 'Type':
-                            self.getSlot(index).setEffectType(attribute.text)
-                        elif attribute.tag == 'Effect':
-                            self.getSlot(index).setEffect(attribute.text)
-                        elif attribute.tag == 'Amount':
-                            self.getSlot(index).setEffectAmount(attribute.text)
-                        elif attribute.tag == 'Requirement':
-                            self.getSlot(index).setEffectRequirement(attribute.text)
+            return int(success) if int(success) <= 100 else int(100)
         else:
-            return -1
+            return int(0)
 
-        if 'All' in self.Restrictions:
-            self.Restrictions = ['All']
+# =============================================== #
+#              MISCELLANEOUS METHODS              #
+# =============================================== #
 
-    def exportAsXML(self, filename, export = False, report = False):
-        fields = [
-            ('Realm', self.Realm),
-            ('ActiveState', self.ActiveState),
-            ('Type', self.Type),
-            ('Name', self.Name),
-            ('Level', self.Level),
-            ('Quality', self.Quality),
-            ('Bonus', self.Bonus),
-            ('AFDPS', self.AFDPS),
-            ('Speed', self.Speed),
-            ('Origin', self.Origin),
-            ('DamageType', self.DamageType),
-            ('LeftHand', self.LeftHand),
-            ('Requirement', self.Requirement),
-            ('Restrictions', self.Restrictions),
-            ('Notes', self.Notes,)
-        ]
+    def clearSlots(self):
+        self.SlotList.clear()
+        self.SlotList = self.createSlots()
+
+    def createSlots(self):
+        item_slots = []
+        if self.isCrafted():
+            item_slots.append(Slot('Crafted'))
+            item_slots.append(Slot('Crafted'))
+            item_slots.append(Slot('Crafted'))
+            item_slots.append(Slot('Crafted'))
+            item_slots.append(Slot('Enhanced'))
+        elif self.isLegendary():
+            item_slots.append(Slot('Crafted'))
+            item_slots.append(Slot('Crafted'))
+            item_slots.append(Slot('Crafted'))
+            item_slots.append(Slot('Crafted'))
+            item_slots.append(Slot('Dropped'))
+            item_slots.append(Slot('Dropped'))
+            item_slots.append(Slot('Dropped'))
+        elif self.isDropped():
+            item_slots.append(Slot('Dropped'))
+            item_slots.append(Slot('Dropped'))
+            item_slots.append(Slot('Dropped'))
+            item_slots.append(Slot('Dropped'))
+            item_slots.append(Slot('Dropped'))
+            item_slots.append(Slot('Dropped'))
+            item_slots.append(Slot('Dropped'))
+            item_slots.append(Slot('Dropped'))
+            item_slots.append(Slot('Dropped'))
+            item_slots.append(Slot('Dropped'))
+            item_slots.append(Slot('Dropped'))
+            item_slots.append(Slot('Dropped'))
+        return item_slots
+
+    def getXMLFields(self, export, report):
+        xml_fields = {
+            'Realm': self.getRealm(),
+            'State': self.getState(),
+            'Type': self.getType(),
+            'Name': self.getName(),
+            'Level': self.getLevel(),
+            'Quality': self.getLevel(),
+            'Bonus': self.getBonus(),
+            'AFDPS': self.getAFDPS(),
+            'Speed': self.getSpeed(),
+            'Origin': self.getOrigin(),
+            'DamageType': self.getDamageType(),
+            'LeftHand': self.isLeftHand(),
+            'Requirement': self.getRequirement(),
+            'Restrictions': self.getRestrictions(),
+            'Notes': self.getNotes(),
+        }
 
         if export:
-            fields.extend([
-                ('Location', self.Location),
-                ('Equipped', self.Equipped),
-            ])
+            xml_fields['Location'] = self.getLocation()
+            xml_fields['Equipped'] = self.isEquipped()
 
         if report:
-            fields.extend([
-                ('Utility', '%.1f' % self.getUtility()),
-                ('Imbue', '%.1f' % sum(self.getImbueValues())),
-                ('ImbueMax', str(self.getMaxImbueValue())),
-                ('Success', str(self.getOverchargeSuccess())),
-            ])
+            xml_fields['Utility'] = '{:.1f}'.format(self.getUtility())
+
+        if report and self.isPlayerCrafted():
+            xml_fields['Imbue'] = '{:.1f}'.format(sum(self.getImbueValues()))
+            xml_fields['ImbueMax'] = self.getMaxImbueValue()
+            xml_fields['Sucess'] = self.getOverchargeSuccess()
+
+        return xml_fields
+
+# =============================================== #
+#                 XML PROCESSING                  #
+# =============================================== #
+
+    def importFromXML(self, filename, export = False):
+        tree = etree.ElementTree(filename) if export else etree.parse(filename)
+
+        # RETURN ERROR CODE ...
+        if tree.getroot().tag != 'Item': return -1
+
+        elements = tree.getroot().getchildren()
+        for element in elements:
+            if element.tag not in ('Equipped', 'Restrictions', 'Slot', 'State',):
+                setattr(self, element.tag, element.text)
+            elif element.tag == 'Equipped':
+                self.setEquipped(element.text == 'True')
+            elif element.tag == 'Restrictions':
+                for restriction in element:
+                    self.addClassRestriction(restriction.text)
+            elif element.tag == 'Slot':
+                index = int(element.attrib['Number'])
+                for attribute in element:
+                    if attribute.tag == 'Type':
+                        self.getSlot(index).setEffectType(attribute.text)
+                    elif attribute.tag == 'Effect':
+                        self.getSlot(index).setEffect(attribute.text)
+                    elif attribute.tag == 'Amount':
+                        self.getSlot(index).setEffectAmount(attribute.text)
+                    elif attribute.tag == 'Requirement':
+                        self.getSlot(index).setEffectRequirement(attribute.text)
+            elif element.tag == 'State':
+                self.setState(element.text)
+                self.SlotList = self.createSlots()
+
+    def exportAsXML(self, filename, export = False, report = False):
+        xml_fields = self.getXMLFields(export, report)
 
         item = etree.Element('Item')
-        for key, value in fields:
-            if key != 'Restrictions' and value != '':
-                etree.SubElement(item, key).text = str(value)
-            elif key == 'Restrictions' and value:
+        for attribute, value in xml_fields.items():
+            if attribute == 'Restrictions' and value:
                 restrictions = etree.SubElement(item, 'Restrictions')
-                for restriction in self.Restrictions:
+                for restriction in self.getRestrictions():
                     etree.SubElement(restrictions, 'Class').text = restriction
-            elif key in ('Location', 'Equipped') and export:
-                etree.SubElement(item, key).text = str(value)
+            elif value:
+                etree.SubElement(item, attribute).text = str(value)
 
         for index in range(0, self.getSlotCount()):
-            if self.getSlot(index).getEffectType() != 'Unused':
-                slot = etree.SubElement(item, 'Slot', Number = str(index), Type = self.getSlot(index).getSlotType())
-                etree.SubElement(slot, 'Type').text = self.getSlot(index).getEffectType()
-                etree.SubElement(slot, 'Effect').text = self.getSlot(index).getEffect()
-                etree.SubElement(slot, 'Amount').text = self.getSlot(index).getEffectAmount()
-                if self.getSlot(index).getEffectRequirement() != '':
-                    etree.SubElement(slot, 'Requirement').text = self.getSlot(index).getEffectRequirement()
-                if report and self.ActiveState in ('Crafted', 'Legendary'):
-                    etree.SubElement(slot, 'GemName').text = self.getSlot(index).getGemName(self.Realm)
+            if self.getSlot(index).isUtilized():
+                slot = self.getSlot(index)
+                slot_element = etree.SubElement(
+                    item, 'Slot', Number = str(index), Type = slot.getSlotType()
+                )
+                etree.SubElement(slot_element, 'Type').text = slot.getEffectType()
+                etree.SubElement(slot_element, 'Effect').text = slot.getEffect()
+                etree.SubElement(slot_element, 'Amount').text = slot.getEffectAmount()
+                if slot.getEffectRequirement():
+                    etree.SubElement(slot_element, 'Requirement').text = slot.getEffectRequirement()
+
+                # EXTRA ATTRIBUTES FOR REPORT ...
+                if self.isPlayerCrafted() and report:
+                    etree.SubElement(slot_element, 'GemName').text = slot.getGemName(self.getRealm())
 
         if not export:
             with open(filename, 'wb') as document:
-                document.write(etree.tostring(item, encoding = 'UTF-8', pretty_print = True, xml_declaration = True))
+                document.write(etree.tostring(item, encoding='UTF-8', pretty_print = True, xml_declaration = True))
         else:
             return item
-
-    def parseLog(self, filename):
-        pass
 
 
 class Slot:
 
-    def __init__(self, itype = '', etype = 'Unused', effect = '', amount = '', requirement = ''):
-        self.SlotType = itype
+    def __init__(self, stype = '', etype = 'Unused', effect = '', amount = '', requirement = ''):
+        self.SlotType = stype
         self.EffectType = etype
         self.Effect = effect
         self.EffectAmount = amount
         self.Requirement = requirement
 
-    def isCraftable(self):
-        if self.getSlotType() == 'Craftable':
-            return True if (self.getEffectType() not in ('', 'Unused')) else False
+# =============================================== #
+#             BOOLEAN CHECK METHODS               #
+# =============================================== #
 
-    def setAll(self, etype, effect, amount,):
-        self.EffectType = etype
-        self.Effect = effect
-        self.EffectAmount = amount
+    def isCrafted(self):
+        return True if self.getSlotType() == 'Crafted' else False
+
+    def isEnhanced(self):
+        return True if self.getSlotType() == 'Enhanced' else False
+
+    def isDropped(self):
+        return True if self.getSlotType() == 'Dropped' else False
+
+    def isUtilized(self):
+        return False if self.getEffectType() == 'Unused' else True
+
+# =============================================== #
+#                 SETTER METHODS                  #
+# =============================================== #
 
     def setEffectType(self, etype):
-        self.EffectType = etype
+        self.EffectType = str(etype)
 
     def setEffect(self, effect):
-        self.Effect = effect
+        self.Effect = str(effect)
 
     def setEffectAmount(self, amount):
-        self.EffectAmount = amount
+        self.EffectAmount = str(amount)
 
-    def setEffectRequirement(self, value):
-        self.Requirement = value
+    def setEffectRequirement(self, requirement):
+        self.Requirement = str(requirement)
+
+    def setAll(self, etype, effect, amount):
+        self.setEffectType(etype)
+        self.setEffect(effect)
+        self.setEffectAmount(amount)
+
+# =============================================== #
+#                 GETTER METHODS                  #
+# =============================================== #
 
     def getSlotType(self):
-        return self.SlotType
+        return str(self.SlotType)
+
+    def getSlotAttributes(self):
+        return str(self.EffectType), str(self.Effect), str(self.EffectAmount)
 
     def getEffectType(self):
-        return self.EffectType
+        return str(self.EffectType)
 
     def getEffect(self):
-        return self.Effect
+        return str(self.Effect)
 
     def getEffectAmount(self):
-        return self.EffectAmount
+        return str(self.EffectAmount)
 
     def getEffectRequirement(self):
-        return self.Requirement
+        return str(self.Requirement)
 
-    def getImbueValue(self, value = 0):
-        if not self.isCraftable(): return 0.0
+    def getImbueValue(self):
+        if self.getEffectAmount() in ('', '0'):
+            return float(0.0)
+
+        imbue_value = float(0.0)
         if self.getEffectType() == 'Skill':
-            value = (int(self.getEffectAmount()) - 1) * 5.0
+            imbue_value = (int(self.getEffectAmount()) - 1) * 5.0
         elif self.getEffectType() == 'Attribute':
-            if self.getEffect() not in ('Hit Points', 'Power'):
-                value = round((int(self.getEffectAmount()) - 1) / 1.7)
-            elif self.getEffect() == 'Hit Points':
-                value = int(self.getEffectAmount()) / 4.0
+            if self.getEffect() == 'Hit Points':
+                imbue_value = (int(self.getEffectAmount()) / 4.0)
             elif self.getEffect() == 'Power':
-                value = (int(self.getEffectAmount()) - 1) * 2.0
+                imbue_value = (int(self.getEffectAmount()) - 1) * 2.0
+            else:
+                imbue_value = round((int(self.getEffectAmount()) - 1) / 1.7)
         elif self.getEffectType() == 'Resistance':
-            value = (int(self.getEffectAmount()) - 1) * 2.0
+            imbue_value = (int(self.getEffectAmount()) - 1) * 2.0
 
-        return 1.0 if value < 1.0 else value
+        return float(1.0 if imbue_value < 1.0 else imbue_value)
 
     def getGemUtility(self):
-        if not self.getEffectAmount() or self.getEffectAmount() == '0':
-            return 0.0
+        if self.getEffectAmount() in ('', '0'):
+            return float(0.0)
 
+        gem_utility = float(0.0)
         if self.getEffectType() == 'Skill':
-            return float(int(self.getEffectAmount()) * 5.0)
+            gem_utility = float(int(self.getEffectAmount()) * 5.0)
         elif self.getEffectType() == 'Attribute':
-            if self.getEffect() not in ('Hit Points', 'Power'):
-                return float((int(self.getEffectAmount()) * 2.0) / 3.0)
-            elif self.getEffect() == 'Hit Points':
-                return float(int(self.getEffectAmount()) / 4.0)
+            if self.getEffect() == 'Hit Points':
+                gem_utility = float(int(self.getEffectAmount()) / 4.0)
             elif self.getEffect() == 'Power':
-                return float(int(self.getEffectAmount()) * 2.0)
+                gem_utility = float(int(self.getEffectAmount()) * 2.0)
+            else:
+                gem_utility = float((int(self.getEffectAmount()) * 2.0) / 3.0)
         elif self.getEffectType() == 'Resistance':
-            return float(int(self.getEffectAmount()) * 2.0)
+            gem_utility = float(int(self.getEffectAmount()) * 2.0)
         elif self.getEffectType() == 'Focus':
-            return float(int(self.getEffectAmount()) * 1.0)
-        else:
-            return 0.0
+            gem_utility = float(int(self.getEffectAmount()) * 1.0)
+
+        return float(gem_utility)
 
     def getGemIndex(self):
-        if self.getEffect() in CraftedValuesList[self.getEffectType()]:
-            return CraftedValuesList[self.getEffectType()][self.getEffect()].index(self.getEffectAmount())
-        elif self.getEffectType() in CraftedValuesList:
-            return CraftedValuesList[self.getEffectType()].index(self.getEffectAmount())
+        etype, effect, amount = self.getSlotAttributes()
+        if effect in CraftedValuesList[etype]:
+            return CraftedValuesList[etype][effect].index(amount)
+        elif etype in CraftedValuesList:
+            return CraftedValuesList[etype].index(amount)
 
     def getGemName(self, realm):
-        if self.isCraftable():
+        if self.isCrafted() and self.isUtilized():
             tier = GemTierName[self.getGemIndex()]
             realm = realm if (self.getEffectType() in GemMaterials[realm]) else 'All'
             return tier + ' ' + GemMaterials[realm][self.getEffectType()][self.getEffect()]['Gem']
-        elif self.getSlotType() in ('Dropped', 'Enhanced'):
-            return 'Unused' if (self.getEffectType() == 'Unused') else 'Crafted Bonus'
+        elif self.isEnhanced() or self.isDropped():
+            return 'Crafted Bonus' if self.isUtilized() else 'Unused'
         else:
             return 'None'
 
     def getGemMaterials(self, realm):
-        if not self.isCraftable(): return
         materials = {'Gems': {}, 'Dusts': {}, 'Liquids': {}}
 
         index = self.getGemIndex()
@@ -331,7 +502,7 @@ class Slot:
         components = GemMaterials[realm][self.getEffectType()][self.getEffect()]
         materials['Gems'][GemMaterialsOrder['Gems'][index]] = 1
 
-        if self.getEffect()[0:4] == 'All ':
+        if self.getEffect().split(None)[0] == 'All':
             if self.getEffectType() == 'Focus':
                 materials['Gems'][GemMaterialsOrder['Gems'][index]] = 3
             materials['Dusts'][components['Dust']] = (index * 5) + 1

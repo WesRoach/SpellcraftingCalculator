@@ -10,6 +10,7 @@ Ui_ReportDialog = uic.loadUiType(r'interface/ReportDialog.ui')[0]
 
 
 class ReportDialog(QDialog, Ui_ReportDialog):
+
     def __init__(self, parent = None, flags = Qt.Dialog):
         QDialog.__init__(self, parent, flags)
         self.setupUi(self)
@@ -42,8 +43,8 @@ class ReportDialog(QDialog, Ui_ReportDialog):
 
         materials = {'Items': {}, 'Gems': {}, 'Dusts': {}, 'Liquids': {}}
 
-        for item in [x for x in item_list.values() if x.isCraftable()]:
-            for slot in [x for x in item.getSlotList() if x.isCraftable()]:
+        for item in [x for x in item_list.values() if x.isPlayerCrafted()]:
+            for slot in [x for x in item.getSlotList() if x.isCrafted() and x.isUtilized()]:
 
                 try:  # THE KEY MAY NOT EXIST ...
                     materials['Items'][item.Location] += [slot.getGemName(realm)]
@@ -107,8 +108,10 @@ class ReportDialog(QDialog, Ui_ReportDialog):
     def exportToHTML(self):
         options = QFileDialog.Options()
         filename, filters = QFileDialog.getSaveFileName(
-            self, 'Save HTML Report', '', 'HTML Report (*.htm *.html);; All Files (*.*)', options = options)
-        if filename == '': return
+            QFileDialog(), 'Save HTML Report', '', 'HTML Report (*.htm *.html);; All Files (*.*)', options = options)
+
+        if filename in ('', None):
+            return
 
         with open(filename, 'wb') as document:
             document.write(etree.tostring(self.RawHTMLReport, pretty_print = True, method = 'html'))
