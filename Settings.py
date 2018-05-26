@@ -1,7 +1,8 @@
 # HEADER PLACE HOLDER
 
-from configparser import ConfigParser
+from configparser import ConfigParser, NoOptionError
 from Singleton import Singleton
+from pathlib import Path
 
 
 class Settings(Singleton):
@@ -23,9 +24,10 @@ class Settings(Singleton):
         pass
 
     def load(self):
-
-        # TODO: TEST IF FILE EXISTS ...
-        self.settings.read(r'settings.ini')
+        if Path(r'settings.ini').exists():
+            self.settings.read(r'settings.ini')
+        else:
+            pass
 
     def save(self):
         pass
