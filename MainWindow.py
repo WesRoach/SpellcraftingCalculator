@@ -444,9 +444,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ItemSpeed.setFixedSize(QSize(width, defaultFixedHeight))
         self.ItemSpeed.setValidator(QDoubleValidator(-999.0, +999.0, 1, self))
 
-        self.ItemInformationGroup.setFixedWidth(186)
-
         # TODO: SET DYNAMIC WIDTH ...
+        self.ItemInformationGroup.setFixedWidth(186)
         self.ItemRestrictionsGroup.setFixedWidth(135)
 
         width = testFont.size(Qt.TextSingleLine, "1999.9", tabArray=None).width()
