@@ -24,10 +24,7 @@ class Settings(Singleton):
         pass
 
     def load(self):
-        if Path(r'settings.ini').exists():
-            self.settings.read(r'settings.ini')
-        else:
-            pass
+        pass
 
     def save(self):
         pass
