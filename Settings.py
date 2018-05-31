@@ -2,6 +2,7 @@
 
 from configparser import ConfigParser
 from Singleton import Singleton
+from pathlib import Path
 
 
 class Settings(Singleton):
@@ -26,7 +27,10 @@ class Settings(Singleton):
         pass
 
     def load(self):
-        pass
+        if Path(r'settings.ini'):
+            self.settings.read(r'settings.ini')
+        else:
+            self.create()
 
     def save(self):
         pass
