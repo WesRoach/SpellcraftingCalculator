@@ -1,8 +1,7 @@
 # HEADER PLACE HOLDER
 
-from configparser import ConfigParser, NoOptionError
+from configparser import ConfigParser
 from Singleton import Singleton
-from pathlib import Path
 
 
 class Settings(Singleton):
@@ -18,6 +17,9 @@ class Settings(Singleton):
         pass
 
     def write(self):
+        pass
+
+    def create(self):
         pass
 
     def parse(self):
