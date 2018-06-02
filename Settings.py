@@ -9,7 +9,6 @@ class Settings(Singleton):
 
     def __init__(self):
         Singleton.__init__(self)
-        self.settings = ConfigParser()
 
     def get(self, option, value):
         pass
@@ -28,7 +27,7 @@ class Settings(Singleton):
 
     def load(self):
         if Path(r'settings.ini'):
-            self.settings.read(r'settings.ini')
+            pass
         else:
             self.create()
 
