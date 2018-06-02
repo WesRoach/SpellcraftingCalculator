@@ -1,6 +1,5 @@
 # HEADER PLACE HOLDER
 
-from configparser import ConfigParser
 from Singleton import Singleton
 from pathlib import Path
 
