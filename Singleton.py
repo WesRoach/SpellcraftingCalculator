@@ -4,10 +4,9 @@
 class Singleton:
     __single = None
 
+    @staticmethod
     def instance():
         return Singleton.__single
-
-    instance = staticmethod(instance)
 
     def __init__(self):
         if Singleton.__single:
