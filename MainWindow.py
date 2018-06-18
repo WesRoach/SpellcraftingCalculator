@@ -448,7 +448,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ItemInformationGroup.setFixedWidth(186)
         self.ItemRestrictionsGroup.setFixedWidth(135)
 
-        width = testFont.size(Qt.TextSingleLine, "1999.9", tabArray=None).width()
+        width = testFont.size(Qt.TextSingleLine, "1999.9", tabArray = None).width()
         self.BuildUtility.setFixedWidth(width)
         self.BuildUtility.setAlignment(Qt.AlignRight)
         self.StatusBar.setStyleSheet('QStatusBar::item {border: None;}')
@@ -1604,8 +1604,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # CASCADE THE CHANGES ...
         self.calculate()
 
-# =============================================== #
-#     UPDATE ETYPE/EFFECT/AMOUNT/REQ METHODS      #
 # =============================================== #
 #        METHODS SEPARATED FOR READABILITY        #
 # =============================================== #

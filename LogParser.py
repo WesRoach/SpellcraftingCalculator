@@ -1,7 +1,7 @@
 # HEADER PLACE HOLDER
 
 
-class ParseLog:
+class LogParser:
 
     def __init__(self, log_file):
         pass
