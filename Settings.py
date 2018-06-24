@@ -22,7 +22,7 @@ class Settings(Singleton):
 
     @staticmethod
     def create():
-        with open('settings.ini', 'w') as document:
+        with open(r'settings.ini', 'w') as document:
             settings = ConfigParser()
             settings.optionxform = str
             sections = ['GENERAL', 'PATHS']
@@ -30,12 +30,12 @@ class Settings(Singleton):
             for section in sections:
                 settings.add_section(section)
 
-            # DEFAULT VALUES FOR 'GENERAL' SECTION
+            # DEFAULTS FOR 'GENERAL' SECTION
             settings.set('GENERAL', 'DistanceToCap', 'True')
             settings.set('GENERAL', 'UnusableSkills', 'False')
             settings.set('GENERAL', 'ToolbarSize', '16')
 
-            # DEFAULT VALUES FOR 'PATHS' SECTION
+            # DEFAULTS FOR 'PATHS' SECTION
             default_path = os.path.dirname(os.path.abspath(sys.argv[0]))
             settings.set('PATHS', 'ItemPath', os.path.join(default_path, 'items'))
             settings.set('PATHS', 'DatabasePath', os.path.join(default_path, 'database'))
