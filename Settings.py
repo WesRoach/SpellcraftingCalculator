@@ -2,7 +2,8 @@
 
 from configparser import ConfigParser
 from Singleton import Singleton
-from pathlib import Path
+import os
+import sys
 
 
 class Settings(Singleton):
@@ -19,14 +20,35 @@ class Settings(Singleton):
     def write(self):
         pass
 
-    def create(self):
-        pass
+    @staticmethod
+    def create():
+        with open('settings.ini', 'w') as document:
+            settings = ConfigParser()
+            settings.optionxform = str
+            sections = ['GENERAL', 'PATHS']
+
+            for section in sections:
+                settings.add_section(section)
+
+            # DEFAULT VALUES FOR 'GENERAL' SECTION
+            settings.set('GENERAL', 'DistanceToCap', 'True')
+            settings.set('GENERAL', 'UnusableSkills', 'False')
+            settings.set('GENERAL', 'ToolbarSize', '16')
+
+            # DEFAULT VALUES FOR 'PATHS' SECTION
+            default_path = os.path.dirname(os.path.abspath(sys.argv[0]))
+            settings.set('PATHS', 'ItemPath', os.path.join(default_path, 'items'))
+            settings.set('PATHS', 'DatabasePath', os.path.join(default_path, 'database'))
+            settings.set('PATHS', 'TemplatePath', os.path.join(default_path, 'templates'))
+
+            # CREATE DEFAULT 'settings.ini'
+            settings.write(document)
 
     def parse(self):
         pass
 
     def load(self):
-        if not Path(r'settings.ini').exists():
+        if not os.path.exists(r'settings.ini'):
             self.create()
 
         settings = ConfigParser()
