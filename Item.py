@@ -274,7 +274,7 @@ class Item:
             'Type': self.getType(),
             'Name': self.getName(),
             'Level': self.getLevel(),
-            'Quality': self.getLevel(),
+            'Quality': self.getQuality(),
             'Bonus': self.getBonus(),
             'AFDPS': self.getAFDPS(),
             'Speed': self.getSpeed(),
