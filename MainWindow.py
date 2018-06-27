@@ -631,7 +631,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 for attribute, bonuses in total[key].items():
                     tag = ''.join(x for x in attribute if x.isalnum())
                     if tag != attribute:
-                        root = etree.SubElement(element, tag, Text=attribute)
+                        root = etree.SubElement(element, tag, Text = attribute)
                     else:
                         root = etree.SubElement(element, tag)
                     for bonus, value in bonuses.items():
