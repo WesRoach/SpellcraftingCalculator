@@ -94,8 +94,6 @@ class ReportDialog(QDialog, Ui_ReportDialog):
         transform = etree.XSLT(xslt)
         report = str(transform(report))
 
-        print(report)
-
         parser = etree.HTMLParser(remove_blank_text = True)
         self.RawHTMLReport = etree.HTML(report, parser)
         self.ReportTextBrowser.setHtml(report)
