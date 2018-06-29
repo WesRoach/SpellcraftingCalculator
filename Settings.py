@@ -5,6 +5,7 @@ from Singleton import Singleton
 import os
 import sys
 
+# SINGLETON IS NOT REQUIRED ...
 
 class Settings(Singleton):
 
@@ -54,6 +55,8 @@ class Settings(Singleton):
         settings = ConfigParser()
         settings.optionxform = str
         settings.read(r'settings.ini')
+
+        # MAYBE RETURN SETTINGS AND JUST CALL PARSE EACH TIME?
 
         for section in settings.keys():
             for option, value in settings[section].items():

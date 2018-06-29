@@ -241,7 +241,7 @@
     </xsl:template>
 
     <xsl:template match = "Item">
-        <xsl:if test = "count(Slot) &gt; 0 and Equipped = '2'">
+        <xsl:if test = "count(Slot) &gt; 0 and Equipped = 'True' ">
             <dl>
                 <dt><b><xsl:value-of select = "Location" /></b></dt>
                 <dt><i><xsl:value-of select = "Name"/></i></dt>
@@ -267,7 +267,7 @@
                         <xsl:text>,&#160; Bonus: </xsl:text><xsl:value-of select = "Bonus"/>
                     </xsl:if>
                 </dt>
-                <xsl:if test = "ActiveState = 'Crafted' or ActiveState = 'Legendary' ">
+                <xsl:if test = "State = 'Crafted' or State = 'Legendary' ">
                     <dt>
                         <xsl:text>Imbue Points: </xsl:text>
 						<xsl:value-of select = "Imbue"/><xsl:text> of </xsl:text><xsl:value-of select = "ImbueMax"/>
