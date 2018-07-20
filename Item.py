@@ -132,8 +132,6 @@ class Item:
 # =============================================== #
 #                 GETTER METHODS                  #
 # =============================================== #
-#  BUG: RETURN NONE IF STRING EMPTY ...
-# =============================================== #
 
     def getParent(self):
         for parent, locations in ItemTypes.items():

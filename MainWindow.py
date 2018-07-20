@@ -1347,8 +1347,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 # =============================================== #
 #                  GETTER METHODS                 #
 # =============================================== #
-#  BUG: RETURN NONE IF STRING EMPTY ...
-# =============================================== #
 
     @staticmethod
     def getRealms():

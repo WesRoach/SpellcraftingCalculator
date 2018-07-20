@@ -36,6 +36,8 @@ class Settings(Singleton):
             settings.set('GENERAL', 'UnusableSkills', 'False')
             settings.set('GENERAL', 'ToolbarSize', '16')
 
+            # TODO: TEST AND CREATE DIRECTORIES IF THEY ARE NOT THERE ...
+
             # DEFAULTS FOR 'PATHS' SECTION
             default_path = os.path.dirname(os.path.abspath(sys.argv[0]))
             settings.set('PATHS', 'ItemPath', os.path.join(default_path, 'items'))
