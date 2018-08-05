@@ -59,7 +59,7 @@ class Settings(Singleton):
         settings.optionxform = str
         settings.read(r'settings.ini')
 
-        # MAYBE RETURN SETTINGS AND JUST CALL PARSE EACH TIME?           [[]9998a478
+        # MAYBE RETURN SETTINGS AND JUST CALL PARSE EACH TIME?
 
         for section in settings.keys():
             for option, value in settings[section].items():
