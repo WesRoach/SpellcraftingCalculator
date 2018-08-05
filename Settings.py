@@ -7,6 +7,7 @@ import sys
 
 # SINGLETON IS NOT REQUIRED ...
 
+
 class Settings(Singleton):
 
     def __init__(self):
