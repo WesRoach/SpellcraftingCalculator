@@ -192,7 +192,6 @@ class Item:
     def getSlotCount(self):
         return len(self.SlotList)
 
-    # BUG: CALCULATING DROPPED ITEMS ...
     def getImbueValues(self):
         imbue_values = []
         for slot in (x for x in self.getSlotList() if x.isCrafted()):
