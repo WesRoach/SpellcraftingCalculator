@@ -25,8 +25,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         QMainWindow.__init__(self, parent, flags)
         self.setupUi(self)
 
-        Settings().instance().load()
-
         self.FileMenu = QMenu('&File', self)
         self.EditMenu = QMenu('&Edit', self)
         self.ViewMenu = QMenu('&View', self)
