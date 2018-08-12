@@ -26,7 +26,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.setupUi(self)
 
         # INSTANTIATE SETTINGS ...
-        # Settings().load()
+        self.Settings = Settings()
+        self.Settings.load()
 
         self.FileMenu = QMenu('&File', self)
         self.EditMenu = QMenu('&Edit', self)
@@ -1741,6 +1742,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.initialize()
 
     # TODO: LOAD PATH FROM SAVED SETTINGS ...
+    # TODO: CHECK IF TEMPLATE HAS BEEN MODIFIED, IF YES ... openEvent
     def openTemplate(self):
         options = QFileDialog.Options()
         filename, filters = QFileDialog.getOpenFileName(
@@ -1966,7 +1968,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if self.TemplateModified:
             prompt = QMessageBox.warning(
                 self, 'Save Changes?',
-                'This template has been changed.\n'
+                'This template has been modified.\n'
                 'Do you want to save these changes?',
                 QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel, QMessageBox.Cancel
             )
@@ -1975,9 +1977,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 self.saveTemplate()
                 if self.TemplateModified:
                     event.ignore()
-                    return
+                else:
+                    self.Settings.save()
+                    event.accept()
+
             if prompt == QMessageBox.No:
+                self.Settings.save()
                 event.accept()
+
             if prompt == QMessageBox.Cancel:
                 event.ignore()
-                return
