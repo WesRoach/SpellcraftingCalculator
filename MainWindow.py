@@ -1738,11 +1738,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 #           NEW/SAVE/LOAD/DELETE METHODS          #
 # =============================================== #
 
+    # TODO: CHECK IF TEMPLATE MODIFIED ...
     def newTemplate(self):
         self.initialize()
 
-    # TODO: LOAD PATH FROM SAVED SETTINGS ...
-    # TODO: CHECK IF TEMPLATE HAS BEEN MODIFIED, IF YES ... openEvent
+    # TODO: LOAD PATH & CHECK IF TEMPLATE MODIFIED ...
     def openTemplate(self):
         options = QFileDialog.Options()
         filename, filters = QFileDialog.getOpenFileName(
@@ -1763,11 +1763,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.exportAsXML(os.path.join(self.TemplatePath, self.TemplateName))
             self.TemplateModified = False
 
-    # TODO: LOAD PATH FROM SAVED SETTINGS ...
     def saveTemplateAs(self):
         options = QFileDialog.Options()
+        path = self.Settings.get('PATHS', 'TemplatePath')
         filename, filters = QFileDialog.getSaveFileName(
-            QFileDialog(), 'Save Item', '', 'Templates (*.ktf);; All Files (*.*)', options=options)
+            QFileDialog(), 'Save Item', path, 'Templates (*.ktf);; All Files (*.*)', options = options)
 
         if filename in ('', None):
             return
@@ -1806,11 +1806,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # CASCADE THE CHANGES ...
         self.restoreItem(self.getItem())
 
-    # TODO: LOAD PATH FROM SAVED SETTINGS ...
     def loadItem(self):
         options = QFileDialog.Options()
+        path = self.Settings.get('PATHS', 'ItemPath')
         filename, filters = QFileDialog.getOpenFileName(
-            QFileDialog(), 'Load Item:', '', 'Items (*.xml);; All Files (*.*)', options = options)
+            QFileDialog(), 'Load Item:', path, 'Items (*.xml);; All Files (*.*)', options = options)
 
         if filename in ('', None):
             return
@@ -1963,7 +1963,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.SkillsView.model().setData(index, QVariant(bonus), Qt.DisplayRole)
         self.SkillsView.model().setData(index, QVariant(group), Qt.UserRole)
 
-    # TODO: IMPLEMENT SAVE OPTIONS ...
     def closeEvent(self, event):
         if self.TemplateModified:
             prompt = QMessageBox.warning(
