@@ -2,13 +2,17 @@
 
 
 class Singleton:
-    __single = None
+    __instance = None
 
     @staticmethod
-    def instance():
-        return Singleton.__single
+    def getInstance():
+        if Singleton.__instance:
+            return Singleton.__instance
+        else:
+            raise Exception('ERROR: Class has not been instatiated.')
 
     def __init__(self):
-        if Singleton.__single:
-            raise TypeError("Singleton is already instantiated")
-        Singleton.__single = self
+        if not Singleton.__instance:
+            Singleton.__instance = self
+        else:
+            raise Exception('ERROR: Class is already instantiated.')
