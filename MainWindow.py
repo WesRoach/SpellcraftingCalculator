@@ -1738,15 +1738,16 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 #           NEW/SAVE/LOAD/DELETE METHODS          #
 # =============================================== #
 
-    # TODO: CHECK IF TEMPLATE MODIFIED ...
+    # TODO: IF TEMPLATE MODIFIED ...
     def newTemplate(self):
         self.initialize()
 
-    # TODO: LOAD PATH & CHECK IF TEMPLATE MODIFIED ...
+    # TODO: IF TEMPLATE MODIFIED ...
     def openTemplate(self):
         options = QFileDialog.Options()
+        path = self.Settings.get('PATHS', 'TemplatePath')
         filename, filters = QFileDialog.getOpenFileName(
-            QFileDialog(), "Open Template", '', 'Templates (*.ktf);; All Files (*.*)', options = options)
+            QFileDialog(), "Open Template", path, 'Templates (*.ktf);; All Files (*.*)', options = options)
 
         if filename in ('', None):
             return
@@ -1859,7 +1860,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # CASCADE THE CHANGES ...
         self.restoreItem(self.getItem())
 
-    # TODO: LOAD PATH FROM SAVED SETTINGS ...
     def saveItem(self):
         item = self.getItem(self.CurrentItemLabel)
 
@@ -1880,8 +1880,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             return
 
         options = QFileDialog.Options()
+        path = os.path.join(self.Settings.get('PATHS', 'ItemPath'), item.getName())
         filename, filters = QFileDialog.getSaveFileName(
-            QFileDialog(), 'Save Item', item.getName(), 'Items (*.xml);; All Files (*.*)', options = options)
+            QFileDialog(), 'Save Item', path, 'Items (*.xml);; All Files (*.*)', options = options)
 
         if filename:
             item.exportAsXML(filename)
@@ -1962,6 +1963,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         index = self.SkillsView.model().index(self.SkillsView.model().rowCount() - 1, 0, QModelIndex())
         self.SkillsView.model().setData(index, QVariant(bonus), Qt.DisplayRole)
         self.SkillsView.model().setData(index, QVariant(group), Qt.UserRole)
+
+    # TODO: IMPLEMENT
+    def saveEvent(self):
+        pass
 
     def closeEvent(self, event):
         if self.TemplateModified:
