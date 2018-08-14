@@ -1738,11 +1738,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 #           NEW/SAVE/LOAD/DELETE METHODS          #
 # =============================================== #
 
-    # TODO: IF TEMPLATE MODIFIED ...
+    # TODO: CHECK IF TEMPLATE WAS MODIFIED ...
     def newTemplate(self):
         self.initialize()
 
-    # TODO: IF TEMPLATE MODIFIED ...
+    # TODO: CHECK IF TEMPLATE WAS MODIFIED ...
     def openTemplate(self):
         options = QFileDialog.Options()
         path = self.Settings.get('PATHS', 'TemplatePath')
@@ -1968,6 +1968,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def saveEvent(self):
         pass
 
+    # TODO: SAVE SETTINGS ...
     def closeEvent(self, event):
         if self.TemplateModified:
             prompt = QMessageBox.warning(
