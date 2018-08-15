@@ -1441,7 +1441,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def changeCharLevel(self):
 
-        try:  # VALUE MIGHT BE INVALIDE ...
+        try:  # VALUE MIGHT BE INVALID ...
             char_level = int(self.getCharLevel())
         except ValueError:
             return
@@ -1453,7 +1453,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def changeCharRealmRank(self):
 
-        try:  # VALUE MIGHT BE INVALIDE ...
+        try:  # VALUE MIGHT BE INVALID ...
             char_realm_rank = int(self.getCharRealmRank())
         except ValueError:
             return
@@ -1464,7 +1464,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def changeCharChampLevel(self):
 
-        try:  # VALUE MIGHT BE INVALIDE ...
+        try:  # VALUE MIGHT BE INVALID ...
             char_champion_level = int(self.getCharChampLevel())
         except ValueError:
             return
@@ -1964,11 +1964,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.SkillsView.model().setData(index, QVariant(bonus), Qt.DisplayRole)
         self.SkillsView.model().setData(index, QVariant(group), Qt.UserRole)
 
-    # TODO: IMPLEMENT
-    def saveEvent(self):
-        pass
-
-    # TODO: SAVE SETTINGS ...
     def closeEvent(self, event):
         if self.TemplateModified:
             prompt = QMessageBox.warning(
@@ -1992,3 +1987,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
             if prompt == QMessageBox.Cancel:
                 event.ignore()
+
+        # SAVE SETTINGS ...
+        self.Settings.save()
