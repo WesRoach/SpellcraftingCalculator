@@ -1311,6 +1311,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             )
 
 # =============================================== #
+#             BOOLEAN CHECK METHODS               #
+# =============================================== #
+
+    # TODO: IMPLEMENT ...
+    def wasModified(self, init_value, new_value, modified = False):
+        pass
+
+# =============================================== #
 #                  SETTER METHODS                 #
 # =============================================== #
 
