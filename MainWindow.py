@@ -70,7 +70,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.TemplateName = None
         self.TemplatePath = None
         self.TemplateModified = False
-        self.Initialized = False
 
         self.initMenuBar()
         self.initToolBar()
@@ -457,6 +456,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.StatusBar.addPermanentWidget(QLabel('Build Utility: '))
         self.StatusBar.addPermanentWidget(self.BuildUtility)
 
+    # TODO: CHECK IF MODIFIED ...
     def initialize(self):
         self.TemplateName = None
         self.TemplatePath = None
@@ -1311,14 +1311,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             )
 
 # =============================================== #
-#             BOOLEAN CHECK METHODS               #
-# =============================================== #
-
-    # TODO: IMPLEMENT ...
-    def wasModified(self, init_value, new_value, modified = False):
-        pass
-
-# =============================================== #
 #                  SETTER METHODS                 #
 # =============================================== #
 
@@ -1353,6 +1345,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def setUnusableSkills(self):
         self.restoreItem(self.getItem())
         self.calculate()
+
+    # TODO: IMPLEMENT ...
+    def setTemplateModified(self, init_value, new_value):
+        if not self.TemplateModified:
+            pass
 
 # =============================================== #
 #                  GETTER METHODS                 #
@@ -1760,10 +1757,17 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if filename in ('', None):
             return
 
-        self.importFromXML(filename)
-        self.TemplateName = os.path.basename(filename)
-        self.TemplatePath = os.path.dirname(filename)
-        self.TemplateModified = False
+        if self.importFromXML(filename) != -1:
+            self.TemplateName = os.path.basename(filename)
+            self.TemplatePath = os.path.dirname(filename)
+        else:
+            QMessageBox.warning(
+                self, 'Error!',
+                'The template you are attempting to import \n'
+                'is using an unsupported XML format.',
+                QMessageBox.Ok, QMessageBox.Ok
+            )
+            return
 
     def saveTemplate(self):
         if None in (self.TemplateName, self.TemplatePath):

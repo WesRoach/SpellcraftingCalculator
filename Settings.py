@@ -18,7 +18,7 @@ class Settings(Singleton):
             self.create()
         else:
             with open(r'settings.ini', 'r') as document:
-                self.Settings.read(document)
+                self.Settings.read_file(document)
 
     def save(self):
         with open(r'settings.ini', 'w') as document:
