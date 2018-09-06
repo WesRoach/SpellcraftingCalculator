@@ -1819,6 +1819,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # CASCADE THE CHANGES ...
         self.restoreItem(self.getItem())
 
+    # TODO: ALL USER TO SET 'ItemPath' ...
     def loadItem(self):
         options = QFileDialog.Options()
         path = self.Settings.get('PATHS', 'ItemPath')
@@ -1872,6 +1873,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # CASCADE THE CHANGES ...
         self.restoreItem(self.getItem())
 
+    # TODO: ALL USER TO SET 'ItemPath' ...
     def saveItem(self):
         item = self.getItem(self.CurrentItemLabel)
 
