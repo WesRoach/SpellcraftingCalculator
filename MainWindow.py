@@ -1347,7 +1347,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.calculate()
 
     # TODO: IMPLEMENT ...
-    def setTemplateModified(self, init_value, new_value):
+    def setTemplateModified(self):
         if not self.TemplateModified:
             pass
 
