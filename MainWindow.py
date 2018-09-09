@@ -25,7 +25,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         QMainWindow.__init__(self, parent, flags)
         self.setupUi(self)
 
-        # INSTANTIATE SETTINGS ...
+        # TODO: SWITCH TO 'QSettings' ...
         self.Settings = Settings()
         self.Settings.load()
 
