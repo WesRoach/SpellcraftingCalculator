@@ -68,7 +68,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         self.TemplateName = None
         self.TemplatePath = None
-        self.TemplateModified = False
+        self.InitialValues = None
 
         self.initMenuBar()
         self.initToolBar()
@@ -456,10 +456,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.StatusBar.addPermanentWidget(self.BuildUtility)
 
     # TODO: CHECK IF MODIFIED ...
-    def initialize(self):
+    def initialize(self, new_template = True):
         self.TemplateName = None
         self.TemplatePath = None
-        self.TemplateModified = False
+        self.InitialValues = None
 
         # SET INITIAL STATS ...
         self.setCharName('')
@@ -481,6 +481,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     item.setName(f'{item.getState()} Item')
                 self.ItemAttributeList[location] = item
                 self.ItemDictionary[location] = [item]
+
+        # GET INITIAL TEMPLATE VALUES ...
+        if new_template:
+            self.InitialValues = self.exportAsXML(None, True, False)
 
         # SET INITIAL ITEM SLOT ...
         self.changeItemSelection('Neck')
@@ -559,7 +563,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         # RETURN ERROR CODE ...
         if tree.getroot().tag == 'Template':
-            self.initialize()
+            self.initialize(False)
         else:
             return -1
 
@@ -594,6 +598,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 self.ItemAttributeList[item.getLocation()] = item
             self.ItemDictionary[item.getLocation()].insert(int(item_xml.attrib['Index']), item)
 
+        # GET INITIAL TEMPLATE VALUES ...
+        self.InitialValues = self.exportAsXML(None, True, False)
+
         # CASCADE THE CHANGES ...
         self.restoreItem(self.getItem(self.CurrentItemLabel))
 
@@ -611,7 +618,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         }
 
         for (attribute, value) in xml_fields.items():
-            etree.SubElement(template, attribute).text = str(value)
+            if value:
+                etree.SubElement(template, attribute).text = str(value)
 
         for items in self.ItemDictionary.values():
             for item in items:
@@ -1345,11 +1353,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.restoreItem(self.getItem())
         self.calculate()
 
-    # TODO: IMPLEMENT ...
-    def setTemplateModified(self):
-        if not self.TemplateModified:
-            pass
-
 # =============================================== #
 #                  GETTER METHODS                 #
 # =============================================== #
@@ -1742,11 +1745,19 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 #           NEW/SAVE/LOAD/DELETE METHODS          #
 # =============================================== #
 
-    # TODO: CHECK IF TEMPLATE WAS MODIFIED ...
     def newTemplate(self):
+        if self.templateWasModified():
+            action = self.saveTemplatePrompt()
+            if action == QMessageBox.Yes:
+                self.saveTemplate()
+                if self.templateWasModified():
+                    return
+            if action == QMessageBox.Cancel:
+                return
+
+        # RESET THE APPLICATION ...
         self.initialize()
 
-    # TODO: CHECK IF TEMPLATE WAS MODIFIED ...
     def openTemplate(self):
         options = QFileDialog.Options()
         path = self.Settings.get('PATHS', 'TemplatePath')
@@ -1755,6 +1766,15 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         if filename in ('', None):
             return
+
+        if self.templateWasModified():
+            action = self.saveTemplatePrompt()
+            if action == QMessageBox.Yes:
+                self.saveTemplate()
+                if self.templateWasModified():
+                    return
+            if action == QMessageBox.Cancel:
+                return
 
         if self.importFromXML(filename) != -1:
             self.TemplateName = os.path.basename(filename)
@@ -1773,7 +1793,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.saveTemplateAs()
         else:
             self.exportAsXML(os.path.join(self.TemplatePath, self.TemplateName))
-            self.TemplateModified = False
+            self.InitialValues = self.exportAsXML(None, True, False)
 
     def saveTemplateAs(self):
         options = QFileDialog.Options()
@@ -1787,7 +1807,15 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.exportAsXML(filename)
         self.TemplateName = os.path.basename(filename)
         self.TemplatePath = os.path.dirname(filename)
-        self.TemplateModified = False
+        self.InitialValues = self.exportAsXML(None, True, False)
+
+    def saveTemplatePrompt(self):
+        prompt = QMessageBox.warning(
+            self, 'Save Changes?',
+            'This template has been modified.\n'
+            'Do you want to save these changes?',
+            QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel, QMessageBox.Cancel
+        ); return prompt
 
     def newItem(self, action):
         selection = action.text().split(None)[0]
@@ -1930,6 +1958,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 #              MISCELLANEOUS METHODS              #
 # =============================================== #
 
+    def templateWasModified(self):
+        initial_values = etree.tostring(self.InitialValues, encoding = 'UTF-8')
+        current_values = etree.tostring(self.exportAsXML(None, True, False), encoding = 'UTF-8')
+        return initial_values != current_values
+
     def mousePressEvent(self, event):
         try:  # NOT ALL WIDGETS HAVE 'clearFocus()' ...
             self.focusWidget().clearFocus()
@@ -1978,27 +2011,16 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.SkillsView.model().setData(index, QVariant(group), Qt.UserRole)
 
     def closeEvent(self, event):
-        if self.TemplateModified:
-            prompt = QMessageBox.warning(
-                self, 'Save Changes?',
-                'This template has been modified.\n'
-                'Do you want to save these changes?',
-                QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel, QMessageBox.Cancel
-            )
-
-            if prompt == QMessageBox.Yes:
+        if self.templateWasModified():
+            action = self.saveTemplatePrompt()
+            if action == QMessageBox.Yes:
                 self.saveTemplate()
-                if self.TemplateModified:
+                if self.templateWasModified():
                     event.ignore()
-                else:
-                    self.Settings.save()
-                    event.accept()
-
-            if prompt == QMessageBox.No:
+            if action == QMessageBox.No:
                 self.Settings.save()
                 event.accept()
-
-            if prompt == QMessageBox.Cancel:
+            if action == QMessageBox.Cancel:
                 event.ignore()
 
         # SAVE SETTINGS ...
