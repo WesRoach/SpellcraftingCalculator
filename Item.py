@@ -350,9 +350,13 @@ class Item:
                 slot_element = etree.SubElement(
                     item, 'Slot', Number = str(index), Type = slot.getSlotType()
                 )
-                etree.SubElement(slot_element, 'Type').text = slot.getEffectType()
-                etree.SubElement(slot_element, 'Effect').text = slot.getEffect()
-                etree.SubElement(slot_element, 'Amount').text = slot.getEffectAmount()
+
+                if slot.getEffectType():
+                    etree.SubElement(slot_element, 'Type').text = slot.getEffectType()
+                if slot.getEffect():
+                    etree.SubElement(slot_element, 'Effect').text = slot.getEffect()
+                if slot.getEffectAmount():
+                    etree.SubElement(slot_element, 'Amount').text = slot.getEffectAmount()
                 if slot.getEffectRequirement():
                     etree.SubElement(slot_element, 'Requirement').text = slot.getEffectRequirement()
 
