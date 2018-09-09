@@ -362,7 +362,7 @@ class Item:
 
         if not export:
             with open(filename, 'wb') as document:
-                document.write(etree.tostring(item, encoding='UTF-8', pretty_print = True, xml_declaration = True))
+                document.write(etree.tostring(item, encoding = 'UTF-8', pretty_print = True, xml_declaration = True))
         else:
             return item
 
