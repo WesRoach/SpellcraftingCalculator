@@ -903,7 +903,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     # LEGACY CODE ...
     def summarize(self):
+
+        # BUG: CRASH HERE ...
         Level = int(self.getCharLevel())
+
         total = {
             'Skills': {},
             'Attributes': {},
