@@ -1450,7 +1450,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if self.CurrentItemLabel != '':
             self.restoreItem(self.getItem())
 
-    # TODO: FIX ...
     def changeCharLevel(self):
 
         try:  # VALUE MIGHT BE INVALID ...
@@ -1463,7 +1462,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.CharacterLevel.setModified(False)
         self.calculate()
 
-    # TODO: FIX ...
     def changeCharRealmRank(self):
 
         try:  # VALUE MIGHT BE INVALID ...
@@ -1475,7 +1473,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.setCharRealmRank('0' if char_realm_rank < 0 else '14')
         self.CharacterRealmRank.setModified(False)
 
-    # TODO: FIX ...
     def changeCharChampLevel(self):
 
         try:  # VALUE MIGHT BE INVALID ...
@@ -1542,28 +1539,23 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def changeItemDamageType(self, item_damage_type):
         self.getItem().setDamageType(item_damage_type)
 
-    # TODO: FIX ...
     def changeItemLevel(self):
         self.getItem().setLevel(self.ItemLevel.text())
         self.ItemLevel.setModified(False)
         self.restoreItem(self.getItem())
 
-    # TODO: FIX ...
     def changeItemQuality(self):
         self.getItem().setQuality(self.ItemQuality.text())
         self.ItemQuality.setModified(False)
 
-    # TODO: FIX ...
     def changeItemBonus(self):
         self.getItem().setBonus(self.ItemBonus.text())
         self.ItemBonus.setModified(False)
 
-    # TODO: FIX ...
     def changeItemAFDPS(self):
         self.getItem().setAFDPS(self.ItemAFDPS.text())
         self.ItemAFDPS.setModified(False)
 
-    # TODO: FIX ...
     def changeItemSpeed(self):
         self.getItem().setSpeed(self.ItemSpeed.text())
         self.ItemSpeed.setModified(False)
