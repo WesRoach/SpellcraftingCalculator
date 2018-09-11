@@ -1371,11 +1371,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def getRaces(self):
         return tuple(AllBonusList[self.getCharRealm()][self.getCharClass()]['Races'])
 
-    def getFirstClassSkill(self):
-        for class_skill in AllBonusList['All'][self.getCharClass()]['All Skills']:
-            if class_skill.split(None)[0] != 'All':
-                return str(class_skill)
-
     def getCharName(self):
         return str(self.CharacterName.text())
 
@@ -1405,6 +1400,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         index = self.sender().objectName()[-2:]
         if not index.isdigit(): index = index[-1:]
         return int(index)
+
+    def getFirstClassSkill(self):
+        for class_skill in AllBonusList['All'][self.getCharClass()]['All Skills']:
+            if class_skill.split(None)[0] != 'All':
+                return str(class_skill)
 
 # =============================================== #
 #                  CHANGE METHODS                 #
