@@ -767,6 +767,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         elif item.isDropped():
             self.showDropWidgets(item)
 
+        # DEBUGGING ...
         print(item.__dict__)
 
         # VALIDATE ATTRIBUTES ...
