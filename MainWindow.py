@@ -826,7 +826,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.ItemRealm.insertItems(0, ('All',) + self.getRealms())
             self.ItemOrigin.insertItems(0, ('',) + origins)
 
-        try:  # NOT ALL ITEM TYPE HAVE A REALM ...
+        try:  # NOT ALL ITEM TYPES HAVE A REALM ...
             item_types = ItemTypes[item.getParent()][item.getLocation()][item.getRealm()]
         except KeyError:
             item_types = ItemTypes[item.getParent()][item.getLocation()]['All']
