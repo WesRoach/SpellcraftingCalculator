@@ -1450,6 +1450,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if self.CurrentItemLabel != '':
             self.restoreItem(self.getItem())
 
+    # BUG: NOT WORKING AS INTENDED ... REGEX: ^[-+]?[0-9]\d*(\.\d+)?$
     def changeCharLevel(self):
 
         try:  # VALUE MIGHT BE INVALID ...
@@ -1462,6 +1463,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.CharacterLevel.setModified(False)
         self.calculate()
 
+    # BUG: NOT WORKING AS INTENDED ... REGEX: ^[-+]?[0-9]\d*(\.\d+)?$
     def changeCharRealmRank(self):
 
         try:  # VALUE MIGHT BE INVALID ...
@@ -1473,6 +1475,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.setCharRealmRank('0' if char_realm_rank < 0 else '14')
         self.CharacterRealmRank.setModified(False)
 
+    # BUG: NOT WORKING AS INTENDED ... REGEX:^[-+]?[0-9]\d*(\.\d+)?$
     def changeCharChampLevel(self):
 
         try:  # VALUE MIGHT BE INVALID ...
