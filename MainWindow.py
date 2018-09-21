@@ -183,14 +183,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # VALUES BASED ON THE FONT BEING USED ...
         testFont = QFontMetrics(self.font())
 
-        # MAKE SURE WE ARE NOT ALLOWING NEGATIVE AND
-        # POSITIVE SIGNS WHEN ACCEPTING VALUE INPUT.
-        integer_regex = QRegExp('')
-        double_regex = QRegExp('^([1-9][0-9]?)(\.[0-9])?$')
-
         defaultFixedHeight = 20
         buttonFixedHeight = 22
         buttonFixedWidth = 35
+
+        # REGEX FOR 'QRegExpValidator'
+        integer_regex = QRegExp('^(?:[0-9]{0,3})$')
+        double_regex = QRegExp('^(?:[0-9]{3}|[0-9][0-9]?(?:\.[0-9])?)$')
 
         width = self.setMinimumWidth(['Necromancer'])
         self.CharacterName.setFixedSize(QSize(width, defaultFixedHeight))
@@ -298,8 +297,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.EffectType.append(getattr(self, 'EffectType%d' % index))
             self.EffectType[index].setFixedSize(QSize(width, defaultFixedHeight))
             self.EffectType[index].activated[str].connect(self.changeEffectType)
-
-        # TODO: SWITCH TO "QRegExpValidator" ...
 
         width = self.setMinimumWidth(['100'])
         for index in range(0, 12):
@@ -437,8 +434,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ItemType.setFixedHeight(defaultFixedHeight)
         self.ItemOrigin.setFixedHeight(defaultFixedHeight)
         self.ItemDamageType.setFixedHeight(defaultFixedHeight)
-
-        # TODO: SWITCH TO "QRegExpValidator" ...
 
         width = self.setMinimumWidth([' - '])
         self.ItemLevel.setFixedSize(QSize(width, defaultFixedHeight))
@@ -1314,6 +1309,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     amount = amts['Base'] - amts['TotalBonus']
                 self.insertSkill(amount, 'Mythical ' + bonus, 'Bonus')
 
+# =============================================== #
+#                VALIDATOR METHODS                #
+# =============================================== #
+
+    # TODO: IMPLEMENT
+    def validateEntry(self):
+        pass
+
     def validateAttributes(self, invalid = False):
         if not self.UnusableSkills.isChecked():
             for item in self.ItemAttributeList.values():
@@ -1461,6 +1464,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def changeCharLevel(self):
 
+        # TODO: AUTOCORRECT ERRONEOUS ENTRIES ...
+
+        # DEBUGGING ...
+        print('changeCharLevel: INPUT ACCEPTED')
+
         try:  # VALUE MIGHT BE INVALID ...
             char_level = int(self.getCharLevel())
         except ValueError:
@@ -1473,6 +1481,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def changeCharRealmRank(self):
 
+        # TODO: AUTOCORRECT ERRONEOUS ENTRIES ...
+
+        # DEBUGGING ...
+        print('changeCharRealmRank: INPUT ACCEPTED')
+
         try:  # VALUE MIGHT BE INVALID ...
             char_realm_rank = int(self.getCharRealmRank())
         except ValueError:
@@ -1483,6 +1496,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.CharacterRealmRank.setModified(False)
 
     def changeCharChampLevel(self):
+
+        # TODO: AUTOCORRECT ERRONEOUS ENTRIES ...
+
+        # DEBUGGING ...
+        print('changeCharChampLevel: INPUT ACCEPTED')
 
         try:  # VALUE MIGHT BE INVALID ...
             char_champion_level = int(self.getCharChampLevel())
@@ -1549,23 +1567,53 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.getItem().setDamageType(item_damage_type)
 
     def changeItemLevel(self):
+
+        # TODO: AUTOCORRECT ERRONEOUS ENTRIES ...
+
+        # DEBUGGING ...
+        print('changeItemLevel: INPUT ACCEPTED')
+
         self.getItem().setLevel(self.ItemLevel.text())
         self.ItemLevel.setModified(False)
         self.restoreItem(self.getItem())
 
     def changeItemQuality(self):
+
+        # TODO: AUTOCORRECT ERRONEOUS ENTRIES ...
+
+        # DEBUGGING ...
+        print('changeItemQuality: INPUT ACCEPTED')
+
         self.getItem().setQuality(self.ItemQuality.text())
         self.ItemQuality.setModified(False)
 
     def changeItemBonus(self):
+
+        # TODO: AUTOCORRECT ERRONEOUS ENTRIES ...
+
+        # DEBUGGING ...
+        print('changeItemBonus: INPUT ACCEPTED')
+
         self.getItem().setBonus(self.ItemBonus.text())
         self.ItemBonus.setModified(False)
 
     def changeItemAFDPS(self):
+
+        # TODO: AUTOCORRECT ERRONEOUS ENTRIES ...
+
+        # DEBUGGING ...
+        print('changeItemAFDPS: INPUT ACCEPTED')
+
         self.getItem().setAFDPS(self.ItemAFDPS.text())
         self.ItemAFDPS.setModified(False)
 
     def changeItemSpeed(self):
+
+        # TODO: AUTOCORRECT ERRONEOUS ENTRIES ...
+
+        # DEBUGGING ...
+        print('changeItemSpeed: INPUT ACCEPTED')
+
         self.getItem().setSpeed(self.ItemSpeed.text())
         self.ItemSpeed.setModified(False)
 
