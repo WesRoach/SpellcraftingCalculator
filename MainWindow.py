@@ -295,6 +295,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.EffectType[index].setFixedSize(QSize(width, defaultFixedHeight))
             self.EffectType[index].activated[str].connect(self.changeEffectType)
 
+        # TODO: SWITCH TO "QRegExpValidator" ...
+
         width = self.setMinimumWidth(['100'])
         for index in range(0, 12):
             self.AmountEdit.append(getattr(self, 'AmountEdit%d' % index))
@@ -431,6 +433,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ItemType.setFixedHeight(defaultFixedHeight)
         self.ItemOrigin.setFixedHeight(defaultFixedHeight)
         self.ItemDamageType.setFixedHeight(defaultFixedHeight)
+
+        # TODO: SWITCH TO "QRegExpValidator" ...
 
         width = self.setMinimumWidth([' - '])
         self.ItemLevel.setFixedSize(QSize(width, defaultFixedHeight))
