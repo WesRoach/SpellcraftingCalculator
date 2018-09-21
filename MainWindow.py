@@ -2,8 +2,8 @@
 
 from PyQt5 import uic
 from PyQt5.Qt import QAction, Qt, QKeySequence
-from PyQt5.QtCore import QSize, QModelIndex, QVariant
-from PyQt5.QtGui import QFontMetrics, QIcon, QIntValidator, QDoubleValidator
+from PyQt5.QtCore import QSize, QModelIndex, QRegExp, QVariant
+from PyQt5.QtGui import QFontMetrics, QIcon, QRegExpValidator
 from PyQt5.QtWidgets import QFileDialog, QLabel, QListWidgetItem, QMainWindow, QMenu, QMessageBox, QToolBar, QTreeWidgetItem, QTreeWidgetItemIterator, QStyle, QStyleOptionComboBox
 from Character import AllBonusList, ClassList, ItemTypes, Races
 from Constants import Cap, CraftedTypeList, CraftedEffectList, CraftedValuesList, DropTypeList, DropEffectList
@@ -183,22 +183,26 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # VALUES BASED ON THE FONT BEING USED ...
         testFont = QFontMetrics(self.font())
 
+        # MAKE SURE WE ARE NOT ALLOWING NEGATIVE AND
+        # POSITIVE SIGNS WHEN ACCEPTING VALUE INPUT.
+        integer_regex = QRegExp('')
+        double_regex = QRegExp('^([1-9][0-9]?)(\.[0-9])?$')
+
         defaultFixedHeight = 20
         buttonFixedHeight = 22
         buttonFixedWidth = 35
 
         width = self.setMinimumWidth(['Necromancer'])
         self.CharacterName.setFixedSize(QSize(width, defaultFixedHeight))
-
         self.CharacterRealm.setFixedSize(QSize(width, defaultFixedHeight))
         self.CharacterClass.setFixedSize(QSize(width, defaultFixedHeight))
         self.CharacterRace.setFixedSize(QSize(width, defaultFixedHeight))
         self.CharacterLevel.setFixedSize(QSize(width, defaultFixedHeight))
-        self.CharacterLevel.setValidator(QIntValidator(-999, +999, self))
+        self.CharacterLevel.setValidator(QRegExpValidator(integer_regex, self))
         self.CharacterRealmRank.setFixedSize(QSize(width, defaultFixedHeight))
-        self.CharacterRealmRank.setValidator(QIntValidator(-999, +999, self))
+        self.CharacterRealmRank.setValidator(QRegExpValidator(integer_regex, self))
         self.CharacterChampLevel.setFixedSize(QSize(width, defaultFixedHeight))
-        self.CharacterChampLevel.setValidator(QIntValidator(-999, +999, self))
+        self.CharacterChampLevel.setValidator(QRegExpValidator(integer_regex, self))
 
         for attribute in DropEffectList['All']['Attribute'] + ('ArmorFactor', 'Fatigue', 'PowerPool'):
             attribute = attribute.replace(' ', '')
@@ -301,7 +305,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         for index in range(0, 12):
             self.AmountEdit.append(getattr(self, 'AmountEdit%d' % index))
             self.AmountEdit[index].setFixedSize(QSize(width, defaultFixedHeight))
-            self.AmountEdit[index].setValidator(QIntValidator(-999, +999, self))
+            self.AmountEdit[index].setValidator(QRegExpValidator(integer_regex, self))
             self.AmountEdit[index].textEdited[str].connect(self.changeEffectAmount)
 
         width = self.setMinimumWidth(['100'])
@@ -438,15 +442,15 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         width = self.setMinimumWidth([' - '])
         self.ItemLevel.setFixedSize(QSize(width, defaultFixedHeight))
-        self.ItemLevel.setValidator(QIntValidator(-999, +999, self))
+        self.ItemLevel.setValidator(QRegExpValidator(integer_regex, self))
         self.ItemQuality.setFixedSize(QSize(width, defaultFixedHeight))
-        self.ItemQuality.setValidator(QIntValidator(-999, +999, self))
+        self.ItemQuality.setValidator(QRegExpValidator(integer_regex, self))
         self.ItemBonus.setFixedSize(QSize(width, defaultFixedHeight))
-        self.ItemBonus.setValidator(QIntValidator(-999, +999, self))
+        self.ItemBonus.setValidator(QRegExpValidator(integer_regex, self))
         self.ItemAFDPS.setFixedSize(QSize(width, defaultFixedHeight))
-        self.ItemAFDPS.setValidator(QDoubleValidator(-999.0, +999.0, 1, self))
+        self.ItemAFDPS.setValidator(QRegExpValidator(double_regex, self))
         self.ItemSpeed.setFixedSize(QSize(width, defaultFixedHeight))
-        self.ItemSpeed.setValidator(QDoubleValidator(-999.0, +999.0, 1, self))
+        self.ItemSpeed.setValidator(QRegExpValidator(double_regex, self))
 
         # TODO: SET DYNAMIC WIDTH ...
         self.ItemInformationGroup.setFixedWidth(186)
@@ -1455,7 +1459,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if self.CurrentItemLabel != '':
             self.restoreItem(self.getItem())
 
-    # BUG: NOT WORKING AS INTENDED ... REGEX: ^[-+]?[0-9]\d*(\.\d+)?$
     def changeCharLevel(self):
 
         try:  # VALUE MIGHT BE INVALID ...
@@ -1468,7 +1471,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.CharacterLevel.setModified(False)
         self.calculate()
 
-    # BUG: NOT WORKING AS INTENDED ... REGEX: ^[-+]?[0-9]\d*(\.\d+)?$
     def changeCharRealmRank(self):
 
         try:  # VALUE MIGHT BE INVALID ...
@@ -1480,7 +1482,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.setCharRealmRank('0' if char_realm_rank < 0 else '14')
         self.CharacterRealmRank.setModified(False)
 
-    # BUG: NOT WORKING AS INTENDED ... REGEX:^[-+]?[0-9]\d*(\.\d+)?$
     def changeCharChampLevel(self):
 
         try:  # VALUE MIGHT BE INVALID ...
