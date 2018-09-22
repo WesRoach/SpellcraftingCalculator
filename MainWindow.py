@@ -1464,51 +1464,38 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def changeCharLevel(self):
 
-        # TODO: AUTOCORRECT ERRONEOUS ENTRIES ...
-
-        # DEBUGGING ...
-        print('changeCharLevel: INPUT ACCEPTED')
-
         try:  # VALUE MIGHT BE INVALID ...
             char_level = int(self.getCharLevel())
         except ValueError:
-            return
+            char_level = int(51)
 
         if char_level < 1 or char_level > 50:
             self.setCharLevel('1' if char_level < 1 else '50')
         self.CharacterLevel.setModified(False)
         self.calculate()
 
+    # TODO: DETERMINE IF NEEDED ...
     def changeCharRealmRank(self):
-
-        # TODO: AUTOCORRECT ERRONEOUS ENTRIES ...
-
-        # DEBUGGING ...
-        print('changeCharRealmRank: INPUT ACCEPTED')
 
         try:  # VALUE MIGHT BE INVALID ...
             char_realm_rank = int(self.getCharRealmRank())
         except ValueError:
             return
 
-        if char_realm_rank < 0 or char_realm_rank > 14:
-            self.setCharRealmRank('0' if char_realm_rank < 0 else '14')
+        if char_realm_rank > 14:
+            self.setCharRealmRank('14')
         self.CharacterRealmRank.setModified(False)
 
+    # TODO: DETERMINE IF NEEDED ...
     def changeCharChampLevel(self):
-
-        # TODO: AUTOCORRECT ERRONEOUS ENTRIES ...
-
-        # DEBUGGING ...
-        print('changeCharChampLevel: INPUT ACCEPTED')
 
         try:  # VALUE MIGHT BE INVALID ...
             char_champion_level = int(self.getCharChampLevel())
         except ValueError:
             return
 
-        if char_champion_level < 0 or char_champion_level > 15:
-            self.setCharChampLevel('0' if char_champion_level < 0 else '15')
+        if char_champion_level > 15:
+            self.setCharChampLevel('15')
         self.CharacterChampLevel.setModified(False)
 
     def changeItemSelection(self, selection = None):
@@ -1577,6 +1564,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ItemLevel.setModified(False)
         self.restoreItem(self.getItem())
 
+    # TODO: DETERMINE IF NEEDED ...
     def changeItemQuality(self):
 
         # TODO: AUTOCORRECT ERRONEOUS ENTRIES ...
@@ -1587,6 +1575,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.getItem().setQuality(self.ItemQuality.text())
         self.ItemQuality.setModified(False)
 
+    # TODO: DETERMINE IF NEEDED ...
     def changeItemBonus(self):
 
         # TODO: AUTOCORRECT ERRONEOUS ENTRIES ...
@@ -1607,6 +1596,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.getItem().setAFDPS(self.ItemAFDPS.text())
         self.ItemAFDPS.setModified(False)
 
+    # TODO: DETERMINE IF NEEDED ...
     def changeItemSpeed(self):
 
         # TODO: AUTOCORRECT ERRONEOUS ENTRIES ...
