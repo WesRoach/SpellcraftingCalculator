@@ -188,8 +188,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         buttonFixedWidth = 35
 
         # REGEX FOR 'QRegExpValidator'
-        integer_regex = QRegExp('^(?:[0-9]{0,3})$')
-        double_regex = QRegExp('^(?:[0-9]{3}|[0-9][0-9]?(?:\.[0-9])?)$')
+        int_regex = QRegExp('^(?:[0-9]{0,3})$')
+        dbl_regex = QRegExp('^(?:[0-9]{3}|[0-9][0-9]?(?:\.[0-9])?)$')
 
         width = self.setMinimumWidth(['Necromancer'])
         self.CharacterName.setFixedSize(QSize(width, defaultFixedHeight))
@@ -197,11 +197,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.CharacterClass.setFixedSize(QSize(width, defaultFixedHeight))
         self.CharacterRace.setFixedSize(QSize(width, defaultFixedHeight))
         self.CharacterLevel.setFixedSize(QSize(width, defaultFixedHeight))
-        self.CharacterLevel.setValidator(QRegExpValidator(integer_regex, self))
+        self.CharacterLevel.setValidator(QRegExpValidator(int_regex, self))
         self.CharacterRealmRank.setFixedSize(QSize(width, defaultFixedHeight))
-        self.CharacterRealmRank.setValidator(QRegExpValidator(integer_regex, self))
+        self.CharacterRealmRank.setValidator(QRegExpValidator(int_regex, self))
         self.CharacterChampLevel.setFixedSize(QSize(width, defaultFixedHeight))
-        self.CharacterChampLevel.setValidator(QRegExpValidator(integer_regex, self))
+        self.CharacterChampLevel.setValidator(QRegExpValidator(int_regex, self))
 
         for attribute in DropEffectList['All']['Attribute'] + ('ArmorFactor', 'Fatigue', 'PowerPool'):
             attribute = attribute.replace(' ', '')
@@ -302,7 +302,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         for index in range(0, 12):
             self.AmountEdit.append(getattr(self, 'AmountEdit%d' % index))
             self.AmountEdit[index].setFixedSize(QSize(width, defaultFixedHeight))
-            self.AmountEdit[index].setValidator(QRegExpValidator(integer_regex, self))
+            self.AmountEdit[index].setValidator(QRegExpValidator(int_regex, self))
             self.AmountEdit[index].textEdited[str].connect(self.changeEffectAmount)
 
         width = self.setMinimumWidth(['100'])
@@ -437,15 +437,15 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         width = self.setMinimumWidth([' - '])
         self.ItemLevel.setFixedSize(QSize(width, defaultFixedHeight))
-        self.ItemLevel.setValidator(QRegExpValidator(integer_regex, self))
+        self.ItemLevel.setValidator(QRegExpValidator(int_regex, self))
         self.ItemQuality.setFixedSize(QSize(width, defaultFixedHeight))
-        self.ItemQuality.setValidator(QRegExpValidator(integer_regex, self))
+        self.ItemQuality.setValidator(QRegExpValidator(int_regex, self))
         self.ItemBonus.setFixedSize(QSize(width, defaultFixedHeight))
-        self.ItemBonus.setValidator(QRegExpValidator(integer_regex, self))
+        self.ItemBonus.setValidator(QRegExpValidator(int_regex, self))
         self.ItemAFDPS.setFixedSize(QSize(width, defaultFixedHeight))
-        self.ItemAFDPS.setValidator(QRegExpValidator(double_regex, self))
+        self.ItemAFDPS.setValidator(QRegExpValidator(dbl_regex, self))
         self.ItemSpeed.setFixedSize(QSize(width, defaultFixedHeight))
-        self.ItemSpeed.setValidator(QRegExpValidator(double_regex, self))
+        self.ItemSpeed.setValidator(QRegExpValidator(dbl_regex, self))
 
         # TODO: SET DYNAMIC WIDTH ...
         self.ItemInformationGroup.setFixedWidth(186)
