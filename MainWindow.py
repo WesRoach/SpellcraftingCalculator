@@ -1562,14 +1562,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ItemLevel.setModified(False)
         self.restoreItem(self.getItem())
 
-    # BUG: DOES NOT PREVENT INTEGERS > 100 ...
     def changeItemQuality(self):
-
-        # TODO: AUTOCORRECT ERRONEOUS ENTRIES FOR CRAFTED PIECES ...
-
-        # DEBUGGING ...
-        print('changeItemQuality: INPUT ACCEPTED')
-
         self.getItem().setQuality(self.ItemQuality.text())
         self.ItemQuality.setModified(False)
 
