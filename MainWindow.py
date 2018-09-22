@@ -1552,12 +1552,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     # BUG: DOES NOT PREVENT INTEGERS > 51 ...
     def changeItemLevel(self):
-
-        # TODO: AUTOCORRECT ERRONEOUS ENTRIES FOR CRAFTED PIECES ...
-
-        # DEBUGGING ...
-        print('changeItemLevel: INPUT ACCEPTED')
-
         self.getItem().setLevel(self.ItemLevel.text())
         self.ItemLevel.setModified(False)
         self.restoreItem(self.getItem())
@@ -1852,6 +1846,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ItemAttributeList[self.CurrentItemLabel] = item
 
         if selection == 'Legendary':
+            item.setLevel(51)
             if action.text().split(None)[1] == 'Staff':
                 item.getSlot(4).setAll('Focus', 'All Spell Lines', '50')
                 item.getSlot(5).setAll('ToA Bonus', 'Casting Speed', '3')
@@ -1906,6 +1901,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ItemAttributeList[self.CurrentItemLabel] = item
 
         if selection == 'Legendary':
+            item.setLevel(51)
             if action.text().split(None)[1] == 'Staff':
                 item.getSlot(4).setAll('Focus', 'All Spell Lines', '50')
                 item.getSlot(5).setAll('ToA Bonus', 'Casting Speed', '3')
