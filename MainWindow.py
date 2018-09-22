@@ -1553,6 +1553,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def changeItemDamageType(self, item_damage_type):
         self.getItem().setDamageType(item_damage_type)
 
+    # BUG: DOES NOT PREVENT INTEGERS > 51 ...
     def changeItemLevel(self):
 
         # TODO: AUTOCORRECT ERRONEOUS ENTRIES ...
@@ -1564,7 +1565,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ItemLevel.setModified(False)
         self.restoreItem(self.getItem())
 
-    # TODO: DETERMINE IF NEEDED ...
+    # BUG: DOES NOT PREVENT INTEGERS > 100 ...
     def changeItemQuality(self):
 
         # TODO: AUTOCORRECT ERRONEOUS ENTRIES ...
@@ -1575,7 +1576,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.getItem().setQuality(self.ItemQuality.text())
         self.ItemQuality.setModified(False)
 
-    # TODO: DETERMINE IF NEEDED ...
+    # BUG: DOES NOT PREVENT INTEGERS > 35 ...
     def changeItemBonus(self):
 
         # TODO: AUTOCORRECT ERRONEOUS ENTRIES ...
@@ -1586,6 +1587,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.getItem().setBonus(self.ItemBonus.text())
         self.ItemBonus.setModified(False)
 
+    # BUG: DOES NOT PREVENT INTEGERS > 102 OR DOUBLES > 16.5
     def changeItemAFDPS(self):
 
         # TODO: AUTOCORRECT ERRONEOUS ENTRIES ...
@@ -1596,7 +1598,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.getItem().setAFDPS(self.ItemAFDPS.text())
         self.ItemAFDPS.setModified(False)
 
-    # TODO: DETERMINE IF NEEDED ...
+    # BUG: DOES NOT PREVENT DOUBLES > 6.0 ...
     def changeItemSpeed(self):
 
         # TODO: AUTOCORRECT ERRONEOUS ENTRIES ...
