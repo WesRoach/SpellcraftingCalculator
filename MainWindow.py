@@ -1550,7 +1550,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def changeItemDamageType(self, item_damage_type):
         self.getItem().setDamageType(item_damage_type)
 
-    # BUG: DOES NOT PREVENT INTEGERS > 51 ...
+    # TODO: PREVENT INTEGERS ON CRAFTED ITEMS > 51
     def changeItemLevel(self):
         self.getItem().setLevel(self.ItemLevel.text())
         self.ItemLevel.setModified(False)
@@ -1564,6 +1564,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.getItem().setBonus(self.ItemBonus.text())
         self.ItemBonus.setModified(False)
 
+    # TODO: SET ITEM LEVEL BASED ON AFDPS CALCULATION ...
     def changeItemAFDPS(self):
         self.getItem().setAFDPS(self.ItemAFDPS.text())
         self.ItemAFDPS.setModified(False)
