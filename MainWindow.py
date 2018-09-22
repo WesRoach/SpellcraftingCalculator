@@ -458,7 +458,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.StatusBar.addPermanentWidget(QLabel('Build Utility: '))
         self.StatusBar.addPermanentWidget(self.BuildUtility)
 
-    # TODO: CHECK IF MODIFIED ...
     def initialize(self, new_template = True):
         self.TemplateName = None
         self.TemplatePath = None
@@ -1474,7 +1473,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.CharacterLevel.setModified(False)
         self.calculate()
 
-    # TODO: DETERMINE IF NEEDED ...
     def changeCharRealmRank(self):
 
         try:  # VALUE MIGHT BE INVALID ...
@@ -1486,7 +1484,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.setCharRealmRank('14')
         self.CharacterRealmRank.setModified(False)
 
-    # TODO: DETERMINE IF NEEDED ...
     def changeCharChampLevel(self):
 
         try:  # VALUE MIGHT BE INVALID ...
@@ -1556,7 +1553,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     # BUG: DOES NOT PREVENT INTEGERS > 51 ...
     def changeItemLevel(self):
 
-        # TODO: AUTOCORRECT ERRONEOUS ENTRIES ...
+        # TODO: AUTOCORRECT ERRONEOUS ENTRIES FOR CRAFTED PIECES ...
 
         # DEBUGGING ...
         print('changeItemLevel: INPUT ACCEPTED')
@@ -1568,7 +1565,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     # BUG: DOES NOT PREVENT INTEGERS > 100 ...
     def changeItemQuality(self):
 
-        # TODO: AUTOCORRECT ERRONEOUS ENTRIES ...
+        # TODO: AUTOCORRECT ERRONEOUS ENTRIES FOR CRAFTED PIECES ...
 
         # DEBUGGING ...
         print('changeItemQuality: INPUT ACCEPTED')
@@ -1576,36 +1573,15 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.getItem().setQuality(self.ItemQuality.text())
         self.ItemQuality.setModified(False)
 
-    # BUG: DOES NOT PREVENT INTEGERS > 35 ...
     def changeItemBonus(self):
-
-        # TODO: AUTOCORRECT ERRONEOUS ENTRIES ...
-
-        # DEBUGGING ...
-        print('changeItemBonus: INPUT ACCEPTED')
-
         self.getItem().setBonus(self.ItemBonus.text())
         self.ItemBonus.setModified(False)
 
-    # BUG: DOES NOT PREVENT INTEGERS > 102 OR DOUBLES > 16.5
     def changeItemAFDPS(self):
-
-        # TODO: AUTOCORRECT ERRONEOUS ENTRIES ...
-
-        # DEBUGGING ...
-        print('changeItemAFDPS: INPUT ACCEPTED')
-
         self.getItem().setAFDPS(self.ItemAFDPS.text())
         self.ItemAFDPS.setModified(False)
 
-    # BUG: DOES NOT PREVENT DOUBLES > 6.0 ...
     def changeItemSpeed(self):
-
-        # TODO: AUTOCORRECT ERRONEOUS ENTRIES ...
-
-        # DEBUGGING ...
-        print('changeItemSpeed: INPUT ACCEPTED')
-
         self.getItem().setSpeed(self.ItemSpeed.text())
         self.ItemSpeed.setModified(False)
 
