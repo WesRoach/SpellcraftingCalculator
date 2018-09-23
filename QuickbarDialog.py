@@ -4,6 +4,7 @@ from PyQt5 import uic
 from PyQt5.Qt import Qt, QIcon, QModelIndex, QVariant
 from PyQt5.QtWidgets import QDialog, QMessageBox
 from Constants import GemHotkeyValues, ServerCodes
+from Settings import Settings
 from configparser import DEFAULTSECT, RawConfigParser
 from os import getenv, path, remove, walk
 from re import compile
@@ -91,9 +92,10 @@ class QuickbarDialog(QDialog, Ui_QuickbarDialog):
         for location in self.CraftableItems.keys():
             if self.CraftableItems[location].isEnabled():
                 for slot in self.ItemAttributeList[location].getSlotList():
-                    if slot.isCrafted():
+                    if slot.isCrafted() and slot.isUtilized():
                         self.CraftableItems[location].setCheckState(Qt.Checked)
 
+        # TODO: LOAD PATH FROM SAVED SETTINGS ...
         ini_path = getenv('APPDATA') + '\\Electronic Arts\\Dark Age of Camelot\\'
         self.CharacterPath.setText(ini_path)
         self.CharacterPath.setCursorPosition(0)
