@@ -94,7 +94,6 @@ class QuickbarDialog(QDialog, Ui_QuickbarDialog):
                     if slot.isCrafted():
                         self.CraftableItems[location].setCheckState(Qt.Checked)
 
-        # TODO: LOAD PATH FROM SAVED SETTINGS ...
         ini_path = getenv('APPDATA') + '\\Electronic Arts\\Dark Age of Camelot\\'
         self.CharacterPath.setText(ini_path)
         self.CharacterPath.setCursorPosition(0)

@@ -1550,9 +1550,21 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def changeItemDamageType(self, item_damage_type):
         self.getItem().setDamageType(item_damage_type)
 
-    # TODO: PREVENT INTEGERS ON CRAFTED ITEMS > 51
+    # TODO: SET AFDPS BASED ON ITEM LEVEL ...
     def changeItemLevel(self):
-        self.getItem().setLevel(self.ItemLevel.text())
+        item = self.getItem()
+        item_level = self.ItemLevel.text()
+        if item.isPlayerCrafted():
+
+            try:  # VALUE MIGHT BE INVALID ...
+                item_level = int(item_level)
+            except ValueError:
+                item_level = int(51)
+
+            if item_level < 1 or item_level > 51:
+                item_level = 1 if item_level < 1 else 51
+
+        self.getItem().setLevel(str(item_level))
         self.ItemLevel.setModified(False)
         self.restoreItem(self.getItem())
 
@@ -1564,7 +1576,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.getItem().setBonus(self.ItemBonus.text())
         self.ItemBonus.setModified(False)
 
-    # TODO: SET ITEM LEVEL BASED ON AFDPS CALCULATION ...
+    # TODO: SET LEVEL BASED ON ITEM AFDPS ...
     def changeItemAFDPS(self):
         self.getItem().setAFDPS(self.ItemAFDPS.text())
         self.ItemAFDPS.setModified(False)
