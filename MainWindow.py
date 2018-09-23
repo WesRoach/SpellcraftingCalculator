@@ -8,10 +8,10 @@ from PyQt5.QtWidgets import QFileDialog, QLabel, QListWidgetItem, QMainWindow, Q
 from Character import AllBonusList, ClassList, ItemTypes, Races
 from Constants import Cap, CraftedTypeList, CraftedEffectList, CraftedValuesList, DropTypeList, DropEffectList
 from Constants import EnhancedTypeList, EnhancedEffectList, EnhancedValuesList, MythicalBonusCap, PVEBonusCap, TOABonusCap
-from Settings import Settings
 from Item import Item
 from QuickbarDialog import QuickbarDialog
 from ReportDialog import ReportDialog
+from Settings import Settings
 from lxml import etree
 import os
 import re

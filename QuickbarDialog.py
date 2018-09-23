@@ -37,6 +37,8 @@ class QuickbarDialog(QDialog, Ui_QuickbarDialog):
         QDialog.__init__(self, parent, flags)
         self.setupUi(self)
 
+        self.Settings = Settings.getInstance()
+
         self.Selection = []
         self.GemCount = 0
         self.ItemExportList = {}
@@ -96,7 +98,10 @@ class QuickbarDialog(QDialog, Ui_QuickbarDialog):
                         self.CraftableItems[location].setCheckState(Qt.Checked)
 
         # TODO: LOAD PATH FROM SAVED SETTINGS ...
+        # TODO: TEST IF 'ini_path' EXISTS ...
+        # USE OS.PATH.JOIN ...
         ini_path = getenv('APPDATA') + '\\Electronic Arts\\Dark Age of Camelot\\'
+
         self.CharacterPath.setText(ini_path)
         self.CharacterPath.setCursorPosition(0)
         self.CloseButton.setFocus()
