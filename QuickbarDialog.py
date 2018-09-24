@@ -219,6 +219,9 @@ class QuickbarDialog(QDialog, Ui_QuickbarDialog):
         except AttributeError:
             pass
 
+    def CharacterSelectionChanged(self):
+        self.Selection = self.CharacterTable.selectedIndexes()
+
     def ItemSelectionChanged(self):
         self.ItemExportList.clear()
         for location, checkbox in self.CraftableItems.items():
@@ -227,6 +230,3 @@ class QuickbarDialog(QDialog, Ui_QuickbarDialog):
 
         # CASCADE THE CHANGES ...
         self.getGemCount()
-
-    def CharacterSelectionChanged(self):
-        self.Selection = self.CharacterTable.selectedIndexes()
