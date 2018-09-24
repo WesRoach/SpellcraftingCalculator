@@ -104,27 +104,23 @@ class QuickbarDialog(QDialog, Ui_QuickbarDialog):
         self.CharacterPath.setCursorPosition(0)
         self.CloseButton.setFocus()
         self.getCrafterList(ini_path)
-        self.ItemSelectionChanged()
+        self.changeItemSelection()
 
     def initControls(self):
-        self.ChestCheckBox.clicked.connect(self.ItemSelectionChanged)
-        self.ArmsCheckBox.clicked.connect(self.ItemSelectionChanged)
-        self.HeadCheckBox.clicked.connect(self.ItemSelectionChanged)
-        self.LegsCheckBox.clicked.connect(self.ItemSelectionChanged)
-        self.HandsCheckBox.clicked.connect(self.ItemSelectionChanged)
-        self.FeetCheckBox.clicked.connect(self.ItemSelectionChanged)
-        self.RightHandCheckBox.clicked.connect(self.ItemSelectionChanged)
-        self.LeftHandCheckBox.clicked.connect(self.ItemSelectionChanged)
-        self.TwoHandedCheckBox.clicked.connect(self.ItemSelectionChanged)
-        self.RangedCheckBox.clicked.connect(self.ItemSelectionChanged)
-        self.CharacterTable.selectionModel().selectionChanged.connect(self.CharacterSelectionChanged)
+        self.ChestCheckBox.clicked.connect(self.changeItemSelection)
+        self.ArmsCheckBox.clicked.connect(self.changeItemSelection)
+        self.HeadCheckBox.clicked.connect(self.changeItemSelection)
+        self.LegsCheckBox.clicked.connect(self.changeItemSelection)
+        self.HandsCheckBox.clicked.connect(self.changeItemSelection)
+        self.FeetCheckBox.clicked.connect(self.changeItemSelection)
+        self.RightHandCheckBox.clicked.connect(self.changeItemSelection)
+        self.LeftHandCheckBox.clicked.connect(self.changeItemSelection)
+        self.TwoHandedCheckBox.clicked.connect(self.changeItemSelection)
+        self.RangedCheckBox.clicked.connect(self.changeItemSelection)
+        self.CharacterTable.selectionModel().selectionChanged.connect(self.changeCharSelection)
         self.ExportButton.clicked.connect(self.exportGemsToQuickbar)
         self.RestoreButton.clicked.connect(self.restoreQuickbar)
         self.CloseButton.clicked.connect(self.accept)
-
-# =============================================== #
-#             BOOLEAN CHECK METHODS               #
-# =============================================== #
 
 # =============================================== #
 #                  SETTER METHODS                 #
@@ -132,14 +128,6 @@ class QuickbarDialog(QDialog, Ui_QuickbarDialog):
 
 # =============================================== #
 #                  GETTER METHODS                 #
-# =============================================== #
-
-# =============================================== #
-#                  CHANGE METHODS                 #
-# =============================================== #
-
-# =============================================== #
-#       MISCELLANEOUS METHODS AND FUNCTIONS       #
 # =============================================== #
 
     def getCrafterList(self, rootdir):
@@ -166,6 +154,26 @@ class QuickbarDialog(QDialog, Ui_QuickbarDialog):
         for item in self.ItemExportList.values():
             self.GemCount += sum(1 for x in item.getSlotList() if x.isCrafted() and x.isUtilized())
         self.GemExportCount.setText(str(self.GemCount))
+
+# =============================================== #
+#                  CHANGE METHODS                 #
+# =============================================== #
+
+    def changeCharSelection(self):
+        self.Selection = self.CharacterTable.selectedIndexes()
+
+    def changeItemSelection(self):
+        self.ItemExportList.clear()
+        for location, checkbox in self.CraftableItems.items():
+            if checkbox.checkState() == Qt.Checked:
+                self.ItemExportList[location] = self.ItemAttributeList[location]
+
+        # CASCADE THE CHANGES ...
+        self.getGemCount()
+
+# =============================================== #
+#             EXPORT/RESTORE METHODS              #
+# =============================================== #
 
     def exportGemsToQuickbar(self):
         if len(self.Selection) == 0 or self.GemCount == 0:
@@ -227,7 +235,7 @@ class QuickbarDialog(QDialog, Ui_QuickbarDialog):
             remove(file + '.bak')
 
 # =============================================== #
-#        SLOT/SIGNAL METHODS AND FUNCTIONS        #
+#              MISCELLANEOUS METHODS              #
 # =============================================== #
 
     def mousePressEvent(self, event):
@@ -235,15 +243,3 @@ class QuickbarDialog(QDialog, Ui_QuickbarDialog):
             self.focusWidget().clearFocus()
         except AttributeError:
             pass
-
-    def CharacterSelectionChanged(self):
-        self.Selection = self.CharacterTable.selectedIndexes()
-
-    def ItemSelectionChanged(self):
-        self.ItemExportList.clear()
-        for location, checkbox in self.CraftableItems.items():
-            if checkbox.checkState() == Qt.Checked:
-                self.ItemExportList[location] = self.ItemAttributeList[location]
-
-        # CASCADE THE CHANGES ...
-        self.getGemCount()
