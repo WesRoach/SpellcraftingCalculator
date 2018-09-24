@@ -98,10 +98,7 @@ class QuickbarDialog(QDialog, Ui_QuickbarDialog):
                         self.CraftableItems[location].setCheckState(Qt.Checked)
 
         # TODO: LOAD PATH FROM SAVED SETTINGS ...
-        # TODO: TEST IF 'ini_path' EXISTS ...
-        # USE OS.PATH.JOIN ...
         ini_path = getenv('APPDATA') + '\\Electronic Arts\\Dark Age of Camelot\\'
-
         self.CharacterPath.setText(ini_path)
         self.CharacterPath.setCursorPosition(0)
         self.CloseButton.setFocus()
@@ -154,14 +151,12 @@ class QuickbarDialog(QDialog, Ui_QuickbarDialog):
         self.GemExportCount.setText(str(self.GemCount))
 
     def exportGemsToQuickbar(self):
-        if len(self.Selection) == 0 or self.GemCount == 0: return
+        if len(self.Selection) == 0 or self.GemCount == 0:
+            return
+
         bar = (self.QuickbarNum.value() - 1) if (self.QuickbarNum.value() != 1) else ''
         file = self.TableModel.data(self.TableModel.index(self.Selection[0].row(), 0), Qt.UserRole)
         index = ((self.QuickbarRow.value() - 1) * 10) + (self.QuickbarStart.value() - 1)
-
-        with open(file, 'r') as document:
-            with open(file + '.bak', 'w') as backup:
-                backup.write(document.read())
 
         if (100 - index) < self.GemCount:
             QMessageBox.warning(
@@ -171,6 +166,10 @@ class QuickbarDialog(QDialog, Ui_QuickbarDialog):
                 QMessageBox.Ok, QMessageBox.Ok
             )
             return
+
+        with open(file, 'r') as document:
+            with open(file + '.bak', 'w') as backup:
+                backup.write(document.read())
 
         button_strings = []
         for location, item in self.ItemExportList.items():
