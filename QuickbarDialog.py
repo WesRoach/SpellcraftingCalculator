@@ -126,9 +126,17 @@ class QuickbarDialog(QDialog, Ui_QuickbarDialog):
 #                  SETTER METHODS                 #
 # =============================================== #
 
+    # TODO: IMPLEMENT ...
+    def setConfigPath(self):
+        pass
+
 # =============================================== #
 #                  GETTER METHODS                 #
 # =============================================== #
+
+    # TODO: IMPLEMENT ...
+    def getConfigPath(self):
+        pass
 
     def getCrafterList(self, rootdir):
         for root, dirs, files in walk(rootdir):
