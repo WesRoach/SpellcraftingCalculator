@@ -159,6 +159,10 @@ class QuickbarDialog(QDialog, Ui_QuickbarDialog):
 #                  CHANGE METHODS                 #
 # =============================================== #
 
+    # TODO: IMPLEMENT ...
+    def changeConfigPath(self):
+        pass
+
     def changeCharSelection(self):
         self.Selection = self.CharacterTable.selectedIndexes()
 
