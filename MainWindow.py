@@ -94,8 +94,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def initMenuBar(self):
         for action, variable in (
                 ('Template Path ...', 'TemplatePath'),
-                ('Item Database Path ...', 'ItemDatabasePath'),
-                ('Item XML Files Path ...', 'ItemXMLFilesPath')):
+                ('Item XML File Path ...', 'ItemPath'),
+                ('Item Database Path ...', 'DatabasePath')):
             action = QAction(action, self)
             action.setData(variable)
             self.PathMenu.addAction(action)
@@ -126,6 +126,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.EditMenu.addAction('Clear Item', self.clearItem)
         self.EditMenu.addAction('Clear Slots', self.clearItemSlots)
 
+        # TODO: LOAD FROM SETTINGS ...
         for (title, res) in (("Large", 32,), ("Normal", 24,), ("Small", 16,), ("Hide", 0,),):
             action = QAction(title, self)
             action.setData(QVariant(res))
@@ -133,11 +134,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.ToolBarMenu.addAction(action)
         self.ToolBarMenu.actions()[1].setChecked(True)
 
+        # TODO: LOAD FROM SETTINGS ...
         self.DistanceToCap = QAction('&Distance to Cap', self)
         self.DistanceToCap.setShortcut(QKeySequence(Qt.ALT + Qt.Key_D))
         self.DistanceToCap.setCheckable(True)
         self.DistanceToCap.setChecked(True)
 
+        # TODO: LOAD FROM SETTINGS ...
         self.UnusableSkills = QAction('&Unusable Skills', self)
         self.UnusableSkills.setShortcut(QKeySequence(Qt.ALT + Qt.Key_U))
         self.UnusableSkills.setCheckable(True)
@@ -1435,8 +1438,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             QFileDialog(), "Select a Folder", '', options = options)
 
         if path:
+            path = os.path.normpath(path)
             self.Settings.set('PATHS', action.data(), path)
-
 
     def changeCharRealm(self, char_realm):
         for location in self.ItemAttributeList.keys():
@@ -1893,7 +1896,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # CASCADE THE CHANGES ...
         self.restoreItem(self.getItem())
 
-    # TODO: ALLOW USER TO SET 'ItemPath' ...
     def loadItem(self):
         options = QFileDialog.Options()
         path = self.Settings.get('PATHS', 'ItemPath')
@@ -1948,7 +1950,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # CASCADE THE CHANGES ...
         self.restoreItem(self.getItem())
 
-    # TODO: ALLOW USER TO SET 'ItemPath' ...
     def saveItem(self):
         item = self.getItem(self.CurrentItemLabel)
 
