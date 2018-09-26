@@ -331,7 +331,6 @@ class Item:
                 self.setState(element.text)
                 self.SlotList = self.createSlots()
 
-    # TODO: MAKE SURE 'filename' INCLUDES FULL PATH ...
     def exportAsXML(self, filename, export = False, report = False):
         xml_fields = self.getXMLFields(export, report)
 
