@@ -33,6 +33,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ViewMenu = QMenu('&View', self)
         self.ErrorMenu = QMenu('&Errors', self)
         self.HelpMenu = QMenu('&Help', self)
+        self.PathMenu = QMenu('Configure &Paths')
         self.ItemLoadMenu = QMenu('Load Item', self)
         self.ItemTypeMenu = QMenu('Item &Type', self)
         self.ItemNewMenu = QMenu('&New Item', self)
@@ -91,12 +92,22 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         return icon
 
     def initMenuBar(self):
+        for action, variable in (
+                ('Template Path ...', 'TemplatePath'),
+                ('Item Database Path ...', 'ItemDatabasePath'),
+                ('Item XML Files Path ...', 'ItemXMLFilesPath')):
+            action = QAction(action, self)
+            action.setData(variable)
+            self.PathMenu.addAction(action)
+
         self.FileMenu.addAction('New Template', self.newTemplate)
         self.FileMenu.addAction('Open Template ...', self.openTemplate)
         self.FileMenu.addAction('Save Template', self.saveTemplate)
         self.FileMenu.addAction('Save Template As ...', self.saveTemplateAs)
         self.FileMenu.addSeparator()
         self.FileMenu.addAction('Export Gem\'s to Quickbar ...', self.showQuickbarDialog)
+        self.FileMenu.addSeparator()
+        self.FileMenu.addMenu(self.PathMenu)
         self.FileMenu.addSeparator()
         self.FileMenu.addMenu(self.RecentMenu)
         self.FileMenu.addSeparator()
@@ -502,6 +513,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.calculate()
 
     def initControls(self):
+        self.PathMenu.triggered.connect(self.changeFilePath)
         self.ItemTypeMenu.triggered.connect(self.convertItem)
         self.ItemNewMenu.triggered.connect(self.newItem)
         self.ToolBarMenu.triggered.connect(self.setToolBarOptions)
