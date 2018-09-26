@@ -47,14 +47,14 @@
       <number>3</number>
      </property>
      <item>
-      <widget class="QLabel" name="CharacterPathLabel">
+      <widget class="QLabel" name="CrafterPathLabel">
        <property name="text">
         <string>Path:</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="CharacterPath"/>
+      <widget class="QLineEdit" name="CrafterPath"/>
      </item>
      <item>
       <widget class="QPushButton" name="BrowseButton">
@@ -93,7 +93,7 @@
        <number>0</number>
       </property>
       <item>
-       <widget class="QTableWidget" name="CharacterTable">
+       <widget class="QTableWidget" name="CrafterTable">
         <property name="contextMenuPolicy">
          <enum>Qt::DefaultContextMenu</enum>
         </property>

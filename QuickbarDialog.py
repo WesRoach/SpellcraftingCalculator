@@ -1,13 +1,13 @@
 # HEADER PLACE HOLDER
 
 from PyQt5 import uic
-from PyQt5.Qt import Qt, QIcon, QModelIndex, QVariant
+from PyQt5.Qt import QFileDialog, QIcon, QModelIndex, Qt, QVariant
 from PyQt5.QtWidgets import QDialog, QMessageBox
 from Constants import GemHotkeyValues, ServerCodes
 from Settings import Settings
-from configparser import DEFAULTSECT, RawConfigParser
-from os import getenv, path, remove, walk
+from configparser import DEFAULTSECT, NoOptionError, RawConfigParser
 from re import compile
+import os
 
 Ui_QuickbarDialog = uic.loadUiType(r'interface/QuickbarDialog.ui')[0]
 
@@ -61,7 +61,7 @@ class QuickbarDialog(QDialog, Ui_QuickbarDialog):
         self.resec = compile('\[(\w+)\]')
         self.rectl = compile('[Hh]otkey_(\d+)=44,13,')
 
-        self.TableModel = self.CharacterTable.model()
+        self.TableModel = self.CrafterTable.model()
 
         self.initLayout()
         self.initControls()
@@ -97,16 +97,13 @@ class QuickbarDialog(QDialog, Ui_QuickbarDialog):
                     if slot.isCrafted() and slot.isUtilized():
                         self.CraftableItems[location].setCheckState(Qt.Checked)
 
-        # TODO: LOAD PATH FROM SAVED SETTINGS ...
-        ini_path = getenv('APPDATA') + '\\Electronic Arts\\Dark Age of Camelot\\'
-
-        self.CharacterPath.setText(ini_path)
-        self.CharacterPath.setCursorPosition(0)
-        self.CloseButton.setFocus()
-        self.getCrafterList(ini_path)
+        self.setCrafterPath()
+        self.getCrafterList()
         self.changeItemSelection()
+        self.CloseButton.setFocus()
 
     def initControls(self):
+        self.BrowseButton.clicked.connect(self.changeCrafterPath)
         self.ChestCheckBox.clicked.connect(self.changeItemSelection)
         self.ArmsCheckBox.clicked.connect(self.changeItemSelection)
         self.HeadCheckBox.clicked.connect(self.changeItemSelection)
@@ -117,7 +114,7 @@ class QuickbarDialog(QDialog, Ui_QuickbarDialog):
         self.LeftHandCheckBox.clicked.connect(self.changeItemSelection)
         self.TwoHandedCheckBox.clicked.connect(self.changeItemSelection)
         self.RangedCheckBox.clicked.connect(self.changeItemSelection)
-        self.CharacterTable.selectionModel().selectionChanged.connect(self.changeCharSelection)
+        self.CrafterTable.selectionModel().selectionChanged.connect(self.changeCrafterSelection)
         self.ExportButton.clicked.connect(self.exportGemsToQuickbar)
         self.RestoreButton.clicked.connect(self.restoreQuickbar)
         self.CloseButton.clicked.connect(self.accept)
@@ -126,20 +123,26 @@ class QuickbarDialog(QDialog, Ui_QuickbarDialog):
 #                  SETTER METHODS                 #
 # =============================================== #
 
-    # TODO: IMPLEMENT ...
-    def setConfigPath(self):
-        pass
+    def setCrafterPath(self):
+        self.CrafterPath.setText(self.getCrafterPath())
+        self.CrafterPath.setCursorPosition(0)
 
 # =============================================== #
 #                  GETTER METHODS                 #
 # =============================================== #
 
-    # TODO: IMPLEMENT ...
-    def getConfigPath(self):
-        pass
+    def getCrafterPath(self):
 
-    def getCrafterList(self, rootdir):
-        for root, dirs, files in walk(rootdir):
+        try:  # OPTION MIGHT NOT EXIST ...
+            path = self.Settings.get('PATHS', 'CrafterPath')
+        except NoOptionError:
+            path = os.getenv('APPDATA') + '\\Electronic Arts\\Dark Age of Camelot\\'
+
+        return path
+
+    def getCrafterList(self):
+        self.CrafterTable.setRowCount(0)
+        for root, dirs, files in os.walk(self.getCrafterPath()):
             for file in (x for x in files if self.reini.search(x)):
                 with open(root + '\\' + file, 'r') as document:
                     if self.rectl.search(document.read()) is not None:
@@ -152,10 +155,10 @@ class QuickbarDialog(QDialog, Ui_QuickbarDialog):
                         self.TableModel.setData(index, QVariant(root + '\\' + file), Qt.UserRole)
                         index = self.TableModel.index(self.TableModel.rowCount() - 1, 1, QModelIndex())
                         self.TableModel.setData(index, QVariant(' ' + character), Qt.DisplayRole)
-        self.CharacterTable.resizeRowsToContents()
+        self.CrafterTable.resizeRowsToContents()
 
         if self.TableModel.rowCount() == 1:
-            self.CharacterTable.selectRow(0)
+            self.CrafterTable.selectRow(0)
 
     def getGemCount(self):
         self.GemCount = 0
@@ -167,12 +170,21 @@ class QuickbarDialog(QDialog, Ui_QuickbarDialog):
 #                  CHANGE METHODS                 #
 # =============================================== #
 
-    # TODO: IMPLEMENT ...
-    def changeConfigPath(self):
-        pass
+    def changeCrafterPath(self):
+        options = QFileDialog.Options()
+        path = QFileDialog.getExistingDirectory(
+            QFileDialog(), "Select a New Path", self.getCrafterPath(), options=options)
 
-    def changeCharSelection(self):
-        self.Selection = self.CharacterTable.selectedIndexes()
+        if path in ('', None):
+            return
+
+        path = os.path.normpath(path)
+        self.Settings.set('PATHS', 'CrafterPath', path)
+        self.setCrafterPath()
+        self.getCrafterList()
+
+    def changeCrafterSelection(self):
+        self.Selection = self.CrafterTable.selectedIndexes()
 
     def changeItemSelection(self):
         self.ItemExportList.clear()
@@ -240,11 +252,11 @@ class QuickbarDialog(QDialog, Ui_QuickbarDialog):
         index = self.TableModel.index(self.Selection[0].row(), 0)
         file = self.TableModel.data(index, Qt.UserRole)
 
-        if path.exists(file + '.bak') and path.isfile(file + '.bak'):
+        if os.path.exists(file + '.bak') and os.path.isfile(file + '.bak'):
             with open(file, 'w') as document:
                 with open(file + '.bak', 'r') as backup:
                     document.write(backup.read())
-            remove(file + '.bak')
+            os.remove(file + '.bak')
 
 # =============================================== #
 #              MISCELLANEOUS METHODS              #
