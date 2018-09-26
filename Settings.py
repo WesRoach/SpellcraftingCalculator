@@ -46,9 +46,9 @@ class Settings(Singleton):
         self.Settings.set('PATHS', 'DatabasePath', os.path.join(path, 'database'))
         self.Settings.set('PATHS', 'TemplatePath', os.path.join(path, 'templates'))
 
-    # TODO: SAVE AFTER EACH SET ...
     def set(self, section, option, value):
         self.Settings.set(section, option, value)
+        self.save()
 
     def get(self, section, option):
         return self.Settings.get(section, option)
