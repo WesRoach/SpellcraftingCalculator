@@ -87,7 +87,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         for size in (16, 24, 32):
             icon.addFile(r'images/normal/' + f'{name}{size}.png', QSize(size, size), QIcon.Normal, QIcon.Off)
             icon.addFile(r'images/active/' + f'{name}{size}.png', QSize(size, size), QIcon.Active, QIcon.Off)
-            icon.addFile(r'images/disabled/' f'{name}{size}.png', QSize(size, size), QIcon.Disabled, QIcon.Off)
+            icon.addFile(r'images/disabled/' + f'{name}{size}.png', QSize(size, size), QIcon.Disabled, QIcon.Off)
         return icon
 
     def initMenuBar(self):
@@ -115,10 +115,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.EditMenu.addAction('Clear Item', self.clearItem)
         self.EditMenu.addAction('Clear Slots', self.clearItemSlots)
 
-        self.ViewMenu.addAction('&Material Report ...', self.showMaterialsReport)
-        self.ViewMenu.addAction('&Template Report ...', self.showTemplateReport)
-        self.ViewMenu.addSeparator()
-
         for (title, res) in (("Large", 32,), ("Normal", 24,), ("Small", 16,), ("Hide", 0,),):
             action = QAction(title, self)
             action.setData(QVariant(res))
@@ -126,19 +122,22 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.ToolBarMenu.addAction(action)
         self.ToolBarMenu.actions()[1].setChecked(True)
 
-        self.ViewMenu.addMenu(self.ToolBarMenu)
-        self.ViewMenu.addSeparator()
-
         self.DistanceToCap = QAction('&Distance to Cap', self)
         self.DistanceToCap.setShortcut(QKeySequence(Qt.ALT + Qt.Key_D))
         self.DistanceToCap.setCheckable(True)
         self.DistanceToCap.setChecked(True)
-        self.ViewMenu.addAction(self.DistanceToCap)
 
         self.UnusableSkills = QAction('&Unusable Skills', self)
         self.UnusableSkills.setShortcut(QKeySequence(Qt.ALT + Qt.Key_U))
         self.UnusableSkills.setCheckable(True)
         self.UnusableSkills.setChecked(False)
+
+        self.ViewMenu.addAction('&Material Report ...', self.showMaterialsReport)
+        self.ViewMenu.addAction('&Template Report ...', self.showTemplateReport)
+        self.ViewMenu.addSeparator()
+        self.ViewMenu.addMenu(self.ToolBarMenu)
+        self.ViewMenu.addSeparator()
+        self.ViewMenu.addAction(self.DistanceToCap)
         self.ViewMenu.addAction(self.UnusableSkills)
 
         self.menuBar().addMenu(self.FileMenu)
@@ -164,17 +163,16 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ItemNewButton.setMenu(self.ItemNewMenu)
         self.ItemNewButton.setToolTip('Add New Item')
         self.ItemNewButton.clicked.connect(self.ItemNewButton.showMenu)
-
         self.ItemTypeButton.setMenu(self.ItemTypeMenu)
         self.ItemTypeButton.setToolTip('Change Item Type')
         self.ItemTypeButton.clicked.connect(self.ItemTypeButton.showMenu)
-
         self.ItemLoadButton.setMenu(self.ItemLoadMenu)
         self.ItemLoadButton.setToolTip('Load Item')
         self.ItemLoadButton.clicked.connect(self.ItemLoadButton.showMenu)
-
         self.ItemDeleteButton.setToolTip('Delete Item')
+        self.ItemDeleteButton.clicked.connect(self.deleteItem)
         self.ItemSaveButton.setToolTip('Save Item')
+        self.ItemSaveButton.clicked.connect(self.saveItem)
 
     def initLayout(self):
         self.setWindowTitle('Kort\'s Spellcrafting Calculator')
@@ -504,13 +502,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.calculate()
 
     def initControls(self):
-        self.ItemNewMenu.triggered.connect(self.newItem)
         self.ItemTypeMenu.triggered.connect(self.convertItem)
+        self.ItemNewMenu.triggered.connect(self.newItem)
         self.ToolBarMenu.triggered.connect(self.setToolBarOptions)
         self.DistanceToCap.triggered.connect(self.setDistanceToCap)
         self.UnusableSkills.triggered.connect(self.setUnusableSkills)
-        self.ItemSaveButton.clicked.connect(self.saveItem)
-        self.ItemDeleteButton.clicked.connect(self.deleteItem)
         self.CharacterLevel.editingFinished.connect(self.changeCharLevel)
         self.CharacterRealmRank.editingFinished.connect(self.changeCharRealmRank)
         self.CharacterChampLevel.editingFinished.connect(self.changeCharChampLevel)
@@ -1420,6 +1416,15 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 # =============================================== #
 #                  CHANGE METHODS                 #
 # =============================================== #
+
+    def changeFilePath(self, action):
+        options = QFileDialog.Options()
+        path = QFileDialog.getExistingDirectory(
+            QFileDialog(), "Select a Folder", '', options = options)
+
+        if path:
+            self.Settings.set('PATHS', action.data(), path)
+
 
     def changeCharRealm(self, char_realm):
         for location in self.ItemAttributeList.keys():
