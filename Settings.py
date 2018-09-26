@@ -26,7 +26,6 @@ class Settings(Singleton):
 
     def create(self):
         path = os.path.dirname(os.path.abspath(sys.argv[0]))
-
         directories = ('items', 'database', 'templates')
         for directory in directories:
             if not os.path.exists(os.path.join(path, directory)):
