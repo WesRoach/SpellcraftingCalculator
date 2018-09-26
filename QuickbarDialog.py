@@ -98,12 +98,12 @@ class QuickbarDialog(QDialog, Ui_QuickbarDialog):
                         self.CraftableItems[location].setCheckState(Qt.Checked)
 
         # TODO: LOAD PATH FROM SAVED SETTINGS ...
-        path = getenv('APPDATA') + '\\Electronic Arts\\Dark Age of Camelot\\'
+        ini_path = getenv('APPDATA') + '\\Electronic Arts\\Dark Age of Camelot\\'
 
-        self.CharacterPath.setText(path)
+        self.CharacterPath.setText(ini_path)
         self.CharacterPath.setCursorPosition(0)
         self.CloseButton.setFocus()
-        self.getCrafterList(path)
+        self.getCrafterList(ini_path)
         self.changeItemSelection()
 
     def initControls(self):
