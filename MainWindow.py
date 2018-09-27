@@ -783,9 +783,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         elif item.isDropped():
             self.showDropWidgets(item)
 
-        # DEBUGGING ...
-        print(item.__dict__)
-
         # VALIDATE ATTRIBUTES ...
         self.validateAttributes()
 
@@ -1206,13 +1203,18 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     self.ImbuePoints[index].setText('{:3.1f}'.format(item.getImbueValues()[index]))
                 self.GemName[index].setText(item.getSlot(index).getGemName(self.getCharRealm()))
 
+            # CLEAR STYLE SHEET AND TOOLTIP
+            self.ItemOvercharge.setStyleSheet('')
+            self.ItemOvercharge.setToolTip('')
+
             success = item.getOverchargeSuccess()
             if isinstance(success, int):
-                self.ItemOvercharge.setText('{}%'.format(success))
-                self.ItemOvercharge.setStyleSheet('' if success > 0 else 'color: red')
+                self.ItemOvercharge.setText(f'{success}%')
+                if success == 0:
+                    self.ItemOvercharge.setStyleSheet('QLabel{color: red}')
+                    self.ItemOvercharge.setToolTip('Impossible Overcharge')
             else:
-                self.ItemOvercharge.setText('{}'.format(success))
-                self.ItemOvercharge.setStyleSheet('')
+                self.ItemOvercharge.setText(f'{success}')
 
         for key, datum in total['Attributes'].items():
             Acuity = AllBonusList[self.getCharRealm()][self.getCharClass()]["Acuity"]
