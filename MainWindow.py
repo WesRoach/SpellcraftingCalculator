@@ -38,7 +38,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ItemTypeMenu = QMenu('Item &Type', self)
         self.ItemNewMenu = QMenu('&New Item', self)
         self.RecentMenu = QMenu('Recent Templates', self)
-        self.ToolBarMenu = QMenu('&Toolbar', self)
+        self.ToolbarMenu = QMenu('&Toolbar', self)
         self.ToolBar = QToolBar("Default Toolbar")
 
         self.DistanceToCap = QAction()
@@ -92,7 +92,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         return icon
 
     def initMenuBar(self):
-        for action, variable in (
+        for (action, variable) in (
                 ('Template Path ...', 'TemplatePath'),
                 ('Item XML File Path ...', 'ItemPath'),
                 ('Item Database Path ...', 'DatabasePath')):
@@ -131,8 +131,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             action = QAction(title, self)
             action.setData(QVariant(res))
             action.setCheckable(True)
-            self.ToolBarMenu.addAction(action)
-        self.ToolBarMenu.actions()[1].setChecked(True)
+            self.ToolbarMenu.addAction(action)
+        self.ToolbarMenu.actions()[1].setChecked(True)
 
         # TODO: LOAD FROM SETTINGS ...
         self.DistanceToCap = QAction('&Distance to Cap', self)
@@ -149,7 +149,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ViewMenu.addAction('&Material Report ...', self.showMaterialsReport)
         self.ViewMenu.addAction('&Template Report ...', self.showTemplateReport)
         self.ViewMenu.addSeparator()
-        self.ViewMenu.addMenu(self.ToolBarMenu)
+        self.ViewMenu.addMenu(self.ToolbarMenu)
         self.ViewMenu.addSeparator()
         self.ViewMenu.addAction(self.DistanceToCap)
         self.ViewMenu.addAction(self.UnusableSkills)
@@ -519,7 +519,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.PathMenu.triggered.connect(self.changeFilePath)
         self.ItemTypeMenu.triggered.connect(self.convertItem)
         self.ItemNewMenu.triggered.connect(self.newItem)
-        self.ToolBarMenu.triggered.connect(self.setToolBarOptions)
+        self.ToolbarMenu.triggered.connect(self.setToolBarOptions)
         self.DistanceToCap.triggered.connect(self.setDistanceToCap)
         self.UnusableSkills.triggered.connect(self.setUnusableSkills)
         self.CharacterLevel.editingFinished.connect(self.changeCharLevel)
@@ -2018,8 +2018,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         except AttributeError:
             pass
 
+    # TODO: REORGANIZE, NO REASON FOR ACT AND ACTION ...
     def setToolBarOptions(self, action):
-        for act in self.ToolBarMenu.actions():
+        for act in self.ToolbarMenu.actions():
             if act.data() == action.data() and not act.isChecked():
                 act.setChecked(True)
             elif act.data() != action.data() and act.isChecked():
