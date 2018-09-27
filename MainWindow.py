@@ -2038,6 +2038,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.setIconSize(QSize(selection.data(), selection.data()))
             self.Toolbar.show()
 
+    # TODO: MIGRATE AWAY FROM THIS ...
     def setMinimumWidth(self, items = None):
         font = QFontMetrics(self.font())
         option = QStyleOptionComboBox()
