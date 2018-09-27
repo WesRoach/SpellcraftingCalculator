@@ -1193,7 +1193,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.BuildUtility.setText(f'{total["Utility"]:3.1f}')
         self.ItemUtility.setText(f'{item.getUtility():3.1f}')
 
-        # TODO: CHECK FOR DUPLICATES ...
         if item.isPlayerCrafted():
             self.ItemImbuePointsTotal.setText(f'{sum(item.getImbueValues()):3.1f}')
             self.ItemImbuePoints.setText(f'/ {item.getMaxImbueValue()}')
@@ -1326,10 +1325,18 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 self.insertSkill(amount, 'Mythical ' + bonus, 'Bonus')
 
 # =============================================== #
+#                COLORIZER METHOD                 #
+# =============================================== #
+
+    # TODO: IMPLEMENT ...
+    def colorize(self):
+        pass
+
+# =============================================== #
 #                VALIDATOR METHODS                #
 # =============================================== #
 
-    # TODO: IMPLEMENT
+    # TODO: IMPLEMENT ...
     def validateEntry(self):
         pass
 
@@ -1576,7 +1583,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def changeItemDamageType(self, item_damage_type):
         self.getItem().setDamageType(item_damage_type)
 
-    # TODO: SET AFDPS BASED ON ITEM LEVEL ...
     def changeItemLevel(self):
         item = self.getItem()
         item_level = self.ItemLevel.text()
@@ -1602,7 +1608,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.getItem().setBonus(self.ItemBonus.text())
         self.ItemBonus.setModified(False)
 
-    # TODO: SET LEVEL BASED ON ITEM AFDPS ...
     def changeItemAFDPS(self):
         self.getItem().setAFDPS(self.ItemAFDPS.text())
         self.ItemAFDPS.setModified(False)
