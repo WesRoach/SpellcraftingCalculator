@@ -657,7 +657,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             for key in (x for x in total.keys() if x != 'Utility'):
                 element = etree.SubElement(template, key)
                 if key[-7:] == 'Bonuses':
-                    element.attrib['Text'] = str('{} {}').format(key[:-7], key[-7:])
+                    element.attrib['Text'] = str(f'{key[:-7]} {key[-7:]}')
                 for attribute, bonuses in total[key].items():
                     tag = ''.join(x for x in attribute if x.isalnum())
                     if tag != attribute:
@@ -1190,29 +1190,22 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         total = self.summarize()
 
         item = self.getItem()
-        self.BuildUtility.setText('{:3.1f}'.format(total['Utility']))
-        self.ItemUtility.setText('{:3.1f}'.format(item.getUtility()))
+        self.BuildUtility.setText(f'{total["Utility"]:3.1f}')
+        self.ItemUtility.setText(f'{item.getUtility():3.1f}')
 
         # TODO: CHECK FOR DUPLICATES ...
         if item.isPlayerCrafted():
-            self.ItemImbuePointsTotal.setText('{:3.1f}'.format(sum(item.getImbueValues())))
-            self.ItemImbuePoints.setText('/ {}'.format(item.getMaxImbueValue()))
+            self.ItemImbuePointsTotal.setText(f'{sum(item.getImbueValues()):3.1f}')
+            self.ItemImbuePoints.setText(f'/ {item.getMaxImbueValue()}')
 
             for index in range(0, item.getSlotCount()):
                 if index < len(item.getImbueValues()):
-                    self.ImbuePoints[index].setText('{:3.1f}'.format(item.getImbueValues()[index]))
+                    self.ImbuePoints[index].setText(f'{item.getImbueValues()[index]:3.1f}')
                 self.GemName[index].setText(item.getSlot(index).getGemName(self.getCharRealm()))
-
-            # CLEAR STYLE SHEET AND TOOLTIP
-            self.ItemOvercharge.setStyleSheet('')
-            self.ItemOvercharge.setToolTip('')
 
             success = item.getOverchargeSuccess()
             if isinstance(success, int):
                 self.ItemOvercharge.setText(f'{success}%')
-                if success == 0:
-                    self.ItemOvercharge.setStyleSheet('QLabel{color: red}')
-                    self.ItemOvercharge.setToolTip('Impossible Overcharge')
             else:
                 self.ItemOvercharge.setText(f'{success}')
 
@@ -1257,8 +1250,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
             if not self.DistanceToCap.isChecked():
                 self.StatValue[key].setText(str(datum['TotalBonus']))
-                self.StatCap[key].setText('({})'.format(datum['TotalCapBonus']))
-                self.StatMythicalCap[key].setText('({})'.format(datum['TotalMythicalCapBonus']))
+                self.StatCap[key].setText(f'({datum["TotalCapBonus"]})')
+                self.StatMythicalCap[key].setText(f'({datum["TotalMythicalCapBonus"]})')
 
             elif self.DistanceToCap.isChecked():
                 Base = datum['Base'] + datum['CapBonus'] + datum['MythicalCapBonus']
@@ -1273,8 +1266,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 TotalMythicalCapBonus = datum['TotalMythicalCapBonus']
 
                 self.StatValue[key].setText(str(int(Base - TotalBonus)))
-                self.StatCap[key].setText('({})'.format(BaseCap - TotalCapBonus))
-                self.StatMythicalCap[key].setText('({})'.format(BaseMythicalCap - TotalMythicalCapBonus))
+                self.StatCap[key].setText(f'({BaseCap - TotalCapBonus})')
+                self.StatMythicalCap[key].setText(f'({BaseMythicalCap - TotalMythicalCapBonus})')
 
                 if BaseMythicalCap == 0:
                     self.StatMythicalCap[key].setText('--  ')
@@ -1289,11 +1282,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
             if not self.DistanceToCap.isChecked():
                 self.StatValue[key].setText(str(amts['TotalBonus']))
-                self.StatMythicalCap[key].setText('({})'.format(amts['TotalMythicalCapBonus']))
+                self.StatMythicalCap[key].setText(f'({amts["TotalMythicalCapBonus"]})')
 
             elif self.DistanceToCap.isChecked():
                 self.StatValue[key].setText(str(int(Base - TotalBonus)))
-                self.StatMythicalCap[key].setText('({})'.format(BaseMythicalCap - TotalMythicalCapBonus))
+                self.StatMythicalCap[key].setText(f'({BaseMythicalCap - TotalMythicalCapBonus})')
 
         self.SkillsView.model().removeRows(0, self.SkillsView.model().rowCount())
 
@@ -1485,7 +1478,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         racial_resists = Races['All'][self.getCharRace()]['Resistances']
         for resist in DropEffectList['All']['Resistance']:
             if resist in racial_resists:
-                self.StatBonus[resist].setText('+ {}'.format(racial_resists[resist]))
+                self.StatBonus[resist].setText(f'+ {racial_resists[resist]}')
             else:
                 self.StatBonus[resist].setText('-')
 
