@@ -39,7 +39,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ItemNewMenu = QMenu('&New Item', self)
         self.RecentMenu = QMenu('Recent Templates', self)
         self.ToolbarMenu = QMenu('&Toolbar', self)
-        self.ToolBar = QToolBar("Default Toolbar")
+        self.Toolbar = QToolBar("Default Toolbar")
 
         self.DistanceToCap = QAction()
         self.UnusableSkills = QAction()
@@ -72,8 +72,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.InitialValues = None
 
         self.initMenuBar()
-        self.initToolBar()
-        self.initItemToolBar()
+        self.initToolbar()
+        self.initItemToolbar()
         self.initLayout()
         self.initialize()
         self.initControls()
@@ -127,7 +127,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.EditMenu.addAction('Clear Slots', self.clearItemSlots)
 
         # TODO: LOAD FROM SETTINGS ...
-        for (title, res) in (("Large", 32,), ("Normal", 24,), ("Small", 16,), ("Hide", 0,),):
+        for (title, res) in (("Large", 32), ("Normal", 24), ("Small", 16), ("Hide", 0)):
             action = QAction(title, self)
             action.setData(QVariant(res))
             action.setCheckable(True)
@@ -160,20 +160,20 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.menuBar().addMenu(self.ErrorMenu)
         self.menuBar().addMenu(self.HelpMenu)
 
-    def initToolBar(self):
-        self.ToolBar.setFloatable(False)
-        self.ToolBar.addAction('New Template', self.newTemplate)
-        self.ToolBar.addAction('Open Template', self.openTemplate)
-        self.ToolBar.addAction('Save Template', self.saveTemplate)
-        self.ToolBar.addAction('Save Template As', self.saveTemplateAs)
-        self.ToolBar.addSeparator()
-        self.ToolBar.addAction('Export Gems', self.showQuickbarDialog)
-        self.ToolBar.addSeparator()
-        self.ToolBar.addAction('Materials Report', self.showMaterialsReport)
-        self.ToolBar.addAction('Template Report', self.showTemplateReport)
-        self.addToolBar(self.ToolBar)
+    def initToolbar(self):
+        self.Toolbar.setFloatable(False)
+        self.Toolbar.addAction('New Template', self.newTemplate)
+        self.Toolbar.addAction('Open Template', self.openTemplate)
+        self.Toolbar.addAction('Save Template', self.saveTemplate)
+        self.Toolbar.addAction('Save Template As', self.saveTemplateAs)
+        self.Toolbar.addSeparator()
+        self.Toolbar.addAction('Export Gems', self.showQuickbarDialog)
+        self.Toolbar.addSeparator()
+        self.Toolbar.addAction('Materials Report', self.showMaterialsReport)
+        self.Toolbar.addAction('Template Report', self.showTemplateReport)
+        self.addToolBar(self.Toolbar)
 
-    def initItemToolBar(self):
+    def initItemToolbar(self):
         self.ItemNewButton.setMenu(self.ItemNewMenu)
         self.ItemNewButton.setToolTip('Add New Item')
         self.ItemNewButton.clicked.connect(self.ItemNewButton.showMenu)
@@ -519,7 +519,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.PathMenu.triggered.connect(self.changeFilePath)
         self.ItemTypeMenu.triggered.connect(self.convertItem)
         self.ItemNewMenu.triggered.connect(self.newItem)
-        self.ToolbarMenu.triggered.connect(self.setToolBarOptions)
+        self.ToolbarMenu.triggered.connect(self.setToolbarOptions)
         self.DistanceToCap.triggered.connect(self.setDistanceToCap)
         self.UnusableSkills.triggered.connect(self.setUnusableSkills)
         self.CharacterLevel.editingFinished.connect(self.changeCharLevel)
@@ -2019,17 +2019,18 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             pass
 
     # TODO: REORGANIZE, NO REASON FOR ACT AND ACTION ...
-    def setToolBarOptions(self, action):
-        for act in self.ToolbarMenu.actions():
-            if act.data() == action.data() and not act.isChecked():
-                act.setChecked(True)
-            elif act.data() != action.data() and act.isChecked():
-                act.setChecked(False)
-        if action.data() == 0:
-            self.ToolBar.hide()
+    # TRY for action in ... action.setCheck(action.data() == selection.data)
+    def setToolbarOptions(self, selection):
+        for action in self.ToolbarMenu.actions():
+            if action.data() == selection.data() and not action.isChecked():
+                action.setChecked(True)
+            elif action.data() != selection.data() and action.isChecked():
+                action.setChecked(False)
+        if selection.data() == 0:
+            self.Toolbar.hide()
         else:
-            self.setIconSize(QSize(action.data(), action.data()))
-            self.ToolBar.show()
+            self.setIconSize(QSize(selection.data(), selection.data()))
+            self.Toolbar.show()
 
     def setMinimumWidth(self, items = None):
         font = QFontMetrics(self.font())
