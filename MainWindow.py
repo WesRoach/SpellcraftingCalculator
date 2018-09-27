@@ -134,6 +134,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.ToolbarMenu.addAction(action)
         self.ToolbarMenu.actions()[1].setChecked(True)
 
+        # STRING ...
+        # self.Settings.get('GENERAL', 'ToolbarSize')
+
         # TODO: LOAD FROM SETTINGS ...
         self.DistanceToCap = QAction('&Distance to Cap', self)
         self.DistanceToCap.setShortcut(QKeySequence(Qt.ALT + Qt.Key_D))
