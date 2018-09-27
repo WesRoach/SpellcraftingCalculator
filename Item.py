@@ -288,10 +288,10 @@ class Item:
             xml_fields['Equipped'] = self.isEquipped()
 
         if report:
-            xml_fields['Utility'] = '{:.1f}'.format(self.getUtility())
+            xml_fields['Utility'] = f'{self.getUtility():.1f}'
 
         if report and self.isPlayerCrafted():
-            xml_fields['Imbue'] = '{:.1f}'.format(sum(self.getImbueValues()))
+            xml_fields['Imbue'] = f'{sum(self.getImbueValues()):.1f}'
             xml_fields['ImbueMax'] = self.getMaxImbueValue()
             xml_fields['Sucess'] = self.getOverchargeSuccess()
 
