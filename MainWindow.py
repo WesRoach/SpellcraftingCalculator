@@ -185,14 +185,16 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def initLayout(self):
         self.setWindowTitle('Kort\'s Spellcrafting Calculator')
 
-        selection = int(self.Settings.get('GENERAL', 'ToolbarSize'))
+        saved_state = int(self.Settings.get('GENERAL', 'ToolbarSize'))
         for action in self.ToolbarMenu.actions():
-            if action.data() == selection:
+            if action.data() == saved_state:
                 self.setToolbarOptions(action)
 
-        # TODO: LOAD FROM SETTINGS ...
-        self.DistanceToCap.setChecked(True)
-        self.UnusableSkills.setChecked(False)
+        saved_state = self.Settings.get('GENERAL', 'DistanceToCap') in 'True'
+        self.DistanceToCap.setChecked(saved_state)
+
+        saved_state = self.Settings.get('GENERAL', 'UnusableSkills') in 'True'
+        self.UnusableSkills.setChecked(saved_state)
 
         # MAKE SURE WE ARE TESTING WIDTH AND HEIGHT
         # VALUES BASED ON THE FONT BEING USED ...
