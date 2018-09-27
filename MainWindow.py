@@ -1188,7 +1188,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         return total
 
-    # LEGACY CODE ...
+    # MOSTLY LEGACY CODE ...
     def calculate(self):
         total = self.summarize()
 
@@ -1196,6 +1196,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.BuildUtility.setText('{:3.1f}'.format(total['Utility']))
         self.ItemUtility.setText('{:3.1f}'.format(item.getUtility()))
 
+        # TODO: CHECK FOR DUPLICATES ...
         if item.isPlayerCrafted():
             self.ItemImbuePointsTotal.setText('{:3.1f}'.format(sum(item.getImbueValues())))
             self.ItemImbuePoints.setText('/ {}'.format(item.getMaxImbueValue()))
@@ -1207,10 +1208,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
             success = item.getOverchargeSuccess()
             if isinstance(success, int):
-                self.ItemOvercharge.setText(f'{success}%')
+                self.ItemOvercharge.setText('{}%'.format(success))
                 self.ItemOvercharge.setStyleSheet('' if success > 0 else 'color: red')
             else:
-                self.ItemOvercharge.setText(f'{success}')
+                self.ItemOvercharge.setText('{}'.format(success))
                 self.ItemOvercharge.setStyleSheet('')
 
         for key, datum in total['Attributes'].items():
