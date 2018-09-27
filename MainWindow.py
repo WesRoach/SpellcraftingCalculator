@@ -2029,14 +2029,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         except AttributeError:
             pass
 
-    # TODO: REORGANIZE, NO REASON FOR ACT AND ACTION ...
-    # TRY for action in ... action.setCheck(action.data() == selection.data)
     def setToolbarOptions(self, selection):
         for action in self.ToolbarMenu.actions():
-            if action.data() == selection.data() and not action.isChecked():
-                action.setChecked(True)
-            elif action.data() != selection.data() and action.isChecked():
-                action.setChecked(False)
+            action.setChecked(action.data() == selection.data())
         if selection.data() == 0:
             self.Toolbar.hide()
         else:
