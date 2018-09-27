@@ -31,7 +31,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.FileMenu = QMenu('&File', self)
         self.EditMenu = QMenu('&Edit', self)
         self.ViewMenu = QMenu('&View', self)
-        self.ErrorMenu = QMenu('&Errors', self)
         self.HelpMenu = QMenu('&Help', self)
         self.PathMenu = QMenu('Configure &Paths')
         self.ItemLoadMenu = QMenu('Load Item', self)
@@ -148,10 +147,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ViewMenu.addAction(self.DistanceToCap)
         self.ViewMenu.addAction(self.UnusableSkills)
 
+        empty_note = QAction('Nothing Here ...', self)
+        empty_note.setDisabled(True)
+        self.HelpMenu.addAction(empty_note)
+
         self.menuBar().addMenu(self.FileMenu)
         self.menuBar().addMenu(self.EditMenu)
         self.menuBar().addMenu(self.ViewMenu)
-        self.menuBar().addMenu(self.ErrorMenu)
         self.menuBar().addMenu(self.HelpMenu)
 
     def initToolbar(self):
@@ -1203,10 +1205,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     self.ImbuePoints[index].setText('{:3.1f}'.format(item.getImbueValues()[index]))
                 self.GemName[index].setText(item.getSlot(index).getGemName(self.getCharRealm()))
 
-            if isinstance(item.getOverchargeSuccess(), int):
-                self.ItemOvercharge.setText('{}%'.format(item.getOverchargeSuccess()))
+            success = item.getOverchargeSuccess()
+            if isinstance(success, int):
+                self.ItemOvercharge.setText(f'{success}%')
+                self.ItemOvercharge.setStyleSheet('' if success > 0 else 'color: red')
             else:
-                self.ItemOvercharge.setText(item.getOverchargeSuccess())
+                self.ItemOvercharge.setText(f'{success}')
+                self.ItemOvercharge.setStyleSheet('')
 
         for key, datum in total['Attributes'].items():
             Acuity = AllBonusList[self.getCharRealm()][self.getCharClass()]["Acuity"]
