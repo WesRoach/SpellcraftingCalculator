@@ -126,28 +126,19 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.EditMenu.addAction('Clear Item', self.clearItem)
         self.EditMenu.addAction('Clear Slots', self.clearItemSlots)
 
-        # TODO: LOAD FROM SETTINGS ...
         for (title, res) in (("Large", 32), ("Normal", 24), ("Small", 16), ("Hide", 0)):
             action = QAction(title, self)
             action.setData(QVariant(res))
             action.setCheckable(True)
             self.ToolbarMenu.addAction(action)
-        self.ToolbarMenu.actions()[1].setChecked(True)
 
-        # STRING ...
-        # self.Settings.get('GENERAL', 'ToolbarSize')
-
-        # TODO: LOAD FROM SETTINGS ...
         self.DistanceToCap = QAction('&Distance to Cap', self)
         self.DistanceToCap.setShortcut(QKeySequence(Qt.ALT + Qt.Key_D))
         self.DistanceToCap.setCheckable(True)
-        self.DistanceToCap.setChecked(True)
 
-        # TODO: LOAD FROM SETTINGS ...
         self.UnusableSkills = QAction('&Unusable Skills', self)
         self.UnusableSkills.setShortcut(QKeySequence(Qt.ALT + Qt.Key_U))
         self.UnusableSkills.setCheckable(True)
-        self.UnusableSkills.setChecked(False)
 
         self.ViewMenu.addAction('&Material Report ...', self.showMaterialsReport)
         self.ViewMenu.addAction('&Template Report ...', self.showTemplateReport)
@@ -193,6 +184,15 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def initLayout(self):
         self.setWindowTitle('Kort\'s Spellcrafting Calculator')
+
+        selection = int(self.Settings.get('GENERAL', 'ToolbarSize'))
+        for action in self.ToolbarMenu.actions():
+            if action.data() == selection:
+                self.setToolbarOptions(action)
+
+        # TODO: LOAD FROM SETTINGS ...
+        self.DistanceToCap.setChecked(True)
+        self.UnusableSkills.setChecked(False)
 
         # MAKE SURE WE ARE TESTING WIDTH AND HEIGHT
         # VALUES BASED ON THE FONT BEING USED ...
