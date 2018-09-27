@@ -18,7 +18,7 @@ class SpellcraftingCalculator(QApplication):
     def __init__(self):
         args = sys.argv
         QApplication.__init__(self, args)
-        self.setWindowIcon(QIcon(r'images/SCWindow.png'))
+        self.setWindowIcon(QIcon(r'images/Spellcraft.png'))
         self.application = MainWindow.MainWindow()
 
     def initializeApplication(self):
