@@ -16,9 +16,6 @@
     <verstretch>0</verstretch>
    </sizepolicy>
   </property>
-  <property name="windowTitle">
-   <string>Spellcrafting Calculator</string>
-  </property>
   <widget class="QWidget" name="MainWidget">
    <layout class="QVBoxLayout">
     <property name="spacing">
