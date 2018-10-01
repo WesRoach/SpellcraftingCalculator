@@ -48,7 +48,7 @@
        <bool>false</bool>
       </property>
       <widget class="QWidget" name="layoutWidget">
-       <layout class="QHBoxLayout">
+       <layout class="QHBoxLayout" stretch="0,0,0,1">
         <property name="spacing">
          <number>5</number>
         </property>
@@ -201,6 +201,9 @@
             <widget class="QLabel" name="CharacterChampLevelLabel">
              <property name="text">
               <string>Chmp:</string>
+             </property>
+			 <property name="buddy">
+              <cstring>CharacterChampLevel</cstring>
              </property>
             </widget>
            </item>
@@ -401,7 +404,7 @@
            <item row="0" column="0">
             <widget class="QLabel" name="StrengthLabel">
              <property name="text">
-              <string>STR: </string>
+              <string>STR:</string>
              </property>
             </widget>
            </item>
@@ -418,7 +421,7 @@
            <item row="6" column="0">
             <widget class="QLabel" name="CharismaLabel">
              <property name="text">
-              <string>CHA: </string>
+              <string>CHA:</string>
              </property>
             </widget>
            </item>
@@ -455,7 +458,7 @@
            <item row="4" column="0">
             <widget class="QLabel" name="IntelligenceLabel">
              <property name="text">
-              <string>INT: </string>
+              <string>INT:</string>
              </property>
             </widget>
            </item>
@@ -492,7 +495,7 @@
            <item row="10" column="0">
             <widget class="QLabel" name="PowerPoolLabel">
              <property name="text">
-              <string>PP%: </string>
+              <string>PP%:</string>
              </property>
             </widget>
            </item>
@@ -546,14 +549,14 @@
            <item row="13" column="0">
             <widget class="QLabel" name="HitPointsLabel">
              <property name="text">
-              <string>HITS: </string>
+              <string>HITS:</string>
              </property>
             </widget>
            </item>
            <item row="3" column="0">
             <widget class="QLabel" name="QuicknessLabel">
              <property name="text">
-              <string>QUI: </string>
+              <string>QUI:</string>
              </property>
             </widget>
            </item>
@@ -600,21 +603,21 @@
            <item row="11" column="0">
             <widget class="QLabel" name="FatigueLabel">
              <property name="text">
-              <string>END: </string>
+              <string>END:</string>
              </property>
             </widget>
            </item>
            <item row="2" column="0">
             <widget class="QLabel" name="DexterityLabel">
              <property name="text">
-              <string>DEX: </string>
+              <string>DEX:</string>
              </property>
             </widget>
            </item>
            <item row="12" column="0">
             <widget class="QLabel" name="ArmorFactorLabel">
              <property name="text">
-              <string>AF: </string>
+              <string>AF:</string>
              </property>
             </widget>
            </item>
@@ -658,14 +661,14 @@
            <item row="1" column="0">
             <widget class="QLabel" name="ConstitutionLabel">
              <property name="text">
-              <string>CON: </string>
+              <string>CON:</string>
              </property>
             </widget>
            </item>
            <item row="5" column="0">
             <widget class="QLabel" name="PietyLabel">
              <property name="text">
-              <string>PIE: </string>
+              <string>PIE:</string>
              </property>
             </widget>
            </item>
@@ -682,7 +685,7 @@
            <item row="7" column="0">
             <widget class="QLabel" name="EmpathyLabel">
              <property name="text">
-              <string>EMP: </string>
+              <string>EMP:</string>
              </property>
             </widget>
            </item>
@@ -868,7 +871,7 @@
            <item row="7" column="0">
             <widget class="QLabel" name="ThrustLabel">
              <property name="text">
-              <string>Thrust: </string>
+              <string>Thrust:</string>
              </property>
             </widget>
            </item>
@@ -942,7 +945,7 @@
            <item row="2" column="0">
             <widget class="QLabel" name="HeatLabel">
              <property name="text">
-              <string>Heat: </string>
+              <string>Heat:</string>
              </property>
             </widget>
            </item>
@@ -959,14 +962,14 @@
            <item row="1" column="0">
             <widget class="QLabel" name="ColdLabel">
              <property name="text">
-              <string>Cold: </string>
+              <string>Cold:</string>
              </property>
             </widget>
            </item>
            <item row="0" column="0">
             <widget class="QLabel" name="BodyLabel">
              <property name="text">
-              <string>Body: </string>
+              <string>Body:</string>
              </property>
             </widget>
            </item>
@@ -993,7 +996,7 @@
            <item row="3" column="0">
             <widget class="QLabel" name="EnergyLabel">
              <property name="text">
-              <string>Energy: </string>
+              <string>Energy:</string>
              </property>
             </widget>
            </item>
@@ -1040,7 +1043,7 @@
            <item row="4" column="0">
             <widget class="QLabel" name="MatterLabel">
              <property name="text">
-              <string>Matter: </string>
+              <string>Matter:</string>
              </property>
             </widget>
            </item>
@@ -1097,14 +1100,14 @@
            <item row="6" column="0">
             <widget class="QLabel" name="CrushLabel">
              <property name="text">
-              <string>Crush: </string>
+              <string>Crush:</string>
              </property>
             </widget>
            </item>
            <item row="5" column="0">
             <widget class="QLabel" name="SpiritLabel">
              <property name="text">
-              <string>Spirit: </string>
+              <string>Spirit:</string>
              </property>
             </widget>
            </item>
@@ -1134,7 +1137,7 @@
            <item row="8" column="0">
             <widget class="QLabel" name="SlashLabel">
              <property name="text">
-              <string>Slash: </string>
+              <string>Slash:</string>
              </property>
             </widget>
            </item>
@@ -1448,7 +1451,7 @@
                <item>
                 <widget class="QLabel" name="ItemNameLabel">
                  <property name="text">
-                  <string>  &amp;Name: </string>
+                  <string> &amp;Name: </string>
                  </property>
                  <property name="buddy">
                   <cstring>ItemName</cstring>
@@ -2195,12 +2198,6 @@
                       <property name="alignment">
                        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
                       </property>
-                      <property name="margin">
-                       <number>0</number>
-                      </property>
-                      <property name="indent">
-                       <number>0</number>
-                      </property>
                      </widget>
                     </item>
                     <item row="0" column="6">
@@ -2210,12 +2207,6 @@
                       </property>
                       <property name="alignment">
                        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-                      </property>
-                      <property name="margin">
-                       <number>0</number>
-                      </property>
-                      <property name="indent">
-                       <number>0</number>
                       </property>
                      </widget>
                     </item>
@@ -2244,12 +2235,6 @@
                       <property name="alignment">
                        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
                       </property>
-                      <property name="margin">
-                       <number>0</number>
-                      </property>
-                      <property name="indent">
-                       <number>0</number>
-                      </property>
                      </widget>
                     </item>
                     <item row="2" column="6">
@@ -2259,12 +2244,6 @@
                       </property>
                       <property name="alignment">
                        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-                      </property>
-                      <property name="margin">
-                       <number>0</number>
-                      </property>
-                      <property name="indent">
-                       <number>0</number>
                       </property>
                      </widget>
                     </item>
@@ -2466,7 +2445,7 @@
                  <item row="6" column="0">
                   <widget class="QLabel" name="ItemBonusLabel">
                    <property name="text">
-                    <string>Bonus: </string>
+                    <string>Bonus:</string>
                    </property>
                    <property name="buddy">
                     <cstring>ItemBonus</cstring>
@@ -2476,7 +2455,7 @@
                  <item row="1" column="0">
                   <widget class="QLabel" name="ItemTypeLabel">
                    <property name="text">
-                    <string>Type: </string>
+                    <string>Type:</string>
                    </property>
                    <property name="buddy">
                     <cstring>ItemType</cstring>
@@ -2486,7 +2465,7 @@
                  <item row="7" column="0">
                   <widget class="QLabel" name="ItemSpeedLabel">
                    <property name="text">
-                    <string>Speed: </string>
+                    <string>Speed:</string>
                    </property>
                    <property name="buddy">
                     <cstring>ItemSpeed</cstring>
@@ -2506,7 +2485,7 @@
                  <item row="2" column="0">
                   <widget class="QLabel" name="ItemOriginLabel">
                    <property name="text">
-                    <string>Origin: </string>
+                    <string>Origin:</string>
                    </property>
                    <property name="buddy">
                     <cstring>ItemOrigin</cstring>
@@ -2661,6 +2640,9 @@
                      <property name="text">
                       <string>Item Requirements:</string>
                      </property>
+					 <property name="buddy">
+                      <cstring>ItemRequirement</cstring>
+                     </property>
                     </widget>
                    </item>
                    <item>
@@ -2670,6 +2652,9 @@
                     <widget class="QLabel" name="ItemNotesLabel">
                      <property name="text">
                       <string>Item Notes:</string>
+                     </property>
+					 <property name="buddy">
+                      <cstring>ItemNotes</cstring>
                      </property>
                     </widget>
                    </item>
@@ -2750,6 +2735,7 @@
   <tabstop>SlotListTreeView</tabstop>
   <tabstop>ItemName</tabstop>
   <tabstop>ItemNewButton</tabstop>
+  <tabstop>ItemLoadButton</tabstop>
   <tabstop>ItemTypeButton</tabstop>
   <tabstop>ItemSaveButton</tabstop>
   <tabstop>ItemDeleteButton</tabstop>

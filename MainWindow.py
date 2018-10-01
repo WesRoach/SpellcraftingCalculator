@@ -236,9 +236,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         width = test_font.size(Qt.TextSingleLine, "CON:", tabArray = None).width()
         self.AttributesGroup.layout().setColumnMinimumWidth(0, width)
-        width = test_font.size(Qt.TextSingleLine, "-400", tabArray = None).width()
+        width = test_font.size(Qt.TextSingleLine, "400", tabArray = None).width()
         self.AttributesGroup.layout().setColumnMinimumWidth(1, width)
-        width = test_font.size(Qt.TextSingleLine, "(-400)", tabArray = None).width()
+        width = test_font.size(Qt.TextSingleLine, "(400)", tabArray = None).width()
         self.AttributesGroup.layout().setColumnMinimumWidth(2, width)
         width = test_font.size(Qt.TextSingleLine, "(-26)", tabArray = None).width()
         self.AttributesGroup.layout().setColumnMinimumWidth(3, width)
