@@ -233,11 +233,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             except AttributeError:
                 pass
 
-        width = testFont.size(Qt.TextSingleLine, "CON: ", tabArray = None).width()
+        width = testFont.size(Qt.TextSingleLine, "CON:", tabArray = None).width()
         self.AttributesGroup.layout().setColumnMinimumWidth(0, width)
         width = testFont.size(Qt.TextSingleLine, "-400", tabArray = None).width()
         self.AttributesGroup.layout().setColumnMinimumWidth(1, width)
-        width = testFont.size(Qt.TextSingleLine, "(400)", tabArray = None).width()
+        width = testFont.size(Qt.TextSingleLine, "(-400)", tabArray = None).width()
         self.AttributesGroup.layout().setColumnMinimumWidth(2, width)
         width = testFont.size(Qt.TextSingleLine, "(-26)", tabArray = None).width()
         self.AttributesGroup.layout().setColumnMinimumWidth(3, width)
@@ -252,7 +252,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             except AttributeError:
                 pass
 
-        width = testFont.size(Qt.TextSingleLine, "Essence: ", tabArray = None).width()
+        width = testFont.size(Qt.TextSingleLine, "Essence:", tabArray = None).width()
         self.ResistGroup.layout().setColumnMinimumWidth(0, width)
         width = testFont.size(Qt.TextSingleLine, "26", tabArray = None).width()
         self.ResistGroup.layout().setColumnMinimumWidth(1, width)
