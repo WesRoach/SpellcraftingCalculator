@@ -25,6 +25,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         QMainWindow.__init__(self, parent, flags)
         self.setupUi(self)
 
+        # BUILD - MAJOR.YEAR.MONTHDAY ...
+        self.BuildDate = "3.18.1001 (Alpha)"
+
         self.Settings = Settings()
         self.Settings.load()
 
@@ -185,7 +188,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ItemSaveButton.clicked.connect(self.saveItem)
 
     def initLayout(self):
-        self.setWindowTitle('Kort\'s Spellcrafting Calculator')
+        self.setWindowTitle(f"Kort's Spellcrafting Calculator - {self.BuildDate}")
 
         saved_state = int(self.Settings.get('GENERAL', 'ToolbarSize'))
         for action in self.ToolbarMenu.actions():
@@ -200,27 +203,25 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         # MAKE SURE WE ARE TESTING WIDTH AND HEIGHT
         # VALUES BASED ON THE FONT BEING USED ...
-        testFont = QFontMetrics(self.font())
+        test_font = QFontMetrics(self.font())
 
-        defaultFixedHeight = 20
-        buttonFixedHeight = 22
-        buttonFixedWidth = 35
-
-        # REGEX FOR 'QRegExpValidator'
+        # INTEGER AND DOUBLE VALIDATORS ...
         int_regex = QRegExp('^(?:[0-9]{0,3})$')
+        int_validator = QRegExpValidator(int_regex)
         dbl_regex = QRegExp('^(?:[0-9]{3}|[0-9][0-9]?(?:\.[0-9])?)$')
+        dbl_validator = QRegExpValidator(dbl_regex)
 
-        width = self.getMinimumWidth(['Necromancer'])
-        self.CharacterName.setFixedSize(QSize(width, defaultFixedHeight))
-        self.CharacterRealm.setFixedSize(QSize(width, defaultFixedHeight))
-        self.CharacterClass.setFixedSize(QSize(width, defaultFixedHeight))
-        self.CharacterRace.setFixedSize(QSize(width, defaultFixedHeight))
-        self.CharacterLevel.setFixedSize(QSize(width, defaultFixedHeight))
-        self.CharacterLevel.setValidator(QRegExpValidator(int_regex, self))
-        self.CharacterRealmRank.setFixedSize(QSize(width, defaultFixedHeight))
-        self.CharacterRealmRank.setValidator(QRegExpValidator(int_regex, self))
-        self.CharacterChampLevel.setFixedSize(QSize(width, defaultFixedHeight))
-        self.CharacterChampLevel.setValidator(QRegExpValidator(int_regex, self))
+        # width = self.getMinimumWidth(['Necromancer'])
+        # self.CharacterName.setFixedWidth(width)
+        # self.CharacterRealm.setFixedWidth(width)
+        # self.CharacterClass.setFixedWidth(width)
+        # self.CharacterRace.setFixedWidth(width)
+        # self.CharacterLevel.setFixedWidth(width)
+        self.CharacterLevel.setValidator(int_validator)
+        # self.CharacterRealmRank.setFixedWidth(width)
+        self.CharacterRealmRank.setValidator(int_validator)
+        # self.CharacterChampLevel.setFixedWidth(width)
+        self.CharacterChampLevel.setValidator(int_validator)
 
         for attribute in DropEffectList['All']['Attribute'] + ('ArmorFactor', 'Fatigue', 'PowerPool'):
             attribute = attribute.replace(' ', '')
@@ -233,13 +234,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             except AttributeError:
                 pass
 
-        width = testFont.size(Qt.TextSingleLine, "CON:", tabArray = None).width()
+        width = test_font.size(Qt.TextSingleLine, "CON:", tabArray = None).width()
         self.AttributesGroup.layout().setColumnMinimumWidth(0, width)
-        width = testFont.size(Qt.TextSingleLine, "-400", tabArray = None).width()
+        width = test_font.size(Qt.TextSingleLine, "-400", tabArray = None).width()
         self.AttributesGroup.layout().setColumnMinimumWidth(1, width)
-        width = testFont.size(Qt.TextSingleLine, "(-400)", tabArray = None).width()
+        width = test_font.size(Qt.TextSingleLine, "(-400)", tabArray = None).width()
         self.AttributesGroup.layout().setColumnMinimumWidth(2, width)
-        width = testFont.size(Qt.TextSingleLine, "(-26)", tabArray = None).width()
+        width = test_font.size(Qt.TextSingleLine, "(-26)", tabArray = None).width()
         self.AttributesGroup.layout().setColumnMinimumWidth(3, width)
 
         for resist in DropEffectList['All']['Resistance']:
@@ -252,13 +253,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             except AttributeError:
                 pass
 
-        width = testFont.size(Qt.TextSingleLine, "Essence:", tabArray = None).width()
+        width = test_font.size(Qt.TextSingleLine, "Essence:", tabArray = None).width()
         self.ResistGroup.layout().setColumnMinimumWidth(0, width)
-        width = testFont.size(Qt.TextSingleLine, "26", tabArray = None).width()
+        width = test_font.size(Qt.TextSingleLine, "26", tabArray = None).width()
         self.ResistGroup.layout().setColumnMinimumWidth(1, width)
-        width = testFont.size(Qt.TextSingleLine, "(-15)", tabArray = None).width()
+        width = test_font.size(Qt.TextSingleLine, "(-15)", tabArray = None).width()
         self.ResistGroup.layout().setColumnMinimumWidth(2, width)
-        width = testFont.size(Qt.TextSingleLine, "+5", tabArray = None).width()
+        width = test_font.size(Qt.TextSingleLine, "+5", tabArray = None).width()
         self.ResistGroup.layout().setColumnMinimumWidth(3, width)
 
         for key, locations in ItemTypes.items():
@@ -301,52 +302,52 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             ]
         }
 
-        self.ItemNewButton.setFixedSize(QSize(buttonFixedWidth, buttonFixedHeight))
-        self.ItemTypeButton.setFixedSize(QSize(buttonFixedWidth, buttonFixedHeight))
-        self.ItemLoadButton.setFixedSize(QSize(buttonFixedWidth, buttonFixedHeight))
-        self.ItemDeleteButton.setFixedSize(QSize(buttonFixedWidth, buttonFixedHeight))
-        self.ItemSaveButton.setFixedSize(QSize(buttonFixedWidth, buttonFixedHeight))
-        self.ItemName.setFixedHeight(defaultFixedHeight)
+        # width = self.getMinimumWidth(['BT'])
+        # self.ItemNewButton.setFixedWidth(width)
+        # self.ItemTypeButton.setFixedWidth(width)
+        # self.ItemLoadButton.setFixedWidth(width)
+        # self.ItemDeleteButton.setFixedWidth(width)
+        # self.ItemSaveButton.setFixedWidth(width)
 
-        width = testFont.size(Qt.TextSingleLine, "Slot 12: ", tabArray = None).width()
+        width = test_font.size(Qt.TextSingleLine, "Slot 12: ", tabArray = None).width()
         self.ItemStatsGroup.layout().setColumnMinimumWidth(0, width)
 
-        width = self.getMinimumWidth([' Mythical Resist & Cap '])
+        # width = self.getMinimumWidth(['Mythical Resists & Caps'])
         for index in range(0, 12):
             self.EffectType.append(getattr(self, 'EffectType%d' % index))
-            self.EffectType[index].setFixedSize(QSize(width, defaultFixedHeight))
+            # self.EffectType[index].setFixedWidth(width)
             self.EffectType[index].activated[str].connect(self.changeEffectType)
 
-        width = self.getMinimumWidth(['100'])
+        # width = self.getMinimumWidth(['100'])
         for index in range(0, 12):
             self.AmountEdit.append(getattr(self, 'AmountEdit%d' % index))
-            self.AmountEdit[index].setFixedSize(QSize(width, defaultFixedHeight))
-            self.AmountEdit[index].setValidator(QRegExpValidator(int_regex, self))
+            # self.AmountEdit[index].setFixedWidth(width)
+            self.AmountEdit[index].setValidator(int_validator)
             self.AmountEdit[index].textEdited[str].connect(self.changeEffectAmount)
 
-        width = self.getMinimumWidth(['100'])
+        # width = self.getMinimumWidth(['100'])
         for index in range(0, 5):
             self.AmountStatic.append(getattr(self, 'AmountStatic%d' % index))
-            self.AmountStatic[index].setFixedSize(QSize(width, defaultFixedHeight))
+            # self.AmountStatic[index].setFixedWidth(width)
             self.AmountStatic[index].activated[str].connect(self.changeEffectAmount)
 
-        width = self.getMinimumWidth([' Neg. Effect Duration Reduction '])
+        # width = self.getMinimumWidth(['Neg. Effect Duration Reduction'])
         for index in range(0, 12):
             self.SlotLabel.append(getattr(self, 'SlotLabel%d' % index))
             self.Effect.append(getattr(self, 'Effect%d' % index))
-            self.Effect[index].setFixedSize(QSize(width, defaultFixedHeight))
+            # self.Effect[index].setFixedWidth(width)
             self.Effect[index].activated[str].connect(self.changeEffect)
 
-        width = self.getMinimumWidth(['vs. Enemy Players'])
+        # width = self.getMinimumWidth(['vs. Enemy Players'])
         for index in range(0, 12):
             self.Requirement.append(getattr(self, 'Requirement%d' % index))
-            self.Requirement[index].setFixedSize(QSize(width, defaultFixedHeight))
+            # self.Requirement[index].setFixedWidth(width)
             self.Requirement[index].textEdited.connect(self.changeEffectRequirement)
 
-        width = self.getMinimumWidth(['-'])
+        # width = self.getMinimumWidth(['-'])
         for index in range(0, 4):
             self.ImbuePoints.append(getattr(self, 'ImbuePoints%d' % index))
-            self.ImbuePoints[index].setFixedSize(QSize(width, defaultFixedHeight))
+            # self.ImbuePoints[index].setFixedWidth(width)
             self.GemNameLabel.append(getattr(self, 'GemNameLabel%d' % index))
 
         for index in range(0, 7):
@@ -354,9 +355,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         width = self.Requirement[0].width()
         for index in range(4, 7):
-            self.GemName[index].setFixedSize(QSize(width, defaultFixedHeight))
+            self.GemName[index].setFixedWidth(width)
 
-        width = testFont.size(Qt.TextSingleLine, "37.5", tabArray = None).width()
+        width = test_font.size(Qt.TextSingleLine, "37.5", tabArray = None).width()
         self.ItemImbuePointsTotal.setFixedWidth(width)
 
         testItem = Item('Crafted')
@@ -449,28 +450,28 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             ],
         }
 
-        self.ItemRealm.setFixedHeight(defaultFixedHeight)
-        self.ItemType.setFixedHeight(defaultFixedHeight)
-        self.ItemOrigin.setFixedHeight(defaultFixedHeight)
-        self.ItemDamageType.setFixedHeight(defaultFixedHeight)
+        # self.ItemRealm.setFixedHeight(defaultFixedHeight)
+        # self.ItemType.setFixedHeight(defaultFixedHeight)
+        # self.ItemOrigin.setFixedHeight(defaultFixedHeight)
+        # self.ItemDamageType.setFixedHeight(defaultFixedHeight)
 
-        width = self.getMinimumWidth([' - '])
-        self.ItemLevel.setFixedSize(QSize(width, defaultFixedHeight))
-        self.ItemLevel.setValidator(QRegExpValidator(int_regex, self))
-        self.ItemQuality.setFixedSize(QSize(width, defaultFixedHeight))
-        self.ItemQuality.setValidator(QRegExpValidator(int_regex, self))
-        self.ItemBonus.setFixedSize(QSize(width, defaultFixedHeight))
-        self.ItemBonus.setValidator(QRegExpValidator(int_regex, self))
-        self.ItemAFDPS.setFixedSize(QSize(width, defaultFixedHeight))
-        self.ItemAFDPS.setValidator(QRegExpValidator(dbl_regex, self))
-        self.ItemSpeed.setFixedSize(QSize(width, defaultFixedHeight))
-        self.ItemSpeed.setValidator(QRegExpValidator(dbl_regex, self))
+        # width = self.getMinimumWidth([' - '])
+        # self.ItemLevel.setFixedWidth(width)
+        self.ItemLevel.setValidator(int_validator)
+        # self.ItemQuality.setFixedWidth(width)
+        self.ItemQuality.setValidator(int_validator)
+        # self.ItemBonus.setFixedWidth(width)
+        self.ItemBonus.setValidator(int_validator)
+        # self.ItemAFDPS.setFixedWidth(width)
+        self.ItemAFDPS.setValidator(dbl_validator)
+        # self.ItemSpeed.setFixedWidth(width)
+        self.ItemSpeed.setValidator(dbl_validator)
 
         # TODO: SET DYNAMIC WIDTH ...
-        self.ItemInformationGroup.setFixedWidth(186)
-        self.ItemRestrictionsGroup.setFixedWidth(135)
+        # self.ItemInformationGroup.setFixedWidth(186)
+        # self.ItemRestrictionsGroup.setFixedWidth(135)
 
-        width = testFont.size(Qt.TextSingleLine, "1999.9", tabArray = None).width()
+        width = test_font.size(Qt.TextSingleLine, "1999.9", tabArray = None).width()
         self.BuildUtility.setFixedWidth(width)
         self.BuildUtility.setAlignment(Qt.AlignRight)
         self.StatusBar.setStyleSheet('QStatusBar::item {border: None;}')
