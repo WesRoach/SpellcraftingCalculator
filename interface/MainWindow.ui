@@ -35,12 +35,6 @@
     </property>
     <item>
      <widget class="QSplitter" name="MainSplitter">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
       <property name="frameShape">
        <enum>QFrame::NoFrame</enum>
       </property>
@@ -66,12 +60,6 @@
         </property>
         <item>
          <widget class="QGroupBox" name="ConfigurationGroup">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
           <property name="title">
            <string>Configuration</string>
           </property>
@@ -115,17 +103,8 @@
            </item>
            <item row="2" column="1">
             <widget class="QComboBox" name="CharacterClass">
-             <property name="focusPolicy">
-              <enum>Qt::StrongFocus</enum>
-             </property>
              <property name="maxVisibleItems">
               <number>20</number>
-             </property>
-             <property name="sizeAdjustPolicy">
-              <enum>QComboBox::AdjustToContents</enum>
-             </property>
-             <property name="minimumContentsLength">
-              <number>0</number>
              </property>
             </widget>
            </item>
@@ -151,17 +130,8 @@
            </item>
            <item row="3" column="1">
             <widget class="QComboBox" name="CharacterRace">
-             <property name="focusPolicy">
-              <enum>Qt::StrongFocus</enum>
-             </property>
              <property name="maxVisibleItems">
               <number>20</number>
-             </property>
-             <property name="sizeAdjustPolicy">
-              <enum>QComboBox::AdjustToContents</enum>
-             </property>
-             <property name="minimumContentsLength">
-              <number>0</number>
              </property>
             </widget>
            </item>
@@ -177,30 +147,12 @@
            </item>
            <item row="0" column="1">
             <widget class="QLineEdit" name="CharacterName">
-             <property name="acceptDrops">
-              <bool>false</bool>
-             </property>
-             <property name="inputMethodHints">
-              <set>Qt::ImhNone</set>
-             </property>
-             <property name="inputMask">
-              <string/>
-             </property>
             </widget>
            </item>
            <item row="1" column="1">
             <widget class="QComboBox" name="CharacterRealm">
-             <property name="focusPolicy">
-              <enum>Qt::StrongFocus</enum>
-             </property>
              <property name="maxVisibleItems">
               <number>20</number>
-             </property>
-             <property name="sizeAdjustPolicy">
-              <enum>QComboBox::AdjustToContents</enum>
-             </property>
-             <property name="minimumContentsLength">
-              <number>0</number>
              </property>
             </widget>
            </item>
@@ -216,12 +168,6 @@
            </item>
            <item row="6" column="1">
             <widget class="QLineEdit" name="CharacterRealmRank">
-             <property name="acceptDrops">
-              <bool>false</bool>
-             </property>
-             <property name="placeholderText">
-              <string/>
-             </property>
             </widget>
            </item>
            <item row="6" column="0">
@@ -239,25 +185,16 @@
              <property name="orientation">
               <enum>Qt::Vertical</enum>
              </property>
-             <property name="sizeType">
-              <enum>QSizePolicy::Expanding</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
+			 <property name="sizeHint" stdset="0">
               <size>
-               <width>20</width>
-               <height>40</height>
+               <width>0</width>
+               <height>0</height>
               </size>
              </property>
             </spacer>
            </item>
            <item row="5" column="1">
             <widget class="QLineEdit" name="CharacterLevel">
-             <property name="acceptDrops">
-              <bool>false</bool>
-             </property>
-             <property name="placeholderText">
-              <string/>
-             </property>
             </widget>
            </item>
            <item row="7" column="0">
@@ -269,12 +206,6 @@
            </item>
            <item row="7" column="1">
             <widget class="QLineEdit" name="CharacterChampLevel">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
             </widget>
            </item>
           </layout>
@@ -282,17 +213,11 @@
         </item>
         <item>
          <widget class="QGroupBox" name="AttributesGroup">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
           <property name="title">
            <string>Attributes</string>
           </property>
           <property name="alignment">
-           <set>Qt::AlignHCenter|Qt::AlignTop</set>
+           <set>Qt::AlignHCenter</set>
           </property>
           <layout class="QGridLayout">
            <property name="leftMargin">
@@ -786,10 +711,10 @@
              <property name="orientation">
               <enum>Qt::Vertical</enum>
              </property>
-             <property name="sizeHint" stdset="0">
+			 <property name="sizeHint" stdset="0">
               <size>
-               <width>20</width>
-               <height>40</height>
+               <width>0</width>
+               <height>0</height>
               </size>
              </property>
             </spacer>
@@ -905,17 +830,11 @@
         </item>
         <item>
          <widget class="QGroupBox" name="ResistGroup">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
           <property name="title">
            <string>Resistances</string>
           </property>
           <property name="alignment">
-           <set>Qt::AlignHCenter|Qt::AlignTop</set>
+           <set>Qt::AlignHCenter</set>
           </property>
           <layout class="QGridLayout">
            <property name="leftMargin">
@@ -1194,13 +1113,10 @@
              <property name="orientation">
               <enum>Qt::Vertical</enum>
              </property>
-             <property name="sizeType">
-              <enum>QSizePolicy::Expanding</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
+			 <property name="sizeHint" stdset="0">
               <size>
-               <width>20</width>
-               <height>40</height>
+               <width>0</width>
+               <height>0</height>
               </size>
              </property>
             </spacer>
@@ -1327,12 +1243,6 @@
         </item>
         <item>
          <widget class="QGroupBox" name="SkillsViewGroup">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-            <horstretch>1</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
           <property name="title">
            <string>Skills, ToA Bonuses, PvE Bonuses, and Mythical Bonuses</string>
           </property>
@@ -1418,17 +1328,8 @@
              <property name="horizontalScrollBarPolicy">
               <enum>Qt::ScrollBarAlwaysOff</enum>
              </property>
-             <property name="autoScrollMargin">
-              <number>15</number>
-             </property>
              <property name="selectionMode">
               <enum>QAbstractItemView::NoSelection</enum>
-             </property>
-             <property name="verticalScrollMode">
-              <enum>QAbstractItemView::ScrollPerPixel</enum>
-             </property>
-             <property name="horizontalScrollMode">
-              <enum>QAbstractItemView::ScrollPerPixel</enum>
              </property>
             </widget>
            </item>
@@ -1438,27 +1339,12 @@
        </layout>
       </widget>
       <widget class="QWidget" name="layoutWidget">
-       <layout class="QHBoxLayout" stretch="0">
+       <layout class="QHBoxLayout">
         <property name="spacing">
          <number>5</number>
         </property>
-        <property name="sizeConstraint">
-         <enum>QLayout::SetDefaultConstraint</enum>
-        </property>
-        <property name="rightMargin">
-         <number>0</number>
-        </property>
         <item>
          <widget class="QSplitter" name="SlotItemSplitter">
-          <property name="enabled">
-           <bool>true</bool>
-          </property>
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-            <horstretch>0</horstretch>
-            <verstretch>1</verstretch>
-           </sizepolicy>
-          </property>
           <property name="frameShape">
            <enum>QFrame::NoFrame</enum>
           </property>
@@ -1475,21 +1361,6 @@
            <property name="enabled">
             <bool>true</bool>
            </property>
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="baseSize">
-            <size>
-             <width>0</width>
-             <height>0</height>
-            </size>
-           </property>
-           <property name="contextMenuPolicy">
-            <enum>Qt::DefaultContextMenu</enum>
-           </property>
            <property name="frameShape">
             <enum>QFrame::StyledPanel</enum>
            </property>
@@ -1498,12 +1369,6 @@
            </property>
            <property name="lineWidth">
             <number>0</number>
-           </property>
-           <property name="sizeAdjustPolicy">
-            <enum>QAbstractScrollArea::AdjustIgnored</enum>
-           </property>
-           <property name="autoScrollMargin">
-            <number>15</number>
            </property>
            <property name="editTriggers">
             <set>QAbstractItemView::NoEditTriggers</set>
@@ -1520,12 +1385,6 @@
            <property name="selectionBehavior">
             <enum>QAbstractItemView::SelectItems</enum>
            </property>
-           <property name="textElideMode">
-            <enum>Qt::ElideNone</enum>
-           </property>
-           <property name="verticalScrollMode">
-            <enum>QAbstractItemView::ScrollPerPixel</enum>
-           </property>
            <property name="indentation">
             <number>15</number>
            </property>
@@ -1538,25 +1397,11 @@
            <property name="headerHidden">
             <bool>true</bool>
            </property>
-           <attribute name="headerVisible">
-            <bool>false</bool>
-           </attribute>
            <attribute name="headerMinimumSectionSize">
             <number>100</number>
            </attribute>
-           <column>
-            <property name="text">
-             <string notr="true">1</string>
-            </property>
-           </column>
           </widget>
           <widget class="QFrame" name="ItemGroup">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
            <layout class="QVBoxLayout">
             <property name="spacing">
              <number>5</number>
@@ -1578,19 +1423,13 @@
               <property name="enabled">
                <bool>true</bool>
               </property>
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
               <property name="frameShape">
                <enum>QFrame::StyledPanel</enum>
               </property>
               <property name="lineWidth">
                <number>0</number>
               </property>
-              <layout class="QHBoxLayout">
+              <layout class="QHBoxLayout" stretch="0,1,0,0,0,0,0">
                <property name="spacing">
                 <number>2</number>
                </property>
@@ -1618,12 +1457,6 @@
                </item>
                <item>
                 <widget class="QComboBox" name="ItemName">
-                 <property name="sizePolicy">
-                  <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
-                 </property>
                  <property name="acceptDrops">
                   <bool>true</bool>
                  </property>
@@ -1640,12 +1473,6 @@
                </item>
                <item>
                 <widget class="QPushButton" name="ItemNewButton">
-                 <property name="sizePolicy">
-                  <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
-                 </property>
                  <property name="text">
                   <string>N</string>
                  </property>
@@ -1660,12 +1487,6 @@
                </item>
                <item>
                 <widget class="QPushButton" name="ItemTypeButton">
-                 <property name="sizePolicy">
-                  <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
-                 </property>
                  <property name="text">
                   <string>C</string>
                  </property>
@@ -1680,12 +1501,6 @@
                </item>
                <item>
                 <widget class="QPushButton" name="ItemDeleteButton">
-                 <property name="sizePolicy">
-                  <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
-                 </property>
                  <property name="text">
                   <string>D</string>
                  </property>
@@ -1713,12 +1528,6 @@
               </property>
               <item>
                <widget class="QGroupBox" name="ItemStatsGroup">
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
                 <property name="title">
                  <string>Item Stats</string>
                 </property>
@@ -1728,7 +1537,7 @@
                 <property name="flat">
                  <bool>false</bool>
                 </property>
-                <layout class="QGridLayout">
+                <layout class="QGridLayout" columnstretch="0,0,0,0,0,1">
                  <property name="leftMargin">
                   <number>8</number>
                  </property>
@@ -1756,22 +1565,10 @@
                  </item>
                  <item row="3" column="4" colspan="2">
                   <widget class="QLineEdit" name="Requirement2">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
                   </widget>
                  </item>
                  <item row="11" column="4" colspan="2">
                   <widget class="QLineEdit" name="Requirement10">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
                   </widget>
                  </item>
                  <item row="7" column="4" colspan="2">
@@ -1786,12 +1583,6 @@
                  </item>
                  <item row="1" column="2">
                   <widget class="QLineEdit" name="AmountEdit0">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
                   </widget>
                  </item>
                  <item row="12" column="3">
@@ -1803,9 +1594,6 @@
                  </item>
                  <item row="1" column="2">
                   <widget class="QComboBox" name="AmountStatic0">
-                   <property name="enabled">
-                    <bool>true</bool>
-                   </property>
                    <property name="maxVisibleItems">
                     <number>20</number>
                    </property>
@@ -1822,9 +1610,6 @@
                   <widget class="QLabel" name="GemName4">
                    <property name="text">
                     <string>GemName4</string>
-                   </property>
-                   <property name="margin">
-                    <number>0</number>
                    </property>
                    <property name="indent">
                     <number>8</number>
@@ -1843,71 +1628,26 @@
                  </item>
                  <item row="4" column="2">
                   <widget class="QLineEdit" name="AmountEdit3">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
-                   <property name="acceptDrops">
-                    <bool>false</bool>
-                   </property>
                   </widget>
                  </item>
                  <item row="12" column="4" colspan="2">
                   <widget class="QLineEdit" name="Requirement11">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
                   </widget>
                  </item>
                  <item row="12" column="2">
                   <widget class="QLineEdit" name="AmountEdit11">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
-                   <property name="acceptDrops">
-                    <bool>false</bool>
-                   </property>
                   </widget>
                  </item>
                  <item row="4" column="4" colspan="2">
                   <widget class="QLineEdit" name="Requirement3">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
                   </widget>
                  </item>
                  <item row="11" column="2">
                   <widget class="QLineEdit" name="AmountEdit10">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
-                   <property name="acceptDrops">
-                    <bool>false</bool>
-                   </property>
                   </widget>
                  </item>
                  <item row="4" column="0">
                   <widget class="QLabel" name="SlotLabel3">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
                    <property name="text">
                     <string>Slot &amp;4:</string>
                    </property>
@@ -1932,12 +1672,6 @@
                  </item>
                  <item row="1" column="4" colspan="2">
                   <widget class="QLineEdit" name="Requirement0">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
                   </widget>
                  </item>
                  <item row="4" column="3">
@@ -1956,12 +1690,6 @@
                  </item>
                  <item row="1" column="4">
                   <widget class="QLabel" name="ImbuePoints0">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
                    <property name="text">
                     <string>0.0</string>
                    </property>
@@ -1972,25 +1700,10 @@
                  </item>
                  <item row="7" column="2">
                   <widget class="QLineEdit" name="AmountEdit6">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
-                   <property name="acceptDrops">
-                    <bool>false</bool>
-                   </property>
                   </widget>
                  </item>
                  <item row="9" column="0">
                   <widget class="QLabel" name="SlotLabel8">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
                    <property name="text">
                     <string>Slot &amp;9:</string>
                    </property>
@@ -2001,18 +1714,6 @@
                  </item>
                  <item row="6" column="2">
                   <widget class="QLineEdit" name="AmountEdit5">
-                   <property name="enabled">
-                    <bool>true</bool>
-                   </property>
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
-                   <property name="acceptDrops">
-                    <bool>false</bool>
-                   </property>
                   </widget>
                  </item>
                  <item row="4" column="2">
@@ -2031,15 +1732,6 @@
                  </item>
                  <item row="9" column="2">
                   <widget class="QLineEdit" name="AmountEdit8">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
-                   <property name="acceptDrops">
-                    <bool>false</bool>
-                   </property>
                   </widget>
                  </item>
                  <item row="5" column="3">
@@ -2051,15 +1743,6 @@
                  </item>
                  <item row="5" column="2">
                   <widget class="QLineEdit" name="AmountEdit4">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
-                   <property name="acceptDrops">
-                    <bool>false</bool>
-                   </property>
                   </widget>
                  </item>
                  <item row="0" column="1">
@@ -2074,12 +1757,6 @@
                  </item>
                  <item row="1" column="0">
                   <widget class="QLabel" name="SlotLabel0">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
                    <property name="text">
                     <string>Slot &amp;1:</string>
                    </property>
@@ -2100,12 +1777,6 @@
                  </item>
                  <item row="4" column="4">
                   <widget class="QLabel" name="ImbuePoints3">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
                    <property name="text">
                     <string>0.0</string>
                    </property>
@@ -2116,22 +1787,10 @@
                  </item>
                  <item row="6" column="4" colspan="2">
                   <widget class="QLineEdit" name="Requirement5">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
                   </widget>
                  </item>
                  <item row="2" column="4" colspan="2">
                   <widget class="QLineEdit" name="Requirement1">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
                   </widget>
                  </item>
                  <item row="10" column="3">
@@ -2143,12 +1802,6 @@
                  </item>
                  <item row="8" column="0">
                   <widget class="QLabel" name="SlotLabel7">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
                    <property name="text">
                     <string>Slot &amp;8:</string>
                    </property>
@@ -2169,12 +1822,6 @@
                  </item>
                  <item row="9" column="4" colspan="2">
                   <widget class="QLineEdit" name="Requirement8">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
                   </widget>
                  </item>
                  <item row="3" column="1">
@@ -2196,12 +1843,6 @@
                  </item>
                  <item row="2" column="4">
                   <widget class="QLabel" name="ImbuePoints1">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
                    <property name="text">
                     <string>0.0</string>
                    </property>
@@ -2229,19 +1870,10 @@
                    <property name="maxVisibleItems">
                     <number>20</number>
                    </property>
-                   <property name="modelColumn">
-                    <number>0</number>
-                   </property>
                   </widget>
                  </item>
                  <item row="5" column="0">
                   <widget class="QLabel" name="SlotLabel4">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
                    <property name="text">
                     <string>Slot &amp;5:</string>
                    </property>
@@ -2249,6 +1881,19 @@
                     <cstring>EffectType4</cstring>
                    </property>
                   </widget>
+                 </item>
+				 <item row="15" column="0" colspan="6">
+                  <spacer>
+                   <property name="orientation">
+                    <enum>Qt::Vertical</enum>
+                   </property>
+				   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>0</width>
+                     <height>0</height>
+                    </size>
+                   </property>
+                  </spacer>
                  </item>
                  <item row="2" column="3">
                   <widget class="QComboBox" name="Effect1">
@@ -2267,7 +1912,7 @@
                    </property>
                    <property name="sizeHint" stdset="0">
                     <size>
-                     <width>20</width>
+					 <width>0</width>
                      <height>15</height>
                     </size>
                    </property>
@@ -2275,12 +1920,6 @@
                  </item>
                  <item row="2" column="0">
                   <widget class="QLabel" name="SlotLabel1">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
                    <property name="text">
                     <string>Slot &amp;2:</string>
                    </property>
@@ -2289,43 +1928,8 @@
                    </property>
                   </widget>
                  </item>
-                 <item row="0" column="6" rowspan="13">
-                  <spacer>
-                   <property name="orientation">
-                    <enum>Qt::Horizontal</enum>
-                   </property>
-                   <property name="sizeType">
-                    <enum>QSizePolicy::Expanding</enum>
-                   </property>
-                   <property name="sizeHint" stdset="0">
-                    <size>
-                     <width>0</width>
-                     <height>20</height>
-                    </size>
-                   </property>
-                  </spacer>
-                 </item>
-                 <item row="15" column="0" colspan="7">
-                  <spacer>
-                   <property name="orientation">
-                    <enum>Qt::Vertical</enum>
-                   </property>
-                   <property name="sizeHint" stdset="0">
-                    <size>
-                     <width>20</width>
-                     <height>40</height>
-                    </size>
-                   </property>
-                  </spacer>
-                 </item>
                  <item row="7" column="0">
                   <widget class="QLabel" name="SlotLabel6">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
                    <property name="text">
                     <string>Slot &amp;7:</string>
                    </property>
@@ -2343,15 +1947,6 @@
                  </item>
                  <item row="3" column="2">
                   <widget class="QLineEdit" name="AmountEdit2">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
-                   <property name="acceptDrops">
-                    <bool>false</bool>
-                   </property>
                   </widget>
                  </item>
                  <item row="12" column="1">
@@ -2370,12 +1965,6 @@
                  </item>
                  <item row="3" column="4">
                   <widget class="QLabel" name="ImbuePoints2">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
                    <property name="text">
                     <string>0.0</string>
                    </property>
@@ -2393,12 +1982,6 @@
                  </item>
                  <item row="12" column="0">
                   <widget class="QLabel" name="SlotLabel11">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
                    <property name="text">
                     <string>Slot 1&amp;2:</string>
                    </property>
@@ -2409,12 +1992,6 @@
                  </item>
                  <item row="6" column="0">
                   <widget class="QLabel" name="SlotLabel5">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
                    <property name="text">
                     <string>Slot &amp;6:</string>
                    </property>
@@ -2432,12 +2009,6 @@
                  </item>
                  <item row="7" column="4" colspan="2">
                   <widget class="QLineEdit" name="Requirement6">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
                   </widget>
                  </item>
                  <item row="3" column="3">
@@ -2449,12 +2020,6 @@
                  </item>
                  <item row="2" column="2">
                   <widget class="QLineEdit" name="AmountEdit1">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
                   </widget>
                  </item>
                  <item row="8" column="3">
@@ -2466,25 +2031,10 @@
                  </item>
                  <item row="8" column="2">
                   <widget class="QLineEdit" name="AmountEdit7">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
-                   <property name="acceptDrops">
-                    <bool>false</bool>
-                   </property>
                   </widget>
                  </item>
                  <item row="10" column="0">
                   <widget class="QLabel" name="SlotLabel9">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
                    <property name="text">
                     <string>Slot 1&amp;0:</string>
                    </property>
@@ -2495,15 +2045,6 @@
                  </item>
                  <item row="10" column="2">
                   <widget class="QLineEdit" name="AmountEdit9">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
-                   <property name="acceptDrops">
-                    <bool>false</bool>
-                   </property>
                   </widget>
                  </item>
                  <item row="7" column="1">
@@ -2515,12 +2056,6 @@
                  </item>
                  <item row="10" column="4" colspan="2">
                   <widget class="QLineEdit" name="Requirement9">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
                   </widget>
                  </item>
                  <item row="11" column="3">
@@ -2532,22 +2067,10 @@
                  </item>
                  <item row="5" column="4" colspan="2">
                   <widget class="QLineEdit" name="Requirement4">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
                   </widget>
                  </item>
                  <item row="11" column="0">
                   <widget class="QLabel" name="SlotLabel10">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
                    <property name="text">
                     <string>Slot 1&amp;1:</string>
                    </property>
@@ -2579,22 +2102,10 @@
                  </item>
                  <item row="8" column="4" colspan="2">
                   <widget class="QLineEdit" name="Requirement7">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
                   </widget>
                  </item>
                  <item row="3" column="0">
                   <widget class="QLabel" name="SlotLabel2">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
                    <property name="text">
                     <string>Slot &amp;3:</string>
                    </property>
@@ -2615,7 +2126,7 @@
                    <property name="frameShape">
                     <enum>QFrame::NoFrame</enum>
                    </property>
-                   <layout class="QGridLayout">
+                   <layout class="QGridLayout" columnstretch="0,0,0,0,0,0,0,1">
                     <property name="leftMargin">
                      <number>0</number>
                     </property>
@@ -2636,10 +2147,10 @@
                       <property name="orientation">
                        <enum>Qt::Horizontal</enum>
                       </property>
-                      <property name="sizeHint" stdset="0">
+					  <property name="sizeHint" stdset="0">
                        <size>
-                        <width>40</width>
-                        <height>20</height>
+                        <width>0</width>
+                        <height>0</height>
                        </size>
                       </property>
                      </spacer>
@@ -2654,14 +2165,14 @@
                       </property>
                       <property name="sizeHint" stdset="0">
                        <size>
-                        <width>15</width>
-                        <height>20</height>
+					    <width>15</width>
+                        <height>0</height>
                        </size>
                       </property>
                      </spacer>
                     </item>
                     <item row="0" column="4" rowspan="4">
-                     <spacer name="horizontalSpacer">
+                     <spacer>
                       <property name="orientation">
                        <enum>Qt::Horizontal</enum>
                       </property>
@@ -2709,13 +2220,7 @@
                      </widget>
                     </item>
                     <item row="0" column="5">
-                     <widget class="QLabel" name="GemNameLabel0">
-                      <property name="sizePolicy">
-                       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                        <horstretch>0</horstretch>
-                        <verstretch>0</verstretch>
-                       </sizepolicy>
-                      </property>
+                     <widget class="QLabel" name="GemNameLabel0">>
                       <property name="text">
                        <string>Gem 1:</string>
                       </property>
@@ -2927,12 +2432,6 @@
               </item>
               <item>
                <widget class="QGroupBox" name="ItemInformationGroup">
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
                 <property name="title">
                  <string>Item Information</string>
                 </property>
@@ -2969,9 +2468,6 @@
                    <property name="text">
                     <string>Bonus: </string>
                    </property>
-                   <property name="textFormat">
-                    <enum>Qt::PlainText</enum>
-                   </property>
                    <property name="buddy">
                     <cstring>ItemBonus</cstring>
                    </property>
@@ -2982,9 +2478,6 @@
                    <property name="text">
                     <string>Type: </string>
                    </property>
-                   <property name="textFormat">
-                    <enum>Qt::PlainText</enum>
-                   </property>
                    <property name="buddy">
                     <cstring>ItemType</cstring>
                    </property>
@@ -2994,9 +2487,6 @@
                   <widget class="QLabel" name="ItemSpeedLabel">
                    <property name="text">
                     <string>Speed: </string>
-                   </property>
-                   <property name="textFormat">
-                    <enum>Qt::PlainText</enum>
                    </property>
                    <property name="buddy">
                     <cstring>ItemSpeed</cstring>
@@ -3018,43 +2508,19 @@
                    <property name="text">
                     <string>Origin: </string>
                    </property>
-                   <property name="textFormat">
-                    <enum>Qt::PlainText</enum>
-                   </property>
                    <property name="buddy">
                     <cstring>ItemOrigin</cstring>
                    </property>
                   </widget>
                  </item>
                  <item row="6" column="1">
-                  <widget class="QLineEdit" name="ItemBonus">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
-                  </widget>
+                  <widget class="QLineEdit" name="ItemBonus"/>
                  </item>
                  <item row="7" column="1">
-                  <widget class="QLineEdit" name="ItemSpeed">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
-                  </widget>
+                  <widget class="QLineEdit" name="ItemSpeed"/>
                  </item>
                  <item row="4" column="1">
-                  <widget class="QLineEdit" name="ItemLevel">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
-                  </widget>
+                  <widget class="QLineEdit" name="ItemLevel"/>
                  </item>
                  <item row="4" column="0">
                   <widget class="QLabel" name="ItemLevelLabel">
@@ -3103,24 +2569,10 @@
                   </widget>
                  </item>
                  <item row="4" column="3">
-                  <widget class="QLineEdit" name="ItemQuality">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
-                  </widget>
+                  <widget class="QLineEdit" name="ItemQuality"/>
                  </item>
                  <item row="6" column="3">
-                  <widget class="QLineEdit" name="ItemAFDPS">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
-                  </widget>
+                  <widget class="QLineEdit" name="ItemAFDPS"/>
                  </item>
                  <item row="7" column="2" colspan="2">
                   <layout class="QHBoxLayout">
@@ -3144,25 +2596,16 @@
                      <property name="orientation">
                       <enum>Qt::Horizontal</enum>
                      </property>
-                     <property name="sizeHint" stdset="0">
+					 <property name="sizeHint" stdset="0">
                       <size>
-                       <width>40</width>
-                       <height>20</height>
+                       <width>0</width>
+                       <height>0</height>
                       </size>
                      </property>
                     </spacer>
                    </item>
                    <item>
                     <widget class="QCheckBox" name="ItemLeftHand">
-                     <property name="sizePolicy">
-                      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-                       <horstretch>0</horstretch>
-                       <verstretch>0</verstretch>
-                      </sizepolicy>
-                     </property>
-                     <property name="tabletTracking">
-                      <bool>false</bool>
-                     </property>
                      <property name="text">
                       <string>Left Hand</string>
                      </property>
@@ -3173,10 +2616,10 @@
                      <property name="orientation">
                       <enum>Qt::Horizontal</enum>
                      </property>
-                     <property name="sizeHint" stdset="0">
+					 <property name="sizeHint" stdset="0">
                       <size>
-                       <width>40</width>
-                       <height>20</height>
+                       <width>0</width>
+                       <height>0</height>
                       </size>
                      </property>
                     </spacer>
@@ -3184,43 +2627,16 @@
                   </layout>
                  </item>
                  <item row="3" column="1" colspan="3">
-                  <widget class="QComboBox" name="ItemDamageType">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
-                  </widget>
+                  <widget class="QComboBox" name="ItemDamageType"/>
                  </item>
                  <item row="2" column="1" colspan="3">
-                  <widget class="QComboBox" name="ItemOrigin">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
-                  </widget>
+                  <widget class="QComboBox" name="ItemOrigin"/>
                  </item>
                  <item row="1" column="1" colspan="3">
-                  <widget class="QComboBox" name="ItemType">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
-                  </widget>
+                  <widget class="QComboBox" name="ItemType"/>
                  </item>
                  <item row="0" column="1" colspan="3">
                   <widget class="QComboBox" name="ItemRealm">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
                   </widget>
                  </item>
                  <item row="8" column="0" colspan="4">
@@ -3259,9 +2675,6 @@
                    </item>
                    <item>
                     <widget class="QTextEdit" name="ItemNotes">
-                     <property name="acceptDrops">
-                      <bool>false</bool>
-                     </property>
                      <property name="acceptRichText">
                       <bool>false</bool>
                      </property>
@@ -3274,12 +2687,6 @@
               </item>
               <item>
                <widget class="QGroupBox" name="ItemRestrictionsGroup">
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
                 <property name="title">
                  <string>Class Restrictions</string>
                 </property>
@@ -3307,15 +2714,6 @@
                  </property>
                  <item>
                   <widget class="QListWidget" name="ItemRestrictionsList">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
-                   <property name="mouseTracking">
-                    <bool>false</bool>
-                   </property>
                    <property name="frameShape">
                     <enum>QFrame::StyledPanel</enum>
                    </property>
