@@ -210,7 +210,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         int_regex = QRegExp('^(?:[0-9]{0,3})$')
         dbl_regex = QRegExp('^(?:[0-9]{3}|[0-9][0-9]?(?:\.[0-9])?)$')
 
-        width = self.setMinimumWidth(['Necromancer'])
+        width = self.getMinimumWidth(['Necromancer'])
         self.CharacterName.setFixedSize(QSize(width, defaultFixedHeight))
         self.CharacterRealm.setFixedSize(QSize(width, defaultFixedHeight))
         self.CharacterClass.setFixedSize(QSize(width, defaultFixedHeight))
@@ -311,39 +311,39 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         width = testFont.size(Qt.TextSingleLine, "Slot 12: ", tabArray = None).width()
         self.ItemStatsGroup.layout().setColumnMinimumWidth(0, width)
 
-        width = self.setMinimumWidth([' Mythical Resist & Cap '])
+        width = self.getMinimumWidth([' Mythical Resist & Cap '])
         for index in range(0, 12):
             self.EffectType.append(getattr(self, 'EffectType%d' % index))
             self.EffectType[index].setFixedSize(QSize(width, defaultFixedHeight))
             self.EffectType[index].activated[str].connect(self.changeEffectType)
 
-        width = self.setMinimumWidth(['100'])
+        width = self.getMinimumWidth(['100'])
         for index in range(0, 12):
             self.AmountEdit.append(getattr(self, 'AmountEdit%d' % index))
             self.AmountEdit[index].setFixedSize(QSize(width, defaultFixedHeight))
             self.AmountEdit[index].setValidator(QRegExpValidator(int_regex, self))
             self.AmountEdit[index].textEdited[str].connect(self.changeEffectAmount)
 
-        width = self.setMinimumWidth(['100'])
+        width = self.getMinimumWidth(['100'])
         for index in range(0, 5):
             self.AmountStatic.append(getattr(self, 'AmountStatic%d' % index))
             self.AmountStatic[index].setFixedSize(QSize(width, defaultFixedHeight))
             self.AmountStatic[index].activated[str].connect(self.changeEffectAmount)
 
-        width = self.setMinimumWidth([' Neg. Effect Duration Reduction '])
+        width = self.getMinimumWidth([' Neg. Effect Duration Reduction '])
         for index in range(0, 12):
             self.SlotLabel.append(getattr(self, 'SlotLabel%d' % index))
             self.Effect.append(getattr(self, 'Effect%d' % index))
             self.Effect[index].setFixedSize(QSize(width, defaultFixedHeight))
             self.Effect[index].activated[str].connect(self.changeEffect)
 
-        width = self.setMinimumWidth(['vs. Enemy Players'])
+        width = self.getMinimumWidth(['vs. Enemy Players'])
         for index in range(0, 12):
             self.Requirement.append(getattr(self, 'Requirement%d' % index))
             self.Requirement[index].setFixedSize(QSize(width, defaultFixedHeight))
             self.Requirement[index].textEdited.connect(self.changeEffectRequirement)
 
-        width = self.setMinimumWidth(['-'])
+        width = self.getMinimumWidth(['-'])
         for index in range(0, 4):
             self.ImbuePoints.append(getattr(self, 'ImbuePoints%d' % index))
             self.ImbuePoints[index].setFixedSize(QSize(width, defaultFixedHeight))
@@ -454,7 +454,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ItemOrigin.setFixedHeight(defaultFixedHeight)
         self.ItemDamageType.setFixedHeight(defaultFixedHeight)
 
-        width = self.setMinimumWidth([' - '])
+        width = self.getMinimumWidth([' - '])
         self.ItemLevel.setFixedSize(QSize(width, defaultFixedHeight))
         self.ItemLevel.setValidator(QRegExpValidator(int_regex, self))
         self.ItemQuality.setFixedSize(QSize(width, defaultFixedHeight))
@@ -2039,7 +2039,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.Toolbar.show()
 
     # TODO: MIGRATE AWAY FROM THIS ...
-    def setMinimumWidth(self, items = None):
+    def getMinimumWidth(self, items = None):
         font = QFontMetrics(self.font())
         option = QStyleOptionComboBox()
         style = self.style()
