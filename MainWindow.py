@@ -455,7 +455,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # self.ItemOrigin.setFixedHeight(defaultFixedHeight)
         # self.ItemDamageType.setFixedHeight(defaultFixedHeight)
 
-        # width = self.getMinimumWidth([' - '])
+        # width = self.getMinimumWidth(['-'])
         # self.ItemLevel.setFixedWidth(width)
         self.ItemLevel.setValidator(int_validator)
         # self.ItemQuality.setFixedWidth(width)
@@ -467,9 +467,18 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # self.ItemSpeed.setFixedWidth(width)
         self.ItemSpeed.setValidator(dbl_validator)
 
-        # TODO: SET DYNAMIC WIDTH ...
-        # self.ItemInformationGroup.setFixedWidth(186)
-        # self.ItemRestrictionsGroup.setFixedWidth(135)
+        # TODO: CHECK 'QComboBox' SIZING POLICY ...
+        width = self.ItemDamageTypeLabel.minimumSizeHint().width()
+        width += self.ItemAFDPSLabel.minimumSizeHint().width()
+        width += self.ItemLevel.minimumSizeHint().width()
+        width += self.ItemQuality.minimumSizeHint().width()
+        self.ItemInformationGroup.setFixedWidth(width)
+
+        # DEBUGGING
+        print("ItemInformationGroup Width =", width)
+
+        # TODO: SET A DYNAMIC WIDTH ...
+        self.ItemRestrictionsGroup.setFixedWidth(135)
 
         width = test_font.size(Qt.TextSingleLine, "1999.9", tabArray = None).width()
         self.BuildUtility.setFixedWidth(width)

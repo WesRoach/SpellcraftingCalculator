@@ -227,6 +227,9 @@
              <property name="title">
               <string>Bar</string>
              </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
              <layout class="QHBoxLayout">
               <property name="spacing">
                <number>5</number>
@@ -254,6 +257,9 @@
              <property name="title">
               <string>Row</string>
              </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
              <layout class="QHBoxLayout">
               <property name="spacing">
                <number>5</number>
@@ -280,6 +286,9 @@
             <widget class="QGroupBox" name="groupBox">
              <property name="title">
               <string>Start</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
              </property>
              <layout class="QHBoxLayout">
               <property name="spacing">
@@ -310,6 +319,9 @@
            <property name="title">
             <string>Crafted Pieces</string>
            </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
            <layout class="QGridLayout">
             <property name="leftMargin">
              <number>5</number>
@@ -326,7 +338,76 @@
             <property name="spacing">
              <number>5</number>
             </property>
-            <item row="1" column="0">
+            <item row="5" column="0">
+             <widget class="QCheckBox" name="ArmsCheckBox">
+              <property name="text">
+               <string>Arms</string>
+              </property>
+             </widget>
+            </item>
+            <item row="6" column="1">
+             <widget class="QCheckBox" name="TwoHandedCheckBox">
+              <property name="text">
+               <string>Two-Handed</string>
+              </property>
+             </widget>
+            </item>
+            <item row="7" column="1">
+             <widget class="QCheckBox" name="RangedCheckBox">
+              <property name="text">
+               <string>Ranged</string>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="1">
+             <widget class="QCheckBox" name="FeetCheckBox">
+              <property name="text">
+               <string>Feet</string>
+              </property>
+             </widget>
+            </item>
+            <item row="6" column="0">
+             <widget class="QCheckBox" name="HandsCheckBox">
+              <property name="text">
+               <string>Hands</string>
+              </property>
+             </widget>
+            </item>
+            <item row="5" column="1">
+             <widget class="QCheckBox" name="LeftHandCheckBox">
+              <property name="text">
+               <string>Left Hand</string>
+              </property>
+             </widget>
+            </item>
+            <item row="7" column="0">
+             <widget class="QCheckBox" name="LegsCheckBox">
+              <property name="text">
+               <string>Legs</string>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="1">
+             <widget class="QCheckBox" name="RightHandCheckBox">
+              <property name="text">
+               <string>Right Hand</string>
+              </property>
+             </widget>
+            </item>
+            <item row="9" column="0" colspan="2">
+             <spacer>
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>20</width>
+                <height>40</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item row="4" column="0">
              <widget class="QCheckBox" name="ChestCheckBox">
               <property name="text">
                <string>Chest</string>
@@ -339,75 +420,6 @@
                <string>Head</string>
               </property>
              </widget>
-            </item>
-            <item row="2" column="0">
-             <widget class="QCheckBox" name="ArmsCheckBox">
-              <property name="text">
-               <string>Arms</string>
-              </property>
-             </widget>
-            </item>
-            <item row="5" column="0">
-             <widget class="QCheckBox" name="HandsCheckBox">
-              <property name="text">
-               <string>Hands</string>
-              </property>
-             </widget>
-            </item>
-            <item row="4" column="0">
-             <widget class="QCheckBox" name="LegsCheckBox">
-              <property name="text">
-               <string>Legs</string>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="1">
-             <widget class="QCheckBox" name="FeetCheckBox">
-              <property name="text">
-               <string>Feet</string>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="1">
-             <widget class="QCheckBox" name="RightHandCheckBox">
-              <property name="text">
-               <string>Right Hand</string>
-              </property>
-             </widget>
-            </item>
-            <item row="3" column="1">
-             <widget class="QCheckBox" name="LeftHandCheckBox">
-              <property name="text">
-               <string>Left Hand</string>
-              </property>
-             </widget>
-            </item>
-            <item row="4" column="1">
-             <widget class="QCheckBox" name="TwoHandedCheckBox">
-              <property name="text">
-               <string>Two-Handed</string>
-              </property>
-             </widget>
-            </item>
-            <item row="5" column="1">
-             <widget class="QCheckBox" name="RangedCheckBox">
-              <property name="text">
-               <string>Ranged</string>
-              </property>
-             </widget>
-            </item>
-            <item row="6" column="0" colspan="2">
-             <spacer>
-              <property name="orientation">
-               <enum>Qt::Vertical</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>20</width>
-                <height>40</height>
-               </size>
-              </property>
-             </spacer>
             </item>
            </layout>
           </widget>
