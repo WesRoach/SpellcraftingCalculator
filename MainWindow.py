@@ -236,9 +236,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         width = test_font.size(Qt.TextSingleLine, "CON:", tabArray = None).width()
         self.AttributesGroup.layout().setColumnMinimumWidth(0, width)
-        width = test_font.size(Qt.TextSingleLine, "400", tabArray = None).width()
+        width = test_font.size(Qt.TextSingleLine, "-400", tabArray = None).width()
         self.AttributesGroup.layout().setColumnMinimumWidth(1, width)
-        width = test_font.size(Qt.TextSingleLine, "(400)", tabArray = None).width()
+        width = test_font.size(Qt.TextSingleLine, "(-400)", tabArray = None).width()
         self.AttributesGroup.layout().setColumnMinimumWidth(2, width)
         width = test_font.size(Qt.TextSingleLine, "(-26)", tabArray = None).width()
         self.AttributesGroup.layout().setColumnMinimumWidth(3, width)
@@ -309,7 +309,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # self.ItemDeleteButton.setFixedWidth(width)
         # self.ItemSaveButton.setFixedWidth(width)
 
-        width = test_font.size(Qt.TextSingleLine, "Slot 12: ", tabArray = None).width()
+        width = test_font.size(Qt.TextSingleLine, "Slot 12:", tabArray = None).width()
         self.ItemStatsGroup.layout().setColumnMinimumWidth(0, width)
 
         # width = self.getMinimumWidth(['Mythical Resists & Caps'])
@@ -450,11 +450,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             ],
         }
 
-        # self.ItemRealm.setFixedHeight(defaultFixedHeight)
-        # self.ItemType.setFixedHeight(defaultFixedHeight)
-        # self.ItemOrigin.setFixedHeight(defaultFixedHeight)
-        # self.ItemDamageType.setFixedHeight(defaultFixedHeight)
-
         # width = self.getMinimumWidth(['-'])
         # self.ItemLevel.setFixedWidth(width)
         self.ItemLevel.setValidator(int_validator)
@@ -467,12 +462,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # self.ItemSpeed.setFixedWidth(width)
         self.ItemSpeed.setValidator(dbl_validator)
 
-        # TODO: CHECK 'QComboBox' SIZING POLICY ...
+        # TODO: SET A DYNAMIC WIDTH ...
         width = self.ItemDamageTypeLabel.minimumSizeHint().width()
         width += self.ItemAFDPSLabel.minimumSizeHint().width()
         width += self.ItemLevel.minimumSizeHint().width()
         width += self.ItemQuality.minimumSizeHint().width()
-        self.ItemInformationGroup.setFixedWidth(width)
+        self.ItemInformationGroup.setFixedWidth(width - 20)
 
         # DEBUGGING
         print("ItemInformationGroup Width =", width)
