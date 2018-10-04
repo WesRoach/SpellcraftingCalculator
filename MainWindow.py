@@ -454,34 +454,27 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             ],
         }
 
-        # self.ItemRealm.setFixedHeight(height)
-        # self.ItemType.setFixedHeight(height)
-        # self.ItemOrigin.setFixedHeight(height)
-        # self.ItemDamageType.setFixedHeight(height)
-
-        # width = self.getMinimumWidth(['--'])
-        # self.ItemLevel.setFixedSize(width, height)
         self.ItemLevel.setValidator(int_validator)
-        # self.ItemQuality.setFixedSize(width, height)
         self.ItemQuality.setValidator(int_validator)
-        # self.ItemBonus.setFixedSize(width, height)
         self.ItemBonus.setValidator(int_validator)
-        # self.ItemAFDPS.setFixedSize(width, height)
         self.ItemAFDPS.setValidator(dbl_validator)
-        # self.ItemSpeed.setFixedSize(width, height)
         self.ItemSpeed.setValidator(dbl_validator)
 
-        # width = self.ItemOriginLabel.minimumSizeHint().width()
-        # width += self.ItemQualityLabel.minimumSizeHint().width()
-        # width += self.ItemLevel.minimumSizeHint().width()
-        # width += self.ItemQuality.minimumSizeHint().width()
-        # self.ItemInformationGroup.setFixedWidth(width)
+        width = self.ItemDamageTypeLabel.minimumSizeHint().width()
+        width += self.ItemQualityLabel.minimumSizeHint().width()
+        width += self.ItemLevel.minimumSizeHint().width()
+        width += self.ItemQuality.minimumSizeHint().width()
+        self.ItemInformationGroup.setFixedWidth(width)
 
         # DEBUGGING
-        # print("ItemInformationGroup Width =", width)
+        print("ItemInformationGroup Width =", width)
+
+        # table_entry = QListWidgetItem('Necromancer')
+        # table_entry.setFlags(Qt.ItemIsUserCheckable)
+        # self.ItemRestrictionsList.addItem(table_entry)
 
         # TODO: SET A DYNAMIC WIDTH ...
-        # self.ItemRestrictionsGroup.setFixedWidth(135)
+        self.ItemRestrictionsGroup.setFixedWidth(135)
 
         width = test_font.size(Qt.TextSingleLine, "1999.9", tabArray = None).width()
         self.BuildUtility.setFixedWidth(width)
