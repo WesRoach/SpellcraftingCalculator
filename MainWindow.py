@@ -461,7 +461,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ItemSpeed.setValidator(dbl_validator)
 
         width = self.ItemDamageTypeLabel.minimumSizeHint().width()
-        width += self.ItemQualityLabel.minimumSizeHint().width()
+        width += self.ItemAFDPSLabel.minimumSizeHint().width()
         width += self.ItemLevel.minimumSizeHint().width()
         width += self.ItemQuality.minimumSizeHint().width()
         self.ItemInformationGroup.setFixedWidth(width)
