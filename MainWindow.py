@@ -211,17 +211,17 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         dbl_regex = QRegExp('^(?:[0-9]{3}|[0-9][0-9]?(?:\.[0-9])?)$')
         dbl_validator = QRegExpValidator(dbl_regex)
 
-        # width = self.getMinimumWidth(['ShadowBlade'])
-        # height = self.CharacterRealm.minimumSizeHint().height()
-        # self.CharacterName.setFixedSize(width, height)
-        # self.CharacterRealm.setFixedSize(width, height)
-        # self.CharacterClass.setFixedSize(width, height)
-        # self.CharacterRace.setFixedSize(width, height)
-        # self.CharacterLevel.setFixedSize(width, height)
+        # TODO: GET WIDTH FROM CLASS DICT ...
+        # width = self.getMinimumWidth(["DaShadowBlade"])
+        # self.CharacterName.setFixedWidth(width)
+        # self.CharacterRealm.setFixedWidth(width)
+        # self.CharacterClass.setFixedWidth(width)
+        # self.CharacterRace.setFixedWidth(width)
+        # self.CharacterLevel.setFixedWidth(width)
         self.CharacterLevel.setValidator(int_validator)
-        # self.CharacterRealmRank.setFixedSize(width, height)
+        # self.CharacterRealmRank.setFixedWidth(width)
         self.CharacterRealmRank.setValidator(int_validator)
-        # self.CharacterChampLevel.setFixedSize(width, height)
+        # self.CharacterChampLevel.setFixedWidth(width)
         self.CharacterChampLevel.setValidator(int_validator)
 
         # TODO: SET FIXED WIDTH FOR `self.ConfigurationGroup` ...
@@ -313,34 +313,35 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # self.ItemDeleteButton.setFixedWidth(width)
         # self.ItemSaveButton.setFixedWidth(width)
 
-        # width = test_font.size(Qt.TextSingleLine, "Slot 12:", tabArray = None).width()
-        # self.ItemStatsGroup.layout().setColumnMinimumWidth(0, width)
+        width = test_font.size(Qt.TextSingleLine, "Slot 12:", tabArray = None).width()
+        self.ItemStatsGroup.layout().setColumnMinimumWidth(0, width)
 
-        # width = self.getMinimumWidth(['Mythical Resists & Caps'])
+        # TODO: GET WIDTH FROM EFFECT TYPE DICT ...
+        width = self.getMinimumWidth(['Mythical Resists & Caps'])
         for index in range(0, 12):
             self.EffectType.append(getattr(self, 'EffectType%d' % index))
-            # self.EffectType[index].setFixedSize(width, height)
             self.EffectType[index].activated[str].connect(self.changeEffectType)
+            self.EffectType[index].setFixedWidth(width)
 
-        # width = self.getMinimumWidth(['999'])
+        width = self.getMinimumWidth(['999'])
         for index in range(0, 12):
             self.AmountEdit.append(getattr(self, 'AmountEdit%d' % index))
-            # self.AmountEdit[index].setFixedSize(width, height)
-            self.AmountEdit[index].setValidator(int_validator)
             self.AmountEdit[index].textEdited[str].connect(self.changeEffectAmount)
+            self.AmountEdit[index].setValidator(int_validator)
+            self.AmountEdit[index].setFixedWidth(width)
 
-        # width = self.getMinimumWidth(['999'])
         for index in range(0, 5):
             self.AmountStatic.append(getattr(self, 'AmountStatic%d' % index))
-            # self.AmountStatic[index].setFixedSize(width, height)
+            self.AmountStatic[index].setFixedWidth(width)
             self.AmountStatic[index].activated[str].connect(self.changeEffectAmount)
 
-        # width = self.getMinimumWidth(['Neg. Effect Duration Reduction'])
+        # TODO: GET WIDTH FROM EFFECT DICT ...
+        width = self.getMinimumWidth(['Neg. Effect Duration Reduction'])
         for index in range(0, 12):
             self.SlotLabel.append(getattr(self, 'SlotLabel%d' % index))
             self.Effect.append(getattr(self, 'Effect%d' % index))
-            # self.Effect[index].setFixedSize(width, height)
             self.Effect[index].activated[str].connect(self.changeEffect)
+            self.Effect[index].setFixedWidth(width)
 
         # width = self.getMinimumWidth(['vs. Enemy Players'])
         for index in range(0, 12):
@@ -357,12 +358,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         for index in range(0, 7):
             self.GemName.append(getattr(self, 'GemName%d' % index))
 
-        # width = self.Requirement[0].width()
-        # for index in range(4, 7):
-            # self.GemName[index].setFixedSize(width, height)
+        width = self.Requirement[0].width()
+        for index in range(4, 7):
+            self.GemName[index].setFixedWidth(width)
 
-        # width = test_font.size(Qt.TextSingleLine, "37.5", tabArray = None).width()
-        # self.ItemImbuePointsTotal.setFixedWidth(width)
+        width = test_font.size(Qt.TextSingleLine, "37.5", tabArray = None).width()
+        self.ItemImbuePointsTotal.setFixedWidth(width)
 
         testItem = Item('Crafted')
         for index in range(0, testItem.getSlotCount()):
@@ -1446,6 +1447,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         for class_skill in AllBonusList['All'][self.getCharClass()]['All Skills']:
             if class_skill.split(None)[0] != 'All':
                 return str(class_skill)
+
+    # TODO: IMPLEMENT ..
+    def getComboBoxWidth(self):
+        pass
+
+    # TODO: IMPLEMENT ...
+    def getLineEditWidth(self):
+        pass
 
 # =============================================== #
 #                  CHANGE METHODS                 #
