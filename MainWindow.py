@@ -470,10 +470,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # DEBUGGING
         print("ItemInformationGroup Width =", width)
 
-        # table_entry = QListWidgetItem('Necromancer')
-        # table_entry.setFlags(Qt.ItemIsUserCheckable)
-        # self.ItemRestrictionsList.addItem(table_entry)
-
         # TODO: SET A DYNAMIC WIDTH ...
         self.ItemRestrictionsGroup.setFixedWidth(135)
 
@@ -883,6 +879,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ItemRequirement.setText(item.getRequirement())
         self.ItemNotes.setPlainText(item.getNotes())
 
+        # TODO: THIS SHOULD BE `list_entry` ...
         table_entry = QListWidgetItem('All')
         table_entry.setFlags(Qt.ItemIsUserCheckable | Qt.ItemIsEnabled)
         table_entry.setCheckState(Qt.Unchecked)
