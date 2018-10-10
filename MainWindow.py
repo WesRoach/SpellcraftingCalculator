@@ -277,7 +277,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 parent.addChild(child)
 
         # TODO: SET A DYNAMIC MINIMAL WIDTH ...
-        # self.SlotListTreeView.setMinimumWidth(143)
+        # self.SlotListTreeView.setMinimumWidth()
 
         self.CharacterRealm.insertItems(0, self.getRealms())
 
