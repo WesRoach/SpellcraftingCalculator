@@ -1466,7 +1466,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             if class_skill.split(None)[0] != 'All':
                 return str(class_skill)
 
-    # TODO: PASS IN LIST OF VALUES ...
+    # TODO: LIST OF VALUES ...
     def getComboBoxWidth(self, value):
         cb = self.CharacterRealm
         const_values = 4 + 2
@@ -1480,7 +1480,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         width += const_values + scroll_width + frame_width * 2
         return width
 
-    # TODO: PASS IN LIST OF VALUES ...
+    # TODO: LIST OF VALUES ...
     def getLineEditWidth(self, value):
         le = self.CharacterName
         const_values = 4 + 2
