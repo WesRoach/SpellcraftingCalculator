@@ -309,7 +309,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             ]
         }
 
-        # TODO: DYNAMICALL SET THESE LATER ...
         self.ItemNewButton.setFixedWidth(34)
         self.ItemTypeButton.setFixedWidth(34)
         self.ItemLoadButton.setFixedWidth(34)
@@ -352,7 +351,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.Requirement[index].textEdited.connect(self.changeEffectRequirement)
             self.Requirement[index].setFixedWidth(width)
 
-        width = test_font.size(Qt.TextSingleLine, "-////-", tabArray=None).width()
+        width = test_font.size(Qt.TextSingleLine, "-////-", tabArray = None).width()
         for index in range(0, 4):
             self.ImbuePoints.append(getattr(self, 'ImbuePoints%d' % index))
             self.GemNameLabel.append(getattr(self, 'GemNameLabel%d' % index))
@@ -494,12 +493,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         width += cm.left() + cm.right()
         width += gm.left() + gm.right()
         width += ch + iw + sw + fw * 4
-
-        # NEED QListWidget Frame, QGroupBox Frame, QGroupBox Margins
-
-        print(fm.width('Necromancer'), cm.left(), cm.right(), ch, iw, sw, fw * 2)
-
-        # TODO: SET A DYNAMIC WIDTH ...
         self.ItemRestrictionsGroup.setFixedWidth(width)
 
         width = test_font.size(Qt.TextSingleLine, "1999.9", tabArray = None).width()
