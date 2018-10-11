@@ -309,11 +309,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             ]
         }
 
-        self.ItemNewButton.setFixedWidth(34)
-        self.ItemTypeButton.setFixedWidth(34)
-        self.ItemLoadButton.setFixedWidth(34)
-        self.ItemDeleteButton.setFixedWidth(34)
-        self.ItemSaveButton.setFixedWidth(34)
+        self.ItemNewButton.setFixedWidth(38)
+        self.ItemTypeButton.setFixedWidth(38)
+        self.ItemLoadButton.setFixedWidth(38)
+        self.ItemDeleteButton.setFixedWidth(38)
+        self.ItemSaveButton.setFixedWidth(38)
 
         width = test_font.size(Qt.TextSingleLine, "Slot 12:", tabArray = None).width()
         self.ItemStatsGroup.layout().setColumnMinimumWidth(0, width)
