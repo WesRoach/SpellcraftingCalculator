@@ -179,7 +179,7 @@ class QuickbarDialog(QDialog, Ui_QuickbarDialog):
     def changeCrafterPath(self):
         options = QFileDialog.Options()
         path = QFileDialog.getExistingDirectory(
-            QFileDialog(), "Select a New Path", self.getCrafterPath(), options=options)
+            QFileDialog(), "Select a New Path", self.getCrafterPath(), options = options)
 
         if path in ('', None):
             return
