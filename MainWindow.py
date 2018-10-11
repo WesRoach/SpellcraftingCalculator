@@ -478,12 +478,29 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         width += layout.contentsMargins().left()
         width += layout.contentsMargins().right()
         width += layout.horizontalSpacing() * 3
-
-        # TODO: SET DYNAMIC WIDTH ...
         self.ItemInformationGroup.setFixedWidth(width)
 
+        # SERIOUSLY QT?! ...
+        lw = self.ItemRestrictionsList
+        fm = lw.fontMetrics()
+        cm = lw.contentsMargins()
+        gm = self.ItemRestrictionsGroup.layout().contentsMargins()
+        ch = self.style().pixelMetric(QStyle.PM_DefaultChildMargin)
+        fw = self.style().pixelMetric(QStyle.PM_DefaultFrameWidth)
+        iw = self.style().pixelMetric(QStyle.PM_ListViewIconSize)
+        sw = self.style().pixelMetric(QStyle.PM_ScrollBarExtent)
+
+        width = fm.width('Necromancer')
+        width += cm.left() + cm.right()
+        width += gm.left() + gm.right()
+        width += ch + iw + sw + fw * 4
+
+        # NEED QListWidget Frame, QGroupBox Frame, QGroupBox Margins
+
+        print(fm.width('Necromancer'), cm.left(), cm.right(), ch, iw, sw, fw * 2)
+
         # TODO: SET A DYNAMIC WIDTH ...
-        self.ItemRestrictionsGroup.setFixedWidth(135)
+        self.ItemRestrictionsGroup.setFixedWidth(width)
 
         width = test_font.size(Qt.TextSingleLine, "1999.9", tabArray = None).width()
         self.BuildUtility.setFixedWidth(width)
@@ -891,36 +908,35 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ItemRequirement.setText(item.getRequirement())
         self.ItemNotes.setPlainText(item.getNotes())
 
-        # TODO: THIS SHOULD BE `list_entry` ...
-        table_entry = QListWidgetItem('All')
-        table_entry.setFlags(Qt.ItemIsUserCheckable | Qt.ItemIsEnabled)
-        table_entry.setCheckState(Qt.Unchecked)
+        list_entry = QListWidgetItem('All')
+        list_entry.setFlags(Qt.ItemIsUserCheckable | Qt.ItemIsEnabled)
+        list_entry.setCheckState(Qt.Unchecked)
 
         self.ItemRestrictionsList.clear()
-        self.ItemRestrictionsList.addItem(table_entry)
+        self.ItemRestrictionsList.addItem(list_entry)
 
         for key in ClassList['All']:
-            table_entry = QListWidgetItem(key)
-            table_entry.setFlags(Qt.ItemIsUserCheckable | Qt.ItemIsEnabled)
-            table_entry.setCheckState(Qt.Unchecked)
-            self.ItemRestrictionsList.addItem(table_entry)
+            list_entry = QListWidgetItem(key)
+            list_entry.setFlags(Qt.ItemIsUserCheckable | Qt.ItemIsEnabled)
+            list_entry.setCheckState(Qt.Unchecked)
+            self.ItemRestrictionsList.addItem(list_entry)
 
         for index in range(self.ItemRestrictionsList.count()):
-            table_entry = self.ItemRestrictionsList.item(index)
-            if table_entry.text() not in (('All',) + ClassList[item.getRealm()]):
-                table_entry.setHidden(True)
+            lsit_entry = self.ItemRestrictionsList.item(index)
+            if list_entry.text() not in (('All',) + ClassList[item.getRealm()]):
+                list_entry.setHidden(True)
 
         # BLOCK WIDGET SIGNALS ...
         self.ItemRestrictionsList.blockSignals(True)
 
         for index in range(self.ItemRestrictionsList.count()):
-            table_entry = self.ItemRestrictionsList.item(index)
-            if table_entry.text() in item.getRestrictions():
-                if table_entry.text() in (('All',) + ClassList[item.getRealm()]):
-                    table_entry.setCheckState(Qt.Checked)
+            list_entry = self.ItemRestrictionsList.item(index)
+            if list_entry.text() in item.getRestrictions():
+                if list_entry.text() in (('All',) + ClassList[item.getRealm()]):
+                    list_entry.setCheckState(Qt.Checked)
                 else:
-                    table_entry.setCheckState(Qt.Unchecked)
-                    self.changeItemRestrictions(table_entry)
+                    list_entry.setCheckState(Qt.Unchecked)
+                    self.changeItemRestrictions(list_entry)
 
         # UNBLOCK WIDGET SIGNALS ...
         self.ItemRestrictionsList.blockSignals(False)
@@ -1457,7 +1473,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             if class_skill.split(None)[0] != 'All':
                 return str(class_skill)
 
-    # TODO: IMPLEMENT ..
+    # TODO: PASS IN LIST OF VALUES ...
     def getComboBoxWidth(self, value):
         cb = self.CharacterRealm
         const_values = 4 + 2
@@ -1471,7 +1487,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         width += const_values + scroll_width + frame_width * 2
         return width
 
-    # TODO: IMPLEMENT ...
+    # TODO: PASS IN LIST OF VALUES ...
     def getLineEditWidth(self, value):
         le = self.CharacterName
         const_values = 4 + 2
@@ -1484,20 +1500,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         width += text_margins.left() + text_margins.right()
         width += cont_margins.left() + cont_margins.right()
         width += const_values + frame_width * 2
-        return width
-
-    # TODO: IMPLEMENT ...
-    def getListWidgetWidth(self, value):
-        lw = self.ItemRestrictionsList
-        font_metrics = lw.fontMetrics()
-        cont_margins = lw.contentsMargins()
-        child_margins = self.style().pixelMetric(QStyle.PM_DefaultChildMargin)
-        scroll_width = self.style().pixelMetric(QStyle.PM_ScrollBarExtent)
-        frame_width = self.style().pixelMetric(QStyle.PM_DefaultFrameWidth)
-
-        width = font_metrics.width(value)
-        width += cont_margins.left() + cont_margins.right()
-        width += child_margins + scroll_width + frame_width * 2
         return width
 
 # =============================================== #
