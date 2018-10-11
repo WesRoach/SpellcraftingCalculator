@@ -2,6 +2,7 @@
 
 from PyQt5 import uic
 from PyQt5.Qt import Qt, QIcon
+from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import QDialog, QFileDialog
 from Constants import GemMaterialsOrder
 from lxml import etree
@@ -14,6 +15,11 @@ class ReportDialog(QDialog, Ui_ReportDialog):
     def __init__(self, parent = None, flags = Qt.Dialog):
         QDialog.__init__(self, parent, flags)
         self.setupUi(self)
+
+        font = QFont()
+        font.setFamily("Trebuchet MS")
+        font.setPointSize(8)
+        self.setFont(font)
 
         self.initLayout()
         self.initControls()

@@ -2,6 +2,7 @@
 
 from PyQt5 import uic
 from PyQt5.Qt import QFileDialog, QIcon, QModelIndex, Qt, QVariant
+from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import QDialog, QMessageBox
 from Constants import GemHotkeyValues, ServerCodes
 from Settings import Settings
@@ -36,6 +37,11 @@ class QuickbarDialog(QDialog, Ui_QuickbarDialog):
     def __init__(self, parent = None, flags = Qt.Dialog, items = None):
         QDialog.__init__(self, parent, flags)
         self.setupUi(self)
+
+        font = QFont()
+        font.setFamily("Trebuchet MS")
+        font.setPointSize(8)
+        self.setFont(font)
 
         self.Settings = Settings.getInstance()
 

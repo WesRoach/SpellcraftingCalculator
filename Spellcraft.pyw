@@ -22,7 +22,7 @@ class SpellcraftingCalculator(QApplication):
         self.application = MainWindow.MainWindow()
 
     def initializeApplication(self):
-        font = QFont(self.font())
+        font = QFont()
         font.setFamily("Trebuchet MS")
         font.setPointSize(8)
         self.setFont(font)

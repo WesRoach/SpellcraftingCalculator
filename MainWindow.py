@@ -3,8 +3,8 @@
 from PyQt5 import uic
 from PyQt5.Qt import QAction, Qt, QKeySequence
 from PyQt5.QtCore import QSize, QModelIndex, QRegExp, QVariant
-from PyQt5.QtGui import QFontMetrics, QIcon, QRegExpValidator
-from PyQt5.QtWidgets import QFileDialog, QLabel, QListWidgetItem, QMainWindow, QMenu, QMessageBox, QToolBar, QTreeWidgetItem, QTreeWidgetItemIterator, QStyle, QStyleOptionComboBox
+from PyQt5.QtGui import QFont, QFontMetrics, QIcon, QRegExpValidator
+from PyQt5.QtWidgets import QComboBox, QFileDialog, QLabel, QLineEdit, QListWidget, QListWidgetItem, QMainWindow, QMenu, QMessageBox, QToolBar, QTreeWidgetItem, QTreeWidgetItemIterator, QStyle
 from Character import AllBonusList, ClassList, ItemTypes, Races
 from Constants import Cap, CraftedTypeList, CraftedEffectList, CraftedValuesList, DropTypeList, DropEffectList
 from Constants import EnhancedTypeList, EnhancedEffectList, EnhancedValuesList, MythicalBonusCap, PVEBonusCap, TOABonusCap
@@ -27,6 +27,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         # BUILD - MAJOR.YEAR.MONTHDAY ...
         self.BuildDate = "3.18.1001 (Alpha)"
+
+        font = QFont()
+        font.setFamily("Trebuchet MS")
+        font.setPointSize(8)
+        self.setFont(font)
 
         self.Settings = Settings()
         self.Settings.load()
@@ -212,16 +217,16 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         dbl_validator = QRegExpValidator(dbl_regex)
 
         # TODO: GET WIDTH FROM CLASS DICT ...
-        # width = self.getMinimumWidth(["DaShadowBlade"])
-        # self.CharacterName.setFixedWidth(width)
-        # self.CharacterRealm.setFixedWidth(width)
-        # self.CharacterClass.setFixedWidth(width)
-        # self.CharacterRace.setFixedWidth(width)
-        # self.CharacterLevel.setFixedWidth(width)
+        width = self.getComboBoxWidth('Necromancer')
+        self.CharacterName.setFixedWidth(width)
+        self.CharacterRealm.setFixedWidth(width)
+        self.CharacterClass.setFixedWidth(width)
+        self.CharacterRace.setFixedWidth(width)
+        self.CharacterLevel.setFixedWidth(width)
         self.CharacterLevel.setValidator(int_validator)
-        # self.CharacterRealmRank.setFixedWidth(width)
+        self.CharacterRealmRank.setFixedWidth(width)
         self.CharacterRealmRank.setValidator(int_validator)
-        # self.CharacterChampLevel.setFixedWidth(width)
+        self.CharacterChampLevel.setFixedWidth(width)
         self.CharacterChampLevel.setValidator(int_validator)
 
         # TODO: SET FIXED WIDTH FOR `self.ConfigurationGroup` ...
@@ -276,8 +281,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 child.setCheckState(0, Qt.Unchecked)
                 parent.addChild(child)
 
-        # TODO: SET A DYNAMIC MINIMAL WIDTH ...
-        # self.SlotListTreeView.setMinimumWidth()
+        width = self.ConfigurationGroup.sizeHint().width()
+        self.SlotListTreeView.setMinimumWidth(width)
 
         self.CharacterRealm.insertItems(0, self.getRealms())
 
@@ -306,24 +311,24 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             ]
         }
 
-        # width = self.getMinimumWidth(['BTN'])
-        # self.ItemNewButton.setFixedWidth(width)
-        # self.ItemTypeButton.setFixedWidth(width)
-        # self.ItemLoadButton.setFixedWidth(width)
-        # self.ItemDeleteButton.setFixedWidth(width)
-        # self.ItemSaveButton.setFixedWidth(width)
+        # TODO: DYNAMICALL SET THESE LATER ...
+        self.ItemNewButton.setFixedWidth(34)
+        self.ItemTypeButton.setFixedWidth(34)
+        self.ItemLoadButton.setFixedWidth(34)
+        self.ItemDeleteButton.setFixedWidth(34)
+        self.ItemSaveButton.setFixedWidth(34)
 
         width = test_font.size(Qt.TextSingleLine, "Slot 12:", tabArray = None).width()
         self.ItemStatsGroup.layout().setColumnMinimumWidth(0, width)
 
         # TODO: GET WIDTH FROM EFFECT TYPE DICT ...
-        width = self.getMinimumWidth(['Mythical Resists & Caps'])
+        width = self.getComboBoxWidth('Mythical Resists & Caps')
         for index in range(0, 12):
             self.EffectType.append(getattr(self, 'EffectType%d' % index))
             self.EffectType[index].activated[str].connect(self.changeEffectType)
             self.EffectType[index].setFixedWidth(width)
 
-        width = self.getMinimumWidth(['999'])
+        width = self.getComboBoxWidth('29')
         for index in range(0, 12):
             self.AmountEdit.append(getattr(self, 'AmountEdit%d' % index))
             self.AmountEdit[index].textEdited[str].connect(self.changeEffectAmount)
@@ -336,23 +341,23 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.AmountStatic[index].activated[str].connect(self.changeEffectAmount)
 
         # TODO: GET WIDTH FROM EFFECT DICT ...
-        width = self.getMinimumWidth(['Neg. Effect Duration Reduction'])
+        width = self.getComboBoxWidth('Neg. Effect Duration Reduction')
         for index in range(0, 12):
             self.SlotLabel.append(getattr(self, 'SlotLabel%d' % index))
             self.Effect.append(getattr(self, 'Effect%d' % index))
             self.Effect[index].activated[str].connect(self.changeEffect)
             self.Effect[index].setFixedWidth(width)
 
-        # width = self.getMinimumWidth(['vs. Enemy Players'])
+        width = self.getLineEditWidth('vs. Enemy Players')
         for index in range(0, 12):
             self.Requirement.append(getattr(self, 'Requirement%d' % index))
-            # self.Requirement[index].setFixedSize(width, height)
+            self.Requirement[index].setFixedWidth(width)
             self.Requirement[index].textEdited.connect(self.changeEffectRequirement)
 
-        # width = self.getMinimumWidth(['-'])
+        width = test_font.size(Qt.TextSingleLine, "/////", tabArray=None).width()
         for index in range(0, 4):
             self.ImbuePoints.append(getattr(self, 'ImbuePoints%d' % index))
-            # self.ImbuePoints[index].setFixedSize(width, height)
+            self.ImbuePoints[index].setFixedWidth(width)
             self.GemNameLabel.append(getattr(self, 'GemNameLabel%d' % index))
 
         for index in range(0, 7):
@@ -455,17 +460,22 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             ],
         }
 
+        width = self.getLineEditWidth('16.5')
+        self.ItemLevel.setFixedWidth(width)
         self.ItemLevel.setValidator(int_validator)
+        self.ItemQuality.setFixedWidth(width)
         self.ItemQuality.setValidator(int_validator)
+        self.ItemBonus.setFixedWidth(width)
         self.ItemBonus.setValidator(int_validator)
+        self.ItemAFDPS.setFixedWidth(width)
         self.ItemAFDPS.setValidator(dbl_validator)
+        self.ItemSpeed.setFixedWidth(width)
         self.ItemSpeed.setValidator(dbl_validator)
 
-        width = self.ItemDamageTypeLabel.minimumSizeHint().width()
-        width += self.ItemAFDPSLabel.minimumSizeHint().width()
-        width += self.ItemLevel.minimumSizeHint().width()
-        width += self.ItemQuality.minimumSizeHint().width()
-        self.ItemInformationGroup.setFixedWidth(width)
+        # TODO: SET DYNAMIC WIDTH ...
+        self.ItemInformationGroup.setFixedWidth(168)
+
+        print(self.ItemLevel.minimumSizeHint().width())
 
         # DEBUGGING
         print("ItemInformationGroup Width =", width)
@@ -1446,12 +1456,47 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 return str(class_skill)
 
     # TODO: IMPLEMENT ..
-    def getComboBoxWidth(self):
-        pass
+    def getComboBoxWidth(self, value):
+        cb = self.CharacterRealm
+        const_values = 4 + 2
+        font_metrics = cb.fontMetrics()
+        cont_margins = cb.contentsMargins()
+        scroll_width = self.style().pixelMetric(QStyle.PM_ScrollBarExtent)
+        frame_width = self.style().pixelMetric(QStyle.PM_DefaultFrameWidth)
+
+        width = font_metrics.width(value)
+        width += cont_margins.left() + cont_margins.right()
+        width += const_values + scroll_width + frame_width * 2
+        return width
 
     # TODO: IMPLEMENT ...
-    def getLineEditWidth(self):
-        pass
+    def getLineEditWidth(self, value):
+        le = self.CharacterName
+        const_values = 4 + 2
+        font_metrics = le.fontMetrics()
+        text_margins = le.textMargins()
+        cont_margins = le.contentsMargins()
+        frame_width = self.style().pixelMetric(QStyle.PM_DefaultFrameWidth)
+
+        width = font_metrics.width(value)
+        width += text_margins.left() + text_margins.right()
+        width += cont_margins.left() + cont_margins.right()
+        width += const_values + frame_width * 2
+        return width
+
+    # TODO: IMPLEMENT ...
+    def getListWidgetWidth(self, value):
+        lw = self.ItemRestrictionsList
+        font_metrics = lw.fontMetrics()
+        cont_margins = lw.contentsMargins()
+        child_margins = self.style().pixelMetric(QStyle.PM_DefaultChildMargin)
+        scroll_width = self.style().pixelMetric(QStyle.PM_ScrollBarExtent)
+        frame_width = self.style().pixelMetric(QStyle.PM_DefaultFrameWidth)
+
+        width = font_metrics.width(value)
+        width += cont_margins.left() + cont_margins.right()
+        width += child_margins + scroll_width + frame_width * 2
+        return width
 
 # =============================================== #
 #                  CHANGE METHODS                 #
@@ -2049,28 +2094,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         else:
             self.setIconSize(QSize(selection.data(), selection.data()))
             self.Toolbar.show()
-
-    # TODO: MIGRATE AWAY FROM THIS ...
-    def getMinimumWidth(self, items = None):
-        font = QFontMetrics(self.font())
-        option = QStyleOptionComboBox()
-        style = self.style()
-        maxWidth = 0
-        if items is not None:
-            for value in items:
-                option.currentText = value
-                size = QSize(font.width(option.currentText), font.height())
-                maxWidth = max(maxWidth, style.sizeFromContents(QStyle.CT_ComboBox, option, size, self).width())
-        elif maxWidth == 0 and self.count() > 0:
-            for index in range(0, self.count()):
-                option.currentText = self.itemText(index)
-                size = QSize(font.width(option.currentText), font.height())
-                maxWidth = max(maxWidth, style.sizeFromContents(QStyle.CT_ComboBox, option, size, self).width())
-        elif maxWidth == 0:
-            option.currentText = ' '
-            size = QSize(font.width(option.currentText), font.height())
-            maxWidth = max(maxWidth, style.sizeFromContents(QStyle.CT_ComboBox, option, size, self).width())
-        return maxWidth
 
     def insertSkill(self, amount, bonus, group):
         self.SkillsView.model().insertRows(self.SkillsView.model().rowCount(), 1)
