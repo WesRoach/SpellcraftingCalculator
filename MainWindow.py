@@ -229,8 +229,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.CharacterChampLevel.setFixedWidth(width)
         self.CharacterChampLevel.setValidator(int_validator)
 
-        # TODO: SET FIXED WIDTH FOR `self.ConfigurationGroup` ...
-
         for attribute in DropEffectList['All']['Attribute'] + ('ArmorFactor', 'Fatigue', 'PowerPool'):
             attribute = attribute.replace(' ', '')
             self.StatLabel[attribute] = getattr(self, attribute + 'Label')
@@ -322,13 +320,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ItemStatsGroup.layout().setColumnMinimumWidth(0, width)
 
         # TODO: GET WIDTH FROM EFFECT TYPE DICT ...
-        width = self.getComboBoxWidth('Mythical Resists & Caps')
+        width = self.getComboBoxWidth("Mythical Resists & Caps")
         for index in range(0, 12):
             self.EffectType.append(getattr(self, 'EffectType%d' % index))
             self.EffectType[index].activated[str].connect(self.changeEffectType)
             self.EffectType[index].setFixedWidth(width)
 
-        width = self.getComboBoxWidth('29')
+        width = self.getComboBoxWidth('76')
         for index in range(0, 12):
             self.AmountEdit.append(getattr(self, 'AmountEdit%d' % index))
             self.AmountEdit[index].textEdited[str].connect(self.changeEffectAmount)
@@ -337,28 +335,28 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         for index in range(0, 5):
             self.AmountStatic.append(getattr(self, 'AmountStatic%d' % index))
-            self.AmountStatic[index].setFixedWidth(width)
             self.AmountStatic[index].activated[str].connect(self.changeEffectAmount)
+            self.AmountStatic[index].setFixedWidth(width)
 
         # TODO: GET WIDTH FROM EFFECT DICT ...
-        width = self.getComboBoxWidth('Neg. Effect Duration Reduction')
+        width = self.getComboBoxWidth("Neg. Effect Duration Reduction")
         for index in range(0, 12):
             self.SlotLabel.append(getattr(self, 'SlotLabel%d' % index))
             self.Effect.append(getattr(self, 'Effect%d' % index))
             self.Effect[index].activated[str].connect(self.changeEffect)
             self.Effect[index].setFixedWidth(width)
 
-        width = self.getLineEditWidth('vs. Enemy Players')
+        width = self.getLineEditWidth("vs. Enemy Players")
         for index in range(0, 12):
             self.Requirement.append(getattr(self, 'Requirement%d' % index))
-            self.Requirement[index].setFixedWidth(width)
             self.Requirement[index].textEdited.connect(self.changeEffectRequirement)
+            self.Requirement[index].setFixedWidth(width)
 
-        width = test_font.size(Qt.TextSingleLine, "/////", tabArray=None).width()
+        width = test_font.size(Qt.TextSingleLine, "-////-", tabArray=None).width()
         for index in range(0, 4):
             self.ImbuePoints.append(getattr(self, 'ImbuePoints%d' % index))
-            self.ImbuePoints[index].setFixedWidth(width)
             self.GemNameLabel.append(getattr(self, 'GemNameLabel%d' % index))
+            self.ImbuePoints[index].setFixedWidth(width)
 
         for index in range(0, 7):
             self.GemName.append(getattr(self, 'GemName%d' % index))
@@ -460,7 +458,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             ],
         }
 
-        width = self.getLineEditWidth('16.5')
+        width = self.getLineEditWidth("16.5")
         self.ItemLevel.setFixedWidth(width)
         self.ItemLevel.setValidator(int_validator)
         self.ItemQuality.setFixedWidth(width)
@@ -472,13 +470,17 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ItemSpeed.setFixedWidth(width)
         self.ItemSpeed.setValidator(dbl_validator)
 
+        layout = self.ItemInformationGroup.layout()
+        width = test_font.width("Damage:")
+        width += test_font.width("AF/DPS:")
+        width += self.ItemLevel.width()
+        width += self.ItemQuality.width()
+        width += layout.contentsMargins().left()
+        width += layout.contentsMargins().right()
+        width += layout.horizontalSpacing() * 3
+
         # TODO: SET DYNAMIC WIDTH ...
-        self.ItemInformationGroup.setFixedWidth(168)
-
-        print(self.ItemLevel.minimumSizeHint().width())
-
-        # DEBUGGING
-        print("ItemInformationGroup Width =", width)
+        self.ItemInformationGroup.setFixedWidth(width)
 
         # TODO: SET A DYNAMIC WIDTH ...
         self.ItemRestrictionsGroup.setFixedWidth(135)
