@@ -505,7 +505,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         # TODO: NO WORKING, NOT SURE WHY ...
         try:  # OPTION MIGHT NOT EXIST ...
-            saved_state = self.Settings.get('GEOMETRY', 'Geometry')
+            saved_state = self.Settings.get('GEOMETRY', 'MainWindowGeometry')
             self.restoreGeometry(bytes(saved_state, encoding = 'UTF8'))
         except NoOptionError:
             pass
@@ -2126,7 +2126,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 event.ignore()
 
         new_state = str(self.saveGeometry())
-        self.Settings.set('GEOMETRY', 'Geometry', new_state)
+        self.Settings.set('GEOMETRY', 'MainWindowGeometry', new_state)
 
         # SAVE SETTINGS ...
         self.Settings.save()
