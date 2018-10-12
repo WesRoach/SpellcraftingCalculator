@@ -1,12 +1,12 @@
 # HEADER PLACE HOLDER
 
 from PyQt5 import uic
-from PyQt5.Qt import QFileDialog, QIcon, QModelIndex, Qt, QVariant
+from PyQt5.Qt import QIcon, QModelIndex, Qt, QVariant
 from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import QDialog, QMessageBox
 from Constants import GemHotkeyValues, ServerCodes
 from Settings import Settings
-from configparser import DEFAULTSECT, NoOptionError, RawConfigParser
+from configparser import DEFAULTSECT, RawConfigParser
 from re import compile
 import os
 
@@ -103,13 +103,11 @@ class QuickbarDialog(QDialog, Ui_QuickbarDialog):
                     if slot.isCrafted() and slot.isUtilized():
                         self.CraftableItems[location].setCheckState(Qt.Checked)
 
-        self.setCrafterPath()
         self.getCrafterList()
         self.changeItemSelection()
         self.CloseButton.setFocus()
 
     def initControls(self):
-        self.BrowseButton.clicked.connect(self.changeCrafterPath)
         self.ChestCheckBox.clicked.connect(self.changeItemSelection)
         self.ArmsCheckBox.clicked.connect(self.changeItemSelection)
         self.HeadCheckBox.clicked.connect(self.changeItemSelection)
@@ -126,24 +124,14 @@ class QuickbarDialog(QDialog, Ui_QuickbarDialog):
         self.CloseButton.clicked.connect(self.accept)
 
 # =============================================== #
-#                  SETTER METHODS                 #
-# =============================================== #
-
-    def setCrafterPath(self):
-        self.CrafterPath.setText(self.getCrafterPath())
-        self.CrafterPath.setCursorPosition(0)
-
-# =============================================== #
 #                  GETTER METHODS                 #
 # =============================================== #
 
-    def getCrafterPath(self):
-
-        try:  # OPTION MIGHT NOT EXIST ...
-            path = self.Settings.get('PATHS', 'CrafterPath')
-        except NoOptionError:
-            path = os.getenv('APPDATA') + '\\Electronic Arts\\Dark Age of Camelot\\'
-
+    @staticmethod
+    def getCrafterPath():
+        path = os.getenv('APPDATA')
+        path += '\\Electronic Arts'
+        path += '\\Dark Age of Camelot'
         return path
 
     def getCrafterList(self):
@@ -166,6 +154,15 @@ class QuickbarDialog(QDialog, Ui_QuickbarDialog):
         if self.TableModel.rowCount() == 1:
             self.CrafterTable.selectRow(0)
 
+    def getQuickbarNumber(self):
+        return self.QuickbarNum.value()
+
+    def getQuickbarRow(self):
+        return self.QuickbarRow.value() - 1
+
+    def getQuickbarStart(self):
+        return self.QuickbarStart.value() - 1
+
     def getGemCount(self):
         self.GemCount = 0
         for item in self.ItemExportList.values():
@@ -175,20 +172,6 @@ class QuickbarDialog(QDialog, Ui_QuickbarDialog):
 # =============================================== #
 #                  CHANGE METHODS                 #
 # =============================================== #
-
-    # TODO: DISABLE PATH CHANGES
-    def changeCrafterPath(self):
-        options = QFileDialog.Options()
-        path = QFileDialog.getExistingDirectory(
-            QFileDialog(), "Select a New Path", self.getCrafterPath(), options = options)
-
-        if path in ('', None):
-            return
-
-        path = os.path.normpath(path)
-        self.Settings.set('PATHS', 'CrafterPath', path)
-        self.setCrafterPath()
-        self.getCrafterList()
 
     def changeCrafterSelection(self):
         self.Selection = self.CrafterTable.selectedIndexes()
@@ -210,9 +193,9 @@ class QuickbarDialog(QDialog, Ui_QuickbarDialog):
         if len(self.Selection) == 0 or self.GemCount == 0:
             return
 
-        bar = (self.QuickbarNum.value() - 1) if (self.QuickbarNum.value() != 1) else ''
+        index = (self.getQuickbarRow() * 10) + self.getQuickbarStart()
+        number = self.getQuickbarNumber() if self.getQuickbarNumber() != 1 else ''
         file = self.TableModel.data(self.TableModel.index(self.Selection[0].row(), 0), Qt.UserRole)
-        index = ((self.QuickbarRow.value() - 1) * 10) + (self.QuickbarStart.value() - 1)
 
         if (100 - index) < self.GemCount:
             QMessageBox.warning(
@@ -244,7 +227,7 @@ class QuickbarDialog(QDialog, Ui_QuickbarDialog):
 
         with open(file, 'w') as document:
             for string in button_strings:
-                config.set(f'Quickbar{bar}', f'Hotkey_{index}', string)
+                config.set(f'Quickbar{number}', f'Hotkey_{index}', string)
                 index += 1
             config.write(document)
 
