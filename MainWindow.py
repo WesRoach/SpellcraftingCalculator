@@ -1409,10 +1409,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def setCurrentItem(self, item, location):
         self.ItemAttributeList[location] = item
 
+    # TODO: SAVE CHANGE ...
     def setDistanceToCap(self):
         self.restoreItem(self.getItem())
         self.calculate()
 
+    # TODO: SAVE CHANGE ...
     def setUnusableSkills(self):
         self.restoreItem(self.getItem())
         self.calculate()
