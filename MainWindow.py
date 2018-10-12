@@ -492,7 +492,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         width = fm.width('Necromancer')
         width += cm.left() + cm.right()
         width += gm.left() + gm.right()
-        width += ch + iw + sw + fw * 4 + 10
+        width += ch + (fw * 4) + iw + sw + 10
         self.ItemRestrictionsGroup.setFixedWidth(width)
 
         width = test_font.size(Qt.TextSingleLine, "1999.9", tabArray = None).width()
