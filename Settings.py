@@ -31,7 +31,7 @@ class Settings(Singleton):
             if not os.path.exists(os.path.join(path, directory)):
                 os.mkdir(os.path.join(path, directory))
 
-        sections = ('GENERAL', 'PATHS')
+        sections = ('GENERAL', 'PATHS', 'GEOMETRY')
         for section in sections:
             self.Settings.add_section(section)
 

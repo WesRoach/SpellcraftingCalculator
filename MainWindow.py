@@ -12,6 +12,7 @@ from Item import Item
 from QuickbarDialog import QuickbarDialog
 from ReportDialog import ReportDialog
 from Settings import Settings
+from configparser import NoOptionError
 from lxml import etree
 import os
 import re
@@ -501,6 +502,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.StatusBar.setStyleSheet('QStatusBar::item {border: None;}')
         self.StatusBar.addPermanentWidget(QLabel('Build Utility: '))
         self.StatusBar.addPermanentWidget(self.BuildUtility)
+
+        try:  # OPTION MIGHT NOT EXIST ...
+            saved_state = self.Settings.get('GEOMETRY', 'Geometry')
+            self.restoreGeometry(bytes(saved_state, encoding = 'UTF8'))
+        except NoOptionError:
+            pass
 
     def initialize(self, new_template = True):
         self.TemplateName = None
@@ -1409,13 +1416,15 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def setCurrentItem(self, item, location):
         self.ItemAttributeList[location] = item
 
-    # TODO: SAVE CHANGE ...
     def setDistanceToCap(self):
+        new_state = self.DistanceToCap.isChecked()
+        self.Settings.set('GENERAL', 'DistanceToCap', f'{new_state}')
         self.restoreItem(self.getItem())
         self.calculate()
 
-    # TODO: SAVE CHANGE ...
     def setUnusableSkills(self):
+        new_state = self.UnusableSkills.isChecked()
+        self.Settings.set('GENERAL', 'UnusableSkills', f'{new_state}')
         self.restoreItem(self.getItem())
         self.calculate()
 
@@ -1468,7 +1477,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             if class_skill.split(None)[0] != 'All':
                 return str(class_skill)
 
-    # TODO: LIST OF VALUES ...
+    # TODO: USE LIST OF VALUES ...
     def getComboBoxWidth(self, value):
         cb = self.CharacterRealm
         const_values = 4 + 2
@@ -1482,7 +1491,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         width += const_values + scroll_width + frame_width * 2
         return width
 
-    # TODO: LIST OF VALUES ...
+    # TODO: USE LIST OF VALUES ...
     def getLineEditWidth(self, value):
         le = self.CharacterName
         const_values = 4 + 2
@@ -2114,6 +2123,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 event.accept()
             if action == QMessageBox.Cancel:
                 event.ignore()
+
+        new_state = str(self.saveGeometry())
+        self.Settings.set('GEOMETRY', 'Geometry', new_state)
 
         # SAVE SETTINGS ...
         self.Settings.save()
