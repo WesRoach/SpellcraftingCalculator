@@ -4,6 +4,7 @@ from PyQt5 import uic
 from PyQt5.Qt import Qt, QIcon
 from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import QDialog, QFileDialog
+from configparser import NoOptionError
 from Constants import GemMaterialsOrder
 from lxml import etree
 
@@ -32,6 +33,12 @@ class ReportDialog(QDialog, Ui_ReportDialog):
     def initLayout(self):
         self.setWindowTitle('Report Window')
         self.setWindowIcon(QIcon(None))
+
+        try:  # OPTION MIGHT NOT EXIST ...
+            saved_state = self.Settings.get('GEOMETRY', 'ReportGeometry')
+            self.restoreGeometry(bytes(saved_state, encoding = 'UTF8'))
+        except NoOptionError:
+            pass
 
     def initControls(self):
         self.CloseButton.clicked.connect(self.accept)
@@ -121,3 +128,18 @@ class ReportDialog(QDialog, Ui_ReportDialog):
 
         with open(filename, 'wb') as document:
             document.write(etree.tostring(self.RawHTMLReport, pretty_print = True, method = 'html'))
+
+# =============================================== #
+#              MISCELLANEOUS METHODS              #
+# =============================================== #
+
+    def mousePressEvent(self, event):
+        try:  # NOT ALL WIDGETS HAVE 'clearFocus()' ...
+            self.focusWidget().clearFocus()
+        except AttributeError:
+            pass
+
+    def closeEvent(self, event):
+        new_state = str(self.saveGeometry())
+        self.Settings.set('GEOMETRY', 'ReportGeometry', new_state)
+        event.accept()

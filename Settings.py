@@ -45,6 +45,11 @@ class Settings(Singleton):
         self.Settings.set('PATHS', 'DatabasePath', os.path.join(path, 'database'))
         self.Settings.set('PATHS', 'TemplatePath', os.path.join(path, 'templates'))
 
+        # DEFAULTS FOR 'GEOMETRY' SECTION ...
+        self.Settings.set('GEOMETRY', 'MainWindowGeometry', '')
+        self.Settings.set('GEOMETRY', 'QuickbarGeometry', '')
+        self.Settings.set('GEOMETRY', 'ReportGeometry', '')
+
     def set(self, section, option, value):
         self.Settings.set(section, option, value)
         self.save()
