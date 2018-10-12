@@ -34,6 +34,8 @@ class ReportDialog(QDialog, Ui_ReportDialog):
         self.setWindowTitle('Report Window')
         self.setWindowIcon(QIcon(None))
 
+        # TODO: RETURNS FALSE, NOT WORKING ...
+
         try:  # OPTION MIGHT NOT EXIST ...
             saved_state = self.Settings.get('GEOMETRY', 'ReportGeometry')
             self.restoreGeometry(bytes(saved_state, encoding = 'UTF8'))

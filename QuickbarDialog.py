@@ -108,6 +108,8 @@ class QuickbarDialog(QDialog, Ui_QuickbarDialog):
         self.changeItemSelection()
         self.CloseButton.setFocus()
 
+        # TODO: RETURNS FALSE, NOT WORKING ...
+
         try:  # OPTION MIGHT NOT EXIST ...
             saved_state = self.Settings.get('GEOMETRY', 'QuickbarGeometry')
             self.restoreGeometry(bytes(saved_state, encoding = 'UTF8'))
