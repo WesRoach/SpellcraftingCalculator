@@ -144,4 +144,3 @@ class ReportDialog(QDialog, Ui_ReportDialog):
     def closeEvent(self, event):
         new_state = str(self.saveGeometry())
         self.Settings.set('GEOMETRY', 'ReportGeometry', new_state)
-        event.accept()

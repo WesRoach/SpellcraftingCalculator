@@ -270,4 +270,3 @@ class QuickbarDialog(QDialog, Ui_QuickbarDialog):
     def closeEvent(self, event):
         new_state = str(self.saveGeometry())
         self.Settings.set('GEOMETRY', 'QuickbarGeometry', new_state)
-        event.accept()
