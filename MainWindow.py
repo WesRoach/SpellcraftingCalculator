@@ -503,6 +503,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.StatusBar.addPermanentWidget(QLabel('Build Utility: '))
         self.StatusBar.addPermanentWidget(self.BuildUtility)
 
+        # TODO: NO WORKING, NOT SURE WHY ...
         try:  # OPTION MIGHT NOT EXIST ...
             saved_state = self.Settings.get('GEOMETRY', 'Geometry')
             self.restoreGeometry(bytes(saved_state, encoding = 'UTF8'))
