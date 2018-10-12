@@ -176,6 +176,7 @@ class QuickbarDialog(QDialog, Ui_QuickbarDialog):
 #                  CHANGE METHODS                 #
 # =============================================== #
 
+    # TODO: DISABLE PATH CHANGES
     def changeCrafterPath(self):
         options = QFileDialog.Options()
         path = QFileDialog.getExistingDirectory(
