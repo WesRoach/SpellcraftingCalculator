@@ -31,7 +31,7 @@ class Settings(Singleton):
             if not os.path.exists(os.path.join(path, directory)):
                 os.mkdir(os.path.join(path, directory))
 
-        sections = ('GENERAL', 'PATHS', 'GEOMETRY')
+        sections = ('GENERAL', 'PATHS', 'MAIN', 'QUICKBAR', 'REPORT')
         for section in sections:
             self.Settings.add_section(section)
 
@@ -45,10 +45,26 @@ class Settings(Singleton):
         self.Settings.set('PATHS', 'DatabasePath', os.path.join(path, 'database'))
         self.Settings.set('PATHS', 'TemplatePath', os.path.join(path, 'templates'))
 
-        # DEFAULTS FOR 'GEOMETRY' SECTION ...
-        self.Settings.set('GEOMETRY', 'MainWindowGeometry', '')
-        self.Settings.set('GEOMETRY', 'QuickbarGeometry', '')
-        self.Settings.set('GEOMETRY', 'ReportGeometry', '')
+        # DEFAULTS FOR 'MAIN' SECTION ...
+        self.Settings.set('MAIN', 'WindowX', '')
+        self.Settings.set('MAIN', 'WindowY', '')
+        self.Settings.set('MAIN', 'WindowW', '')
+        self.Settings.set('MAIN', 'WindowH', '')
+        self.Settings.set('MAIN', 'Maximized', '')
+
+        # DEFAULTS FOR 'QUICKBAR' SECTION ...
+        self.Settings.set('QUICKBAR', 'WindowX', '')
+        self.Settings.set('QUICKBAR', 'WindowY', '')
+        self.Settings.set('QUICKBAR', 'WindowW', '')
+        self.Settings.set('QUICKBAR', 'WindowH', '')
+        self.Settings.set('QUICKBAR', 'Maximized', '')
+
+        # DEFAULTS FOR 'REPORT' SECTION ...
+        self.Settings.set('REPORT', 'WindowX', '')
+        self.Settings.set('REPORT', 'WindowY', '')
+        self.Settings.set('REPORT', 'WindowW', '')
+        self.Settings.set('REPORT', 'WindowH', '')
+        self.Settings.set('REPORT', 'Maximized', '')
 
     def set(self, section, option, value):
         self.Settings.set(section, option, value)
