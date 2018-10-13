@@ -503,14 +503,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.StatusBar.addPermanentWidget(QLabel('Build Utility: '))
         self.StatusBar.addPermanentWidget(self.BuildUtility)
 
-        # TODO: RETURNS FALSE, NOT WORKING ...
-
-        try:  # OPTION MIGHT NOT EXIST ...
-            saved_state = self.Settings.get('GEOMETRY', 'MainWindowGeometry')
-            self.restoreGeometry(bytes(saved_state, encoding = 'UTF8'))
-        except NoOptionError:
-            pass
-
     def initialize(self, new_template = True):
         self.TemplateName = None
         self.TemplatePath = None
@@ -2125,9 +2117,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 event.accept()
             if action == QMessageBox.Cancel:
                 event.ignore()
-
-        new_state = str(self.saveGeometry())
-        self.Settings.set('GEOMETRY', 'MainWindowGeometry', new_state)
 
         # SAVE SETTINGS ...
         self.Settings.save()

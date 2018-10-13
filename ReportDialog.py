@@ -34,14 +34,6 @@ class ReportDialog(QDialog, Ui_ReportDialog):
         self.setWindowTitle('Report Window')
         self.setWindowIcon(QIcon(None))
 
-        # TODO: RETURNS FALSE, NOT WORKING ...
-
-        try:  # OPTION MIGHT NOT EXIST ...
-            saved_state = self.Settings.get('GEOMETRY', 'ReportGeometry')
-            self.restoreGeometry(bytes(saved_state, encoding = 'UTF8'))
-        except NoOptionError:
-            pass
-
     def initControls(self):
         self.CloseButton.clicked.connect(self.accept)
         self.ExportHTMLButton.clicked.connect(self.exportToHTML)
@@ -140,7 +132,3 @@ class ReportDialog(QDialog, Ui_ReportDialog):
             self.focusWidget().clearFocus()
         except AttributeError:
             pass
-
-    def closeEvent(self, event):
-        new_state = str(self.saveGeometry())
-        self.Settings.set('GEOMETRY', 'ReportGeometry', new_state)

@@ -108,14 +108,6 @@ class QuickbarDialog(QDialog, Ui_QuickbarDialog):
         self.changeItemSelection()
         self.CloseButton.setFocus()
 
-        # TODO: RETURNS FALSE, NOT WORKING ...
-
-        try:  # OPTION MIGHT NOT EXIST ...
-            saved_state = self.Settings.get('GEOMETRY', 'QuickbarGeometry')
-            self.restoreGeometry(bytes(saved_state, encoding = 'UTF8'))
-        except NoOptionError:
-            pass
-
     def initControls(self):
         self.ChestCheckBox.clicked.connect(self.changeItemSelection)
         self.ArmsCheckBox.clicked.connect(self.changeItemSelection)
@@ -266,7 +258,3 @@ class QuickbarDialog(QDialog, Ui_QuickbarDialog):
             self.focusWidget().clearFocus()
         except AttributeError:
             pass
-
-    def closeEvent(self, event):
-        new_state = str(self.saveGeometry())
-        self.Settings.set('GEOMETRY', 'QuickbarGeometry', new_state)
