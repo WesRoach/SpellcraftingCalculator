@@ -196,6 +196,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def initLayout(self):
         self.setWindowTitle(f"Kort's Spellcrafting Calculator - {self.BuildDate}")
 
+        # TODO: RESTORE WINDOW POSITION, SIZE, AND STATE ...
+
         saved_state = int(self.Settings.get('GENERAL', 'ToolbarSize'))
         for action in self.ToolbarMenu.actions():
             if action.data() == saved_state:
