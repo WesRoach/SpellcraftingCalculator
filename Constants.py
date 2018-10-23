@@ -519,6 +519,8 @@ ResistValues = (
 # =============================================== #
 #             FOCUS RELATED CONSTANTS             #
 # =============================================== #
+#      PATCH 1.125 REMOVED SINGLE LINE FOCUS      #
+# =============================================== #
 
 FocusList = {
 
@@ -527,43 +529,43 @@ FocusList = {
     'Albion': (
 
         'All Spell Lines',
-        'Body Magic',
-        'Cold Magic',
-        'Death Servant',
-        'Deathsight',
-        'Earth Magic',
-        'Fire Magic',
-        'Matter Magic',
-        'Mind Magic',
-        'Painworking',
-        'Spirit Magic',
-        'Wind Magic',
+        # 'Body Magic',
+        # 'Cold Magic',
+        # 'Death Servant',
+        # 'Deathsight',
+        # 'Earth Magic',
+        # 'Fire Magic',
+        # 'Matter Magic',
+        # 'Mind Magic',
+        # 'Painworking',
+        # 'Spirit Magic',
+        # 'Wind Magic',
     ),
 
     'Hibernia': (
         'All Spell Lines',
-        'Arboreal Path',
-        'Creeping Path',
-        'Enchantments',
-        'Ethereal Shriek',
-        'Light',
-        'Mana',
-        'Mentalism',
-        'Phantasmal Wail',
-        'Spectral Guard',
-        'Verdant Path',
-        'Void',
+        # 'Arboreal Path',
+        # 'Creeping Path',
+        # 'Enchantments',
+        # 'Ethereal Shriek',
+        # 'Light',
+        # 'Mana',
+        # 'Mentalism',
+        # 'Phantasmal Wail',
+        # 'Spectral Guard',
+        # 'Verdant Path',
+        # 'Void',
     ),
 
     'Midgard': (
 
         'All Spell Lines',
-        'Bone Army',
-        'Cursing',
-        'Darkness',
-        'Runecarving',
-        'Summoning',
-        'Suppression',
+        # 'Bone Army',
+        # 'Cursing',
+        # 'Darkness',
+        # 'Runecarving',
+        # 'Summoning',
+        # 'Suppression',
     ),
 }
 
