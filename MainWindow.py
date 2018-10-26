@@ -12,7 +12,6 @@ from Item import Item
 from QuickbarDialog import QuickbarDialog
 from ReportDialog import ReportDialog
 from Settings import Settings
-from configparser import NoOptionError
 from lxml import etree
 import os
 import re
@@ -27,7 +26,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.setupUi(self)
 
         # BUILD - MAJOR.YEAR.MONTHDAY ...
-        self.BuildDate = "3.18.1020 (Alpha)"
+        self.BuildDate = "3.18.1026 (Alpha)"
 
         font = QFont()
         font.setFamily("Trebuchet MS")
