@@ -25,7 +25,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         QMainWindow.__init__(self, parent, flags)
         self.setupUi(self)
 
-        # BUILD - MAJOR.YEAR.MONTHDAY ....
+        # BUILD - MAJOR.YEAR.MONTHDAY ...
         self.BuildDate = "3.18.1026 (Alpha)"
 
         font = QFont()
