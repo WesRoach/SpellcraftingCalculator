@@ -2,7 +2,7 @@
 
 from PyQt5 import uic
 from PyQt5.Qt import QAction, Qt, QKeySequence
-from PyQt5.QtCore import QSize, QModelIndex, QRegExp, QVariant
+from PyQt5.QtCore import QEvent, QSize, QModelIndex, QRegExp, QVariant
 from PyQt5.QtGui import QFont, QFontMetrics, QIcon, QRegExpValidator
 from PyQt5.QtWidgets import QFileDialog, QLabel, QListWidgetItem, QMainWindow, QMenu, QMessageBox, QToolBar, QTreeWidgetItem, QTreeWidgetItemIterator, QStyle
 from Character import AllBonusList, ClassList, ItemTypes, Races
@@ -26,12 +26,15 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.setupUi(self)
 
         # BUILD - MAJOR.YEAR.MONTHDAY ...
-        self.BuildDate = "3.18.1026 (Alpha)"
+        self.BuildDate = "3.18.1216 (Alpha)"
 
         font = QFont()
         font.setFamily("Trebuchet MS")
         font.setPointSize(8)
         self.setFont(font)
+
+        self.MinWindowWidth = self.width()
+        self.MinWidownHeight = self.height()
 
         self.Settings = Settings()
         self.Settings.load()
@@ -195,7 +198,18 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def initLayout(self):
         self.setWindowTitle(f"Kort's Spellcrafting Calculator - {self.BuildDate}")
 
-        # TODO: RESTORE WINDOW POSITION, SIZE, AND STATE ...
+        try:  # WINDOW GEOMETRY MIGHT NOT BE SET ...
+            windowx = int(self.Settings.get('MAIN', 'WindowX'))
+            windowy = int(self.Settings.get('MAIN', 'WindowY'))
+            windoww = int(self.Settings.get('MAIN', 'WindowW'))
+            windowh = int(self.Settings.get('MAIN', 'WindowH'))
+            self.resize(windoww, windowh)
+            self.move(windowx, windowy)
+        except ValueError:
+            pass
+
+        saved_state = self.Settings.get('MAIN', 'Maximized') in 'True'
+        self.setWindowState(Qt.WindowMaximized if saved_state else Qt.WindowNoState)
 
         saved_state = int(self.Settings.get('GENERAL', 'ToolbarSize'))
         for action in self.ToolbarMenu.actions():
@@ -333,6 +347,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.AmountEdit[index].textEdited[str].connect(self.changeEffectAmount)
             self.AmountEdit[index].setValidator(int_validator)
             self.AmountEdit[index].setFixedWidth(width)
+
+            # CENTER ENTRIES FOR NOW ...
+            self.AmountEdit[index].setAlignment(Qt.AlignCenter)
 
         for index in range(0, 5):
             self.AmountStatic.append(getattr(self, 'AmountStatic%d' % index))
@@ -1751,6 +1768,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         elif slot.isDropped():
             self.EffectType[index].insertItems(0, DropTypeList)
 
+        # TODO: MAKE SURE ITEM IS A STAFF ...
         # REMOVE FOCUS FROM NON-STAFF LOCATIONS ...
         if self.getItem().getLocation() != 'Two-Handed':
             self.EffectType[index].removeItem(self.EffectType[index].findText('Focus'))
@@ -2083,12 +2101,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         current_values = etree.tostring(self.exportAsXML(None, True, False), encoding = 'UTF-8')
         return initial_values != current_values
 
-    def mousePressEvent(self, event):
-        try:  # NOT ALL WIDGETS HAVE 'clearFocus()' ...
-            self.focusWidget().clearFocus()
-        except AttributeError:
-            pass
-
     def setToolbarOptions(self, selection):
         for action in self.ToolbarMenu.actions():
             action.setChecked(action.data() == selection.data())
@@ -2105,6 +2117,28 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         index = self.SkillsView.model().index(self.SkillsView.model().rowCount() - 1, 0, QModelIndex())
         self.SkillsView.model().setData(index, QVariant(bonus), Qt.DisplayRole)
         self.SkillsView.model().setData(index, QVariant(group), Qt.UserRole)
+
+# =============================================== #
+#                OVERRIDE METHODS                 #
+# =============================================== #
+
+    def mousePressEvent(self, event):
+        try:  # NOT ALL WIDGETS HAVE 'clearFocus()' ...
+            self.focusWidget().clearFocus()
+        except AttributeError:
+            pass
+
+    def moveEvent(self, event):
+        self.Settings.set('MAIN', 'WindowX', str(self.x()), False)
+        self.Settings.set('MAIN', 'WindowY', str(self.y()), False)
+
+    def resizeEvent(self, event):
+        self.Settings.set('MAIN', 'WindowW', str(self.width()), False)
+        self.Settings.set('MAIN', 'WindowH', str(self.height()), False)
+
+    def changeEvent(self, event):
+        if event.type() == QEvent.WindowStateChange:
+            pass
 
     def closeEvent(self, event):
         if self.templateWasModified():
