@@ -2128,17 +2128,22 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         except AttributeError:
             pass
 
+    # TODO: CHECK IF WINDOW IS MAXIMIZED ...
     def moveEvent(self, event):
         self.Settings.set('MAIN', 'WindowX', str(self.x()), False)
         self.Settings.set('MAIN', 'WindowY', str(self.y()), False)
 
+    # TODO: CHECK IF WINDOW IS MAXIMIZED ...
     def resizeEvent(self, event):
         self.Settings.set('MAIN', 'WindowW', str(self.width()), False)
         self.Settings.set('MAIN', 'WindowH', str(self.height()), False)
 
     def changeEvent(self, event):
         if event.type() == QEvent.WindowStateChange:
-            pass
+            if event.oldState() != Qt.WindowMaximized:
+                print("The Window is MAXIMIZED")
+            else:
+                print("The Window is MINIMIZED")
 
     def closeEvent(self, event):
         if self.templateWasModified():
