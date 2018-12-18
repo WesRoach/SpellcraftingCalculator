@@ -26,7 +26,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.setupUi(self)
 
         # BUILD - MAJOR.YEAR.MONTHDAY ...
-        self.BuildDate = "3.18.1216 (Alpha)"
+        self.BuildDate = "3.18.1218 (Alpha)"
 
         font = QFont()
         font.setFamily("Trebuchet MS")
