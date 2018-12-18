@@ -195,8 +195,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def initLayout(self):
         self.setWindowTitle(f"Kort's Spellcrafting Calculator - {self.BuildDate}")
 
-        wg = eval(self.Settings.get('MAIN', 'WindowG'))
-        self.restoreGeometry(wg)
+        try:  # SETTING MIGHT NOT EXIST ...
+            geometry = eval(self.Settings.get('MAIN', 'Geometry'))
+            self.restoreGeometry(geometry)
+        except SyntaxError:
+            pass
 
         saved_state = int(self.Settings.get('GENERAL', 'ToolbarSize'))
         for action in self.ToolbarMenu.actions():
@@ -2116,23 +2119,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             pass
 
     def closeEvent(self, event):
-        wx = str(self.pos().x())
-        wy = str(self.pos().y())
-        ww = str(self.geometry().width())
-        wh = str(self.geometry().height())
-        ws = str(self.saveState())
-        wg = str(self.saveGeometry())
-        wm = str(self.isMaximized())
+        geometry = str(self.saveGeometry())
 
-        if not self.isMaximized():
-            self.Settings.set('MAIN', 'WindowX', wx)
-            self.Settings.set('MAIN', 'WindowY', wy)
-            self.Settings.set('MAIN', 'WindowW', ww)
-            self.Settings.set('MAIN', 'WindowH', wh)
-            self.Settings.set('MAIN', 'WindowG', wg)
-
-        self.Settings.set('MAIN', 'WindowS', ws)
-        self.Settings.set('MAIN', 'WindowM', wm)
+        # SAVE THE WINDOW GEOMETRY ...
+        self.Settings.set('MAIN', 'Geometry', geometry)
 
         # SAVE ALL SETTINGS ...
         self.Settings.save()
