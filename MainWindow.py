@@ -33,9 +33,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         font.setPointSize(8)
         self.setFont(font)
 
-        self.MinWindowWidth = self.width()
-        self.MinWidownHeight = self.height()
-
         self.Settings = Settings()
         self.Settings.load()
 
@@ -198,18 +195,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def initLayout(self):
         self.setWindowTitle(f"Kort's Spellcrafting Calculator - {self.BuildDate}")
 
-        try:  # WINDOW GEOMETRY MIGHT NOT BE SET ...
-            windowx = int(self.Settings.get('MAIN', 'WindowX'))
-            windowy = int(self.Settings.get('MAIN', 'WindowY'))
-            windoww = int(self.Settings.get('MAIN', 'WindowW'))
-            windowh = int(self.Settings.get('MAIN', 'WindowH'))
-            self.resize(windoww, windowh)
-            self.move(windowx, windowy)
-        except ValueError:
-            pass
-
-        saved_state = self.Settings.get('MAIN', 'Maximized') in 'True'
-        self.setWindowState(Qt.WindowMaximized if saved_state else Qt.WindowNoState)
+        wg = eval(self.Settings.get('MAIN', 'WindowG'))
+        self.restoreGeometry(wg)
 
         saved_state = int(self.Settings.get('GENERAL', 'ToolbarSize'))
         for action in self.ToolbarMenu.actions():
@@ -2128,24 +2115,28 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         except AttributeError:
             pass
 
-    # TODO: CHECK IF WINDOW IS MAXIMIZED ...
-    def moveEvent(self, event):
-        self.Settings.set('MAIN', 'WindowX', str(self.x()), False)
-        self.Settings.set('MAIN', 'WindowY', str(self.y()), False)
-
-    # TODO: CHECK IF WINDOW IS MAXIMIZED ...
-    def resizeEvent(self, event):
-        self.Settings.set('MAIN', 'WindowW', str(self.width()), False)
-        self.Settings.set('MAIN', 'WindowH', str(self.height()), False)
-
-    def changeEvent(self, event):
-        if event.type() == QEvent.WindowStateChange:
-            if event.oldState() != Qt.WindowMaximized:
-                print("The Window is MAXIMIZED")
-            else:
-                print("The Window is MINIMIZED")
-
     def closeEvent(self, event):
+        wx = str(self.pos().x())
+        wy = str(self.pos().y())
+        ww = str(self.geometry().width())
+        wh = str(self.geometry().height())
+        ws = str(self.saveState())
+        wg = str(self.saveGeometry())
+        wm = str(self.isMaximized())
+
+        if not self.isMaximized():
+            self.Settings.set('MAIN', 'WindowX', wx)
+            self.Settings.set('MAIN', 'WindowY', wy)
+            self.Settings.set('MAIN', 'WindowW', ww)
+            self.Settings.set('MAIN', 'WindowH', wh)
+            self.Settings.set('MAIN', 'WindowG', wg)
+
+        self.Settings.set('MAIN', 'WindowS', ws)
+        self.Settings.set('MAIN', 'WindowM', wm)
+
+        # SAVE ALL SETTINGS ...
+        self.Settings.save()
+
         if self.templateWasModified():
             action = self.saveTemplatePrompt()
             if action == QMessageBox.Yes:
@@ -2153,10 +2144,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 if self.templateWasModified():
                     event.ignore()
             if action == QMessageBox.No:
-                self.Settings.save()
                 event.accept()
             if action == QMessageBox.Cancel:
                 event.ignore()
-
-        # SAVE SETTINGS ...
-        self.Settings.save()
