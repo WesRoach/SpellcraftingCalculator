@@ -50,22 +50,22 @@ class Settings(Singleton):
         self.Settings.set('MAIN', 'WindowY', '')
         self.Settings.set('MAIN', 'WindowW', '')
         self.Settings.set('MAIN', 'WindowH', '')
-        self.Settings.set('MAIN', 'WindowG', '')
-        self.Settings.set('MAIN', 'WindowM', 'False')
+        self.Settings.set('MAIN', 'Geometry', '')
+        self.Settings.set('MAIN', 'Maximized', 'False')
 
         # DEFAULTS FOR 'DATABASE' SECTION ...
         self.Settings.set('DATABASE', 'WindowX', '')
         self.Settings.set('DATABASE', 'WindowY', '')
         self.Settings.set('DATABASE', 'WindowW', '')
         self.Settings.set('DATABASE', 'WindowH', '')
-        self.Settings.set('DATABASE', 'WindowG', '')
+        self.Settings.set('DATABASE', 'Geometry', '')
 
         # DEFAULTS FOR 'QUICKBAR' SECTION ...
         self.Settings.set('QUICKBAR', 'WindowX', '')
         self.Settings.set('QUICKBAR', 'WindowY', '')
         self.Settings.set('QUICKBAR', 'WindowW', '')
         self.Settings.set('QUICKBAR', 'WindowH', '')
-        self.Settings.set('QUICKBAR', 'WindowG', '')
+        self.Settings.set('QUICKBAR', 'Geometry', '')
 
         # DEFAULTS FOR 'REPORT' SECTION ...
         self.Settings.set('REPORT', 'WindowX', '')
