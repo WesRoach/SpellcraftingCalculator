@@ -165,6 +165,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.menuBar().addMenu(self.HelpMenu)
 
     def initToolbar(self):
+        self.Toolbar.setMovable(False)
         self.Toolbar.setFloatable(False)
         self.Toolbar.addAction('New Template', self.newTemplate)
         self.Toolbar.addAction('Open Template', self.openTemplate)
