@@ -274,6 +274,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         width = test_font.size(Qt.TextSingleLine, "+5", tabArray = None).width()
         self.ResistGroup.layout().setColumnMinimumWidth(3, width)
 
+        self.SlotListTreeView.setContextMenuPolicy(Qt.CustomContextMenu)
+
         for key, locations in ItemTypes.items():
             parent = QTreeWidgetItem(self.SlotListTreeView, [key])
             parent.setFlags(parent.flags() & ~Qt.ItemIsUserCheckable & ~Qt.ItemIsSelectable)
@@ -585,6 +587,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ItemLeftHand.stateChanged.connect(self.changeItemLeftHand)
         self.SlotListTreeView.itemSelectionChanged.connect(self.changeItemSelection)
         self.SlotListTreeView.itemChanged.connect(self.changeItemState)
+        self.SlotListTreeView.customContextMenuRequested.connect(self.showContextMenu)
         self.ItemRestrictionsList.itemChanged.connect(self.changeItemRestrictions)
 
 
@@ -608,6 +611,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def showQuickbarDialog(self):
         Dialog = QuickbarDialog(self, Qt.WindowCloseButtonHint, self.ItemAttributeList)
         Dialog.exec_()
+
+    def showContextMenu(self):
+        pass
 
 # =============================================== #
 #                 XML PROCESSING                  #
@@ -2109,7 +2115,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.SkillsView.model().setData(index, QVariant(group), Qt.UserRole)
 
 # =============================================== #
-#                OVERRIDE METHODS                 #
+#                METHOD OVERRIDES                 #
 # =============================================== #
 
     def mousePressEvent(self, event):
