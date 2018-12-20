@@ -1764,7 +1764,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         elif slot.isDropped():
             self.EffectType[index].insertItems(0, DropTypeList)
 
-        # TODO: MAKE SURE ITEM IS A STAFF ...
         # REMOVE FOCUS FROM NON-STAFF LOCATIONS ...
         if self.getItem().getLocation() != 'Two-Handed':
             self.EffectType[index].removeItem(self.EffectType[index].findText('Focus'))
