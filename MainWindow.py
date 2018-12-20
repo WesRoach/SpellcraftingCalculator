@@ -26,7 +26,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.setupUi(self)
 
         # BUILD - MAJOR.YEAR.MONTHDAY ...
-        self.BuildDate = "3.18.1218 (Alpha)"
+        self.BuildDate = "3.18.1220 (Alpha)"
 
         font = QFont()
         font.setFamily("Trebuchet MS")
@@ -612,8 +612,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         Dialog = QuickbarDialog(self, Qt.WindowCloseButtonHint, self.ItemAttributeList)
         Dialog.exec_()
 
-    def showContextMenu(self):
-        pass
+    def showContextMenu(self, position):
+        self.EditMenu.exec(self.SlotListTreeView.mapToGlobal(position))
 
 # =============================================== #
 #                 XML PROCESSING                  #
