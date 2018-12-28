@@ -598,8 +598,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 # =============================================== #
 
     def showItemDatabase(self):
-        Dialog = ItemDatabaseDialog(self, Qt.WindowCloseButtonHint)
-        Dialog.exec_()
+        pass
 
     def showMaterialsReport(self):
         MaterialsReport = ReportDialog(self, Qt.WindowCloseButtonHint)
