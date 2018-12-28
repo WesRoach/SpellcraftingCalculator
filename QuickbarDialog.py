@@ -250,7 +250,7 @@ class QuickbarDialog(QDialog, Ui_QuickbarDialog):
             os.remove(file + '.bak')
 
 # =============================================== #
-#              MISCELLANEOUS METHODS              #
+#                METHOD OVERRIDES                 #
 # =============================================== #
 
     def mousePressEvent(self, event):

@@ -9,6 +9,7 @@ from Character import AllBonusList, ClassList, ItemTypes, Races
 from Constants import Cap, CraftedTypeList, CraftedEffectList, CraftedValuesList, DropTypeList, DropEffectList
 from Constants import EnhancedTypeList, EnhancedEffectList, EnhancedValuesList, MythicalBonusCap, PVEBonusCap, TOABonusCap
 from Item import Item
+from ItemDatabaseDialog import ItemDatabaseDialog
 from QuickbarDialog import QuickbarDialog
 from ReportDialog import ReportDialog
 from Settings import Settings
@@ -597,7 +598,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 # =============================================== #
 
     def showItemDatabase(self):
-        pass
+        Dialog = ItemDatabaseDialog(self, Qt.WindowCloseButtonHint)
+        Dialog.exec_()
 
     def showMaterialsReport(self):
         MaterialsReport = ReportDialog(self, Qt.WindowCloseButtonHint)
@@ -614,7 +616,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         Dialog.exec_()
 
     def showContextMenu(self, position):
-        self.EditMenu.exec(self.SlotListTreeView.mapToGlobal(position))
+        self.EditMenu.exec_(self.SlotListTreeView.mapToGlobal(position))
 
 # =============================================== #
 #                 XML PROCESSING                  #

@@ -124,7 +124,7 @@ class ReportDialog(QDialog, Ui_ReportDialog):
             document.write(etree.tostring(self.RawHTMLReport, pretty_print = True, method = 'html'))
 
 # =============================================== #
-#              MISCELLANEOUS METHODS              #
+#                METHOD OVERRIDES                 #
 # =============================================== #
 
     def mousePressEvent(self, event):
