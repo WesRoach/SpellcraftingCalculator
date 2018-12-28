@@ -9,7 +9,7 @@ from Character import AllBonusList, ClassList, ItemTypes, Races
 from Constants import Cap, CraftedTypeList, CraftedEffectList, CraftedValuesList, DropTypeList, DropEffectList
 from Constants import EnhancedTypeList, EnhancedEffectList, EnhancedValuesList, MythicalBonusCap, PVEBonusCap, TOABonusCap
 from Item import Item
-from ItemDatabaseDialog import ItemDatabaseDialog
+from DatabaseDialog import DatabaseDialog
 from QuickbarDialog import QuickbarDialog
 from ReportDialog import ReportDialog
 from Settings import Settings
@@ -122,7 +122,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.FileMenu.addAction('E&xit', self.close, QKeySequence(Qt.CTRL + Qt.Key_X))
 
         self.ItemLoadMenu.addAction('Item XML File ...', self.loadItem)
-        self.ItemLoadMenu.addAction('Item Database ...', self.showItemDatabase)
+        self.ItemLoadMenu.addAction('Item Database ...', self.showDatabaseDialog)
 
         self.EditMenu.addMenu(self.ItemLoadMenu)
         self.EditMenu.addAction('Save Item ...', self.saveItem)
@@ -597,7 +597,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 #             DIALOG & WINDOW METHODS             #
 # =============================================== #
 
-    def showItemDatabase(self):
+    # TODO: DOES DATABASE & METADATA EXIST? ...
+    def showDatabaseDialog(self):
         pass
 
     def showMaterialsReport(self):
