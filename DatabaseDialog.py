@@ -5,7 +5,7 @@ from PyQt5.Qt import QIcon, Qt
 from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import QDialog
 
-Ui_DatabaseDialog = uic.loadUiType(r'interface/ItemDatabaseDialog.ui')[0]
+Ui_DatabaseDialog = uic.loadUiType(r'interface/DatabaseDialog.ui')[0]
 
 
 class DatabaseDialog(QDialog, Ui_DatabaseDialog):
