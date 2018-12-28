@@ -9,7 +9,7 @@ Ui_ItemDatabaseDialog = uic.loadUiType(r'interface/ItemDatabaseDialog.ui')[0]
 
 
 class ItemDatabaseDialog(QDialog, Ui_ItemDatabaseDialog):
-    def __init__(self, parent = None, flags = Qt.Dialog, items = None):
+    def __init__(self, parent = None, flags = Qt.Dialog, slot = None):
         QDialog.__init__(self, parent, flags)
         self.setupUi(self)
 
