@@ -4,7 +4,6 @@ from PyQt5 import uic
 from PyQt5.Qt import QIcon, QModelIndex, Qt, QVariant
 from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import QDialog, QMessageBox
-from configparser import NoOptionError
 from Constants import GemHotkeyValues, ServerCodes
 from Settings import Settings
 from configparser import DEFAULTSECT, RawConfigParser
@@ -43,8 +42,6 @@ class QuickbarDialog(QDialog, Ui_QuickbarDialog):
         font.setFamily("Trebuchet MS")
         font.setPointSize(8)
         self.setFont(font)
-
-        self.Settings = Settings.getInstance()
 
         self.Selection = []
         self.GemCount = 0
