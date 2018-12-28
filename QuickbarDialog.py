@@ -5,7 +5,6 @@ from PyQt5.Qt import QIcon, QModelIndex, Qt, QVariant
 from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import QDialog, QMessageBox
 from Constants import GemHotkeyValues, ServerCodes
-from Settings import Settings
 from configparser import DEFAULTSECT, RawConfigParser
 from re import compile
 import os
