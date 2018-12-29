@@ -224,6 +224,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         dbl_regex = QRegExp('^(?:[0-9]{3}|[0-9][0-9]?(?:\.[0-9])?)$')
         dbl_validator = QRegExpValidator(dbl_regex)
 
+        self.CharacterRealm.insertItems(0, self.getRealms())
+
         # TODO: GET WIDTH FROM CLASS DICT ...
         width = self.getComboBoxWidth('Necromancer')
         self.CharacterName.setFixedWidth(width)
@@ -291,8 +293,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         width = self.ConfigurationGroup.sizeHint().width()
         self.SlotListTreeView.setMinimumWidth(width)
-
-        self.CharacterRealm.insertItems(0, self.getRealms())
 
         self.SwitchOnType = {
 
@@ -597,9 +597,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 #             DIALOG & WINDOW METHODS             #
 # =============================================== #
 
-    # TODO: DOES DATABASE & METADATA EXIST? ...
+    # TODO: DATABASE & METADATA EXIST? ...
     def showDatabaseDialog(self):
-        pass
+        QMessageBox.information(
+            self, 'Notice',
+            'This feature has not been implemented yet.',
+            QMessageBox.Ok, QMessageBox.Ok
+        )
+        return
 
     def showMaterialsReport(self):
         MaterialsReport = ReportDialog(self, Qt.WindowCloseButtonHint)
@@ -721,8 +726,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 # =============================================== #
 
     def showCharacterStat(self, stat, state):
-        if self.StatLabel[stat].isHidden() != state:
-            return
         self.StatLabel[stat].setVisible(state)
         self.StatValue[stat].setVisible(state)
         self.StatCap[stat].setVisible(state)
@@ -965,7 +968,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     # MOSTLY LEGACY CODE ...
     def summarize(self):
 
-        # BUG: CRASH HERE ...
         Level = int(self.getCharLevel())
 
         total = {
