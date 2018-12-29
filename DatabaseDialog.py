@@ -41,8 +41,7 @@ class DatabaseDialog(QDialog, Ui_DatabaseDialog):
         self.CloseButton.clicked.connect(self.accept)
 
     def initialize(self):
-        path = self.Settings.get('PATHS', 'DatabasePath')
-        files = [x for x in os.listdir(path) if x.endswith('.json')]
+        pass
 
 # =============================================== #
 #                METHOD OVERRIDES                 #

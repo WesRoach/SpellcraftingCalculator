@@ -599,8 +599,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     # TODO: DOES DATABASE & METADATA EXIST? ...
     def showDatabaseDialog(self):
-        Dialog = DatabaseDialog(self, Qt.WindowCloseButtonHint)
-        Dialog.exec_()
+        pass
 
     def showMaterialsReport(self):
         MaterialsReport = ReportDialog(self, Qt.WindowCloseButtonHint)
