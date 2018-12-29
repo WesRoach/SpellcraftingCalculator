@@ -3,16 +3,14 @@
 from PyQt5 import uic
 from PyQt5.Qt import QIcon, Qt
 from PyQt5.QtGui import QFont
-from PyQt5.QtWidgets import QDialog, QMessageBox
+from PyQt5.QtWidgets import QDialog
 from Settings import Settings
-import json
-import os
 
 Ui_DatabaseDialog = uic.loadUiType(r'interface/DatabaseDialog.ui')[0]
 
 
 class DatabaseDialog(QDialog, Ui_DatabaseDialog):
-    def __init__(self, parent=None, flags=Qt.Dialog, slot=None):
+    def __init__(self, parent = None, flags = Qt.Dialog,  slot = None):
         QDialog.__init__(self, parent, flags)
         self.setupUi(self)
 
@@ -27,7 +25,6 @@ class DatabaseDialog(QDialog, Ui_DatabaseDialog):
 
         self.initLayout()
         self.initControls()
-        self.initialize()
 
 # =============================================== #
 #       INTERFACE SETUP AND INITIALIZATION        #
@@ -39,9 +36,6 @@ class DatabaseDialog(QDialog, Ui_DatabaseDialog):
 
     def initControls(self):
         self.CloseButton.clicked.connect(self.accept)
-
-    def initialize(self):
-        pass
 
 # =============================================== #
 #                METHOD OVERRIDES                 #
