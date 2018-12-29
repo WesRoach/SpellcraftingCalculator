@@ -3,7 +3,7 @@
 from PyQt5 import uic
 from PyQt5.Qt import QIcon, Qt
 from PyQt5.QtGui import QFont
-from PyQt5.QtWidgets import QDialog
+from PyQt5.QtWidgets import QDialog, QMessageBox
 from Settings import Settings
 import json
 import os
@@ -42,12 +42,7 @@ class DatabaseDialog(QDialog, Ui_DatabaseDialog):
 
     def initialize(self):
         path = self.Settings.get('PATHS', 'DatabasePath')
-
-        # FileNotFoundError
-        with open(os.path.join(path, "ItemDatabase.json")) as document:
-
-            # KeyError
-            self.Database = json.load(document)['items']
+        files = [x for x in os.listdir(path) if x.endswith('.json')]
 
 # =============================================== #
 #                METHOD OVERRIDES                 #
