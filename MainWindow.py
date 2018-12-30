@@ -593,12 +593,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.SlotListTreeView.customContextMenuRequested.connect(self.showContextMenu)
         self.ItemRestrictionsList.itemChanged.connect(self.changeItemRestrictions)
 
-
 # =============================================== #
 #             DIALOG & WINDOW METHODS             #
 # =============================================== #
 
-    # TODO: DATABASE & METADATA EXIST? ...
     def showDatabaseDialog(self):
         QMessageBox.information(
             self, 'Notice',
