@@ -26,7 +26,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.setupUi(self)
 
         # BUILD - MAJOR.YEAR.MONTHDAY ...
-        self.BuildDate = "3.18.1230 (Alpha)"
+        self.Build = "3.18.1230 (Alpha)"
 
         font = QFont()
         font.setFamily("Trebuchet MS")
@@ -196,7 +196,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ItemSaveButton.clicked.connect(self.saveItem)
 
     def initLayout(self):
-        self.setWindowTitle(f"Kort's Spellcrafting Calculator - {self.BuildDate}")
+        self.setWindowTitle(f"Kort's Spellcrafting Calculator - {self.Build}")
 
         try:  # SETTING MIGHT NOT EXIST ...
             geometry = eval(self.Settings.get('MAIN', 'Geometry'))
