@@ -349,8 +349,7 @@ AllBonusList = {
 
         'Warlock': {
             'All Spell Lines': ('Cursing',),
-            'All Magic Skills': ('Cursing', 'Hexing',),
-            'No Skill Effect': ('Witchcraft',),
+            'All Magic Skills': ('Cursing', 'Hexing', 'Witchcraft',),
             'Races': t2(('Frostalf', 'Kobold', 'Norseman', 'Troll',)),
             'Acuity': ('Piety',),
         },

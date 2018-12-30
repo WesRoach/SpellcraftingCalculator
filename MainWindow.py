@@ -9,7 +9,6 @@ from Character import AllBonusList, ClassList, ItemTypes, Races
 from Constants import Cap, CraftedTypeList, CraftedEffectList, CraftedValuesList, DropTypeList, DropEffectList
 from Constants import EnhancedTypeList, EnhancedEffectList, EnhancedValuesList, MythicalBonusCap, PVEBonusCap, TOABonusCap
 from Item import Item
-from DatabaseDialog import DatabaseDialog
 from QuickbarDialog import QuickbarDialog
 from ReportDialog import ReportDialog
 from Settings import Settings
@@ -112,6 +111,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.FileMenu.addAction('Open Template ...', self.openTemplate)
         self.FileMenu.addAction('Save Template', self.saveTemplate)
         self.FileMenu.addAction('Save Template As ...', self.saveTemplateAs)
+        self.FileMenu.addSeparator()
+        self.FileMenu.addAction('Import from Chatlog ...', self.importFromChatlog)
         self.FileMenu.addSeparator()
         self.FileMenu.addAction('Export Gem\'s to Quickbar ...', self.showQuickbarDialog)
         self.FileMenu.addSeparator()
@@ -1954,6 +1955,15 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             'Do you want to save these changes?',
             QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel, QMessageBox.Cancel
         ); return prompt
+
+    # TODO: IMPLEMENT ...
+    def importFromChatlog(self):
+        QMessageBox.information(
+            self, 'Notice',
+            'This feature has not been implemented yet.',
+            QMessageBox.Ok, QMessageBox.Ok
+        )
+        return
 
     def newItem(self, action):
         selection = action.text().split(None)[0]

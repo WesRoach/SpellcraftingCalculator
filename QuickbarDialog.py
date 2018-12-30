@@ -212,7 +212,7 @@ class QuickbarDialog(QDialog, Ui_QuickbarDialog):
             for slot in [x for x in item.getSlotList() if x.isCrafted() and x.isUtilized()]:
 
                 try:  # HOTKEY MIGHT NOT EXIST ...
-                    gem_tier = slot.getGemIndex()
+                    gem_tier = slot.getGemIndex() + 1
                     gem_name = slot.getGemName(item.Realm).split(None, 1)[1]
                     gem_hotkey = GemHotkeyValues[item.Realm][gem_name]
                     button_strings.append('45,13%03d%02d,,-1' % (gem_hotkey, gem_tier))
@@ -234,6 +234,7 @@ class QuickbarDialog(QDialog, Ui_QuickbarDialog):
             QMessageBox.Ok, QMessageBox.Ok
         )
 
+    # TODO: INFORM USER OF SUCCESS ...
     def restoreQuickbar(self):
         if len(self.Selection) == 0: return
         index = self.TableModel.index(self.Selection[0].row(), 0)
