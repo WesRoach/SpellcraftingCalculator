@@ -2,7 +2,7 @@
 
 from PyQt5 import uic
 from PyQt5.Qt import QAction, Qt, QKeySequence
-from PyQt5.QtCore import QEvent, QSize, QModelIndex, QRegExp, QVariant
+from PyQt5.QtCore import QSize, QModelIndex, QRegExp, QVariant
 from PyQt5.QtGui import QFont, QFontMetrics, QIcon, QRegExpValidator
 from PyQt5.QtWidgets import QFileDialog, QLabel, QListWidgetItem, QMainWindow, QMenu, QMessageBox, QToolBar, QTreeWidgetItem, QTreeWidgetItemIterator, QStyle
 from Character import AllBonusList, ClassList, ItemTypes, Races
