@@ -234,7 +234,6 @@ class QuickbarDialog(QDialog, Ui_QuickbarDialog):
             QMessageBox.Ok, QMessageBox.Ok
         )
 
-    # TODO: INFORM USER OF SUCCESS ...
     def restoreQuickbar(self):
         if len(self.Selection) == 0: return
         index = self.TableModel.index(self.Selection[0].row(), 0)
@@ -245,6 +244,12 @@ class QuickbarDialog(QDialog, Ui_QuickbarDialog):
                 with open(file + '.bak', 'r') as backup:
                     document.write(backup.read())
             os.remove(file + '.bak')
+
+            QMessageBox.information(
+                self, 'Success!',
+                'Successfully restored Quickbar!',
+                QMessageBox.Ok, QMessageBox.Ok
+            )
 
 # =============================================== #
 #                METHOD OVERRIDES                 #
