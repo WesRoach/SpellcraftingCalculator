@@ -1,13 +1,14 @@
-# -*- mode: python -*-
-
-# block_cipher = None
-
-added_datas = [('./interface/*.ui', 'interface'),]
+extras = [
+    ('./images', 'images'),
+    ('./interface/*.ui', 'interface'),
+    ('./reports', 'reports'),
+    ]
 
 a = Analysis(
-    ['Spellcraft.py'],
+    ['Spellcraft.pyw'],
+    pathex = None,
     binaries = None,
-    datas = added_datas,
+    datas = extras,
     hiddenimports = None,
     hookspath = None,
     runtime_hooks = None,
