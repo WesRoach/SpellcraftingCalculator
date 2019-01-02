@@ -24,9 +24,6 @@ __all__ = [
     'ServerIgnCodes',
 ]
 
-UnusedList = ()
-UnusedValues = ()
-
 # =============================================== #
 #             SKILL RELATED CONSTANTS             #
 # =============================================== #
@@ -695,7 +692,7 @@ DropTypeList = (
 CraftedEffectList = {
 
     'All': {
-        'Unused': UnusedList,
+        'Unused': (),
         'Skill': (),
         'Attribute': CraftedAttributeList,
         'Resistance': CraftedResistanceList,
@@ -706,7 +703,7 @@ EnhancedEffectList = {
 
     'All': {
 
-        'Unused': UnusedList,
+        'Unused': (),
 
         'Skill': (
             'All Archery Skills',
@@ -760,7 +757,7 @@ EnhancedEffectList = {
 DropEffectList = {
 
     'All': {
-        'Unused': UnusedList,
+        'Unused': (),
         'Skill': (),
         'Attribute': DropAttributeList,
         'Attribute Cap': AttributeCapList,
@@ -794,7 +791,7 @@ for realm in CraftedEffectList.keys():
 
 CraftedValuesList = {
 
-    'Unused': UnusedValues,
+    'Unused': (),
     'Skill': SkillValues,
 
     'Attribute': {
@@ -816,7 +813,7 @@ CraftedValuesList = {
 
 EnhancedValuesList = {
 
-    'Unused': UnusedValues,
+    'Unused': (),
     'Skill': ('3',),
 
     'Attribute': {
