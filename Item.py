@@ -30,7 +30,7 @@ class Item:
         self.Database = False
         self.SlotList = self.createSlots()
 
-        if self.getParent() == 'Jewelery':
+        if self.getParent() == 'Jewelry':
             self.setEquipped(True)
         elif self.getParent() == 'Armor':
             self.setEquipped(True)
@@ -43,7 +43,7 @@ class Item:
             self.setLevel('51')
             self.setOrigin('Crafted')
 
-        if self.getParent() in ('Jewelery', 'Mythical') and self.getState() != 'Imported':
+        if self.getParent() in ('Jewelry', 'Mythical') and self.getState() != 'Imported':
             self.setType(ItemTypes[self.getParent()][location][realm][-1])
 
         if self.getLocation() == 'Left Hand':

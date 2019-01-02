@@ -26,7 +26,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.setupUi(self)
 
         # BUILD - MAJOR.YEAR.MONTHDAY ...
-        self.Build = "3.18.1231 (Alpha)"
+        self.Build = "3.19.0102 (Alpha)"
 
         font = QFont()
         font.setFamily("Trebuchet MS")
@@ -284,7 +284,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         for key, locations in ItemTypes.items():
             parent = QTreeWidgetItem(self.SlotListTreeView, [key])
             parent.setFlags(parent.flags() & ~Qt.ItemIsUserCheckable & ~Qt.ItemIsSelectable)
-            if key == 'Jewelery':
+            if key == 'Jewelry':
                 parent.setExpanded(True)
             for location in locations:
                 child = QTreeWidgetItem([location])
@@ -440,7 +440,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 self.ItemLeftHand
             ],
 
-            'Jewelery': [
+            'Jewelry': [
                 self.ItemDamageType,
                 self.ItemDamageTypeLabel,
                 self.ItemAFDPS,

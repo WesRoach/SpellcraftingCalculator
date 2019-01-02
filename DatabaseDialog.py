@@ -20,8 +20,8 @@ class DatabaseDialog(QDialog, Ui_DatabaseDialog):
         self.setFont(font)
 
         self.Settings = Settings.getInstance()
-        self.Database = list()
-        self.Metadata = dict()
+
+        locations = {}
 
         self.initLayout()
         self.initControls()

@@ -771,7 +771,7 @@ RangedTypes = {
 
 ItemTypes = {
 
-    'Jewelery': {
+    'Jewelry': {
 
         'Neck': {
             'All': ('Necklace',),
