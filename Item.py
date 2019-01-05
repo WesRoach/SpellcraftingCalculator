@@ -309,7 +309,8 @@ class Item:
         tree = etree.ElementTree(filename) if export else etree.parse(filename)
 
         # RETURN ERROR CODE ...
-        if tree.getroot().tag != 'Item': return -1
+        if tree.getroot().tag != 'Item':
+            return -1
 
         elements = tree.getroot().getchildren()
         for element in elements:
