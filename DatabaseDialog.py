@@ -19,6 +19,8 @@ class DatabaseDialog(QDialog, Ui_DatabaseDialog):
         font.setPointSize(8)
         self.setFont(font)
 
+        print(slot)
+
         self.Settings = Settings.getInstance()
 
         self.initLayout()
