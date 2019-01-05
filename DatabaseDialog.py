@@ -10,7 +10,7 @@ Ui_DatabaseDialog = uic.loadUiType(r'interface/DatabaseDialog.ui')[0]
 
 
 class DatabaseDialog(QDialog, Ui_DatabaseDialog):
-    def __init__(self, parent = None, flags = Qt.Dialog,  slot = None):
+    def __init__(self, parent = None, flags = Qt.Dialog,  location = None):
         QDialog.__init__(self, parent, flags)
         self.setupUi(self)
 
@@ -18,8 +18,6 @@ class DatabaseDialog(QDialog, Ui_DatabaseDialog):
         font.setFamily("Trebuchet MS")
         font.setPointSize(8)
         self.setFont(font)
-
-        print(slot)
 
         self.Settings = Settings.getInstance()
 
@@ -36,6 +34,22 @@ class DatabaseDialog(QDialog, Ui_DatabaseDialog):
 
     def initControls(self):
         self.CloseButton.clicked.connect(self.accept)
+        self.ItemListWidget.itemSelectionChanged.connect(self.changeItemSelection)
+
+    def initialize(self):
+        pass
+
+# =============================================== #
+#                  SETTER METHODS                 #
+# =============================================== #
+
+# =============================================== #
+#                  GETTER METHODS                 #
+# =============================================== #
+
+# =============================================== #
+#                  CHANGE METHODS                 #
+# =============================================== #
 
 # =============================================== #
 #                METHOD OVERRIDES                 #
