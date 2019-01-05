@@ -3,7 +3,7 @@
 from PyQt5 import uic
 from PyQt5.Qt import QAction, Qt, QKeySequence
 from PyQt5.QtCore import QSize, QModelIndex, QRegExp, QVariant
-from PyQt5.QtGui import QFont, QFontMetrics, QIcon, QRegExpValidator
+from PyQt5.QtGui import QBrush, QColor, QFont, QFontMetrics, QIcon, QRegExpValidator
 from PyQt5.QtWidgets import QFileDialog, QLabel, QListWidgetItem, QMainWindow, QMenu, QMessageBox, QToolBar, QTreeWidgetItem, QTreeWidgetItemIterator, QStyle
 from Character import AllBonusList, ClassList, ItemTypes, Races
 from Constants import Cap, CraftedTypeList, CraftedEffectList, CraftedValuesList, DropTypeList, DropEffectList
@@ -598,6 +598,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 # =============================================== #
 
     def showDatabaseDialog(self):
+        flags = Qt.CustomizeWindowHint | Qt.WindowTitleHint | Qt.WindowCloseButtonHint
         QMessageBox.information(
             self, 'Notice',
             'This feature has not been implemented yet.',
@@ -606,17 +607,20 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         return
 
     def showMaterialsReport(self):
-        MaterialsReport = ReportDialog(self, Qt.WindowCloseButtonHint)
+        flags = Qt.CustomizeWindowHint | Qt.WindowTitleHint | Qt.WindowCloseButtonHint
+        MaterialsReport = ReportDialog(self, flags)
         MaterialsReport.materialsReport(self.ItemAttributeList, self.getCharRealm())
         MaterialsReport.exec_()
 
     def showTemplateReport(self):
-        TemplateReport = ReportDialog(self, Qt.WindowCloseButtonHint)
+        flags = Qt.CustomizeWindowHint | Qt.WindowTitleHint | Qt.WindowCloseButtonHint
+        TemplateReport = ReportDialog(self, flags)
         TemplateReport.templateReport(self.exportAsXML(None, True, True))
         TemplateReport.exec_()
 
     def showQuickbarDialog(self):
-        Dialog = QuickbarDialog(self, Qt.WindowCloseButtonHint, self.ItemAttributeList)
+        flags = Qt.CustomizeWindowHint | Qt.WindowTitleHint | Qt.WindowCloseButtonHint
+        Dialog = QuickbarDialog(self, flags, self.ItemAttributeList)
         Dialog.exec_()
 
     def showContextMenu(self, position):
@@ -844,6 +848,18 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     selection.setCheckState(0, Qt.Unchecked)
             iterator += 1
 
+        # TODO: MOVE TO 'colorize' WHEN IMPLEMENTED ...
+        iterator = QTreeWidgetItemIterator(self.SlotListTreeView)
+        while iterator.value():
+            selection = iterator.value()
+            if selection.flags() & Qt.ItemIsUserCheckable:
+                if self.ItemAttributeList[selection.text(0)].isPlayerCrafted():
+                    color = QBrush(QColor('#0000FF'))
+                else:
+                    color = QBrush(QColor('#000000'))
+                selection.setForeground(0, color)
+            iterator += 1
+
         # UNBLOCK WIDGET SIGNALS ...
         self.SlotListTreeView.blockSignals(False)
 
@@ -892,6 +908,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # UPDATE THE COMBOBOX ...
         self.ItemType.insertItems(0, ('',) + item_types)
 
+        # TODO: COMBINE 'Crafted' AND 'Dropped' STATEMENT ...
         if item.getParent() == 'Weapons':
             if item.isCrafted():
                 damage_types = ('Slash', 'Thrust', 'Crush')
@@ -1234,8 +1251,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         total = self.summarize()
 
         item = self.getItem()
-        self.BuildUtility.setText(f'{total["Utility"]:3.1f}')
         self.ItemUtility.setText(f'{item.getUtility():3.1f}')
+        self.BuildUtility.setText(f'{total["Utility"]:3.1f}')
 
         if item.isPlayerCrafted():
             self.ItemImbuePointsTotal.setText(f'{sum(item.getImbueValues()):3.1f}')

@@ -21,8 +21,6 @@ class DatabaseDialog(QDialog, Ui_DatabaseDialog):
 
         self.Settings = Settings.getInstance()
 
-        locations = {}
-
         self.initLayout()
         self.initControls()
 
