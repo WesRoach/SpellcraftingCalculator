@@ -723,8 +723,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         else:
             return template
 
+    # TODO: IMPLEMENT ...
     def importFromJSON(self):
-        pass
+        QMessageBox.information(
+            self, 'Notice',
+            'This feature has not been implemented yet.',
+            QMessageBox.Ok, QMessageBox.Ok
+        )
+        return
 
 # =============================================== #
 #           LAYOUT CHANGE/UPDATE METHODS          #

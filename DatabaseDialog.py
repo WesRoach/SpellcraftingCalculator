@@ -23,6 +23,7 @@ class DatabaseDialog(QDialog, Ui_DatabaseDialog):
 
         self.initLayout()
         self.initControls()
+        self.initialize()
 
 # =============================================== #
 #       INTERFACE SETUP AND INITIALIZATION        #
@@ -34,7 +35,6 @@ class DatabaseDialog(QDialog, Ui_DatabaseDialog):
 
     def initControls(self):
         self.CloseButton.clicked.connect(self.accept)
-        self.ItemListWidget.itemSelectionChanged.connect(self.changeItemSelection)
 
     def initialize(self):
         pass
