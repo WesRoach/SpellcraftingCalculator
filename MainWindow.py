@@ -9,6 +9,7 @@ from Character import AllBonusList, ClassList, ItemTypes, Races
 from Constants import Cap, CraftedTypeList, CraftedEffectList, CraftedValuesList, DropTypeList, DropEffectList
 from Constants import EnhancedTypeList, EnhancedEffectList, EnhancedValuesList, MythicalBonusCap, PVEBonusCap, TOABonusCap
 from Item import Item
+from DatabaseDialog import DatabaseDialog
 from QuickbarDialog import QuickbarDialog
 from ReportDialog import ReportDialog
 from Settings import Settings
