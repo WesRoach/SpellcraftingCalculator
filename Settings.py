@@ -38,6 +38,7 @@ class Settings(Singleton):
         # DEFAULTS FOR 'GENERAL' SECTION ...
         self.Settings.set('GENERAL', 'DistanceToCap', 'True')
         self.Settings.set('GENERAL', 'UnusableSkills', 'False')
+        self.Settings.set('GENERAL', 'DatabaseLoaded', 'False')
         self.Settings.set('GENERAL', 'ToolbarSize', '16')
 
         # DEFAULTS FOR 'PATHS' SECTION ...
