@@ -5,6 +5,8 @@ from PyQt5.Qt import QIcon, Qt
 from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import QDialog
 from Settings import Settings
+import json
+import os
 
 Ui_DatabaseDialog = uic.loadUiType(r'interface/DatabaseDialog.ui')[0]
 
