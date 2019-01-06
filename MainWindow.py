@@ -26,7 +26,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.setupUi(self)
 
         # BUILD - MAJOR.YEAR.MONTHDAY ...
-        self.Build = "3.19.0102 (Alpha)"
+        self.Build = "3.19.0105 (Alpha)"
 
         font = QFont()
         font.setFamily("Trebuchet MS")
@@ -41,6 +41,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.ViewMenu = QMenu('&View', self)
         self.HelpMenu = QMenu('&Help', self)
         self.PathMenu = QMenu('Configure &Paths')
+        self.DatabaseMenu = QMenu('Import &Database')
         self.ItemLoadMenu = QMenu('Load Item', self)
         self.ItemTypeMenu = QMenu('Item &Type', self)
         self.ItemNewMenu = QMenu('&New Item', self)
@@ -112,11 +113,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.FileMenu.addAction('Save Template', self.saveTemplate)
         self.FileMenu.addAction('Save Template As ...', self.saveTemplateAs)
         self.FileMenu.addSeparator()
-        self.FileMenu.addAction('Import from Chatlog ...', self.importFromChatlog)
-        self.FileMenu.addSeparator()
         self.FileMenu.addAction('Export Gem\'s to Quickbar ...', self.showQuickbarDialog)
         self.FileMenu.addSeparator()
         self.FileMenu.addMenu(self.PathMenu)
+        self.FileMenu.addAction('Import Database ...', self.importFromJSON)
         self.FileMenu.addSeparator()
         self.FileMenu.addMenu(self.RecentMenu)
         self.FileMenu.addSeparator()
@@ -626,7 +626,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.EditMenu.exec_(self.SlotListTreeView.mapToGlobal(position))
 
 # =============================================== #
-#                 XML PROCESSING                  #
+#              XML & JSON PROCESSING              #
 # =============================================== #
 
     def importFromXML(self, filename):
@@ -722,6 +722,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 document.write(etree.tostring(template, encoding='UTF-8', pretty_print = True, xml_declaration = True))
         else:
             return template
+
+    def importFromJSON(self):
+        pass
 
 # =============================================== #
 #           LAYOUT CHANGE/UPDATE METHODS          #
@@ -1547,6 +1550,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             path = os.path.normpath(path)
             self.Settings.set('PATHS', action.data(), path)
 
+        if action.data() == 'DatabasePath':
+            self.Settings.set('GENERAL', 'DatabaseLoaded', 'False')
+
     def changeCharRealm(self, char_realm):
         for location in self.ItemAttributeList.keys():
             for item in self.ItemDictionary[location]:
@@ -1732,10 +1738,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         else:
             item.removeClassRestriction(selection.text())
 
-# =============================================== #
-#     CHANGE ETYPE/EFFECT/AMOUNT/REQ METHODS      #
-# =============================================== #
-
     def changeEffectType(self, etype, index = None):
         index = self.getSlotIndex() if index is None else index
         self.getItem().getSlot(index).setEffectType(etype)
@@ -1765,9 +1767,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.calculate()
 
 # =============================================== #
-#        METHODS SEPARATED FOR READABILITY        #
-# =============================================== #
-#         REVAMP AFTER DICTIONARY REWRITE         #
+#                  UPDATE METHODS                 #
 # =============================================== #
 
     def updateEffectTypeList(self, index):
@@ -1793,8 +1793,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         # CASCADE THE CHANGES ...
         self.changeEffectType(slot.getEffectType(), index)
-
-# =============================================== #
 
     def updateEffectList(self, index):
         slot = self.getItem().getSlot(index)
@@ -1831,8 +1829,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         # CASCADE THE CHANGES ...
         self.changeEffect(effect, index)
-
-# =============================================== #
 
     def updateEffectAmountList(self, index):
         slot = self.getItem().getSlot(index)
@@ -1878,8 +1874,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         # CASCADE THE CHANGES ...
         self.changeEffectAmount(amount, index)
-
-# =============================================== #
 
     def updateEffectRequirement(self, index):
         slot = self.getItem().getSlot(index)
@@ -1969,15 +1963,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             'Do you want to save these changes?',
             QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel, QMessageBox.Cancel
         ); return prompt
-
-    # TODO: IMPLEMENT ...
-    def importFromChatlog(self):
-        QMessageBox.information(
-            self, 'Notice',
-            'This feature has not been implemented yet.',
-            QMessageBox.Ok, QMessageBox.Ok
-        )
-        return
 
     def newItem(self, action):
         selection = action.text().split(None)[0]
