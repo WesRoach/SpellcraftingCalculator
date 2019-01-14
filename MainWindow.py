@@ -1409,6 +1409,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def validateEntry(self):
         pass
 
+    # TODO: NEED TO VALIDATE 'FOCUS' ...
     def validateAttributes(self, invalid = False):
         if not self.UnusableSkills.isChecked():
             for item in self.ItemAttributeList.values():
@@ -1851,6 +1852,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 if slot.isCrafted():
 
                     # BUG: FILTERS OUT ALL VALUES FOR 'FOCUS' ...
+
                     if slot.getEffect().split(None)[0] == 'All':
                         values = CraftedValuesList[slot.getEffectType()][:1]
                     else:
