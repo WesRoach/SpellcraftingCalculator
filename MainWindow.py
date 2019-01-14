@@ -1849,6 +1849,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             values = list()
             if slot.isCrafted() or slot.isEnhanced():
                 if slot.isCrafted():
+
+                    # BUG: FILTERS OUT ALL VALUES FOR 'FOCUS' ...
                     if slot.getEffect().split(None)[0] == 'All':
                         values = CraftedValuesList[slot.getEffectType()][:1]
                     else:
