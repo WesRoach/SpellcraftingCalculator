@@ -751,7 +751,7 @@ EnhancedEffectList = {
         'PvE Bonus': (
             'Defensive Bonus',
             'To Hit Bonus',
-         ),
+        ),
     }}
 
 DropEffectList = {
